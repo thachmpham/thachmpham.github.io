@@ -1,10 +1,11 @@
 ---
-weight: 2
-bookFlatSection: true
-title: "Example Site"
+weight: 1
+bookFlatSection: false
+title: "MapReduce"
 ---
 
 # Introduction
+You don't learn to walk by following rules. You learn by doing, and by falling over.
 
 ## Ferre hinnitibus erat accipitrem dixi Troiae tollens
 
