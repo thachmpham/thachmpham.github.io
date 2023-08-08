@@ -1,6 +1,7 @@
 ---
 title: Thach Pham
 type: docs
+bookToc: false
 ---
 
 # Hello world
