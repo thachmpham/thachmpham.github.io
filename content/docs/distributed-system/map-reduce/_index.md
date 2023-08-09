@@ -7,8 +7,7 @@ bookToc: true
 
 # Lab 1: MapReduce
 ## 1. `src/mrapps/wc.go`
-`src/mrapps/wc.go` consists of two functions: Map and Reduce.  
-`wc` stands for word count.
+`src/mrapps/wc.go` consists of two functions: Map and Reduce. `wc` stands for word count.
 
 ## 1.1. Map
 ### Declaration
@@ -19,8 +18,8 @@ func Map(filename string, contents string) []mr.KeyValue
 `contents`: file content.
 
 ### Description
-The function divides the `contents` into words using a space as the separator.  
-Generate a list of dictionaries where each dictionary has a word as the key and a value of 1.
+- Divides the `contents` into words using a space as the separator.  
+- Return a list of maps where each map has a word as the key and a value of 1.
 
 ### Sample code
 ```go
@@ -42,8 +41,8 @@ func main() {
 ```go
 func Reduce(key string, values []string) string
 ```
-`key`: word.  
-`values`: a list of string "1".
+- `key`: word.  
+- `values`: a list of string "1".
 
 ### Description
 Return the number of elements in list `values`.
@@ -63,20 +62,18 @@ func main() {
 ```
 
 ## 2. `src/main/mrsequential.go`
-### 2.1. Testcase 1
-Build `wc.so` library.
-```zsh
-cd src/main
-go build -buildmode=plugin ../mrapps/wc.go
-```
+## 2.1. Testcase 1
+### Description
+- Create a text file named `hello.txt`.  
+- Run `mrsequential.go` to count the occurences of words within the file.
 
-Create a input file.
+### Run
 ```zsh
 echo 'hello world and hello go' > hello.txt
-```
 
-Run word counting using the sequential algorithm. `wc.so` is the library which has Map and Reduce functions. `hello.txt` is the input text file that we want to count words.
-```zsh
+cd src/main
+go build -buildmode=plugin ../mrapps/wc.go
+
 go run mrsequential.go wc.so hello.txt
 ```
 
@@ -88,11 +85,9 @@ hello 2
 world 1
 ```
 
-### 2.2. Testcase 2
-```zsh
-go run mrsequential.go wc.so pg*.txt
-```
-`pg*.txt`: the pattern for input files, encompasses the following files:
+## 2.2. Testcase 2
+### Description
+Count the occurences of words in all files having name pattern `pg*.txt`, encompasses the following files:
 - `pg-being_ernest.txt`
 - `pg-dorian_gray.txt`
 - `pg-frankenstein.txt`
@@ -101,6 +96,11 @@ go run mrsequential.go wc.so pg*.txt
 - `pg-metamorphosis.txt`
 - `pg-sherlock_holmes.txt`
 - `pg-tom_sawyer.txt`
+
+### Run
+```zsh
+go run mrsequential.go wc.so pg*.txt
+```
 
 The output is saved in the file named `mr-out-0`.
 ```text
