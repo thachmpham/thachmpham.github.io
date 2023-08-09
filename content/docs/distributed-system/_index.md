@@ -1,7 +1,7 @@
 ---
 weight: 2
 bookFlatSection: true
-title: "Distributed Systems"
+title: "MIT 6.5840: Distributed Systems"
 ---
 
 # Introduction
