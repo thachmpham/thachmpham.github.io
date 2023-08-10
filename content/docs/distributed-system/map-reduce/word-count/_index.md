@@ -11,6 +11,8 @@ Distributed Word Count is a classic example often used to illustrate the MapRedu
 
 While the example is a simplified illustration, it forms the basis for more complex data processing tasks that can be accomplished using the MapReduce paradigm. It showcases the elegance of the model in solving real-world challenges in data analysis and processing on distributed computing environments.
 
+In this blog post, we will utilize **Golang** to develop a word counting program through two different approaches: a **Sequential** solution and a **MapReduce** solution.
+
 
 ## 2. Sequential Solution
 ## 2.1. Description
