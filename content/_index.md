@@ -35,5 +35,5 @@ ethernet, wifi (802.11), ppp.
 ethtool, iwconfig, arp, netstat.
 ```
 
-## Learn by Doing
+## Learning by Doing
 You don't learn to walk by following rules. You learn by doing, and by falling over (Richard Branson).
