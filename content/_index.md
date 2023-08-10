@@ -4,7 +4,7 @@ type: docs
 bookToc: false
 ---
 
-# Hello world
+# Introduction
 
 {{< columns >}}
 ## Astris ipse furtiva
