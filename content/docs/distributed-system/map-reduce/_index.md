@@ -11,22 +11,7 @@ MapReduce is a programming model and processing paradigm designed to efficiently
 
 The MapReduce model is particularly suited for handling tasks that can be divided into two main phases: the Map phase and the Reduce phase. It is widely used for tasks like data processing, log analysis, batch processing, and generating various types of reports.
 
-
-## 2. Features
-**Parallel Processing:** MapReduce processes data in parallel across multiple nodes, leveraging the computational power of a distributed cluster.
-
-**Fault Tolerance:** If a worker node fails during processing, the MapReduce framework can automatically redistribute the task to another node, ensuring fault tolerance.
-
-**Scalability:** MapReduce scales easily as more nodes can be added to the cluster, allowing efficient processing of large datasets.
-
-**Ease of Use:** Developers can focus on implementing the Map and Reduce functions for their specific problem, abstracting away many of the complexities of distributed programming.
-
-**Aggregation:** MapReduce inherently supports data aggregation, making it useful for tasks like calculating sums, averages, and other statistical analyses.
-
-**Distributed Computing Frameworks:** While Google's original MapReduce was designed for their internal infrastructure, open-source frameworks like Apache Hadoop and Apache Spark provide implementations of the MapReduce model that are available for broader use.
-
-
-## 3. Phases
+## 2. Phases
 Here's how the MapReduce model works:  
 
 **Map Phase:**
@@ -44,7 +29,7 @@ This function performs further processing, aggregation, or computation on the va
 The Reduce function emits the final output key-value pairs, which are collected and often written to an output storage system.
 
 
-## 4. Processes
+## 3. Processes
 The MapReduce model involves two main types of processes: the coordinator and the workers. These processes work together to handle data in a parallel and distributed manner. Let's delve into the behaviors of both the coordinator and workers in the context of the MapReduce model. 
 
 {{< columns >}}
@@ -80,7 +65,7 @@ The MapReduce model involves two main types of processes: the coordinator and th
 In summary, the Coordinator manages the overall flow of data processing, task assignment, and coordination, while the worker nodes execute the map and reduce tasks, generate intermediate data, perform shuffling, and emit the final output. This division of responsibilities allows the MapReduce model to efficiently process large-scale data in a distributed and fault-tolerant manner.
 
 
-## 5. Applications
+## 4. Applications
 **Word Count in Hadoop:**  
 The classic "Word Count" example is a staple in demonstrating the power of the MapReduce model. Hadoop, an open-source framework for distributed storage and processing, includes a Word Count example that showcases how to implement the MapReduce pattern to count the occurrences of each word in a large dataset.
 
@@ -97,3 +82,29 @@ Apache Spark, another distributed computing framework, builds upon the MapReduce
 PageRank is used by search engines to rank web pages in search results. It calculates the importance of web pages based on the links between them. The iterative nature of PageRank makes it well-suited for frameworks like Spark, which can efficiently manage repeated computations.
 
 These are just a few examples of existing programs that use the MapReduce model or its extensions for various purposes, from counting words to analyzing logs and performing complex algorithms. The power of MapReduce lies in its ability to parallelize computation and process massive datasets in a scalable and fault-tolerant manner, making it a cornerstone in the world of distributed computing.
+
+## 5. Pros & Cons
+**Pros**  
+**Scalability:** MapReduce is designed for distributed computing, which makes it highly scalable. It can process massive amounts of data by distributing the work across multiple machines in a cluster.
+
+**Parallelism:** It enables parallel processing of data, dividing the input into smaller chunks that can be processed independently. This leads to significant performance improvements, especially for data-intensive tasks.
+
+**Fault Tolerance:** MapReduce systems, such as Hadoop, provide built-in fault tolerance. If a node in the cluster fails during processing, the framework automatically redistributes the work to other healthy nodes, ensuring job completion.
+
+**Simplicity:** The programming model is relatively simple, focusing on the essential concepts of mapping and reducing. This simplicity makes it easier to write and maintain code for complex data processing tasks.
+
+**Versatility:** MapReduce can handle various types of data processing tasks, such as log analysis, data transformation, indexing, and more. It's a versatile framework used in a wide range of applications.
+
+**Cons**  
+**Latency:** MapReduce is not well-suited for low-latency or real-time processing. The framework's batch processing nature introduces inherent latency, making it less suitable for applications that require immediate results.
+
+**Complexity for Some Tasks:** While it's simple for certain types of tasks, more complex algorithms may be challenging to express in the MapReduce paradigm. Some problems are not naturally suited for the map-reduce pattern, leading to additional complexity in implementation.
+
+**Resource Overhead:** Setting up and managing a MapReduce cluster involves overhead in terms of hardware, software, and maintenance. Smaller-scale projects might find this overhead excessive compared to the problem's complexity.
+
+**Data Movement:** In the map-reduce model, data is shuffled and moved between map and reduce stages, leading to network and I/O overhead. This can impact performance, especially when dealing with large datasets.
+
+**Limited Iterative Processing:** While newer versions and systems built on top of MapReduce have improved support for iterative processing, the original MapReduce model was not designed for iterative algorithms, making certain iterative tasks less efficient.
+
+## 6. Summary
+In summary, the MapReduce model is an excellent choice for many big data processing scenarios, offering scalability, fault tolerance, and simplicity. However, it's important to consider the specific requirements of your application, as well as the trade-offs and potential challenges posed by the batch processing nature of the framework.

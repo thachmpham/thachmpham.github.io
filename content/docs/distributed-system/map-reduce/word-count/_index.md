@@ -147,7 +147,8 @@ func Reduce(key string, counts []string) string {
 ```
 
 ### `sequential.go`
-In file `sequential.go`, we implement sequential logic to to compute word occurrences within files.
+In file `sequential.go`, we implement sequential logic. The program receives a list of input files, compute word occurences, and save to file `output.txt`.
+
 ```go
 package main
 
