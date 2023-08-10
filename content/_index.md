@@ -5,38 +5,35 @@ bookToc: false
 ---
 
 # Introduction
+Greetings and a warm welcome to my blog, a place where I've archived my studies and explorations. My hope is that some of these insights will prove beneficial to you on your own journey of knowledge and growth. 
+
+The majority of posts will offer both theoretical summaries and hands-on practical exercises, spanning across a diverse spectrum of subjects. These exercises may be presented in languages such as C/C++, Golang, Python, or a little Assembly.
 
 {{< columns >}}
-## Astris ipse furtiva
-
-Est in vagis et Pittheus tu arge accipiter regia iram vocatur nurus. Omnes ut
-olivae sensit **arma sorori** deducit, inesset **crudus**, ego vetuere aliis,
-modo arsit? Utinam rapta fiducia valuere litora _adicit cursu_, ad facies
+## Operating Systems
+Linux renowned for their open-source nature and versatility, are widely regarded as one of the best choices for learning about operating systems. Their robustness, extensive documentation, and active community support make them an ideal environment to learn how modern OS works. This concept involves practical exercises using **C/C++**, **Assembly**, and **QEMU**.
 
 <--->
 
-## Suis quot vota
+## [Distributed Systems](/docs/distributed-system/)
+Distributed systems involve networks of interconnected computers working together to achieve a common goal. They enable efficient sharing of resources, data, and computation across multiple machines, enhancing reliability, scalability, and performance. We will investigate to implement some papers and distributed programing algorithms by using **Golang**.
 
-Ea _furtique_ risere fratres edidit terrae magis. Colla tam mihi tenebat:
-miseram excita suadent es pecudes iam. Concilio _quam_ velatus posset ait quod
-nunc! Fragosis suae dextra geruntur functus vulgata.
 {{< /columns >}}
 
 
-## Tempora nisi nunc
+## Computer Networking
+The TCP/IP, also known as the Internet Protocol Suite, is a conceptual framework used for understanding and implementing computer networking protocols. It serves as the foundation for the modern Internet, enabling communication and data exchange between diverse devices across the globe.
 
-Lorem **markdownum** emicat gestu. Cannis sol pressit ducta. **Est** Idaei,
-tremens ausim se tutaeque, illi ulnis hausit, sed, lumina cutem. Quae avis
-sequens!
+```
+http, https, ftp, smtp, pop3, imap, dns.
+curl, wget, dig, bind.
+tcp, udp.
+tcpdump, tshark, netcat, nmap, trafgen.
+ipv4, ipv6, icmp.
+ip, ping, traceroute, ifconfig, netsniff-ng.
+ethernet, wifi (802.11), ppp.
+ethtool, iwconfig, arp, netstat.
+```
 
-    var panel = ram_design;
-    if (backup + system) {
-        file.readPoint = network_native;
-        sidebar_engine_device(cell_tftp_raster,
-                dual_login_paper.adf_vci.application_reader_design(
-                graphicsNvramCdma, lpi_footer_snmp, integer_model));
-    }
-
-## Locis suis novi cum suoque decidit eadem
-
-Idmoniae ripis, at aves, ali missa adest, ut _et autem_, et ab?
+## Learn by Doing
+You don't learn to walk by following rules. You learn by doing, and by falling over (Richard Branson).

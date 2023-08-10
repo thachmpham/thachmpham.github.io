@@ -98,13 +98,9 @@ These are just a few examples of existing programs that use the MapReduce model 
 **Cons**  
 **Latency:** MapReduce is not well-suited for low-latency or real-time processing. The framework's batch processing nature introduces inherent latency, making it less suitable for applications that require immediate results.
 
-**Complexity for Some Tasks:** While it's simple for certain types of tasks, more complex algorithms may be challenging to express in the MapReduce paradigm. Some problems are not naturally suited for the map-reduce pattern, leading to additional complexity in implementation.
-
 **Resource Overhead:** Setting up and managing a MapReduce cluster involves overhead in terms of hardware, software, and maintenance. Smaller-scale projects might find this overhead excessive compared to the problem's complexity.
 
 **Data Movement:** In the map-reduce model, data is shuffled and moved between map and reduce stages, leading to network and I/O overhead. This can impact performance, especially when dealing with large datasets.
-
-**Limited Iterative Processing:** While newer versions and systems built on top of MapReduce have improved support for iterative processing, the original MapReduce model was not designed for iterative algorithms, making certain iterative tasks less efficient.
 
 ## 6. Summary
 In summary, the MapReduce model is an excellent choice for many big data processing scenarios, offering scalability, fault tolerance, and simplicity. However, it's important to consider the specific requirements of your application, as well as the trade-offs and potential challenges posed by the batch processing nature of the framework.

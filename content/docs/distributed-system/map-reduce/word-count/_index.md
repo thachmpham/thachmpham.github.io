@@ -223,7 +223,7 @@ echo "hi go" > input/hi.txt
 go run wc.go sequential.go input/hello.txt input/hi.txt
 ```
 
-Output is saved in output.txt.
+Output is saved in `output.txt`.
 ```text
 and 1
 go 2
