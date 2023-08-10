@@ -30,6 +30,7 @@ Map(hello.txt, content_hello)   => [{hello 1} {world 1} {and 1} {hello 1} {go 1}
 Map(hi.txt, content_hi)         => [{hi 1} {go 1}]
 
 intermediate = [{hello 1} {world 1} {and 1} {hello 1} {go 1} {hi 1} {go 1}]
+// intermediate is the list of all previous Map outputs
 ```
 
 **Shuffle and Sort:**
