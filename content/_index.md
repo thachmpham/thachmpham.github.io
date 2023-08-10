@@ -4,7 +4,7 @@ type: docs
 bookToc: false
 ---
 
-# Introduction
+# Welcome
 Greetings and a warm welcome to my blog, a place where I've archived my studies and explorations. My hope is that some of these insights will prove beneficial to you on your own journey of knowledge and growth. 
 
 The majority of posts will offer both theoretical summaries and hands-on practical exercises, spanning across a diverse spectrum of subjects. These exercises may be presented in languages such as C/C++, Golang, Python, or a little Assembly.
