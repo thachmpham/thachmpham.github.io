@@ -6,200 +6,245 @@ bookToc: true
 ---
 
 # Distributed Word Count
-During this lab, we will construct a MapReduce framework. Our task involves:
-- Implement a worker process that calls application Map and Reduce functions and handles reading and writing files
-- Implement a coordinator process that assigns tasks to workers and manages situations involving worker failures.  
+## 1. Introduction
+Distributed Word Count is a classic example often used to illustrate the MapReduce programming model for processing and analyzing large datasets. In this scenario, the goal is to count the occurrences of each word in a given collection of text documents across a distributed cluster of computers. The MapReduce approach divides the task into two main phases: the Map phase and the Reduce phase.
 
-Clone source code and init.
-```zsh
-git clone git://g.csail.mit.edu/6.5840-golabs-2023 6.5840
-cd 6.5840
-Makefile src
-```
+While the example is a simplified illustration, it forms the basis for more complex data processing tasks that can be accomplished using the MapReduce paradigm. It showcases the elegance of the model in solving real-world challenges in data analysis and processing on distributed computing environments.
 
-## 1. Word Counting
-`src/mrapps/wc.go` consists of two functions: Map and Reduce. `wc` stands for word count. These functions are used to count occurences of words in files later.
 
-## 1.1. Map
-### Declaration
-```go
-func Map(filename string, contents string) []mr.KeyValue
-```
-`filename`: the name of the input file.  
-`contents`: file content.
+## 2. Sequential Solution
+## 2.1. Description
+Before delving into the MapReduce solution, let's begin by exploring the sequential approach to accomplishing this task. We'll outline the steps of the algorithm below, accompanied by sample input and output for each phase.
 
-### Description
-- Divides the `contents` into words using a space as the separator.  
-- Return a list of maps where each map has a word as the key and a value of 1.
-
-### Sample code
-```go
-package main
-
-import "fmt"
-
-func main() {
-    out := Map("input.txt", "hello world and hello go")
-    fmt.Println("Map output: ", out)
-
-    // output:
-    // [{hello 1} {world 1} {and 1} {hello 1} {go 1}]
-}
-```
-
-## 1.2. Reduce
-### Declaration
-```go
-func Reduce(key string, values []string) string
-```
-- `key`: word.  
-- `values`: a list of string "1".
-
-### Description
-Return the number of elements in list `values`.
-
-### Sample code
-```go
-package main
-
-import "fmt"
-
-func main() {
-    out := Reduce("hello", [] string {"1", "1"})
-    fmt.Println("Reduce output:", out)
-
-    // output: 2
-}
-```
-
-## 2. Sequential
-Prior to delving into the MapReduce solution, let's begin by exploring the sequential approach to accomplishing this task. The file `src/main/mrsequential.go` encompasses the sequential algorithm used to tally word occurrences in files. We'll outline the steps of the algorithm below, accompanied by sample input and output for each phase.
-
-**Recommendation:** Before proceeding further, it's advisable to review the `main()` function within `src/main/mrsequential.go`.
-
-- Read each input file, pass it to Map, accumulate the `intermediate` map output.
+**Map Phase:**
+- Input is a set of text files. For each file, a Map function is applied. The Map function tokenizes the text, separates it into words, and emits key-value pairs. The key is the word, and the value is a count of 1 for each occurrence of the word.
 ```text
-input_file = hello.txt
-content = "hello world and hello go"
+input_file = [hello.txt, hi.txt]
 
-intermediate = [{hello 1} {world 1} {and 1} {hello 1} {go 1}]
+content_hello = "hello world and hello go"      // content of hello.txt
+content_hi = "hi go"                            // content of hi.txt
+
+Map(hello.txt, content_hello)   => [{hello 1} {world 1} {and 1} {hello 1} {go 1}]
+Map(hi.txt, content_hi)         => [{hi 1} {go 1}]
+
+intermediate = [{hello 1} {world 1} {and 1} {hello 1} {go 1} {hi 1} {go 1}]
 ```
 
-- Sort `intermediate`
-```text
-intermediate = [{and 1} {go 1} {hello 1} {hello 1} {world 1}]
-```
+**Shuffle and Sort:**
+- Intermediate Data: The emitted key-value pairs from all Map are sorted and grouped based on their keys. All occurrences of a specific word are brought together.
 
-- Aggregate the values in the `intermediate` based on their keys.
 ```text
-intermediate = [{and 1} {go 1} {hello 1} {hello 1} {world 1}]
+// sort intermediate
+intermediate = [{and 1} {go 1} {go 1} {hello 1} {hello 1} {hi 1} {world 1}]
 
+// occurrences of a word are brought together
 |   key   | values      |
 |:-------:|:-----------:|
-|   and   |     [1]     |
-|   go    |     [1]     |
+|   and   |   [1]       |
+|   go    |   [1, 1]    |
 |  hello  |   [1, 1]    |
-|  world  |     [1]     |
+|   hi    |   [1]       |
+|  world  |   [1]       |
 ```
 
-- Call `Reduce` on each distinct key, values.
+**Reduce Phase:**
+- Reduce Function: For each unique word key, a Reduce function receives the list of counts associated with that word. The Reduce function sums up these counts to compute the total occurrences of the word.
 ```text
+Reduce("and", [1])      => 1
+Reduce("go", [1, 1])    => 2
+Reduce("hello", [1, 1]) => 2
+Reduce("hi", [1])       => 1
+Reduce("world", [1])    => 1
+
+Summary:
 |   key   | values      | reduce output |
 |:-------:|:-----------:|:-------------:|
 |   and   |     [1]     |       1       |
-|   go    |     [1]     |       1       |
+|   go    |   [1, 1]    |       2       |
 |  hello  |   [1, 1]    |       2       |
+|   hi    |     [1]     |       1       |
 |  world  |     [1]     |       1       |
 ```
-- The output will be saved in file `mr-out-0`.
 
-## 2.1. Testcase 1
-### Description
-- Create a text file named `hello.txt`.  
-- Run `mrsequential.go` to count of words.
-
-### Run
-```zsh
-echo 'hello world and hello go' > hello.txt
-
-cd src/main
-go build -buildmode=plugin ../mrapps/wc.go
-
-go run mrsequential.go wc.so hello.txt
+**Result:**
+- Output: The reducer emits the word as the key and its total count as the value.
+```text
+|   key   |    output     |
+|:-------:|:-------------:|
+|   and   |       1       |
+|   go    |       2       |
+|  hello  |       2       |
+|  world  |       1       |
 ```
 
-The output is saved in the file named `mr-out-0`.
+## 2.2. Implementation
+### `wc.go`
+File `wc.go` provides Map and Reduce functions which support for word counting.
+
+```go
+package main
+
+import "unicode"
+import "strings"
+import "strconv"
+
+type KeyValue struct {
+	Key   string
+	Value string
+}
+
+// for sorting by key.
+type ByKey []KeyValue
+
+// for sorting by key.
+func (a ByKey) Len() int           { return len(a) }
+func (a ByKey) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByKey) Less(i, j int) bool { return a[i].Key < a[j].Key }
+
+/*
+	The Map function tokenizes the text, separates it into words, 
+	and emits key-value pairs.The key is the word, 
+	and the value is a count of 1 for each occurrence of the word.
+
+	Samples:
+	Map("hello.txt", "hello world and hello go")
+ 	==> [{hello 1} {world 1} {and 1} {hello 1} {go 1}]
+
+ 	Map("hi.txt", "hello go")
+ 	==> [{hello 1} {go 1}]
+*/
+func Map(filename string, contents string) [] KeyValue {
+	// function to detect word separators.
+	ff := func(r rune) bool { return !unicode.IsLetter(r) }
+
+	// split contents into an array of words.
+	words := strings.FieldsFunc(contents, ff)
+
+	kva := [] KeyValue{}
+	for _, w := range words {
+		kv := KeyValue{w, "1"}
+		kva = append(kva, kv)
+	}
+	return kva
+}
+
+
+/*
+	Reduce function receives the list of counts associated with key.
+	The Reduce function sums up these counts to compute the total occurrences of the word.
+
+	Samples:
+	Reduce("hello", []string{"1", "1"})		=> 2
+	Reduce("hi", ["1"])       => 1
+*/
+func Reduce(key string, counts []string) string {
+	// return the number of occurrences of this word.
+	return strconv.Itoa(len(counts))
+}
+```
+
+### `sequential.go`
+In file `sequential.go`, we implement sequential logic to to compute word occurrences within files.
+```go
+package main
+
+import "fmt"
+import "os"
+import "io/ioutil"
+import "sort"
+
+func main() {
+	if len(os.Args) < 2 {
+		fmt.Fprintf(os.Stderr, "Usage: mrsequential <filename_1> [filename_2]...\n")
+		os.Exit(1)
+	}
+
+	fmt.Println("Phase Map")
+
+	intermediate := [] KeyValue{}
+	for _, filename := range os.Args[1:] {
+		file, _ := os.Open(filename)
+		content, _ := ioutil.ReadAll(file)
+		file.Close()
+		
+		kva := Map(filename, string(content))
+		fmt.Println("Map", filename, "=>", kva)
+
+		intermediate = append(intermediate, kva...)
+		fmt.Println("intermediate:", intermediate)
+	}
+
+	fmt.Println("\nPhase Suffle and Sort")
+
+	sort.Sort(ByKey(intermediate))
+	fmt.Println("sorted intermediate:", intermediate)
+
+	oname := "output.txt"
+	ofile, _ := os.Create(oname)
+
+	fmt.Println("\nPhase Reduce")
+	i := 0
+	for i < len(intermediate) {
+		j := i + 1
+		for j < len(intermediate) && intermediate[j].Key == intermediate[i].Key {
+			j++
+		}
+		values := []string{}
+		for k := i; k < j; k++ {
+			values = append(values, intermediate[k].Value)
+		}
+
+		count := Reduce(intermediate[i].Key, values)
+		fmt.Println("Reduce", intermediate[i].Key, "=>", count)
+
+		// Save reduce result to output file
+		fmt.Fprintf(ofile, "%v %v\n", intermediate[i].Key, count)
+
+		i = j
+	}
+
+	ofile.Close()
+	fmt.Println("\nOutput saved to output.txt")
+}
+```
+
+## 2.3. Testcase
+In the following test scenario, we'll generate two input files: hello.txt and hi.txt. Subsequently, we will execute the sequential.go program to compute word occurrences.
+
+```zsh
+mkdir input
+echo "hello world and hello go" > input/hello.txt
+echo "hi go" > input/hi.txt
+
+go run wc.go sequential.go input/hello.txt input/hi.txt
+```
+
+Output is saved in output.txt.
 ```text
 and 1
-go 1
+go 2
 hello 2
+hi 1
 world 1
 ```
 
-## 2.2. Testcase 2
-### Description
-Count the occurences of words in all files having name pattern `pg*.txt`, encompasses the following files:
-- `pg-being_ernest.txt`
-- `pg-dorian_gray.txt`
-- `pg-frankenstein.txt`
-- `pg-grimm.txt`
-- `pg-huckleberry_finn.txt`
-- `pg-metamorphosis.txt`
-- `pg-sherlock_holmes.txt`
-- `pg-tom_sawyer.txt`
-
-### Run
-```zsh
-go run mrsequential.go wc.so pg*.txt
-```
-
-The output is saved in the file named `mr-out-0`.
+You can check log in the terminal for more detailed information.
 ```text
-A 509
-ABOUT 2
-ACT 8
-ACTRESS 1
-ACTUAL 8
-ADLER 1
-ADVENTURE 12
-ADVENTURES 7
-AFTER 2
-AGREE 16
-AGREEMENT 8
-...
+Phase Map
+Map input/hello.txt => [{hello 1} {world 1} {and 1} {hello 1} {go 1}]
+intermediate: [{hello 1} {world 1} {and 1} {hello 1} {go 1}]
+Map input/hi.txt => [{hi 1} {go 1}]
+intermediate: [{hello 1} {world 1} {and 1} {hello 1} {go 1} {hi 1} {go 1}]
+
+Phase Suffle and Sort
+sorted intermediate: [{and 1} {go 1} {go 1} {hello 1} {hello 1} {hi 1} {world 1}]
+
+Phase Reduce
+Reduce and => 1
+Reduce go => 2
+Reduce hello => 2
+Reduce hi => 1
+Reduce world => 1
+
+Output saved to output.txt
 ```
-
-## 3. MapReduce
-MapReduce is a programming model and computational framework designed for processing and generating large-scale data sets in a parallel and distributed manner. It was popularized by Google and has become a fundamental concept in big data processing. The MapReduce framework is used for processing tasks such as data transformation, filtering, sorting, and aggregation.  
-  
-The MapReduce model consists of two main phases: the Map phase and the Reduce phase.  
-  
-**Map Phase:**  
-- In this phase, the input data is divided into smaller chunks, and a user-defined function called the "map function" is applied to each chunk independently and in parallel.
-- The map function takes an input key-value pair and produces intermediate key-value pairs as output.
-
-**Shuffle and Sort Phase:**  
-- After the map phase, the intermediate key-value pairs are grouped and shuffled based on their keys. This step ensures that all intermediate values associated with the same key are brought together in one place.
-- The intermediate key-value pairs are then sorted by key to prepare them for the next phase.
-
-**Reduce Phase:**  
-- In this phase, another user-defined function called the "reduce function" is applied to the sorted intermediate key-value pairs.
-- The reduce function takes a key and its associated list of values and produces one or more output key-value pairs.
-
-## 3.1. Assigment
-Our job is to implement a distributed MapReduce, consisting of two programs, the coordinator and the worker.  
-
-{{< columns >}}
-## Coordinator
-- There will be just one coordinator process.
-- Its role is to listen and assign tasks to workers.
-- The coordinator should notice if a worker has not completed its task in a reasonable amount of time and give the same task to a different worker.
-
-<---> 
-## Workers
-- There will be one or more worker processes executing in parallel.
-- Each worker process will ask the coordinator for a task.
-- The task might involve reading input from one or multiple files, performing computations, and then writing the output of the task to one or several files.
-
-{{< /columns >}}
-

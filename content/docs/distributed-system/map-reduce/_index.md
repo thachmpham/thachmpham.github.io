@@ -26,7 +26,7 @@ The MapReduce model is particularly suited for handling tasks that can be divide
 **Distributed Computing Frameworks:** While Google's original MapReduce was designed for their internal infrastructure, open-source frameworks like Apache Hadoop and Apache Spark provide implementations of the MapReduce model that are available for broader use.
 
 
-## 3. Phrases
+## 3. Phases
 Here's how the MapReduce model works:  
 
 **Map Phase:**
