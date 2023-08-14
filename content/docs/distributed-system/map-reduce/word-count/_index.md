@@ -9,7 +9,7 @@ bookToc: true
 ## 1. Introduction
 Distributed Word Count is a classic example often used to illustrate the MapReduce programming model for processing and analyzing large datasets. In this scenario, the goal is to count the occurrences of each word in a given collection of text documents across a distributed cluster of computers. The MapReduce approach divides the task into two main phases: the Map phase and the Reduce phase.
 
-While the example is a simplified illustration, it forms the basis for more complex data processing tasks that can be accomplished using the MapReduce paradigm. It showcases the elegance of the model in solving real-world challenges in data analysis and processing on distributed computing environments.
+![intro.png](./intro.png)
 
 In this blog post, we will utilize **Golang** to develop a word counting program through two different approaches: a **Sequential** solution and a **MapReduce** solution.
 
@@ -18,27 +18,8 @@ In this blog post, we will utilize **Golang** to develop a word counting program
 ## 2.1 Description
 Before delving into the MapReduce solution, let's begin by exploring the sequential approach to accomplishing this task. 
 
-In the below example, we will **count occurences of words** in two files `hello.txt` and `hi.txt`.  
-
-Content of file `hello.txt`.
-```text
-hello world and hello go
-```
-
-Content of file `hi.txt`.
-```text
-hi go
-```
-
-And we expect the output will be like that.
-```text
-and 1
-go 2
-hello 2
-hi 1
-world 1
-```
-
+In the below example, we will count occurences of words in two files `hello.txt` and `hi.txt`.  
+![sequential.png](./sequential.png)
 Now, we will now explore the functioning of each phase and analyze the input and output of each one.  
 
 ### 2.1.1. Map Phase
@@ -610,4 +591,6 @@ the Coordinator gathers all the Reduce outputs and merge them into a single file
      └───────────┘                                             └──────┘
 ```
 
+## 2.2 Implementation
+### 
 
