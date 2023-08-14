@@ -7,7 +7,7 @@ bookToc: true
 
 # Distributed Word Count
 ## 1. Introduction
-Distributed Word Count is a classic example often used to illustrate the MapReduce programming model for processing and analyzing large datasets. In this scenario, the goal is to count the occurrences of each word in a given collection of text documents across a distributed cluster of computers. The MapReduce approach divides the task into two main phases: the Map phase and the Reduce phase.
+Distributed Word Count is a classic example often used to illustrate the MapReduce programming model for processing and analyzing large datasets. In this scenario, the goal is to count the occurrences of each word in a given collection of text files.
 
 ![intro.png](./intro.png)
 
@@ -16,17 +16,12 @@ In this blog post, we will utilize **Golang** to develop a word counting program
 
 ## 2. Sequential Solution
 ## 2.1 Description
-Before delving into the MapReduce solution, let's begin by exploring the sequential approach to accomplishing this task. 
-
-In the below example, we will count occurences of words in two files `hello.txt` and `hi.txt`.  
-![sequential.png](./sequential.png)
-Now, we will now explore the functioning of each phase and analyze the input and output of each one.  
+In the below example, we will count occurences of words in two files `hello.txt` and `hi.txt` using sequential solution.  
+![sequential.png](./sequential.png) 
 
 ### 2.1.1. Map Phase
-- Input is a set of text files. For each file, a Map function is applied. The Map function tokenizes the text, separates it into words, and emits key-value pairs. The key is the word, and the value is a count of 1 for each occurrence of the word.
-```text
-// Call Map function on hello.txt
-
+The map function takes each input file and emits key-value pairs. The key is usually a word, and the value is 1.
+```
               hello world and hello go
                           |
                           v
@@ -34,33 +29,18 @@ Now, we will now explore the functioning of each phase and analyze the input and
                           |
                           v
   {hello 1} {world 1} {and 1} {hello 1} {go 1}
-
-
-// Call Map function on hi.txt
-
-                      hi go
-                        |
-                        v
-                    Map function
-                        |
-                        v
-                  {hi 1} {go 1}
-
-// Sum up the results
-intermediate = {hello 1} {world 1} {and 1} {hello 1} {go 1} {hi 1} {go 1}
 ```
-
 ### 2.1.2. Shuffle & Sort Phase
-- Intermediate Data: The emitted key-value pairs from all Map are sorted and grouped based on their keys. All occurrences of a specific word are brought together.
+- The emitted key-value pairs from Map function are sorted and grouped based on their keys. All occurrences of a specific word are brought together.
 
-```text
-{hello 1} {world 1} {and 1} {hello 1} {go 1} {hi 1} {go 1}
+```
+{hello 1} {world 1} {and 1} {hello 1} {go 1}
                         |
                         v
-                Sort intermediate by key
+                    Sort by key
                         |
                         v
-{and 1} {go 1} {go 1} {hello 1} {hello 1} {hi 1} {world 1}
+{and 1} {go 1} {hello 1} {hello 1} {world 1}
                         |
                         v
                     Group by key
@@ -70,36 +50,21 @@ intermediate = {hello 1} {world 1} {and 1} {hello 1} {go 1} {hi 1} {go 1}
             |   key   | values      |
             |:-------:|:-----------:|
             |   and   |   [1]       |
-            |   go    |   [1, 1]    |
+            |   go    |   [1]       |
             |  hello  |   [1, 1]    |
-            |   hi    |   [1]       |
             |  world  |   [1]       |
 
 ```
 
 ### 2.1.3. Reduce Phase
-- Reduce Function: For each unique word key, a Reduce function receives the list of counts associated with that word. The Reduce function sums up these counts to compute the total occurrences of the word.
-```text
-// Reduce function returns the number of elements in the values list.
-
+- The reduce function produces a collection of key-value pairs, in which each key corresponds to a distinct word, and its associated value represents the cumulative count of that word across the entire input dataset.
+```
 |   key   | values      |     Reduce    |
 |:-------:|:-----------:|:-------------:|
 |   and   |     [1]     |       1       |
-|   go    |   [1, 1]    |       2       |
+|   go    |     [1]     |       1       |
 |  hello  |   [1, 1]    |       2       |
-|   hi    |     [1]     |       1       |
 |  world  |     [1]     |       1       |
-```
-
-### 2.1.4. Result
-- Output: The reducer emits the word as the key and its total count as the value.
-```text
-|   key   |  occurrence   |
-|:-------:|:-------------:|
-|   and   |       1       |
-|   go    |       2       |
-|  hello  |       2       |
-|  world  |       1       |
 ```
 
 ## 2.2. Implementation
@@ -235,37 +200,39 @@ func main() {
 ```
 
 ## 2.3. Testcase
-### 2.3.1. Prepare Input Data
+### 2.3.1. Input
 ```zsh
-mkdir input
-echo "hello world and hello go" > input/hello.txt
-echo "hi go" > input/hi.txt
+echo "hello world and hello go" > hello.txt
+echo "hi go and let go together" > hi.txt
 ```
 
 ### 2.3.2. Run
 ```zsh
-go run wc.go sequential.go input/hello.txt input/hi.txt
+go run wc.go sequential.go hello.txt hi.txt
 ```
 
+### 2.3.3. Output
 Output is saved in `output.txt`.
 ```text
-and 1
-go 2
+and 2
+go 3
 hello 2
 hi 1
+let 1
+together 1
 world 1
 ```
 
-## 2. **MapReduce Solution**
-## 2.1. Description
+## 3. **MapReduce Solution**
+## 3.1. Description
 In a MapReduce solution, the Coordinator handles task distribution, progress monitoring, and data management, while Workers execute tasks, process data, and communicate their results back to the Coordinator.
 
-### 2.1.1 Map Phase
+### 3.1.1 Map Phase
 **Coordinator**
-- Creates map tasks for files: `hello.txt` and `hi.txt`.
-- Wait for for task requests from Workers.
+- Creates map tasks for files `hello.txt` and `hi.txt`. Task id for `hello.txt` is 0, for `hi.txt` is 1.
+- Wait for task requests from Workers.
 
-```text
+```
      ┌────────┐          ┌────────┐           ┌───────────┐                        
      │Worker_1│          │Worker_2│           │Coordinator│                        
      └───┬────┘          └───┬────┘           └─────┬─────┘                        
@@ -294,108 +261,23 @@ In a MapReduce solution, the Coordinator handles task distribution, progress mon
 ```
 
 **Worker_1**  
-- Involkes Map function on `hello.txt`.
-```text
-Map("hello world and hello go") => {hello 1} {world 1} {and 1} {hello 1} {go 1}
-```
+- Execute the Map tasks on `hello.txt`.
+- Create 5 temporary files, namely `map-0-0.txt`, `map-0-1.txt`, `map-0-2.txt`, `map-0-3.txt`, and `map-0-4.txt`, to hold the output of the Map function. These files are formatted as `map-X-Y.txt`, where X represents the task ID and Y ranges from 0 to 4. The number of temporatory files is configurable.
+- The key-value pair will be written to a file named map-0-Y, where 0 is task id for `hello.txt`, Y corresponds to the hash value of the key.
 
-To store the Map function's output, we will generate 10 temporary files. Each file's name will follow this structure:
-- `bucket_id = hash(key) % 10`. Where hash is a function that transforms text into a numeric value. Keys with identical values will be arranged within the corresponding **bucket**.
-- `filename = tmp.<worker_id>.<bucket_id>`  
-
-For instance:
-- After Worker_1 applies the Map function to hello.txt, resulting in the pair `{hello 1}`.
-- `hash(hello) % 10 = 0`.
-- Therefore, the `filename = tmp.<worker_id>.<bucket_id> = tmp.1.0`.
-- Consequently, the pair `{hello 1}` will be stored within the file named `tmp.1.0`.
-
-```text
-| worker | key   | bucket id | filename  |
-|--------|-------|-----------|-----------|
-| 1      | hello | 0         | tmp.1.0   |
-| 1      | and   | 1         | tmp.1.1   |
-| 1      | go    | 2         | tmp.1.2   |
-```
-
-- Saves key-value pairs to corresponding files.
-```text
-     ┌────────┐           ┌───────┐          ┌───────┐          ┌───────┐
-     │Worker_1│           │tmp.1.0│          │tmp.1.1│          │tmp.1.2│
-     └───┬────┘           └───┬───┘          └───┬───┘          └───┬───┘
-         │ {hello 1} {hello 1}│                  │                  │    
-         │ ───────────────────>                  │                  │    
-         │                    │                  │                  │    
-         │                {and 1}                │                  │    
-         │ ──────────────────────────────────────>                  │    
-         │                    │                  │                  │    
-         │                    │{go 1} {world 1}  │                  │    
-         │ ─────────────────────────────────────────────────────────>    
-     ┌───┴────┐           ┌───┴───┐          ┌───┴───┐          ┌───┴───┐
-     │Worker_1│           │tmp.1.0│          │tmp.1.1│          │tmp.1.2│
-     └────────┘           └───────┘          └───────┘          └───────┘
-```
+![map-worker-1.png](./map-worker-1.png)
 
 **Worker_2**  
-- Involkes Map function on `hi.txt`.
-```text
-Map("hi go") => {hi 1} {go 1}
-```
+- Execute the Map tasks on `hello.txt`.
+- Create 5 temporary files, namely `map-1-0.txt`, `map-1-1.txt`, `map-1-2.txt`, `map-1-3.txt`, and `map-1-4.txt`, to hold the output of the Map function.
+- Write the key-value pairs to the corresponding files.
 
-- Generate temporary file names to store the outcomes of the Map function.
-```text
-| worker | key   | hash | filename    |
-|--------|-------|------|-------------|
-| 2      | hi    | 3    | tmp.2.3     |
-| 2      | go    | 2    | tmp.2.2     |
-```
-
-- Write outputs of Map function to corresponding files.
-```text
-     ┌────────┐          ┌───────┐          ┌───────┐
-     │Worker_2│          │tmp.2.2│          │tmp.2.3│
-     └───┬────┘          └───┬───┘          └───┬───┘
-         │      {go 1}       │                  │    
-         │ ─────────────────>│                  │    
-         │                   │                  │    
-         │                {hi 1}                │    
-         │ ────────────────────────────────────>│    
-     ┌───┴────┐          ┌───┴───┐          ┌───┴───┐
-     │Worker_2│          │tmp.2.2│          │tmp.2.3│
-     └────────┘          └───────┘          └───────┘
-```
-
-We will have about content of each temporatory files as below.  
-  
-
-File: *tmp.1.0*
-```text
-{hello 1} {hello 1}
-```
-
-File: *tmp.1.1*
-```text
-{and 1}
-```
-
-File: *tmp.1.2*
-```text
-{go 1} {world 1}
-```
-
-File: *tmp.2.2*
-```text
-{go 1}
-```
-
-File: *tmp.2.3*
-```text
-{hi 1}
-```
+![map-worker-2.png](./map-worker-2.png)
 
 **Workers notify Coordinator about completed tasks**  
 Once tasks are finished, Worker_1 and Worker_2 will notify the Coordinator.
 In case there are other tasks still pending in the Coordinator's queue, it will prompt the workers to request new tasks.
-```text
+```
      ┌──────┐            ┌───────────┐
      │Worker│            │Coordinator│
      └──┬───┘            └─────┬─────┘
@@ -412,7 +294,7 @@ In case there are other tasks still pending in the Coordinator's queue, it will 
      └──────┘            └───────────┘
 ```
 If no more tasks are available, the Coordinator will also notify the workers to cease requesting tasks.
-```text
+```
      ┌──────┐                ┌───────────┐
      │Worker│                │Coordinator│
      └──┬───┘                └─────┬─────┘
@@ -430,7 +312,7 @@ If no more tasks are available, the Coordinator will also notify the workers to 
      └──────┘                └───────────┘
 ```
 
-### 2.1.2 Reduce Phase
+### 3.1.2 Reduce Phase
 
 **Coordinator:**  
 - Gathers Reduce tasks based on temporary files generated during the Map Phase.
@@ -445,7 +327,7 @@ If no more tasks are available, the Coordinator will also notify the workers to 
 
 Now, let's explore how the Coordinator and Workers execute tasks in parallel, working collaboratively to accomplish the desired goal.
 **Worker_1**  
-```text
+```
      ┌────────┐                                   ┌───────────┐          ┌────────┐
      │Worker_1│                                   │Coordinator│          │output.0│
      └───┬────┘                                   └─────┬─────┘          └───┬────┘
@@ -470,7 +352,7 @@ Now, let's explore how the Coordinator and Workers execute tasks in parallel, wo
 ```
 
 **Worker_2**  
-```text
+```
      ┌────────┐                                   ┌───────────┐          ┌────────┐
      │Worker_2│                                   │Coordinator│          │output.1│
      └───┬────┘                                   └─────┬─────┘          └───┬────┘
@@ -495,7 +377,7 @@ Now, let's explore how the Coordinator and Workers execute tasks in parallel, wo
 ```
 
 **Worker_1**  
-```text
+```
      ┌────────┐                                   ┌───────────┐          ┌────────┐
      │Worker_1│                                   │Coordinator│          │output.2│
      └───┬────┘                                   └─────┬─────┘          └───┬────┘
@@ -523,7 +405,7 @@ Now, let's explore how the Coordinator and Workers execute tasks in parallel, wo
 ```
 
 **Worker_2**  
-```text
+```
      ┌────────┐                                   ┌───────────┐          ┌────────┐
      │Worker_2│                                   │Coordinator│          │output.3│
      └───┬────┘                                   └─────┬─────┘          └───┬────┘
@@ -558,7 +440,7 @@ Now, let's explore how the Coordinator and Workers execute tasks in parallel, wo
 ```
 
 **Worker_1**  
-```text
+```
      ┌────────┐               ┌───────────┐
      │Worker_1│               │Coordinator│
      └───┬────┘               └─────┬─────┘
@@ -573,10 +455,10 @@ Now, let's explore how the Coordinator and Workers execute tasks in parallel, wo
      └────────┘               └───────────┘
 ```
 
-### 2.1.3 Result Phase
+### 3.1.3 Result Phase
 Once Workers complete their respective Reduce tasks, 
 the Coordinator gathers all the Reduce outputs and merge them into a single file.
-```text
+```
      ┌───────────┐                                             ┌──────┐
      │Coordinator│                                             │output│
      └─────┬─────┘                                             └──┬───┘
