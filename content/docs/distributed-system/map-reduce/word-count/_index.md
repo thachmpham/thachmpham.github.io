@@ -7,16 +7,18 @@ bookToc: true
 
 # Distributed Word Count
 ## 1. Introduction
+The MapReduce model is particularly suited for handling tasks that can be divided into two main phases: the Map phase and the Reduce phase.  
+
 Distributed Word Count is a classic example often used to illustrate the MapReduce programming model for processing and analyzing large datasets. In this scenario, the goal is to count the occurrences of each word in a given collection of text files.
 
 ![intro.png](./intro.png)
 
-In this blog post, we will utilize **Golang** to develop a word counting program through two different approaches: a **Sequential** solution and a **MapReduce** solution.
-
+In the beginning, our focus will be on understanding the implementation of a word count program using a sequential approach during session 2. Subsequently, during session 3, we will delve into the exploration of parallel implementation using the MapReduce model.
 
 ## 2. Sequential Solution
 ## 2.1 Description
-In the below example, we will count occurences of words in two files `hello.txt` and `hi.txt` using sequential solution.  
+In the below example, we will count occurences of words in two files `hello.txt` and `hi.txt` using sequential solution. 
+
 ![sequential.png](./sequential.png) 
 
 ### 2.1.1. Map Phase
@@ -293,7 +295,78 @@ In case there are other tasks still pending in the Coordinator's queue, it will 
      │Worker│            │Coordinator│
      └──────┘            └───────────┘
 ```
-If no more tasks are available, the Coordinator will also notify the workers to cease requesting tasks.
+
+
+
+### 3.1.2 Reduce Phase
+
+**Coordinator:**  
+- Generate five reduce tasks, each tasked with processing files produced by map functions. These files are labeled in the format `map-X-Y.txt`, with Y representing the *hash number*. Each reduce task will manage a set of files that share the same Y value. To illustrate, files such as `map-0-4.txt`, `map-1-4.txt` and `map-2-4.txt` would all fall within the same group distinguished by `Y=4`.
+```
+| reduce task | files                        |
+|-------------|------------------------------|
+| 0           | map-0-0.txt, map-1-0.txt     |
+| 1           | map-0-1.txt, map-1-1.txt     |
+| 2           | map-0-2.txt, map-1-2.txt     |
+| 3           | map-0-3.txt, map-1-3.txt     |
+| 4           | map-0-4.txt, map-1-4.txt     |
+```
+
+- Wait for task requests from Workers.
+```
+     ┌────────┐                ┌───────────┐                 ┌────────┐
+     │Worker_1│                │Coordinator│                 │Worker_2│
+     └───┬────┘                └─────┬─────┘                 └───┬────┘
+         │                           │────┐                      │     
+         │                           │    │ create reduce tasks  │     
+         │                           │<───┘                      │     
+         │                           │                           │     
+         │        request task       │                           │     
+         │ ──────────────────────────>                           │     
+         │                           │                           │     
+         │    assign reduce task 0   │                           │     
+         │ <──────────────────────────                           │     
+         │                           │                           │     
+         │       completed task      │                           │     
+         │ ──────────────────────────>                           │     
+         │                           │                           │     
+         │ there still remaining task│                           │     
+         │ <──────────────────────────                           │     
+         │                           │                           │     
+         │        request task       │                           │     
+         │ ──────────────────────────>                           │     
+         │                           │                           │     
+         │ assign another reduce task│                           │     
+         │ <──────────────────────────                           │     
+         │                           │                           │     
+         │                           │        request task       │     
+         │                           │ <──────────────────────────     
+         │                           │                           │     
+         │                           │    assign reduce task 1   │     
+         │                           │ ──────────────────────────>     
+         │                           │                           │     
+         │                           │       completed task      │     
+         │                           │ <──────────────────────────     
+         │                           │                           │     
+         │                           │ there still remaining task│     
+         │                           │ ──────────────────────────>     
+         │                           │                           │     
+         │                           │        request task       │     
+         │                           │ <──────────────────────────     
+         │                           │                           │     
+         │                           │ assign another reduce task│     
+         │                           │ ──────────────────────────>     
+     ┌───┴────┐                ┌─────┴─────┐                 ┌───┴────┐
+     │Worker_1│                │Coordinator│                 │Worker_2│
+     └────────┘                └───────────┘                 └────────┘
+```
+
+**Workers:**  
+Perform the reduce tasks and record the output into files formatted as `output-Y.txt`, where Y represents the hash number. Worker_1 and Worker_2 will execute these tasks in parallel.
+
+![](./parallel-reduce.png)
+
+After all tasks are completed, the Coordinator will also notify the workers to cease requesting tasks.
 ```
      ┌──────┐                ┌───────────┐
      │Worker│                │Coordinator│
@@ -311,167 +384,10 @@ If no more tasks are available, the Coordinator will also notify the workers to 
      │Worker│                │Coordinator│
      └──────┘                └───────────┘
 ```
-
-### 3.1.2 Reduce Phase
-
-**Coordinator:**  
-- Gathers Reduce tasks based on temporary files generated during the Map Phase.
-- Files are categorized by their **bucket id**. For instance, tmp.1.**1** and tmp.2.**1** fall within the same category, while tmp.1.**3** and tmp.2.**3** are part of the same category.
-
-**Workers:**  
-- Workers communicate with the Coordinator to request Reduce tasks.
-- Upon receiving Reduce task details including the bucket id, Workers proceed to execute the Reduce function on the group of temporary files associated with that bucket id.
-- Subsequently, the Reduce output is sorted by key.
-- The resulting output is then saved to a file named as output.<bucket id>, such as output.1 for bucket 1 and output.2 for bucket 2.
-
-
-Now, let's explore how the Coordinator and Workers execute tasks in parallel, working collaboratively to accomplish the desired goal.
-**Worker_1**  
-```
-     ┌────────┐                                   ┌───────────┐          ┌────────┐
-     │Worker_1│                                   │Coordinator│          │output.0│
-     └───┬────┘                                   └─────┬─────┘          └───┬────┘
-         │                 request task                 │                    │     
-         │ ─────────────────────────────────────────────>                    │     
-         │                                              │                    │     
-         │          Reduce task with bucket = 0         │                    │     
-         │ <─────────────────────────────────────────────                    │     
-         │                                              │                    │     
-         │────┐                                                              │     
-         │    │ Perform Reduce on files: tmp.1.0, tmp.2.0                    │     
-         │<───┘                                                              │     
-         │                                              │                    │     
-         │                          Write: "hello 2"    │                    │     
-         │ ──────────────────────────────────────────────────────────────────>     
-         │                                              │                    │     
-         │                task completed                │                    │     
-         │ ─────────────────────────────────────────────>                    │     
-     ┌───┴────┐                                   ┌─────┴─────┐          ┌───┴────┐
-     │Worker_1│                                   │Coordinator│          │output.0│
-     └────────┘                                   └───────────┘          └────────┘
-```
-
-**Worker_2**  
-```
-     ┌────────┐                                   ┌───────────┐          ┌────────┐
-     │Worker_2│                                   │Coordinator│          │output.1│
-     └───┬────┘                                   └─────┬─────┘          └───┬────┘
-         │                 request task                 │                    │     
-         │ ─────────────────────────────────────────────>                    │     
-         │                                              │                    │     
-         │          Reduce task with bucket = 1         │                    │     
-         │ <─────────────────────────────────────────────                    │     
-         │                                              │                    │     
-         │────┐                                                              │     
-         │    │ Perform Reduce on files: tmp.1.1, tmp.2.1                    │     
-         │<───┘                                                              │     
-         │                                              │                    │     
-         │                           Write: "and 1"     │                    │     
-         │ ──────────────────────────────────────────────────────────────────>     
-         │                                              │                    │     
-         │                task completed                │                    │     
-         │ ─────────────────────────────────────────────>                    │     
-     ┌───┴────┐                                   ┌─────┴─────┐          ┌───┴────┐
-     │Worker_2│                                   │Coordinator│          │output.1│
-     └────────┘                                   └───────────┘          └────────┘
-```
-
-**Worker_1**  
-```
-     ┌────────┐                                   ┌───────────┐          ┌────────┐
-     │Worker_1│                                   │Coordinator│          │output.2│
-     └───┬────┘                                   └─────┬─────┘          └───┬────┘
-         │             there remaining task             │                    │     
-         │ <─────────────────────────────────────────────                    │     
-         │                                              │                    │     
-         │                 request task                 │                    │     
-         │ ─────────────────────────────────────────────>                    │     
-         │                                              │                    │     
-         │          Reduce task with bucket = 2         │                    │     
-         │ <─────────────────────────────────────────────                    │     
-         │                                              │                    │     
-         │────┐                                                              │     
-         │    │ Perform Reduce on files: tmp.1.2, tmp.2.2                    │     
-         │<───┘                                                              │     
-         │                                              │                    │     
-         │                       Write: "go 2, world 1" │                    │     
-         │ ──────────────────────────────────────────────────────────────────>     
-         │                                              │                    │     
-         │                task completed                │                    │     
-         │ ─────────────────────────────────────────────>                    │     
-     ┌───┴────┐                                   ┌─────┴─────┐          ┌───┴────┐
-     │Worker_1│                                   │Coordinator│          │output.2│
-     └────────┘                                   └───────────┘          └────────┘
-```
-
-**Worker_2**  
-```
-     ┌────────┐                                   ┌───────────┐          ┌────────┐
-     │Worker_2│                                   │Coordinator│          │output.3│
-     └───┬────┘                                   └─────┬─────┘          └───┬────┘
-         │             there remaining task             │                    │     
-         │ <─────────────────────────────────────────────                    │     
-         │                                              │                    │     
-         │                 request task                 │                    │     
-         │ ─────────────────────────────────────────────>                    │     
-         │                                              │                    │     
-         │          Reduce task with bucket = 3         │                    │     
-         │ <─────────────────────────────────────────────                    │     
-         │                                              │                    │     
-         │────┐                                                              │     
-         │    │ Perform Reduce on files: tmp.1.3, tmp.2.3                    │     
-         │<───┘                                                              │     
-         │                                              │                    │     
-         │                           Write: "hi 1"      │                    │     
-         │ ──────────────────────────────────────────────────────────────────>     
-         │                                              │                    │     
-         │                task completed                │                    │     
-         │ ─────────────────────────────────────────────>                    │     
-         │                                              │                    │     
-         │                 no more task                 │                    │     
-         │ <─────────────────────────────────────────────                    │     
-         │                                              │                    │     
-         │────┐                                         │                    │     
-         │    │ cease requesting task                   │                    │     
-         │<───┘                                         │                    │     
-     ┌───┴────┐                                   ┌─────┴─────┐          ┌───┴────┐
-     │Worker_2│                                   │Coordinator│          │output.3│
-     └────────┘                                   └───────────┘          └────────┘
-```
-
-**Worker_1**  
-```
-     ┌────────┐               ┌───────────┐
-     │Worker_1│               │Coordinator│
-     └───┬────┘               └─────┬─────┘
-         │       no more task       │      
-         │ <─────────────────────────      
-         │                          │      
-         │────┐                            
-         │    │ cease requesting task      
-         │<───┘                            
-     ┌───┴────┐               ┌─────┴─────┐
-     │Worker_1│               │Coordinator│
-     └────────┘               └───────────┘
-```
-
 ### 3.1.3 Result Phase
-Once Workers complete their respective Reduce tasks, 
-the Coordinator gathers all the Reduce outputs and merge them into a single file.
-```
-     ┌───────────┐                                             ┌──────┐
-     │Coordinator│                                             │output│
-     └─────┬─────┘                                             └──┬───┘
-           ────┐                                                       
-               │ concatenate output.0, output.1, output.2, output.3    
-           <───┘                                                       
-           │                                                      │    
-           │                save the final output                 │    
-           │──────────────────────────────────────────────────────>    
-     ┌─────┴─────┐                                             ┌──┴───┐
-     │Coordinator│                                             │output│
-     └───────────┘                                             └──────┘
-```
+Once Workers complete their respective Reduce tasks, the Coordinator gathers all the Reduce outputs and merge them into a single file.
+
+![](./output.png)
 
 ## 2.2 Implementation
 ### 
