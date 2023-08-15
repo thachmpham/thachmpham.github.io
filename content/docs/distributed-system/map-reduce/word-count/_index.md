@@ -264,8 +264,9 @@ In a MapReduce solution, the Coordinator handles task distribution, progress mon
 
 **Worker_1**  
 - Execute the Map tasks on `hello.txt`.
-- Create 5 temporary files, namely `map-0-0.txt`, `map-0-1.txt`, `map-0-2.txt`, `map-0-3.txt`, and `map-0-4.txt`, to hold the output of the Map function. These files are formatted as `map-X-Y.txt`, where X represents the task ID and Y ranges from 0 to 4. The number of temporatory files is configurable.
-- The key-value pair will be written to a file named map-0-Y, where 0 is task id for `hello.txt`, Y corresponds to the hash value of the key.
+- Create 5 temporary files, namely `map-0-0.txt`, `map-0-1.txt`, `map-0-2.txt`, `map-0-3.txt`, and `map-0-4.txt`, to hold the output of the Map function. These files are formatted as `map-X-Y.txt`, where X represents the task ID and Y is the hash value of key (word). The number of temporatory files is configurable. 
+- For example, let's consider the task for the file `hello.txt`, which is assigned the **task with id 0**. Now, suppose the **hash value** for the key "world" is **2**. In this scenario, the key-value pair associated with the key "world" will be recorded in the file named **map-0-2.txt**.
+
 
 ![map-worker-1.png](./map-worker-1.png)
 
