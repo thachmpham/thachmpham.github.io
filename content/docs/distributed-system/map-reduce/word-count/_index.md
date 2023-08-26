@@ -7,7 +7,7 @@ bookToc: true
 
 # Distributed Word Count
 ## 1. Introduction
-The MapReduce model is particularly suited for handling tasks that can be divided into two main phases: the Map phase and the Reduce phase.  
+The MapReduce model is particularly suited for handling tasks that can be divided into two main phases: the Map phase and the Reduce phase.
 
 Distributed Word Count is a classic example often used to illustrate the MapReduce programming model for processing and analyzing large datasets. In this scenario, the goal is to count the occurrences of each word in a given collection of text files.
 
@@ -17,9 +17,9 @@ In the beginning, our focus will be on understanding the implementation of a wor
 
 ## 2. Sequential Solution
 ## 2.1 Description
-In the below example, we will count occurences of words in two files `hello.txt` and `hi.txt` using sequential solution. 
+In the below example, we will count occurences of words in two files `hello.txt` and `hi.txt` using sequential solution.
 
-![sequential.png](./sequential.png) 
+![sequential.png](./sequential.png)
 
 ### 2.1.1. Map Phase
 The map function takes each input file and emits key-value pairs. The key is usually a word, and the value is 1.
@@ -94,8 +94,8 @@ func (a ByKey) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByKey) Less(i, j int) bool { return a[i].Key < a[j].Key }
 
 /*
-	The Map function tokenizes the text, separates it into words, 
-	and emits key-value pairs.The key is the word, 
+	The Map function tokenizes the text, separates it into words,
+	and emits key-value pairs.The key is the word,
 	and the value is a count of 1 for each occurrence of the word.
 
 	Samples:
@@ -159,7 +159,7 @@ func main() {
 		file, _ := os.Open(filename)
 		content, _ := ioutil.ReadAll(file)
 		file.Close()
-		
+
 		kva := Map(filename, string(content))
 		fmt.Println("Map", filename, "=>", kva)
 
@@ -235,63 +235,63 @@ In a MapReduce solution, the Coordinator handles task distribution, progress mon
 - Wait for task requests from Workers.
 
 ```
-     ┌────────┐          ┌────────┐           ┌───────────┐                        
-     │Worker_1│          │Worker_2│           │Coordinator│                        
-     └───┬────┘          └───┬────┘           └─────┬─────┘                        
-         │                   │                      │────┐                         
+     ┌────────┐          ┌────────┐           ┌───────────┐
+     │Worker_1│          │Worker_2│           │Coordinator│
+     └───┬────┘          └───┬────┘           └─────┬─────┘
+         │                   │                      │────┐
          │                   │                      │    │ create MapTask hello.txt
-         │                   │                      │<───┘                         
-         │                   │                      │                              
-         │                   │                      │────┐                         
-         │                   │                      │    │ create MapTask hi.txt   
-         │                   │                      │<───┘                         
-         │                   │                      │                              
-         │               request task               │                              
-         │ ─────────────────────────────────────────>                              
-         │                   │                      │                              
-         │                   │     request task     │                              
-         │                   │ ─────────────────────>                              
-         │                   │                      │                              
-         │         assign MapTask hello.txt         │                              
-         │ <─────────────────────────────────────────                              
-         │                   │                      │                              
-         │                   │ assign MapTask hi.txt│                              
-         │                   │ <─────────────────────                              
-     ┌───┴────┐          ┌───┴────┐           ┌─────┴─────┐                        
-     │Worker_1│          │Worker_2│           │Coordinator│                        
-     └────────┘          └────────┘           └───────────┘        
+         │                   │                      │<───┘
+         │                   │                      │
+         │                   │                      │────┐
+         │                   │                      │    │ create MapTask hi.txt
+         │                   │                      │<───┘
+         │                   │                      │
+         │               request task               │
+         │ ─────────────────────────────────────────>
+         │                   │                      │
+         │                   │     request task     │
+         │                   │ ─────────────────────>
+         │                   │                      │
+         │         assign MapTask hello.txt         │
+         │ <─────────────────────────────────────────
+         │                   │                      │
+         │                   │ assign MapTask hi.txt│
+         │                   │ <─────────────────────
+     ┌───┴────┐          ┌───┴────┐           ┌─────┴─────┐
+     │Worker_1│          │Worker_2│           │Coordinator│
+     └────────┘          └────────┘           └───────────┘
 ```
 
-**Worker_1**  
+**Worker_1**
 - Execute the Map tasks on `hello.txt`.
-- Create 5 temporary files, namely `map-0-0.txt`, `map-0-1.txt`, `map-0-2.txt`, `map-0-3.txt`, and `map-0-4.txt`, to hold the output of the Map function. These files are formatted as `map-X-Y.txt`, where X represents the task ID and Y is the hash value of key (word). The number of temporatory files is configurable. 
+- Create 5 temporary files, namely `map-0-0.txt`, `map-0-1.txt`, `map-0-2.txt`, `map-0-3.txt`, and `map-0-4.txt`, to hold the output of the Map function. These files are formatted as `map-X-Y.txt`, where X represents the task ID and Y is the hash value of key (word). The number of temporatory files is configurable.
 - For example, let's consider the task for the file `hello.txt`, which is assigned the **task with id 0**. Now, suppose the **hash value** for the key "world" is **2**. In this scenario, the key-value pair associated with the key "world" will be recorded in the file named **map-0-2.txt**.
 
 
 ![map-worker-1.png](./map-worker-1.png)
 
-**Worker_2**  
+**Worker_2**
 - Execute the Map tasks on `hello.txt`.
 - Create 5 temporary files, namely `map-1-0.txt`, `map-1-1.txt`, `map-1-2.txt`, `map-1-3.txt`, and `map-1-4.txt`, to hold the output of the Map function.
 - Write the key-value pairs to the corresponding files.
 
 ![map-worker-2.png](./map-worker-2.png)
 
-**Workers notify Coordinator about completed tasks**  
+**Workers notify Coordinator about completed tasks**
 Once tasks are finished, Worker_1 and Worker_2 will notify the Coordinator.
 In case there are other tasks still pending in the Coordinator's queue, it will prompt the workers to request new tasks.
 ```
      ┌──────┐            ┌───────────┐
      │Worker│            │Coordinator│
      └──┬───┘            └─────┬─────┘
-        │    task completed    │      
-        │ ─────────────────────>      
-        │                      │      
-        │ there remaining tasks│      
-        │ <─────────────────────      
-        │                      │      
-        │     task request     │      
-        │ ─────────────────────>      
+        │    task completed    │
+        │ ─────────────────────>
+        │                      │
+        │ there remaining tasks│
+        │ <─────────────────────
+        │                      │
+        │     task request     │
+        │ ─────────────────────>
      ┌──┴───┐            ┌─────┴─────┐
      │Worker│            │Coordinator│
      └──────┘            └───────────┘
@@ -301,7 +301,7 @@ In case there are other tasks still pending in the Coordinator's queue, it will 
 
 ### 3.1.2 Reduce Phase
 
-**Coordinator:**  
+**Coordinator:**
 - Generate five reduce tasks, each tasked with processing files produced by map functions. These files are labeled in the format `map-X-Y.txt`, with Y representing the *hash number*. Each reduce task will manage a set of files that share the same Y value. To illustrate, files such as `map-0-4.txt`, `map-1-4.txt` and `map-2-4.txt` would all fall within the same group distinguished by `Y=4`.
 ```
 | reduce task | files                        |
@@ -318,51 +318,51 @@ In case there are other tasks still pending in the Coordinator's queue, it will 
      ┌────────┐                ┌───────────┐                 ┌────────┐
      │Worker_1│                │Coordinator│                 │Worker_2│
      └───┬────┘                └─────┬─────┘                 └───┬────┘
-         │                           │────┐                      │     
-         │                           │    │ create reduce tasks  │     
-         │                           │<───┘                      │     
-         │                           │                           │     
-         │        request task       │                           │     
-         │ ──────────────────────────>                           │     
-         │                           │                           │     
-         │    assign reduce task 0   │                           │     
-         │ <──────────────────────────                           │     
-         │                           │                           │     
-         │       completed task      │                           │     
-         │ ──────────────────────────>                           │     
-         │                           │                           │     
-         │ there still remaining task│                           │     
-         │ <──────────────────────────                           │     
-         │                           │                           │     
-         │        request task       │                           │     
-         │ ──────────────────────────>                           │     
-         │                           │                           │     
-         │ assign another reduce task│                           │     
-         │ <──────────────────────────                           │     
-         │                           │                           │     
-         │                           │        request task       │     
-         │                           │ <──────────────────────────     
-         │                           │                           │     
-         │                           │    assign reduce task 1   │     
-         │                           │ ──────────────────────────>     
-         │                           │                           │     
-         │                           │       completed task      │     
-         │                           │ <──────────────────────────     
-         │                           │                           │     
-         │                           │ there still remaining task│     
-         │                           │ ──────────────────────────>     
-         │                           │                           │     
-         │                           │        request task       │     
-         │                           │ <──────────────────────────     
-         │                           │                           │     
-         │                           │ assign another reduce task│     
-         │                           │ ──────────────────────────>     
+         │                           │────┐                      │
+         │                           │    │ create reduce tasks  │
+         │                           │<───┘                      │
+         │                           │                           │
+         │        request task       │                           │
+         │ ──────────────────────────>                           │
+         │                           │                           │
+         │    assign reduce task 0   │                           │
+         │ <──────────────────────────                           │
+         │                           │                           │
+         │       completed task      │                           │
+         │ ──────────────────────────>                           │
+         │                           │                           │
+         │ there still remaining task│                           │
+         │ <──────────────────────────                           │
+         │                           │                           │
+         │        request task       │                           │
+         │ ──────────────────────────>                           │
+         │                           │                           │
+         │ assign another reduce task│                           │
+         │ <──────────────────────────                           │
+         │                           │                           │
+         │                           │        request task       │
+         │                           │ <──────────────────────────
+         │                           │                           │
+         │                           │    assign reduce task 1   │
+         │                           │ ──────────────────────────>
+         │                           │                           │
+         │                           │       completed task      │
+         │                           │ <──────────────────────────
+         │                           │                           │
+         │                           │ there still remaining task│
+         │                           │ ──────────────────────────>
+         │                           │                           │
+         │                           │        request task       │
+         │                           │ <──────────────────────────
+         │                           │                           │
+         │                           │ assign another reduce task│
+         │                           │ ──────────────────────────>
      ┌───┴────┐                ┌─────┴─────┐                 ┌───┴────┐
      │Worker_1│                │Coordinator│                 │Worker_2│
      └────────┘                └───────────┘                 └────────┘
 ```
 
-**Workers:**  
+**Workers:**
 Perform the reduce tasks and record the output into files formatted as `output-Y.txt`, where Y represents the hash number. Worker_1 and Worker_2 will execute these tasks in parallel.
 
 ![](./parallel-reduce.png)
@@ -372,15 +372,15 @@ After all tasks are completed, the Coordinator will also notify the workers to c
      ┌──────┐                ┌───────────┐
      │Worker│                │Coordinator│
      └──┬───┘                └─────┬─────┘
-        │      task completed      │      
-        │ ─────────────────────────>      
-        │                          │      
-        │       no more task       │      
-        │ <─────────────────────────      
-        │                          │      
-        │────┐                            
-        │    │ cease requesting task      
-        │<───┘                            
+        │      task completed      │
+        │ ─────────────────────────>
+        │                          │
+        │       no more task       │
+        │ <─────────────────────────
+        │                          │
+        │────┐
+        │    │ cease requesting task
+        │<───┘
      ┌──┴───┐                ┌─────┴─────┐
      │Worker│                │Coordinator│
      └──────┘                └───────────┘
@@ -390,6 +390,154 @@ Once Workers complete their respective Reduce tasks, the Coordinator gathers all
 
 ![](./output.png)
 
-## 2.2 Implementation
-### 
+## 3.2 Implementation
+### 3.2.1. Task Struct
+```go
+type Task struct {
+        TaskId   int32
+
+        // TaskType could be TypeMap or TypeReduce
+        TaskType int32
+        
+        // if TaskType is TypeMap, then Content is filename
+        // if TaskType is TypeReduce, then Content is reduce id
+        Content  string
+       
+        // Status of a task could be:
+        //      StatusReady     : task loaded to queue
+        //      StatusSent      : task sent to workers,
+        //                      : if a worker crashes when execute a task,
+        //                      : coordinator will reset status of the task to StatusReady
+        //      StatusFinish    : task finished
+        Status   int32
+}
+```
+### 3.2.2. Create MapTasks
+```go
+/*
+The Coordinator generates MapTasks and associates them with input files.
+Each input file is allocated to a unique task.
+
+Sample.
+	filenames = ["hello.txt", "hi.txt"]
+
+	loadMapTasks(coordinator, filenames)
+
+	==>	coordinator.taskQueue = [
+		Task{TaskId:0, TaskType:TypeMap, Content:"hello.txt", Status:StatusReady},
+		Task{TaskId:1, TaskType:TypeMap, Content:"hi.txt",    Status:StatusReady}
+	]
+*/
+func loadMapTasks(c *Coordinator,filenames []string) {
+	c.taskQueue = make([]*Task, 0)
+	c.index = 0
+	n := len(filenames)
+	for i := 0; i < n; i++ {
+		c.taskQueue = append(c.taskQueue, &Task{
+			TaskId:    int32(i),
+			TaskType:  TypeMap,
+			Content:   filenames[i],
+			Status:	   StatusReady,
+		})
+	}
+}
+```
+### 3.2.3. TaskRequest, TaskResponse
+```go
+type TaskRequest struct {
+}
+
+type TaskResponse struct {
+        // ErrCode could be:
+        //      ErrSuccess      : succesfully get the task
+        //      ErrWait         : all tasks are assigned to workers, but any of them NOT finished yet
+        //                        so wait, and send another request later
+        //      ErrAllDone      : all tasks
+        ErrCode int32
+
+        // The information of task to execute
+        Task 	Task
+}
+```
+
+### 3.2.4. Get a MapTask
+```go
+/*
+The Coordinator defines the `GetTask` function
+which Workers invoke through RPC calls to obtain tasks.
+
+The function finds a task that is Ready in taskQueue
+and then put the task into response.
+
+Sample:
+	coordinator.taskQueue = [
+		Task{TaskId:0, TaskType:TypeMap, Content:"hello.txt", Status:StatusSent},
+		Task{TaskId:1, TaskType:TypeMap, Content:"hi.txt",    Status:StatusReady}
+	]
+
+	coordinator.GetTask(req, resp)
+
+	==> resp = {
+		ErrCode	: ErrSuccess
+		Task	: {TaskId:1, TaskType:TypeMap, Content:"hi.txt",    Status:StatusReady}
+	}
+*/
+func (c *Coordinator) GetTask(req *TaskRequest, resp *TaskResponse) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.status == AllDone {
+		resp.ErrCode = ErrAllDone
+		return nil
+	}
+
+	// traverse c.taskQueue, and find a task
+	hasWaiting := false
+	n := len(c.taskQueue)
+	for i := 0; i < n; i++ {
+		t := c.taskQueue[c.index]
+		c.index = (c.index + 1) % n
+
+		if t.Status == StatusReady { // found an availabe task
+			// assign the task to the workers in response.
+			t.Status = StatusSent
+			resp.Task = *t
+			resp.ErrCode = ErrSuccess
+
+			// check whether the task is finished within 10s
+			go checkTask(c, t.TaskId, t.TaskType)
+
+			return nil // return nil mean no error happen.
+
+		} else if t.Status == StatusSent {
+			// some tasks has not finished
+			hasWaiting = true
+		}
+	}
+
+	// traversal the whole c.taskQueue, there are still unfinished task,
+	// tell worker just wait the unfinished task to finish.
+	if hasWaiting {
+		resp.ErrCode = ErrWait
+		return nil
+	}
+
+	// finish all map tasks during mapperoid
+	// or reduce tasks during reduceperoid
+	switch c.status {
+	case MapPeroid:	// if finish MapPeriod, then move to Reduce Period
+		c.status = ReducePeroid
+		loadReduceTasks(c)
+		resp.ErrCode = ErrWait
+		return nil
+	case ReducePeroid: // if finish Reduce, then stop coordinator and workers
+		// end coordinator
+		c.status = AllDone
+		// end worker
+		resp.ErrCode = ErrAllDone
+		return nil
+	}
+	return nil
+}
+```
 
