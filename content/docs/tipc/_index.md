@@ -88,6 +88,7 @@ A range of service addresses of the same type and with instances between a lower
 {{< /columns >}}
 
 ## Sample: Bind a service address
+Bind a TIPC service with type is **100** and instance ID is **1**.
 ```c++
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -117,7 +118,7 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-  // Keep process running
+	// Keep process running
 	printf("Bind successfully, press Enter to exit...\n");
 	while ((getchar()) != '\n') {}
 }
@@ -138,6 +139,7 @@ Type       Lower      Upper      Scope    Port       Node
 ```
 
 ## Sample: Bind a range of services
+Bind a TIPC service with type is **100** and range is **0-10**.
 ```c++
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -169,7 +171,7 @@ int main(int argc, char* argv[])
 		exit (1);
 	}
 
-    // Keep process running
+	// Keep process running
 	printf("Bind successfully, press Enter to exit\n");
 	while ((getchar()) != '\n') {}
 }
