@@ -1,8 +1,8 @@
 ---
 weight: 1
-bookFlatSection: false
 title: "TIPC"
 bookToc: false
+bookFlatSection: true
 ---
 
 # TIPC
@@ -28,7 +28,8 @@ struct sockaddr_tipc {
                 struct tipc_service_range nameseq;
                 struct {
                         struct tipc_service_addr name;
-                        __u32 domain;
+                        __u32 domain; // lookup scope: valid node hash number or zero.
+
                 } name;
         } addr;
 };
@@ -58,17 +59,6 @@ enum tipc_scope {
 
 
 {{< columns >}}
-## tipc_socket_addr
-```c++
-struct tipc_socket_addr {
-        __u32 ref;
-        __u32 node;
-};
-```
-A reference to a specific socket in the cluster.
-<--->
-
-
 ## tipc_service_addr
 ```c++
 struct tipc_service_addr {
@@ -77,6 +67,7 @@ struct tipc_service_addr {
 };
 ```
 ID of a service within the TIPC network. The service types 0 through 63 are reserved for system internal use, and are not available for user space applications.
+
 <--->
 
 ## tipc_service_range
@@ -88,10 +79,28 @@ struct tipc_service_range {
 };
 ```
 A range of service addresses of the same type and with instances between a lower and an upper range limit.
+
+<--->
+
+## tipc_socket_addr
+```c++
+struct tipc_socket_addr {
+        __u32 ref;
+        __u32 node;
+};
+```
+A reference to a specific socket in the cluster.
+
 {{< /columns >}}
 
-## Sample: Bind a service address
+
+## Samples
+
+{{< tabs "uniqueid" >}}
+{{< tab "tipc_service_addr" >}}
+
 Bind a TIPC service with type is **100** and instance ID is **1**.
+
 ```c++
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -140,8 +149,10 @@ $ tipc nametable show
 Type       Lower      Upper      Scope    Port       Node
 100        1          1          cluster  1603289447 1001002
 ```
+{{< /tab >}}
 
-## Sample: Bind a range of services
+{{< tab "tipc_service_range" >}}
+
 Bind a TIPC service with type is **100** and range is **0-10**.
 ```c++
 #include <sys/types.h>
@@ -185,6 +196,9 @@ $ tipc nametable show
 Type       Lower      Upper      Scope    Port       Node
 100        0          10         cluster  2776395043
 ```
+
+{{< /tab >}}
+{{< /tabs >}}
 
 # Troubleshooting
 **Unable to get TIPC nl family id (module loaded?)**

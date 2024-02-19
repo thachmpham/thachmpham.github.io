@@ -2,3 +2,12 @@ baseURL = 'https://thachmpham.github.io'
 languageCode = 'en-us'
 title = 'Thach Pham'
 theme = 'hugo-book'
+
+[markup]
+[markup.goldmark.renderer]
+  unsafe = true
+  
+[params]
+  # (Optional, default light) Sets color theme: light, dark or auto.
+  # Theme 'auto' switches between dark and light modes based on browser/os preferences
+  BookTheme = 'light'
