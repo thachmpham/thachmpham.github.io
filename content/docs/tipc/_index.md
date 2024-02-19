@@ -7,10 +7,13 @@ bookToc: false
 
 # TIPC
 # 1. Introduction
-Transparent Inter-Process Communication (TIPC) is an Unix Domain Sockets for transmitting data between nodes in a cluster. TIPC provides transparent communication, meaning that applications can communicate without needing to know the network addresses or locations of other processes.
+TIPC (Transparent Inter-Process Communication) is a communication protocol used for inter-process communication (IPC) in distributed systems. It enables processes running on different nodes within a network to communicate with each other transparently, abstracting away the underlying network details.
 
 Headers:
 - /usr/include/linux/tipc.h
+
+Websites:
+- tipc.sourceforge.net
 
 # 2. Addressing
 {{< columns >}}
@@ -34,12 +37,12 @@ struct sockaddr_tipc {
 ## family
 ```c++
 #define AF_TIPC         30
-#define PF_TIPC         AF_TIPC
-#define SOL_TIPC        271
 ```
 
 ## addrtype
 ```c++
+#define TIPC_ADDR_MCAST         1
+#define TIPC_SERVICE_RANGE      1
 #define TIPC_SERVICE_ADDR       2
 #define TIPC_SOCKET_ADDR        3
 ```
@@ -188,4 +191,9 @@ Type       Lower      Upper      Scope    Port       Node
 ```sh
 $ sudo modprobe tipc
 $ lsmod | grep tipc
+```
+
+**socket(): Address family not supported by protocol**
+```sh
+$ sudo modprobe tipc
 ```
