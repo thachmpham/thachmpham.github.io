@@ -15,7 +15,104 @@ Headers:
 Websites:
 - tipc.sourceforge.net
 
-# 2. Addressing
+
+# 2. Setup A Cluster
+A TIPC cluster consists of nodes interconnected with links. A node can be either a physical processor, a virtual machine or a network namespace.
+```
+Node 1                                             Node 2
+-----------------                                 -----------------
+|      TIPC       |                               |      TIPC       |
+|   Application   |                               |   Application   |
+|-----------------|                               |-----------------|
+|                 |                               |                 |
+|      TIPC       |TIPC address       TIPC address|      TIPC       |
+|                 |                               |                 |
+|-----------------|                               |-----------------|
+| L2 or L3 Bearer |Bearer address   Bearer address| L2 or L3 Bearer |
+|     Service     |                               |     Service     |
+-----------------                                 -----------------
+  |                                                  |
+  +---------------- Bearer Transport ----------------+
+```
+
+## Setup Node Identities
+{{< columns >}}
+### Node 1
+```sh
+# tipc node set identity <node_id>
+$ tipc node set identity node_1
+
+$ tipc node get identity
+Node Identity                    Hash
+node_1                           00000000
+```
+
+<--->
+
+### Node 2
+```sh
+# tipc node set identity <node_id>
+$ tipc node set identity node_2
+
+$ tipc node get identity
+Node Identity                    Hash
+node_2                           00000000
+```
+
+{{< /columns >}}
+
+
+## Setup Bearers
+A bearer is an abstraction of a network interface that transmits message processes or nodes in a TIPC network.
+{{< columns >}}
+
+### Node 1
+```sh
+# Find network interfaces
+$ ifconfig
+ens160: inet 172.16.111.128  netmask 255.255.255.0  broadcast 172.16.111.255
+
+# Enable bear on a network interface
+$ tipc bear enable media eth device ens160
+
+$ tipc bear list
+eth:ens160
+```
+
+<--->
+
+### Node 2
+```sh
+# Find network interfaces
+$ ifconfig
+ens160: inet 172.16.111.129  netmask 255.255.255.0  broadcast 172.16.111.255
+
+# Enable bear on a network interface
+$ tipc bear enable media eth device ens160
+
+$ tipc bear list
+eth:ens160
+```
+
+{{< /columns >}}
+
+## Show Nametable
+Nametable contains information about the network topology, including the identities of nodes and services within the TIPC cluster.
+
+```sh
+$ tipc nametable show
+Type       Lower      Upper      Scope    Port       Node
+0          828204133  828204133  cluster  0          node_2
+0          828269669  828269669  cluster  0          node_1
+1          1          1          node     3236269336 node_2
+2          828269669  828269669  node     0          node_2
+```
+
+- The two entries with service type 0 show that we have two nodes in the cluster.
+- The entry with service type 1 represents the built-in topology (service tracking) service.
+- The entry with service type 2 show the link.
+
+# 3. Addressing
 {{< columns >}}
 ## sockaddr_tipc
 ```c++
