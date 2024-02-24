@@ -35,7 +35,7 @@ A TIPC cluster consists of nodes interconnected with links. A node can be either
         +---------------- Bearer Transport ----------------+
 ```
 
-## Setup Node Identities
+## 2.1. Setup Node Identities
 {{< columns >}}
 ### Node 1
 ```sh
@@ -62,7 +62,7 @@ node_2                           00000000
 {{< /columns >}}
 
 
-## Setup Bearers
+## 2.2. Setup Bearers
 A bearer is an abstraction of a network interface that transmits message processes or nodes in a TIPC network.
 {{< columns >}}
 
@@ -96,7 +96,7 @@ eth:ens160
 
 {{< /columns >}}
 
-## Show Nametable
+## 2.3. Show Nametable
 Nametable contains information about the network topology, including the identities of nodes and services within the TIPC cluster.
 
 ```sh
@@ -114,13 +114,13 @@ Type       Lower      Upper      Scope    Port       Node
 
 
 # 3. Hello World
-## Install Packages
+## 3.1. Install Packages
 ```sh
 $ sudo apt-get install build-essential
 $ sudo apt-get install autoconf
 ```
 
-## Build Tipcutils
+## 3.2. Build Tipcutils
 ```sh
 $ git clone https://github.com/TIPC/tipcutils.git
 $ cd tipcutils
@@ -130,7 +130,7 @@ $ make
 $ sudo make install
 ```
 
-## Run Hello World
+## 3.3. Run Hello World
 
 {{< columns >}}
 
@@ -162,7 +162,7 @@ Client: received response: Uh ?
 
 {{< /columns >}}
 
-## Show Nametable
+## 3.4. Show Nametable
 Start server in a terminal.
 ```sh
 $ cd tipcutils/demos/server_tipc
@@ -177,7 +177,7 @@ Type       Lower      Upper      Scope    Port       Node
 ```
 - The entry with service type 18888 show the server.
 
-# 3. Addressing
+# X. Addressing
 {{< columns >}}
 ## sockaddr_tipc
 ```c++
@@ -362,7 +362,7 @@ Type       Lower      Upper      Scope    Port       Node
 {{< /tab >}}
 {{< /tabs >}}
 
-# Troubleshooting
+# X. Troubleshooting
 **Unable to get TIPC nl family id (module loaded?)**
 ```sh
 $ sudo modprobe tipc
