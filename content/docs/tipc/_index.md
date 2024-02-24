@@ -19,7 +19,7 @@ Websites:
 # 2. Setup A Cluster
 A TIPC cluster consists of nodes interconnected with links. A node can be either a physical processor, a virtual machine or a network namespace.
 ```
-Node 1                                             Node 2
+      Node 1                                             Node 2
 -----------------                                 -----------------
 |      TIPC       |                               |      TIPC       |
 |   Application   |                               |   Application   |
@@ -28,11 +28,11 @@ Node 1                                             Node 2
 |      TIPC       |TIPC address       TIPC address|      TIPC       |
 |                 |                               |                 |
 |-----------------|                               |-----------------|
-| L2 or L3 Bearer |Bearer address   Bearer address| L2 or L3 Bearer |
-|     Service     |                               |     Service     |
+|  Bearer Service |Bearer address   Bearer address|  Bearer Service |
+|                 |                               |                 |
 -----------------                                 -----------------
-  |                                                  |
-  +---------------- Bearer Transport ----------------+
+        |                                                  |
+        +---------------- Bearer Transport ----------------+
 ```
 
 ## Setup Node Identities
@@ -111,6 +111,71 @@ Type       Lower      Upper      Scope    Port       Node
 - The two entries with service type 0 show that we have two nodes in the cluster.
 - The entry with service type 1 represents the built-in topology (service tracking) service.
 - The entry with service type 2 show the link.
+
+
+# 3. Hello World
+## Install Packages
+```sh
+$ sudo apt-get install build-essential
+$ sudo apt-get install autoconf
+```
+
+## Build Tipcutils
+```sh
+$ git clone https://github.com/TIPC/tipcutils.git
+$ cd tipcutils
+$ ./bootstrap
+$ ./configure
+$ make
+$ sudo make install
+```
+
+## Run Hello World
+
+{{< columns >}}
+
+### Node 1
+Start a tipc server with type:18888, instance:17.
+```sh
+$ cd tipcutils/demos/server_tipc
+$ ./server_tipc
+****** TIPC server hello world program started ******
+
+Server: Message received: Hello World !
+
+****** TIPC server hello program finished ******
+```
+
+<--->
+
+### Node 2
+Start a client that connect to the server.
+```sh
+$ cd tipcutils/demos/client_tipc
+$ ./client_tipc
+****** TIPC client hello world program started ******
+
+Client: received response: Uh ?
+
+****** TIPC client hello program finished ******
+```
+
+{{< /columns >}}
+
+## Show Nametable
+Start server in a terminal.
+```sh
+$ cd tipcutils/demos/server_tipc
+$ ./server_tipc
+```
+
+Show nametable in another terminal.
+```sh
+$ tipc nametable show
+Type       Lower      Upper      Scope    Port       Node
+18888      17         17         cluster  3000685032 node_1
+```
+- The entry with service type 18888 show the server.
 
 # 3. Addressing
 {{< columns >}}
