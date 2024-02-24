@@ -35,7 +35,11 @@ A TIPC cluster consists of nodes interconnected with links. A node can be either
         +---------------- Bearer Transport ----------------+
 ```
 
+In this lab, node 1 and node 2 are virtual machines connected with each other.
+
+
 ## 2.1. Setup Node Identities
+
 {{< columns >}}
 ### Node 1
 ```sh
