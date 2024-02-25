@@ -112,21 +112,32 @@ Type       Lower      Upper      Scope    Port       Node
 2          828269669  828269669  node     0          node_2
 ```
 
+{{< columns >}}
 - The two entries with service type 0 show that we have two nodes in the cluster.
 - The entry with service type 1 represents the built-in topology (service tracking) service.
 - The entry with service type 2 show the link.
 
+<--->
+```c++
+// /usr/include/linux/tipc.h
+#define TIPC_NODE_STATE	0	/* node state service type */
+#define TIPC_TOP_SRV		1	/* topology server service type */
+#define TIPC_LINK_STATE	2	/* link state service type */
+```
+
+{{< /columns >}}
 
 # 3. Hello World
 ## 3.1. Install Packages
 ```sh
-$ sudo apt-get install build-essential
-$ sudo apt-get install autoconf
+$ sudo apt-get install build-essential 
+$ sudo apt-get install autoconf libtool pkg-config libdaemon-dev libmnl-dev
 ```
 
 ## 3.2. Build Tipcutils
 ```sh
-$ git clone https://github.com/TIPC/tipcutils.git
+$ wget https://sourceforge.net/projects/tipc/files/tipcutils_3.0.6.tgz
+$ tar xvf tipcutils_3.0.6.tgz
 $ cd tipcutils
 $ ./bootstrap
 $ ./configure
@@ -141,8 +152,8 @@ $ sudo make install
 ### Node 1
 Start a tipc server with type:18888, instance:17.
 ```sh
-$ cd tipcutils/demos/server_tipc
-$ ./server_tipc
+$ cd tipcutils/demos/hello_world
+$ ./hello_server
 ****** TIPC server hello world program started ******
 
 Server: Message received: Hello World !
@@ -155,8 +166,8 @@ Server: Message received: Hello World !
 ### Node 2
 Start a client that connect to the server.
 ```sh
-$ cd tipcutils/demos/client_tipc
-$ ./client_tipc
+$ cd tipcutils/demos/hello_world
+$ ./hello_client
 ****** TIPC client hello world program started ******
 
 Client: received response: Uh ?
@@ -170,7 +181,7 @@ Client: received response: Uh ?
 Start server in a terminal.
 ```sh
 $ cd tipcutils/demos/server_tipc
-$ ./server_tipc
+$ ./hello_server
 ```
 
 Show nametable in another terminal.
@@ -180,6 +191,72 @@ Type       Lower      Upper      Scope    Port       Node
 18888      17         17         cluster  3000685032 node_1
 ```
 - The entry with service type 18888 show the server.
+
+## 3.5. Code
+{{< tabs "helloworld" >}}
+
+{{< tab "hello_server.c" >}}
+```c++
+// start server
+struct sockaddr_tipc server = {
+		.family = AF_TIPC,
+		.addrtype = TIPC_SERVICE_ADDR,
+		.scope = TIPC_CLUSTER_SCOPE,
+		.addr.name.name.type = 18888,
+		.addr.name.name.instance = 17
+};
+sd = socket(AF_TIPC, SOCK_RDM, 0);
+bind(sd, &server, sizeof(server));
+
+// communicate with client
+struct sockaddr_tipc client;
+recvfrom(sd, inbuf, sizeof(inbuf), 0, &client, &alen));
+sendto(sd, outbuf, strlen(outbuf) + 1, 0, &client, sizeof(client));
+```
+{{< /tab >}}
+
+
+{{< tab "hello_client.c" >}}
+```c++
+// connect to topology server
+struct sockaddr_tipc topsrv = {
+		.family = AF_TIPC,
+		.addrtype = TIPC_SERVICE_ADDR,
+		.addr.name.name.type = TIPC_TOP_SRV,
+		.addr.name.name.instance = TIPC_TOP_SRV,
+		.addr.name.domain = 0
+};
+sd = socket(AF_TIPC, SOCK_SEQPACKET, 0);
+connect(sd, &topsrv, sizeof(topsrv)))
+
+// subscribe with topology server to receive events from hello_server
+struct tipc_subscr subscr = {
+		.seq.type = 18888,
+		.seq.lower = 17,
+		.seq.upper = 17,
+		.timeout = 10000, // 10 seconds
+		.filter = TIPC_SUB_SERVICE
+};
+send(sd, &subscr, sizeof(subscr), 0)
+
+// wait for the subscription to fire
+recv(sd, &event, sizeof(event), 0)
+
+// communicate with hello_server
+struct sockaddr_tipc server = {
+		.family = AF_TIPC,
+		.addrtype = TIPC_SERVICE_ADDR,
+		.addr.name.name.type = 18888,
+		.addr.name.name.instance = 17,
+		.addr.name.domain = 0
+	};
+socket(AF_TIPC, SOCK_RDM, 0);
+sendto(sd, buf, strlen(buf) + 1, 0, &server, sizeof(server)))
+recv(sd, buf, sizeof(buf), 0))
+```
+{{< /tab >}}
+
+{{< /tabs >}}
 
 # X. Addressing
 {{< columns >}}
@@ -262,7 +339,7 @@ A reference to a specific socket in the cluster.
 
 ## Samples
 
-{{< tabs "uniqueid" >}}
+{{< tabs "address_samples" >}}
 {{< tab "tipc_service_addr" >}}
 
 Bind a TIPC service with type is **100** and instance ID is **1**.
@@ -375,5 +452,11 @@ $ lsmod | grep tipc
 
 **socket(): Address family not supported by protocol**
 ```sh
+$ sudo modprobe tipc
+```
+
+**Reload tipc: all configures will be reset**
+```sh
+$ sudo modprobe -r tipc
 $ sudo modprobe tipc
 ```
