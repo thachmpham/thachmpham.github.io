@@ -4,24 +4,25 @@ type: docs
 bookToc: false
 ---
 
-# Welcome
-Greetings and a warm welcome to my blog, a place where I've archived my studies and explorations. My hope is that some of these insights will prove beneficial to you on your own journey of knowledge and growth. 
+# Introduction
+My name is **Pham Minh Thach**. I am working as a software engineer at **DEK Technologies, an Endava Company**. Alongside, I am studying in Artificial Intelligence at **Ho Chi Minh City University of Science**.
 
-The majority of posts will offer both theoretical summaries and hands-on practical exercises, spanning across a diverse spectrum of subjects. These exercises may be presented in languages such as C/C++, Golang, Python, or a little Assembly.
+In this blog, I aim to share practical notebooks on distributed systems and artificial intelligence.
 
 {{< columns >}}
-## Operating Systems
-Linux renowned for their open-source nature and versatility, are widely regarded as one of the best choices for learning about operating systems. Their robustness, extensive documentation, and active community support make them an ideal environment to learn how modern OS works. This concept involves practical exercises using **C/C++**, **Assembly**, and **QEMU**.
+
+# Artificial Intelligence.
+Artificial Intelligence (AI) is a field of computer science focused on developing systems that can mimic human intelligence to perform tasks such as learning, reasoning, and problem-solving. It encompasses various technologies such as machine learning, natural language processing, and computer vision, with the potential to revolutionize industries and improve efficiency across diverse sectors.
 
 <--->
 
-## [Distributed Systems](/docs/distributed-system/)
-Distributed systems involve networks of interconnected computers working together to achieve a common goal. They enable efficient sharing of resources, data, and computation across multiple machines, enhancing reliability, scalability, and performance. We will investigate to implement some papers and distributed programing algorithms by using **Golang**.
+# [Distributed Systems](/docs/distributed-system/)
+Distributed systems involve networks of interconnected computers working together to achieve a common goal. They enable efficient sharing of resources, data, and computation across multiple machines, enhancing reliability, scalability, and performance. We will investigate to implement some papers and distributed programing algorithms by using Golang.
 
 {{< /columns >}}
 
 
-## Computer Networking
+# Computer Networking
 The TCP/IP, also known as the Internet Protocol Suite, is a conceptual framework used for understanding and implementing computer networking protocols. It serves as the foundation for the modern Internet, enabling communication and data exchange between diverse devices across the globe.
 
 ```
@@ -35,5 +36,5 @@ ethernet, wifi (802.11), ppp.
 ethtool, iwconfig, arp, netstat.
 ```
 
-## Learning by Doing
-You don't learn to walk by following rules. You learn by doing, and by falling over (Richard Branson).
+# Learning by Doing
+We don't learn to walk by following rules. You learn by doing, and by falling over (Richard Branson).
