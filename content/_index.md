@@ -4,37 +4,31 @@ type: docs
 bookToc: false
 ---
 
-# Introduction
-My name is **Pham Minh Thach**. I am working as a software engineer at **DEK Technologies, an Endava Company**. Alongside, I am studying in Artificial Intelligence at **Ho Chi Minh City University of Science**.
+# **Greeting**
+Hi there, and a warm welcome to my blog!
 
-In this blog, I aim to share practical notebooks on distributed systems and artificial intelligence.
+I'm Pham Minh Thach. Currently, I'm a software engineer at DEK Technologies, an Endava Company, with a focus on computer networking and distributed systems projects. Previously, I had the opportunity to work as a mobile game developer at Gameloft. I'm excited to dive into the world of programming and eager to connect with you all.
 
+In this blog, my aim is to share practical insights into distributed systems and artificial intelligence.
+
+
+# **Table of Content**
+## Distributed Systems
+Distributed systems involve networks of interconnected computers working together to achieve a common goal. They enable efficient sharing of resources, data, and computation across multiple machines, enhancing reliability, scalability, and performance.
+
+[TIPC - A Cluster Communication Protocol](docs/tipc)
+
+
+# **Contact**
 {{< columns >}}
-
-# Artificial Intelligence.
-Artificial Intelligence (AI) is a field of computer science focused on developing systems that can mimic human intelligence to perform tasks such as learning, reasoning, and problem-solving. It encompasses various technologies such as machine learning, natural language processing, and computer vision, with the potential to revolutionize industries and improve efficiency across diverse sectors.
-
+## Linkedin
+[linkedin.com/in/thachmpham](linkedin.com/in/thachmpham)
 <--->
-
-# [Distributed Systems](/docs/distributed-system/)
-Distributed systems involve networks of interconnected computers working together to achieve a common goal. They enable efficient sharing of resources, data, and computation across multiple machines, enhancing reliability, scalability, and performance. We will investigate to implement some papers and distributed programing algorithms by using Golang.
-
+## Gmail
+thach.m.pham@gmail.com
+<--->
+## Address
+- Quy Nhon City, Binh Dinh, Vietnam.  
+- District 5, Ho Chi Minh City, Vietnam.
 {{< /columns >}}
 
-
-# Computer Networking
-The TCP/IP, also known as the Internet Protocol Suite, is a conceptual framework used for understanding and implementing computer networking protocols. It serves as the foundation for the modern Internet, enabling communication and data exchange between diverse devices across the globe.
-
-```
-http, https, ftp, smtp, pop3, imap, dns.
-curl, wget, dig, bind.
-tcp, udp.
-tcpdump, tshark, netcat, nmap, trafgen.
-ipv4, ipv6, icmp.
-ip, ping, traceroute, ifconfig, netsniff-ng.
-ethernet, wifi (802.11), ppp.
-ethtool, iwconfig, arp, netstat.
-```
-
-# Learning by Doing
-We don't learn to walk by following rules. You learn by doing, and by falling over (Richard Branson).

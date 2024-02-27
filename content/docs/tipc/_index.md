@@ -7,7 +7,7 @@ bookFlatSection: true
 
 # TIPC
 # 1. Introduction
-TIPC (Transparent Inter-Process Communication) is a communication protocol used for inter-process communication (IPC) in distributed systems. It enables processes running on different nodes within a network to communicate with each other transparently, abstracting away the underlying network details.
+Transparent Inter-Process Communication (TIPC) is a communication protocol used for inter-process communication (IPC) in distributed systems. It enables processes running on different nodes within a network to communicate with each other transparently, abstracting away the underlying network details.
 
 Headers:
 - /usr/include/linux/tipc.h
