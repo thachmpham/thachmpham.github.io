@@ -260,7 +260,8 @@ recv(sd, buf, sizeof(buf), 0))
 
 {{< /tabs >}}
 
-# X. Addressing
+# 4. Addressing
+## 4.1. API
 {{< columns >}}
 ## sockaddr_tipc
 ```c++
@@ -339,7 +340,7 @@ A reference to a specific socket in the cluster.
 {{< /columns >}}
 
 
-## Samples
+## 4.2. Samples
 
 {{< tabs "address_samples" >}}
 
@@ -405,6 +406,7 @@ Type       Lower      Upper      Scope    Port       Node
 
 Binding a tipc_socket_addr is not allowed. More details at [HERE](https://github.com/torvalds/linux/blob/master/net/tipc/socket.c).
 ```c++
+// net/tipc/socket.c
 static int tipc_bind(_, struct sockaddr *skaddr, _)
 {
 	struct tipc_uaddr *ua = (struct tipc_uaddr *)skaddr;
@@ -415,11 +417,30 @@ static int tipc_bind(_, struct sockaddr *skaddr, _)
 }
 ```
 
-
 {{< /tab >}}
-
-
 {{< /tabs >}}
+
+
+# 5. Service & Topology Tracking
+TIPC provides a service tracking function that makes it possible for an application to follow the availability of service addresses and service ranges in the cluster.
+
+## 5.1. API
+{{< columns >}}
+## tipc_subscr
+```c++
+struct tipc_subscr {
+        struct tipc_service_range seq;  /* range of interest */
+        __u32 timeout;                  /* subscription duration (in ms) */
+        __u32 filter;                   /* bitmask of filter options */
+        char usr_handle[8];             /* available for subscriber use */
+};
+```
+
+<--->
+## def
+
+{{< /columns >}}
+
 
 # X. Troubleshooting
 **Unable to get TIPC nl family id (module loaded?)**
