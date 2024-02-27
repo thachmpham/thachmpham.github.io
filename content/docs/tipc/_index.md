@@ -15,6 +15,8 @@ Headers:
 Websites:
 - tipc.sourceforge.net
 
+Implementation:
+- https://github.com/torvalds/linux/tree/master/net/tipc
 
 # 2. Setup A Cluster
 A TIPC cluster consists of nodes interconnected with links. A node can be either a physical processor, a virtual machine or a network namespace.
@@ -239,7 +241,7 @@ struct tipc_subscr subscr = {
 };
 send(sd, &subscr, sizeof(subscr), 0)
 
-// wait for the subscription to fire
+// wait for the subscription to fire or wait for server become alive
 recv(sd, &event, sizeof(event), 0)
 
 // communicate with hello_server
@@ -340,43 +342,23 @@ A reference to a specific socket in the cluster.
 ## Samples
 
 {{< tabs "address_samples" >}}
+
 {{< tab "tipc_service_addr" >}}
 
-Bind a TIPC service with type is **100** and instance ID is **1**.
+Bind a TIPC service with type is **100** and instance ID is **1**. Full code at [HERE](https://github.com/thachmpham/samples/blob/main/tipc/tipc_service_addr.c).
 
 ```c++
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <linux/tipc.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+struct sockaddr_tipc server = {
+	.family = AF_TIPC,
+	.addrtype = TIPC_SERVICE_ADDR,
+	.scope = TIPC_CLUSTER_SCOPE,
+	.addr.name.name.type = 100,
+	.addr.name.name.instance = 1
+};
 
-int main(int argc, char *argv[])
-{
-	int service_type = 100;
-	int instance = 1;
+sd = socket(AF_TIPC, SOCK_RDM, 0);
 
-	struct sockaddr_tipc server = {
-		.family = AF_TIPC,
-		.addrtype = TIPC_SERVICE_ADDR,
-		.scope = TIPC_CLUSTER_SCOPE,
-		.addr.name.name.type = service_type,
-		.addr.name.name.instance = instance
-	};
-
-	int sd = socket(AF_TIPC, SOCK_RDM, 0);
-
-	if (0 != bind(sd, (void*)&server, sizeof(server))) {
-		printf("Bind failed, error=%s\n", strerror(errno));
-		exit(1);
-	}
-
-	// Keep process running
-	printf("Bind successfully, press Enter to exit...\n");
-	while ((getchar()) != '\n') {}
-}
+bind(sd, &server, sizeof(server));
 ```
 
 ```sh
@@ -396,42 +378,19 @@ Type       Lower      Upper      Scope    Port       Node
 
 {{< tab "tipc_service_range" >}}
 
-Bind a TIPC service with type is **100** and range is **0-10**.
+Bind a TIPC service with type is **100** and range is **0-10**. Full code at [HERE](https://github.com/thachmpham/samples/blob/main/tipc/tipc_service_range.c).
 ```c++
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <unistd.h>
-#include <linux/tipc.h>
+struct sockaddr_tipc server_addr;
+server_addr.family = AF_TIPC;
+server_addr.addrtype = TIPC_SERVICE_RANGE;
+server_addr.scope = TIPC_CLUSTER_SCOPE;
+server_addr.addr.nameseq.type = 100;
+server_addr.addr.nameseq.lower = 0;
+server_addr.addr.nameseq.upper = 10;
 
-int main(int argc, char* argv[])
-{
-    int service_type = 100;
-    int lower = 0;
-    int upper = 10;
+sd = socket(AF_TIPC, SOCK_RDM, 0);
 
-	struct sockaddr_tipc server_addr;
-	server_addr.family = AF_TIPC;
-	server_addr.addrtype = TIPC_SERVICE_RANGE;
-	server_addr.scope = TIPC_CLUSTER_SCOPE;
-	server_addr.addr.nameseq.type = service_type;
-	server_addr.addr.nameseq.lower = lower;
-	server_addr.addr.nameseq.upper = upper;
-
-	int sd = socket(AF_TIPC, SOCK_RDM, 0);
-
-	if (bind(sd, (struct sockaddr *)&server_addr, sizeof(server_addr))) {
-		printf("Bind failed, error=%s\n", strerror(errno));
-		exit (1);
-	}
-
-	// Keep process running
-	printf("Bind successfully, press Enter to exit\n");
-	while ((getchar()) != '\n') {}
-}
+bind(sd, (struct sockaddr *)&server_addr, sizeof(server_addr));
 ```
 
 ```sh
@@ -441,6 +400,25 @@ Type       Lower      Upper      Scope    Port       Node
 ```
 
 {{< /tab >}}
+
+{{< tab "tipc_socket_addr" >}}
+
+Binding a tipc_socket_addr is not allowed. More details at [HERE](https://github.com/torvalds/linux/blob/master/net/tipc/socket.c).
+```c++
+static int tipc_bind(_, struct sockaddr *skaddr, _)
+{
+	struct tipc_uaddr *ua = (struct tipc_uaddr *)skaddr;
+	u32 atype = ua->addrtype;
+
+	if (atype == TIPC_SOCKET_ADDR)
+		return -EAFNOSUPPORT; // Address family not supported by protocol
+}
+```
+
+
+{{< /tab >}}
+
+
 {{< /tabs >}}
 
 # X. Troubleshooting
