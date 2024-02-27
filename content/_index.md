@@ -16,8 +16,8 @@ In this blog, my aim is to share practical insights into distributed systems and
 ## 1. Distributed Systems
 Distributed systems involve networks of interconnected computers working together to achieve a common goal. They enable efficient sharing of resources, data, and computation across multiple machines, enhancing reliability, scalability, and performance.
 
-[1.1. TIPC - A Cluster Communication Protocol](docs/tipc)
-
+[1.1. TIPC - A Cluster Communication Protocol](docs/tipc)  
+[1.2. ORNMA - A Neighbor Monitoring Algorithm](docs/ornma)
 
 # Contact
 {{< columns >}}

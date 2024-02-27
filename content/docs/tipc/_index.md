@@ -9,14 +9,17 @@ bookFlatSection: true
 # 1. Introduction
 Transparent Inter-Process Communication (TIPC) is a communication protocol used for inter-process communication (IPC) in distributed systems. It enables processes running on different nodes within a network to communicate with each other transparently, abstracting away the underlying network details.
 
-Headers:
-- /usr/include/linux/tipc.h
-
 Websites:
-- tipc.sourceforge.net
+- [tipc.sourceforge.net](tipc.sourceforge.net)
+
+Papers:
+- [TIPC Communication Group Netdev 0x12 Paper](https://sourceforge.net/projects/tipc/files/TIPC%20Communication%20Groups%20Netdev%200x12%20Paper.pdf/download)
 
 Implementation:
-- https://github.com/torvalds/linux/tree/master/net/tipc
+- [github.com/torvalds/linux/tree/master/net/tipc](github.com/torvalds/linux/tree/master/net/tipc)
+
+Headers:
+- /usr/include/linux/tipc.h
 
 # 2. Setup A Cluster
 A TIPC cluster consists of nodes interconnected with links. A node can be either a physical processor, a virtual machine or a network namespace.
