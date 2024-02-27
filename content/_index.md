@@ -4,7 +4,7 @@ type: docs
 bookToc: false
 ---
 
-# **Greeting**
+# Greeting
 Hi there, and a warm welcome to my blog!
 
 I'm Pham Minh Thach. Currently, I'm a software engineer at DEK Technologies, an Endava Company, with a focus on computer networking and distributed systems projects. Previously, I had the opportunity to work as a mobile game developer at Gameloft. I'm excited to dive into the world of programming and eager to connect with you all.
@@ -12,14 +12,14 @@ I'm Pham Minh Thach. Currently, I'm a software engineer at DEK Technologies, an 
 In this blog, my aim is to share practical insights into distributed systems and artificial intelligence.
 
 
-# **Table of Content**
-## Distributed Systems
+# Table of Content
+## 1. Distributed Systems
 Distributed systems involve networks of interconnected computers working together to achieve a common goal. They enable efficient sharing of resources, data, and computation across multiple machines, enhancing reliability, scalability, and performance.
 
-[TIPC - A Cluster Communication Protocol](docs/tipc)
+[1.1. TIPC - A Cluster Communication Protocol](docs/tipc)
 
 
-# **Contact**
+# Contact
 {{< columns >}}
 ## Linkedin
 [linkedin.com/in/thachmpham](linkedin.com/in/thachmpham)
