@@ -24,7 +24,7 @@ Distributed systems involve networks of interconnected computers working togethe
 ## Linkedin
 [linkedin.com/in/thachmpham](linkedin.com/in/thachmpham)
 <--->
-## Gmail
+## Email
 thach.m.pham@gmail.com
 <--->
 ## Address

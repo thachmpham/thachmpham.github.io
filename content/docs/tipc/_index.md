@@ -548,6 +548,53 @@ while (recv(sd, &event, sizeof(event), 0) == sizeof(event)) {
 ```
 
 
+# 6. Messaging
+TIPC message transmission can be performed in different ways:
+- Datagram: SOCK_DGRAM, SOCK_RDM.
+- Connection oriented: SOCK_STREAM, SOCK_SEQPACKET.
+- Group.
+
+```c++
+/* Types of sockets.  */
+enum __socket_type
+{
+  SOCK_STREAM = 1,              /* Sequenced, reliable, connection-based byte streams.  */
+  SOCK_DGRAM = 2,               /* Connectionless, unreliable datagrams of fixed maximum length.  */
+  SOCK_RAW = 3,                 /* Raw protocol interface.  */
+  SOCK_RDM = 4,                 /* Reliably-delivered messages.  */
+  SOCK_SEQPACKET = 5,           /* Sequenced, reliable, connection-based, datagrams of fixed maximum length.  */
+  SOCK_DCCP = 6,                /* Datagram Congestion Control Protocol.  */
+};
+```
+
+## 6.1. Datagram Messaging
+{{< columns >}}
+### Server
+```c++
+sock_type = <SOCK_DGRAM or SOCK_RDM>
+sd = socket(AF_TIPC, socket_type, 0);
+
+bind(sd, &server, sizeof(server));
+
+recvfrom(sd, inbuf, sizeof(inbuf), 0, &client, &alen));
+
+sendto(sd, outbuf, strlen(outbuf), 0, &client, sizeof(client))
+```
+<--->
+
+### Client
+```c++
+sock_type = <SOCK_DGRAM or SOCK_RDM>
+sd = socket(AF_TIPC, sock_type, 0);
+
+sendto(sd, buf, strlen(buf), 0, &server, sizeof(server));
+
+recv(sd, buf, sizeof(buf), 0)
+```
+
+{{< /columns >}}
+
+
 # X. Troubleshooting
 **Unable to get TIPC nl family id (module loaded?)**
 ```sh
