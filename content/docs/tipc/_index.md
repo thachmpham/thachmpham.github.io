@@ -10,13 +10,13 @@ bookFlatSection: true
 Transparent Inter-Process Communication (TIPC) is a communication protocol used for inter-process communication (IPC) in distributed systems. It enables processes running on different nodes within a network to communicate with each other transparently, abstracting away the underlying network details.
 
 Websites:
-- [tipc.sourceforge.net](tipc.sourceforge.net)
+- [tipc.sourceforge.net](https://tipc.io)
 
 Papers:
 - [TIPC Communication Group Netdev 0x12 Paper](https://sourceforge.net/projects/tipc/files/TIPC%20Communication%20Groups%20Netdev%200x12%20Paper.pdf/download)
 
 Implementation:
-- [github.com/torvalds/linux/tree/master/net/tipc](github.com/torvalds/linux/tree/master/net/tipc)
+- [github.com/torvalds/linux/tree/master/net/tipc](https://github.com/torvalds/linux/tree/master/net/tipc)
 
 Headers:
 - /usr/include/linux/tipc.h
@@ -580,6 +580,11 @@ sendto(sd, buf, strlen(buf), 0, &server, sizeof(server));
 recv(sd, buf, sizeof(buf), 0)
 ```
 
+```sh
+$ cd tipcutils/demos/tipc-pipe
+$ ./tipc-pipe --sock_type SOCK_DGRAM
+```
+
 <--->
 ### Server
 ```c++
@@ -590,6 +595,11 @@ bind(sd, &server, sizeof(server));
 
 recvfrom(sd, inbuf, sizeof(inbuf), 0, &client, &alen));
 sendto(sd, outbuf, strlen(outbuf), 0, &client, sizeof(client))
+```
+
+```sh
+$ cd tipcutils/demos/tipc-pipe
+$ ./tipc-pipe -l --sock_type SOCK_DGRAM
 ```
 
 {{< /columns >}}
@@ -613,6 +623,11 @@ recvfrom(sd, buf, buf_size, 0, &peer, &addr_size);
 close(sd);
 ```
 
+```sh
+$ cd tipcutils/demos/tipc-pipe
+$ tipc-pipe --sock_type SOCK_STREAM
+```
+
 <--->
 ### Server
 ```c++
@@ -631,6 +646,12 @@ close(peer_sd);
 
 close(sd);
 ```
+
+```sh
+$ cd tipcutils/demos/tipc-pipe
+$ tipc-pipe -l --sock_type SOCK_STREAM
+```
+
 {{< /columns >}}
 
 
