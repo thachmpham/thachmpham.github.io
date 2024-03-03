@@ -569,6 +569,18 @@ enum __socket_type
 
 ## 6.1. Datagram Messaging
 {{< columns >}}
+### Client
+```c++
+sock_type = <SOCK_DGRAM or SOCK_RDM>
+sd = socket(AF_TIPC, sock_type, 0);
+
+
+
+sendto(sd, buf, strlen(buf), 0, &server, sizeof(server));
+recv(sd, buf, sizeof(buf), 0)
+```
+
+<--->
 ### Server
 ```c++
 sock_type = <SOCK_DGRAM or SOCK_RDM>
@@ -577,22 +589,50 @@ sd = socket(AF_TIPC, socket_type, 0);
 bind(sd, &server, sizeof(server));
 
 recvfrom(sd, inbuf, sizeof(inbuf), 0, &client, &alen));
-
 sendto(sd, outbuf, strlen(outbuf), 0, &client, sizeof(client))
-```
-<--->
-
-### Client
-```c++
-sock_type = <SOCK_DGRAM or SOCK_RDM>
-sd = socket(AF_TIPC, sock_type, 0);
-
-sendto(sd, buf, strlen(buf), 0, &server, sizeof(server));
-
-recv(sd, buf, sizeof(buf), 0)
 ```
 
 {{< /columns >}}
+
+
+## 6.1. Connection Oriented Messaging
+{{< columns >}}
+### Client
+```c++
+sock_type = <SOCK_STREAM or SOCK_SEQPACKET>;
+sd = socket(AF_TIPC, sock_type, 0);
+
+
+
+
+connect(sd, &server_addr, sizeof(server_addr));
+
+write(sd, buf, len);
+recvfrom(sd, buf, buf_size, 0, &peer, &addr_size);
+
+close(sd);
+```
+
+<--->
+### Server
+```c++
+sock_type = <SOCK_STREAM or SOCK_SEQPACKET>;
+
+sd = socket(AF_TIPC, socket_type, 0);
+bind(sd, &server, sizeof(server));
+listen(sd, 0);
+
+peer_sd = accept(sd, 0, 0);
+
+recvfrom(peer_sd, buf, buf_size, 0, &peer, &addr_size);
+write(peer_sd, buf, len);
+
+close(peer_sd);
+
+close(sd);
+```
+{{< /columns >}}
+
 
 
 # X. Troubleshooting
