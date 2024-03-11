@@ -10,7 +10,7 @@ bookFlatSection: true
 Transparent Inter-Process Communication (TIPC) is a communication protocol used for inter-process communication (IPC) in distributed systems. It enables processes running on different nodes within a network to communicate with each other transparently, abstracting away the underlying network details.
 
 Websites:
-- [tipc.sourceforge.net](https://tipc.io)
+- [tipc.sourceforge.net](https://tipc.sourceforge.net)
 
 Papers:
 - [TIPC Communication Group Netdev 0x12 Paper](https://sourceforge.net/projects/tipc/files/TIPC%20Communication%20Groups%20Netdev%200x12%20Paper.pdf/download)
@@ -605,7 +605,7 @@ $ ./tipc-pipe -l --sock_type SOCK_DGRAM
 {{< /columns >}}
 
 
-## 6.1. Connection Oriented Messaging
+## 6.2. Connection Oriented Messaging
 {{< columns >}}
 ### Client
 ```c++
@@ -654,6 +654,47 @@ $ tipc-pipe -l --sock_type SOCK_STREAM
 
 {{< /columns >}}
 
+
+## 6.3. Group Messaging
+## 6.3.1. Broadcast
+{{< columns>}}
+### Server
+```c++
+// create tipc socket
+int sockfd = socket(AF_TIPC, SOCK_RDM, 0);
+
+// requests to join group
+struct tipc_group_req request;
+request.type = 4711;
+request.instance = 0;
+request.scope = TIPC_NODE_SCOPE; // or TIPC_CLUSTER_SCOPE
+setsockopt(sockfd, SOL_TIPC, TIPC_GROUP_JOIN, &request, sizeof(request));
+
+// wait for messages
+struct msghdr msg;
+recvmsg(sockfd, &msg, 0);
+```
+[broadcast_server.c](https://github.com/thachmpham/samples/blob/main/tipc/broadcast_server.c)
+<--->
+
+### Client
+```c++
+// create tipc socket
+int socket_fd = socket(AF_TIPC, SOCK_RDM, 0);
+
+// requests to join group
+struct tipc_group_req request;
+request.type = 4711;
+request.instance = 0;
+request.scope = TIPC_NODE_SCOPE;
+setsockopt(socket_fd, SOL_TIPC, TIPC_GROUP_JOIN, &request, sizeof(request));
+
+// send broadcast message
+char buf[32] = "hello";
+int ret = send(socket_fd, buf, strlen(buf)+1, 0);
+```
+[broadcast_client.c](https://github.com/thachmpham/samples/blob/main/tipc/broadcast_client.c)
+{{< /columns>}}
 
 
 # X. Troubleshooting
