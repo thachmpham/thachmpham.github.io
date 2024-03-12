@@ -658,25 +658,6 @@ $ tipc-pipe -l --sock_type SOCK_STREAM
 ## 6.3. Group Messaging
 ## 6.3.1. Broadcast
 {{< columns>}}
-### Server
-```c++
-// create tipc socket
-int sockfd = socket(AF_TIPC, SOCK_RDM, 0);
-
-// requests to join group
-struct tipc_group_req request;
-request.type = 4711;
-request.instance = 0;
-request.scope = TIPC_NODE_SCOPE; // or TIPC_CLUSTER_SCOPE
-setsockopt(sockfd, SOL_TIPC, TIPC_GROUP_JOIN, &request, sizeof(request));
-
-// wait for messages
-struct msghdr msg;
-recvmsg(sockfd, &msg, 0);
-```
-[broadcast_server.c](https://github.com/thachmpham/samples/blob/main/tipc/broadcast_server.c)
-<--->
-
 ### Client
 ```c++
 // create tipc socket
@@ -694,8 +675,79 @@ char buf[32] = "hello";
 int ret = send(socket_fd, buf, strlen(buf)+1, 0);
 ```
 [broadcast_client.c](https://github.com/thachmpham/samples/blob/main/tipc/broadcast_client.c)
+<--->
+
+### Server
+```c++
+// create tipc socket
+int sockfd = socket(AF_TIPC, SOCK_RDM, 0);
+
+// requests to join group
+struct tipc_group_req request;
+request.type = 4711;
+request.instance = 0;
+request.scope = TIPC_NODE_SCOPE; // or TIPC_CLUSTER_SCOPE
+setsockopt(sockfd, SOL_TIPC, TIPC_GROUP_JOIN, &request, sizeof(request));
+
+// wait for messages
+struct msghdr msg;
+recvmsg(sockfd, &msg, 0);
+```
+[broadcast_server.c](https://github.com/thachmpham/samples/blob/main/tipc/broadcast_server.c)
+
 {{< /columns>}}
 
+## 6.3.2. Multicast
+{{< columns>}}
+### Client
+```c++
+struct sockaddr_tipc server_addr;
+server_addr.family = AF_TIPC;
+server_addr.addrtype = TIPC_ADDR_MCAST;
+server_addr.addr.nameseq.type = 18888;
+server_addr.addr.nameseq.lower = 0;
+server_addr.addr.nameseq.upper = 399;
+
+sd = socket(AF_TIPC, SOCK_RDM, 0);
+
+sendto(sd, buf, strlen(buf) + 1, 0, 
+          &server_addr, sizeof(server_addr));
+```
+[client_tipc.c](https://github.com/TIPC/tipcutils/blob/master/demos/multicast_demo/client_tipc.c)
+<--->
+
+### Server
+```c++
+struct sockaddr_tipc server_addr;
+server_addr.family = AF_TIPC;
+server_addr.addrtype = TIPC_SERVICE_RANGE;
+server_addr.scope = TIPC_CLUSTER_SCOPE;
+server_addr.addr.nameseq.type = 18888;
+server_addr.addr.nameseq.lower = 0;
+server_addr.addr.nameseq.upper = 399;
+
+sd = socket (AF_TIPC, SOCK_RDM, 0);
+bind(sd, &server_addr, sizeof(server_addr));
+
+recvfrom(sd, buf, buf_size, 0, _, _);
+```
+[server_tipc.c](https://github.com/TIPC/tipcutils/blob/master/demos/multicast_demo/server_tipc.c)
+{{< /columns>}}
+
+## 6.3.3. Anycast
+```text
+ssize_t send(int sockfd, const void *buff, size_t nbytes, int flags)
+  This routine has two uses:
+    1) Attempt to send a message from a connected socket to its peer socket.
+    2) Attempt to send a group broadcast from a group member socket.
+
+ssize_t sendmsg(int sockfd, struct msghdr *msg, int flags)
+  Attempt to send a message from the socket to the specified destination. There are three cases:
+    1) If the destination is a socket address the message is unicast to that specific socket.
+    2) If the destination is a service address, it is an anycast to any matching destination.
+    3) If the destination is a service range, the message is a multicast to all matching sockets.
+    Note however that the rules for what is a match differ between datagram and group messaging.
+```  
 
 # X. Troubleshooting
 **Unable to get TIPC nl family id (module loaded?)**
