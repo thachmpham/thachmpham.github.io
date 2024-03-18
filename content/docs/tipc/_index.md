@@ -514,7 +514,19 @@ $ ./top_server
 ```
 
 ```sh
-$ sudo tshark -i ens160 -f 'ether proto 0x88ca' -w sample.pcap
+# capture tipc packets
+# 0x88ca is ethertype of TIPC. Defined in /usr/include/linux/if_ether.h
+$ tshark -i ens160 -f 'ether proto 0x88ca' -w sample.pcap
+
+
+# display tipc packets, except Link State Maintenance messages
+# because there too many messages of this type
+# 7 is the ID of Link State Maintenance messages
+$ tshark -r sample.pcap -Y 'tipc.usr != 7'
+81      7.925556593     90.1698.2539    → 0.0.0            TIPC 74 Name Dist    Publication type:18888 inst:17
+128     12.607446355    133.2322.2465   → 90.1698.2539     TIPC 69 Payld:Low    NamedMsg type:18888 inst:17
+129     12.609085805    90.1698.2539    → 133.2322.2465    TIPC 60 Payld:Low    DirectMsg
+130     12.609085930    90.1698.2539    → 0.0.0            TIPC 74 Name Dist    Withdrawal type:18888 inst:17
 ```
 
 # 6. Messaging
