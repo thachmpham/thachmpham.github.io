@@ -270,8 +270,31 @@ sendto(sd, buf, strlen(buf) + 1, 0, &server, sizeof(server)))
 recv(sd, buf, sizeof(buf), 0))
 ```
 {{< /tab >}}
-
 {{< /tabs >}}
+
+## 3.6. Analyze Packets
+```sh
+# capture tipc packets
+# 0x88ca is ethertype of TIPC. Defined in /usr/include/linux/if_ether.h
+$ tshark -i ens160 -f 'ether proto 0x88ca' -w helloworld.pcap
+
+
+# display tipc packets, except Link State Maintenance messages
+# because there too many messages of this type, but not related to our demo.
+# 7 is the ID of Link State Maintenance messages
+$ tshark -r helloworld.pcap -Y 'tipc.usr != 7'
+81      7.925556593     90.1698.2539    → 0.0.0            TIPC 74 Name Dist    Publication type:18888 inst:17
+128     12.607446355    133.2322.2465   → 90.1698.2539     TIPC 69 Payld:Low    NamedMsg type:18888 inst:17
+129     12.609085805    90.1698.2539    → 133.2322.2465    TIPC 60 Payld:Low    DirectMsg
+130     12.609085930    90.1698.2539    → 0.0.0            TIPC 74 Name Dist    Withdrawal type:18888 inst:17
+```
+- 90.1698.2539 is server address. 133.2322.2465 is client address. 0.0.0 denotes that the message can be processed by any node in the sender's cluster, zone, and network, respectively.  
+- Frame 81: Server sends a NAME_DISTRIBUTOR/PUBLICATION message to all nodes within the publishing scope, in order to have them update their tables.
+- Frame 128: Client sends 'Hello World' message to Server.
+- Frame 129: Server sends 'Uh' message to Client.
+- Frame 130: Server sends out a NAME_DISTRIBUTOR/WITHDRAWAL message to all nodes within the publishing scope, in order to have them remove the corresponding entry from their tables.  
+Download pcap file at [HERE](https://github.com/thachmpham/samples/blob/main/tipc/pcap/helloworld.pcap).
+
 
 # 4. Addressing
 ## 4.1. API
@@ -520,7 +543,7 @@ $ tshark -i ens160 -f 'ether proto 0x88ca' -w sample.pcap
 
 
 # display tipc packets, except Link State Maintenance messages
-# because there too many messages of this type
+# because there too many messages of this type, but not related to our demo.
 # 7 is the ID of Link State Maintenance messages
 $ tshark -r sample.pcap -Y 'tipc.usr != 7'
 81      7.925556593     90.1698.2539    → 0.0.0            TIPC 74 Name Dist    Publication type:18888 inst:17
