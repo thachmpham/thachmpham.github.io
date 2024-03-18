@@ -428,7 +428,7 @@ static int tipc_bind(_, struct sockaddr *skaddr, _)
 
 
 # 5. Service & Topology Tracking
-TIPC provides a service tracking function that makes it possible for an application to follow the availability of service addresses and service ranges in the cluster.
+Service tracking means that a user can create a socket, connect it to a built-in topology server and subscribe for events related to a specified service address or address range.
 
 ## 5.1. API
 An application accesses the topology service by opening a SOCK_SEQPACKET type connection to the TIPC internal topology service, using the service address {TIPC_TOP_SRV, TIPC_TOP_SRV}. In return, the topology service sends service event messages back to the application whenever matching addresses are bound or unbound by sockets within the cluster.
@@ -513,6 +513,9 @@ $ ./top_client
 $ ./top_server
 ```
 
+```sh
+$ sudo tshark -i ens160 -f 'ether proto 0x88ca' -w sample.pcap
+```
 
 # 6. Messaging
 TIPC message transmission can be performed in different ways:
