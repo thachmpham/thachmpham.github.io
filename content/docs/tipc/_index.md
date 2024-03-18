@@ -17,7 +17,8 @@ bookFlatSection: true
 
 
 # 1. Introduction
-Transparent Inter-Process Communication (TIPC) is a communication protocol used for inter-process communication (IPC) in distributed systems. It enables processes running on different nodes within a network to communicate with each other transparently, abstracting away the underlying network details.
+Transparent Inter-Process Communication (TIPC) is a communication protocol used for inter-process communication (IPC) in distributed systems. TIPC supports unicast, anycast, multicast and
+broadcast datagram messaging with sequence and delivery guarantee. It also provides a group membership tracker service that is synchronized with the message delivery service, guaranteeing sequentiality between membership events and received messages
 
 Websites:
 - [tipc.sourceforge.net](https://tipc.sourceforge.net)
@@ -317,6 +318,18 @@ TIPC_NODE_SCOPE    = 3
 
 
 {{< columns >}}
+
+## tipc_socket_addr 
+```c++
+struct tipc_socket_addr {
+        __u32 ref;
+        __u32 node;
+};
+```
+
+Address type tipc_socket_addr denotes unicast address (socket-to-socket). It contains two identifiers, a port number and a node number, both given by the system at the moment the socket is created.
+<--->
+
 ## tipc_service_addr
 ```c++
 struct tipc_service_addr {
@@ -324,8 +337,8 @@ struct tipc_service_addr {
         __u32 instance;
 };
 ```
-ID of a service within the TIPC network. The service types 0 through 63 are reserved for system internal use, and are not available for user space applications.
 
+Address type tipc_service_addr denotes anycast or multicast address. It consists of two numbers, a service type identifier and a service instance identifier. Both these numbers are determined by the application programmer. Anycast means that a sent message is delivered to any of the sockets bound to the indicated service address. Multicast means that all sockets bound to the given address will receive a copy of the sent message
 <--->
 
 ## tipc_service_range
@@ -337,17 +350,6 @@ struct tipc_service_range {
 };
 ```
 A range of service addresses of the same type and with instances between a lower and an upper range limit.
-
-<--->
-
-## tipc_socket_addr
-```c++
-struct tipc_socket_addr {
-        __u32 ref;
-        __u32 node;
-};
-```
-A reference to a specific socket in the cluster.
 
 {{< /columns >}}
 
