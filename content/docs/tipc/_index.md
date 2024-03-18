@@ -17,8 +17,7 @@ bookFlatSection: true
 
 
 # 1. Introduction
-Transparent Inter-Process Communication (TIPC) is a communication protocol used for inter-process communication (IPC) in distributed systems. TIPC supports unicast, anycast, multicast and
-broadcast datagram messaging with sequence and delivery guarantee. It also provides a group membership tracker service that is synchronized with the message delivery service, guaranteeing sequentiality between membership events and received messages
+Transparent Inter-Process Communication (TIPC) is a communication protocol used for inter-process communication (IPC) in distributed systems. TIPC supports unicast, anycast, multicast and broadcast datagram messaging. It also provides a group membership tracker service that ensuring consistency between membership events and message delivery.
 
 Websites:
 - [tipc.sourceforge.net](https://tipc.sourceforge.net)
@@ -277,6 +276,38 @@ recv(sd, buf, sizeof(buf), 0))
 # 4. Addressing
 ## 4.1. API
 {{< columns >}}
+## tipc_socket_addr 
+```c++
+struct tipc_socket_addr {
+        __u32 ref;
+        __u32 node;
+};
+```
+Address type tipc_socket_addr denotes unicast address (socket-to-socket). It contains two identifiers, a port number and a node number, both given by the system at the moment the socket is created.
+<--->
+
+## tipc_service_addr
+```c++
+struct tipc_service_addr {
+        __u32 type;
+        __u32 instance;
+};
+```
+The tipc_service_addr type represents anycast or multicast addresses with two numbers: a service type identifier and an instance identifier, set by the application programmer. Multiple TIPC sockets can bind to the same service address. Anycast delivers a message to any socket bound to the address, while multicast sends a copy to all sockets bound to it.
+<--->
+
+## tipc_service_range
+```c++
+struct tipc_service_range {
+        __u32 type;
+        __u32 lower;
+        __u32 upper;
+};
+```
+A range of service addresses of the same type and with instances between a lower and an upper range limit.
+{{< /columns >}}
+
+{{< columns >}}
 ## sockaddr_tipc
 ```c++
 struct sockaddr_tipc {
@@ -316,51 +347,13 @@ TIPC_NODE_SCOPE    = 3
 ```
 {{< /columns >}}
 
-
-{{< columns >}}
-
-## tipc_socket_addr 
-```c++
-struct tipc_socket_addr {
-        __u32 ref;
-        __u32 node;
-};
-```
-
-Address type tipc_socket_addr denotes unicast address (socket-to-socket). It contains two identifiers, a port number and a node number, both given by the system at the moment the socket is created.
-<--->
-
-## tipc_service_addr
-```c++
-struct tipc_service_addr {
-        __u32 type;
-        __u32 instance;
-};
-```
-
-Address type tipc_service_addr denotes anycast or multicast address. It consists of two numbers, a service type identifier and a service instance identifier. Both these numbers are determined by the application programmer. Anycast means that a sent message is delivered to any of the sockets bound to the indicated service address. Multicast means that all sockets bound to the given address will receive a copy of the sent message
-<--->
-
-## tipc_service_range
-```c++
-struct tipc_service_range {
-        __u32 type;
-        __u32 lower;
-        __u32 upper;
-};
-```
-A range of service addresses of the same type and with instances between a lower and an upper range limit.
-
-{{< /columns >}}
-
-
 ## 4.2. Samples
 
 {{< tabs "address_samples" >}}
 
 {{< tab "tipc_service_addr" >}}
 
-Bind a TIPC service with type is **100** and instance ID is **1**. Full code at [HERE](https://github.com/thachmpham/samples/blob/main/tipc/tipc_service_addr.c).
+Bind a TIPC service with type is 100 and instance ID is 1. Full code at [HERE](https://github.com/thachmpham/samples/blob/main/tipc/tipc_service_addr.c).
 
 ```c++
 struct sockaddr_tipc server = {
@@ -378,22 +371,23 @@ bind(sd, &server, sizeof(server));
 
 ```sh
 $ gcc demo.c -o demo
-
 $ ./demo
-Bind service to type=100, instance=1 successfully
-Press Enter to exit
+$ ./demo
 ```
 
 ```sh
 $ tipc nametable show
 Type       Lower      Upper      Scope    Port       Node
-100        1          1          cluster  1603289447 1001002
+100        1          1          cluster  169009847  000c29a1859d
+100        1          1          cluster  2888149149 000c29a1859d
 ```
+
+- Two sockets were bound to the same service address {type=100, instance=1}.
 {{< /tab >}}
 
 {{< tab "tipc_service_range" >}}
 
-Bind a TIPC service with type is **100** and range is **0-10**. Full code at [HERE](https://github.com/thachmpham/samples/blob/main/tipc/tipc_service_range.c).
+Bind a TIPC service with type is 100 and range is 0-10. Full code at [HERE](https://github.com/thachmpham/samples/blob/main/tipc/tipc_service_range.c).
 ```c++
 struct sockaddr_tipc server_addr;
 server_addr.family = AF_TIPC;
@@ -413,7 +407,6 @@ $ tipc nametable show
 Type       Lower      Upper      Scope    Port       Node
 100        0          10         cluster  2776395043
 ```
-
 {{< /tab >}}
 
 {{< tab "tipc_socket_addr" >}}
@@ -430,7 +423,6 @@ static int tipc_bind(_, struct sockaddr *skaddr, _)
 		return -EAFNOSUPPORT; // Address family not supported by protocol
 }
 ```
-
 {{< /tab >}}
 {{< /tabs >}}
 
