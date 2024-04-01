@@ -44,6 +44,11 @@ References:
 ```sh
 # find and execute
 $ find ~/ -name '.*rc' -exec sh -c 'echo $1' _ {} \;
-
-
 ```
+
+## 3. C++
+```c++
+#define print(fmt, args...) printf("%s: ", fmt "\n", __func__, ## args)
+```
+
+
