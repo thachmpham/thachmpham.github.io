@@ -9,31 +9,31 @@ bookFlatSection: true
 ### 1.1. Rebuild rpm
 **Rebuild**
 ```sh
-wget https://kojipkgs.fedoraproject.org//packages/shntool/3.0.10/31.fc39/src/shntool-3.0.10-31.fc39.src.rpm
-rpm -ivvh shntool-3.0.10-31.fc39.src.rpm
-rpmbuild -ba ~/rpmbuild/SPECS/shntool.spec
-rpm -Uvh --force ~/rpmbuild/RPMS/aarch64/shntool-3.0.10-31.fc39.aarch64.rpm
+$ wget https://kojipkgs.fedoraproject.org//packages/shntool/3.0.10/31.fc39/src/shntool-3.0.10-31.fc39.src.rpm
+$ rpm -ivvh shntool-3.0.10-31.fc39.src.rpm
+$ rpmbuild -ba ~/rpmbuild/SPECS/shntool.spec
+$ rpm -Uvh --force ~/rpmbuild/RPMS/aarch64/shntool-3.0.10-31.fc39.aarch64.rpm
 ```
 
 **Create & Apply Patch**
 ```sh
 # extract source
-cd ~/rpmbuild/SOURCES
-tar -xvf shntool-3.0.10.tar.gz
-cp -r shntool-3.0.10 shntool-3.0.10.orig
-vi ./shntool-3.0.10/src/mode_info.c
+$ cd ~/rpmbuild/SOURCES
+$ tar -xvf shntool-3.0.10.tar.gz
+$ cp -r shntool-3.0.10 shntool-3.0.10.orig
+$ vi ./shntool-3.0.10/src/mode_info.c
 
 # create patch
-diff -Npru shntool-3.0.10.orig shntool-3.0.10 > hello.patch
+$ diff -Npru shntool-3.0.10.orig shntool-3.0.10 > hello.patch
 
 # add patch to spec file
-cd ~/rpmbuild/SPECS
-vi shntool.spec
+$ cd ~/rpmbuild/SPECS
+$ vi shntool.spec
 # + Patch5: hello.patch
 
 # install
-rpmbuild -ba ~/rpmbuild/SPECS/shntool.spec
-rpm -Uvh --force ~/rpmbuild/RPMS/aarch64/shntool-3.0.10-31.fc39.aarch64.rpm
+$ rpmbuild -ba ~/rpmbuild/SPECS/shntool.spec
+$ rpm -Uvh --force ~/rpmbuild/RPMS/aarch64/shntool-3.0.10-31.fc39.aarch64.rpm
 ```
 
 References:
@@ -44,7 +44,7 @@ References:
 ## 2. Find
 - Find, execute.
 ```sh
-find ~/ -name '.*rc' -exec sh -c 'echo $1' _ {} \;
+$ find ~/ -name '.*rc' -exec sh -c 'echo $1' _ {} \;
 ```
 
 ## 3. C++
@@ -56,5 +56,16 @@ find ~/ -name '.*rc' -exec sh -c 'echo $1' _ {} \;
 ## 4. IO
 - TCP listening sockets.
 ```sh
-ss -ntl
+$ ss -ntl
+```
+- Port status
+```
+$ nmap -p 389 172.16.111.130
+```
+
+# 5. Firewall
+- Allow incoming traffic
+```
+$ firewall-cmd --permanent --add-port=389/tcp
+$ firewall-cmd --reload
 ```
