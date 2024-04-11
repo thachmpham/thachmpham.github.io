@@ -59,13 +59,13 @@ $ find ~/ -name '.*rc' -exec sh -c 'echo $1' _ {} \;
 $ ss -ntl
 ```
 - Port status
-```
+```sh
 $ nmap -p 389 172.16.111.130
 ```
 
 # 5. Firewall
 - Allow incoming traffic
-```
+```sh
 $ firewall-cmd --permanent --add-port=389/tcp
 $ firewall-cmd --reload
 ```
