@@ -69,3 +69,42 @@ $ nmap -p 389 172.16.111.130
 $ firewall-cmd --permanent --add-port=389/tcp
 $ firewall-cmd --reload
 ```
+
+# 6. KVM
+- Create VM
+```sh
+$ virt-install \
+--name vm-ubuntu --os-variant ubuntu20.04 \
+--location http://ftp.ubuntu.com/ubuntu/dists/focal/main/installer-amd64 \
+--vcpus 8 --ram 8192 \
+--network bridge=virbr0,model=virtio \
+--graphics none \
+--extra-args='console=ttyS0,115200n8 serial'
+```
+
+- Fix: virsh console hangs at promt "The escape character ^]"
+```sh
+$ virsh net-list
+Name    State   Autostart   Persistent
+default active  yes         yes
+
+$ virsh net-dhcp-leases default
+IP address              Hostname
+192.168.123.35/24       ubuntu
+```
+
+```sh
+$ ssh root@192.168.123.35
+
+$ vi /etc/default/grub
+GRUB_TERMINAL=serial
+GRUB_SERIAL_COMMAND="serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1"
+
+$ update-grub
+$ reboot
+```
+
+```sh
+$ virsh console vm-ubuntu
+```
+
