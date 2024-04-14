@@ -108,3 +108,11 @@ $ reboot
 $ virsh console vm-ubuntu
 ```
 
+# 7. Terminal
+- Attach a running process to a new terminal.
+```sh
+reptyr PID
+```
+- https://blog.nelhage.com/2011/01/reptyr-attach-a-running-process-to-a-new-terminal/
+
+
