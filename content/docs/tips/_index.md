@@ -1,6 +1,6 @@
 ---
 title: "TIPS"
-bookToc: false
+bookToc: true
 bookFlatSection: true
 ---
 # TIPS
@@ -63,14 +63,14 @@ $ ss -ntl
 $ nmap -p 389 172.16.111.130
 ```
 
-# 5. Firewall
+## 5. Firewall
 - Allow incoming traffic
 ```sh
 $ firewall-cmd --permanent --add-port=389/tcp
 $ firewall-cmd --reload
 ```
 
-# 6. KVM
+## 6. KVM
 - Create VM
 ```sh
 $ virt-install \
@@ -108,11 +108,38 @@ $ reboot
 $ virsh console vm-ubuntu
 ```
 
-# 7. Terminal
+## 7. Terminal
 - Attach a running process to a new terminal.
 ```sh
 reptyr PID
 ```
 - https://blog.nelhage.com/2011/01/reptyr-attach-a-running-process-to-a-new-terminal/
+
+## 8. Jupyter Remotely
+- Setup Server Which Runs Jupyter
+```sh
+$ pip install jupyterlab
+```
+
+```sh
+$ jupyter lab --generate-config
+Writing default config to: /root/.jupyter/jupyter_lab_config.py
+```
+
+- /root/.jupyter/jupyter_lab_config.py
+```py
+c.ServerApp.allow_root = True
+
+c.ServerApp.open_browser = False
+c.ExtensionApp.open_browser = False
+
+c.ServerApp.ip = '0.0.0.0'
+c.ServerApp.port = 8888
+```
+
+- Setup Client (Localhost)
+```sh
+ssh -L localhost:8888:172.16.111.130:8888 root@172.16.111.130
+```
 
 
