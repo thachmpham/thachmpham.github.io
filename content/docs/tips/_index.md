@@ -6,7 +6,7 @@ bookFlatSection: true
 # TIPS
 
 ## 1. RPM
-### 1.1. Rebuild rpm
+**1.1. Rebuild rpm**
 **Rebuild**
 ```sh
 $ wget https://kojipkgs.fedoraproject.org//packages/shntool/3.0.10/31.fc39/src/shntool-3.0.10-31.fc39.src.rpm
@@ -71,7 +71,7 @@ $ firewall-cmd --reload
 ```
 
 ## 6. KVM
-- Create VM
+- Create Ubuntu VM
 ```sh
 $ virt-install \
 --name vm-ubuntu --os-variant ubuntu20.04 \
@@ -107,6 +107,23 @@ $ reboot
 ```sh
 $ virsh console vm-ubuntu
 ```
+
+- Create Fedora VM
+```
+virt-install \
+--name vm-fedora \
+--location https://repo.jing.rocks/fedora-buffet/fedora/linux/releases/39/Server/x86_64/os \
+--network bridge=virbr0,model=virtio \
+--graphics none \
+--extra-args='console=ttyS0,115200n8 serial'
+```
+
+Distro urls:  
+- Fedora/RedHat: http://download.fedoraproject.org/pub/fedora/linux/releases/10/Fedora/i386/os/
+- Debian/Ubuntu: http://ftp.us.debian.org/debian/dists/etch/main/installer-amd64/
+- Suse: http://download.opensuse.org/distribution/11.0/repo/oss/
+- Mandriva: ftp://ftp.uwsg.indiana.edu/linux/mandrake/official/2009.0/i586/
+
 
 ## 7. Terminal
 - Attach a running process to a new terminal.
