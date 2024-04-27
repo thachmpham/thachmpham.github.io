@@ -137,7 +137,7 @@ $ gdbserver 172.16.111.132:2000 /usr/bin/ls
 
             // -----    local host settings: begin  ----- //
             "program": "/usr/bin/ls",
-            "stopAtConnect": true
+            "stopAtConnect": true,
             // -----    local host settings: end    ----- //
 
 
@@ -181,6 +181,54 @@ $ gdbserver --attach 172.16.111.132:2000 1758
 ```
 
 **Client**: Configure `launch.json`.
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // -----    remote target settings: begin     ----- //
+            "miDebuggerServerAddress": "172.16.111.132:2000",   // gdbserver address
+            // -----    remote target settings: end       ----- //
+
+
+            // -----    local host settings: begin  ----- //
+            "program": "/usr/bin/vim",
+            "useExtendedRemote": true,
+            "miDebuggerPath": "/usr/bin/gdb",
+            // -----    local host settings: end    ----- //
+
+
+            // -----    general settings: begin ----- //
+            "name": "(gdb) Attach",
+            "type": "cppdbg",
+            "request": "attach",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+            // -----    general settings: end   ----- //
+        }
+        
+    ]
+}
+```
+
+### 3.3. Multi-process Mode
+**Server**: Starts the GDB server in multi-process mode and listens at `172.16.111.132:2000`.
+```sh
+$ gdbserver --multi 172.16.111.132:2000
+```
+
+**Client**: Setup `launch.json` to attach to a running process.
 ```json
 {
     "version": "0.2.0",
