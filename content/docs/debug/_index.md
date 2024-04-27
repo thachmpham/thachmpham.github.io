@@ -181,7 +181,7 @@ $ gdbserver --attach 172.16.111.132:2000 1758
 ```
 
 **Client**: Configure `launch.json`.
-```sh
+```json
 {
     "version": "0.2.0",
     "configurations": [
