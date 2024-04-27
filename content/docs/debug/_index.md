@@ -137,8 +137,7 @@ $ gdbserver 172.16.111.132:2000 /usr/bin/ls
 
             // -----    local host settings: begin  ----- //
             "program": "/usr/bin/ls",
-            "args": [],
-            "environment": [],
+            "stopAtConnect": true
             // -----    local host settings: end    ----- //
 
 
@@ -168,4 +167,57 @@ $ gdbserver 172.16.111.132:2000 /usr/bin/ls
 }
 ```
 
+### 3.2. Attach To A Running Process
+**Server**: Starts `/usr/bin/vim` program.
+```sh
+$ /usr/bin/vim
+$ ps aux | grep vim
+root        1758  0.2  0.4  16364  9752 pts/0    Sl+  16:59   0:00 /usr/bin/vim
+```
 
+**Server**: Starts a `gdbserver` instance that listens at `172.16.111.132:2000` and allows remote debug process `13368`.
+```sh
+$ gdbserver --attach 172.16.111.132:2000 1758
+```
+
+**Client**: Configure `launch.json`.
+```sh
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // -----    remote target settings: begin     ----- //
+            "miDebuggerServerAddress": "172.16.111.132:2000",   // gdbserver address
+            // -----    remote target settings: end       ----- //
+
+
+            // -----    local host settings: begin  ----- //
+            "program": "/usr/bin/vim",
+            "useExtendedRemote": true,
+            "miDebuggerPath": "/usr/bin/gdb",
+            // -----    local host settings: end    ----- //
+
+
+            // -----    general settings: begin ----- //
+            "name": "(gdb) Attach",
+            "type": "cppdbg",
+            "request": "attach",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+            // -----    general settings: end   ----- //
+        }
+        
+    ]
+}
+```
