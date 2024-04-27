@@ -1,9 +1,9 @@
 ---
-title: "HEADLESS SERVER"
-bookToc: false
+title: "Debug"
+bookToc: true
 bookFlatSection: true
 ---
-# Tips To Work With Headless Servers
+# Debug Tricks
 
 ## 1. Jupyter
 Generate configuration.
@@ -20,6 +20,9 @@ c.ServerApp.open_browser = False
 c.ExtensionApp.open_browser = False
 
 c.ServerApp.ip = '0.0.0.0'
+
+c.NotebookApp.token = ''
+c.NotebookApp.password = ''
 ```
 
 Start jupyter lab.
@@ -87,7 +90,7 @@ $ gdb
 #15 main (argc=<optimized out>, argv=<optimized out>) at /usr/src/debug/vim-9.1.181-1.fc39.aarch64/src/main.c:441
 ```
 
-### 2.2. Multi-process Mode
+### 2.3. Multi-process Mode
 **Server**: Starts the GDB server in multi-process mode and listens at `172.16.111.130:2000`.
 ```sh
 $ gdbserver --multi 172.16.111.130:2000
@@ -111,83 +114,58 @@ $ gdb
 (gdb)	bt
 ```
 
+## 3. VS Code Remote Debug
+Extension: [C/C++ for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools).  
+Parameter: [`launch.json` reference](https://code.visualstudio.com/docs/cpp/launch-json-reference).
 
-**Client - VS Code**
-- Edit `launch.json`.
-```json
-"configurations": [
-	{
-		"name": "(gdb) Launch",
-		"type": "cppdbg",
-		"request": "launch",
-		"program": "/path/to/program",
-		"args": [],
-		"stopAtEntry": false,
-		"cwd": "${fileDirname}",
-		"environment": [],
-		"externalConsole": false,
-		"MIMode": "gdb",
-		"miDebuggerServerAddress": "server_ip:port",
-		"setupCommands": [
-		    {
-		        "description": "Enable pretty-printing for gdb",
-		        "text": "-enable-pretty-printing",
-		        "ignoreFailures": true
-		    },
-		    {
-		        "description": "Set Disassembly Flavor to Intel",
-		        "text": "-gdb-set disassembly-flavor intel",
-		        "ignoreFailures": true
-		    }
-		]
-	}
-]
-```
-Essential parameters:
-- `program`
-- `miDebuggerServerAddress`
-
-### 2.2. Attach
-**Server**
+### 3.1. Launch A Program
+**Server**: Starts a `gdbserver` instance that listens at `172.16.111.132:2000` and allows remote debug `/usr/bin/ls` program.
 ```sh
-gdbserver --multi <server_ip:port>
+$ gdbserver 172.16.111.132:2000 /usr/bin/ls
 ```
 
-**Client**
+**Client**: Configure `launch.json`.
 ```json
-"configurations": [
-	{
-        "name": "(gdb) Attach",
-        "type": "cppdbg",
-        "request": "attach",
-        "program": "/path/to/program",
-        "MIMode": "gdb",
-        "miDebuggerServerAddress": "server_ip:port",
-        "miDebuggerPath": "/usr/bin/gdb",
-        "useExtendedRemote": true,
-        "setupCommands": [
-            {
-                "description": "Enable pretty-printing for gdb",
-                "text": "-enable-pretty-printing",
-                "ignoreFailures": true
-            },
-            {
-                "description": "Set Disassembly Flavor to Intel",
-                "text": "-gdb-set disassembly-flavor intel",
-                "ignoreFailures": true
-            }
-        ]
-    },
-]
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // -----    remote target settings: begin     ----- //
+            "miDebuggerServerAddress": "172.16.111.132:2000",   // gdbserver address
+            // -----    remote target settings: end       ----- //
+
+
+            // -----    local host settings: begin  ----- //
+            "program": "/usr/bin/ls",
+            "args": [],
+            "environment": [],
+            // -----    local host settings: end    ----- //
+
+
+            // -----    general settings: begin ----- //
+            "name": "(gdb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "stopAtEntry": true,
+            "cwd": "${fileDirname}",
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            // -----    general settings: end   ----- //
+        }
+    ]
+}
 ```
-Essential parameters:
-- `program`
-- `miDebuggerServerAddress`
-- `miDebuggerPath`
-- `useExtendedRemote`
-
-
-
-
 
 
