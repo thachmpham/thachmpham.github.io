@@ -114,7 +114,7 @@ $ gdb
 (gdb)	bt
 ```
 
-### 2.4. Pipe
+### 2.4. Pipe Transport
 **Client (option 1)**: connect gdb and gdbserver through pipe in single-process mode.
 ```sh
 $ gdb
@@ -127,6 +127,9 @@ $ gdb
 (gdb)   target extended-remote | ssh -T root@172.16.111.130 gdbserver --multi -
 (gdb)   attach 98818
 ```
+
+**References:**  
+- [Remote debugging with GDB](https://developers.redhat.com/blog/2015/04/28/remote-debugging-with-gdb)
 
 ## 3. VS Code Remote Debug
 Extension: [C/C++ for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools).  
@@ -280,6 +283,54 @@ $ gdbserver --multi 172.16.111.132:2000
             // -----    general settings: end   ----- //
         }
         
+    ]
+}
+```
+
+### 3.4. Pipe Transport
+**Client**: Setup `launch.json` to attach to a running process.
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) Pipe Attach",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "/root/hello",
+            "processId": "${command:pickRemoteProcess}",
+            "pipeTransport": {
+                "debuggerPath": "/usr/bin/gdb",
+                "pipeProgram": "/usr/bin/sshpass",
+                "pipeArgs": [
+                    "-p", "password",
+                    "ssh", "root@172.16.111.132"
+                ],
+                "pipeCwd": ""
+            },
+            "MIMode": "gdb",
+            "sourceFileMap": {
+                "${workspaceFolder}": {
+                    "editorPath": "${workspaceFolder}",
+                    "useForBreakpoints": "true"
+                }
+            },
+            // "logging": {
+            //     "engineLogging": true
+            // },
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        }
     ]
 }
 ```
