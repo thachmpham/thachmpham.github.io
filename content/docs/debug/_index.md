@@ -114,6 +114,20 @@ $ gdb
 (gdb)	bt
 ```
 
+### 2.4. Pipe
+**Client (option 1)**: connect gdb and gdbserver through pipe in single-process mode.
+```sh
+$ gdb
+(gdb)   target remote | ssh -T root@172.16.111.130 gdbserver - --attach 98818
+```
+
+**Client (option 2)**: connect gdb and gdbserver through pipe in multi-process mode.
+```sh
+$ gdb
+(gdb)   target extended-remote | ssh -T root@172.16.111.130 gdbserver --multi -
+(gdb)   attach 98818
+```
+
 ## 3. VS Code Remote Debug
 Extension: [C/C++ for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools).  
 Parameter: [`launch.json` reference](https://code.visualstudio.com/docs/cpp/launch-json-reference).
