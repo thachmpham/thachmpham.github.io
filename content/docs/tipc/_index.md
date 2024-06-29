@@ -727,7 +727,7 @@ recvfrom(sd, buf, buf_size, 0, _, _);
 [server_tipc.c](https://github.com/TIPC/tipcutils/blob/master/demos/multicast_demo/server_tipc.c)
 {{< /columns>}}
 
-## 6.3.3. Anycast
+## 6.3.3. Anycast (*To be continue...*)
 ```text
 ssize_t send(int sockfd, const void *buff, size_t nbytes, int flags)
   This routine has two uses:
