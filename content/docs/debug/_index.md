@@ -2,6 +2,7 @@
 title: "Debug"
 bookToc: true
 bookFlatSection: true
+bookHidden: true
 ---
 # Debug Tricks
 

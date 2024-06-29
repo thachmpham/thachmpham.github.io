@@ -2,6 +2,7 @@
 title: "TIPS"
 bookToc: true
 bookFlatSection: true
+bookHidden: true
 ---
 # TIPS
 
