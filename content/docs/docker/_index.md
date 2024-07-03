@@ -120,19 +120,26 @@ References:
 {{< columns >}}
 - `docker-compose.yml`
 ```yml
-name: myapp
+name: vm_ubuntu
 
 services:
-  foo:
+  my_service_1:
     image: ubuntu
-    command: echo hello
+    volumes:
+    - /home/mm:/home/mm
+    tty: true
+    command: "/bin/bash"
 ```
 
 <--->
 
 - Run
 ```sh
-docker compose up
+# docker compose up
+docker compose up -d
+
+docker compose stop
+docker compose down
 
 ```
 
