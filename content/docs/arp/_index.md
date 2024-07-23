@@ -9,7 +9,16 @@ bookFlatSection: true
 ## 1. Introduction
 The Address Resolution Protocol (ARP) resolves **IP addresses** to **MAC addresses** in a local network, ensuring that data is sent to the correct physical device.
 
+
 ## 2. How ARP Works
+- ARP Request:  
+    - Device A wants to send data to Device B but only knows Device B’s IP address.
+    - Device A asks, "Who has this IP address?" by sending a message to everyone on the network.
+- ARP Reply:  
+    - Device B compare its IP address and the address in the ARP request, if match, responds with, "I have that IP address, and here’s my MAC address."
+- ARP Cache:  
+    - Device A now knows Device B’s MAC address and stores it in its memory (ARP cache) for future use.
+
 Given a network consisting of 4 nodes and a router as below.
 
 {{< mermaid >}}
@@ -58,30 +67,65 @@ sequenceDiagram
 -   Router sends the message "Who has 192.168.0.40?" to Node4.  
     Node4 compares its IP and 192.168.0.40. The IPs are the same, so Node4 replies the message with its MAC address.
 
-## 3. Send & Capture ARP Packets.
-Node1: Check network interfaces.
+
+## 3. Send ARP Requests.
+Node1: Find network interfaces.
 ```sh
 $ ifconfig
 wlo1:   flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
         inet 192.168.1.106  netmask 255.255.255.0  broadcast 192.168.1.255
 ```
 
-Node1: Capture ARP packets.
+Node1: **Send an ARP request**.  
 ```sh
 $ sudo arping -v -i wlo1 -C 1 192.168.1.27
 ```
 
-Node1: Send an ARP request.
+Node1: Capture packets.
 ```sh
-$ sudo tshark -i wlo1 -f "arp" -w capture.pcap
+$ sudo tshark -i wlo1 -f "arp"
+No  Time            Source                  Destination             Protocol    Len     Info
+1   0.000000000	    ChongqingFug_67:5c:c5   Broadcast	            ARP	        58	    Who has 192.168.1.27? Tell 192.168.1.106
+2   0.093148373	    66:84:ef:bc:c6:25       ChongqingFug_67:5c:c5   ARP	        60	    192.168.1.27 is at 66:84:ef:bc:c6:25
 ```
 
-Node1: Read the packets.
+
+## 4. ARP Cache
+ARP cache is a table stored in the memory of a device that maps IP addresses to MAC addresses. It stores the results of recent ARP requests to reduce repeated requests. Entries in ARP cache have a limited lifetime and will be cleared once timeout expired.  
+  
+Show ARP cache.
 ```sh
-$ sudo tshark -r capture.pcap
-No  Time        Source                  Destination             Protocol    Len     Info
-1	0.000000000	ChongqingFug_67:5c:c5	Broadcast	            ARP	        58	    Who has 192.168.1.27? Tell 192.168.1.106
-2	0.093148373	66:84:ef:bc:c6:25	    ChongqingFug_67:5c:c5	ARP	        60	    192.168.1.27 is at 66:84:ef:bc:c6:25
+$ arp -n
+Address                  HWtype  HWaddress           Flags Mask            Iface
+192.168.1.1              ether   fc:b2:d6:c6:9e:38   C                     wlo1
+192.168.1.232            ether   fc:b2:d6:57:c6:58   C                     wlo1
 ```
 
-## 4. ARP Table
+Ping and check changes of the ARP cache.
+```sh
+$ ping 192.168.1.27
+
+$ arp -n
+Address                  HWtype  HWaddress           Flags Mask            Iface
+192.168.1.1              ether   fc:b2:d6:c6:9e:38   C                     wlo1
+192.168.1.27             ether   66:84:ef:bc:c6:25   C                     wlo1
+192.168.1.232            ether   fc:b2:d6:57:c6:58   C                     wlo1
+```
+
+## 5. Manipulate ARP Cache
+Add An Entry
+```sh
+$ sudo arp -i wlo1 -s 192.168.1.106 74:12:b3:67:5c:c5
+```
+
+Delete An Entry
+```sh
+$ sudo arp -i wlo1 -d 192.168.1.106
+```
+
+
+## X. Summary
+ARP is a network protocol used to map IP addresses to MAC addresses, enabling communication on a local network.
+- ARP Request: A device asks, “Who has this IP address?” by broadcasting a message.
+- ARP Reply: The device with the matching IP responds with its MAC address.
+- ARP Cache: The requesting device stores this IP-to-MAC mapping temporarily for future use.
