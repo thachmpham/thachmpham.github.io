@@ -103,6 +103,8 @@ Address                  HWtype  HWaddress           Flags Mask            Iface
 192.168.1.27             ether   66:84:ef:bc:c6:25   C                     wlo1
 192.168.1.232            ether   fc:b2:d6:57:c6:58   C                     wlo1
 ```
+- A new item with IP 192.168.1.27 is inserted to the cache.
+
 
 ## 5. Manipulate ARP Cache
 Add An Entry
