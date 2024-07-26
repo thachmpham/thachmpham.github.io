@@ -11,14 +11,6 @@ The Address Resolution Protocol (ARP) resolves **IP addresses** to **MAC address
 
 
 ## 2. How ARP Works
-- ARP Request:  
-    - Device A wants to send data to Device B but only knows Device B’s IP address.
-    - Device A asks, "Who has this IP address?" by sending a message to everyone on the network.
-- ARP Reply:  
-    - Device B compare its IP address and the address in the ARP request, if match, responds with, "I have that IP address, and here’s my MAC address."
-- ARP Cache:  
-    - Device A now knows Device B’s MAC address and stores it in its memory (ARP cache) for future use.
-
 Given a network consisting of 4 nodes and a router as below.
 
 {{< mermaid >}}
