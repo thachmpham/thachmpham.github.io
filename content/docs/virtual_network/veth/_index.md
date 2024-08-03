@@ -2,12 +2,11 @@
 weight: 1
 title: "VETH"
 bookToc: false
-bookFlatSection: true
 ---
 
 # Virtual Ethernet Interface
 ## 1. Introduction
-- A virtual ethernet interface (veth) acts as tunnels between devices.
+- A virtual ethernet interface (**veth**) acts as tunnels between devices.
 - Packets transmitted on one device in the pair are immediately received on the other device.
 
 ## 2. Demo
@@ -108,4 +107,3 @@ $ docker exec container2 ping 192.168.0.10
 - https://man7.org/linux/man-pages/man4/veth.4.html
 - https://man7.org/linux/man-pages/man8/ip-netns.8.html
 - https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking
-- https://docs.windriver.com/r/bundle/Wind_River_Linux_Tutorial_Using_Docker_Containers_LTS_18_1/page/fah1569948054760.html

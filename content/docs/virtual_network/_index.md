@@ -1,5 +1,5 @@
 ---
 weight: 1
-title: "VirtualNetwork"
+title: "Virtual Network"
 bookCollapseSection: true
 ---

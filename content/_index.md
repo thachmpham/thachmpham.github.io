@@ -5,13 +5,14 @@ bookToc: false
 ---
 
 # Greeting
-Hi there, and a warm welcome to my blog!
+*Hello and a warm welcome.*  
+*I'm so thankful for you taking time to visit.*
 
-I'm Pham Minh Thach. Currently, I'm a software engineer at DEK Technologies, an Endava Company. I specialize in projects related to computer networking and distributed systems. Previously, I had the opportunity to work as a mobile game developer at Gameloft.
+I'm Thach, a software developer at DEK Technologies, an Endava Company. At work, I have opportunity to join projects related to computer networking and distributed systems. Previously, I worked as a game developer at Gameloft.
 
-In this blog, my aim is to share practical insights into computer networking and distributed systems.  
+In this blog, I would like to share with you some practices in computer networking and distributed systems.  
   
-Thanks for your visiting and have a nice day!
+*Thanks again and wishing you a great day ahead.*
 
 
 # Table of Content
@@ -25,6 +26,7 @@ Thanks for your visiting and have a nice day!
 
 ## Cheat Sheets
 - [Docker](docs/cheatsheets/docker)
+
 
 # Contact
 {{< columns >}}

@@ -1,8 +1,8 @@
 ---
-weight: 1
+weight: 2
 title: "Bridge"
-bookToc: true
-bookFlatSection: true
+bookToc: false
+bookFlatSection: false
 ---
 
 # Bridge
