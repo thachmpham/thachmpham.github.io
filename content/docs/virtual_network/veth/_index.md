@@ -30,27 +30,28 @@ flowchart LR
 
 
 ```sh
-# create namepsaces
+# create namepsaces: ns1, ns2
 $ ip netns add ns1
 $ ip netns add ns2
 
-# create veth pair
+# create veth pair: veth1-veth2
 $ ip link add veth1 type veth peer name veth2
 
-# assign each end of the pair to a namespace
+# assign veth1 to ns1, veth2 to ns2
 $ ip link set veth1 netns ns1
 $ ip link set veth2 netns ns2
 
-# assign IP for each end of the pair
-$ ip netns exec ns1 ip addr add 192.168.1.10/24 dev eth1
+# set IP for veth1
+$ ip netns exec ns1 ip addr add 192.168.0.10/24 dev veth1
 $ ip netns exec ns1 ip link set veth1 up
 
-$ ip netns exec ns1 ip addr add 192.168.1.20/24 dev eth2
+# set IP for veth2
+$ ip netns exec ns1 ip addr add 192.168.0.20/24 dev veth2
 $ ip netns exec ns1 ip link set veth2 up
 
-# check the connection with ping
-$ ip netns exec ns1 ping 192.168.1.20
-$ ip netns exec ns2 ping 192.168.1.10
+# check connection with ping
+$ ip netns exec ns1 ping 192.168.0.20
+$ ip netns exec ns2 ping 192.168.0.10
 ```
 
 
