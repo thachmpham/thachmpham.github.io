@@ -37,8 +37,10 @@ $ ip netns add ns2
 # create veth pair: veth1-veth2
 $ ip link add veth1 type veth peer name veth2
 
-# assign veth1 to ns1, veth2 to ns2
+# move veth1 to namespace ns1
 $ ip link set veth1 netns ns1
+
+# move veth2 to namespace ns2
 $ ip link set veth2 netns ns2
 
 # set IP for veth1
@@ -46,16 +48,64 @@ $ ip netns exec ns1 ip addr add 192.168.0.10/24 dev veth1
 $ ip netns exec ns1 ip link set veth1 up
 
 # set IP for veth2
-$ ip netns exec ns1 ip addr add 192.168.0.20/24 dev veth2
-$ ip netns exec ns1 ip link set veth2 up
+$ ip netns exec ns2 ip addr add 192.168.0.20/24 dev veth2
+$ ip netns exec ns2 ip link set veth2 up
 
 # check connection with ping
 $ ip netns exec ns1 ping 192.168.0.20
 $ ip netns exec ns2 ping 192.168.0.10
 ```
 
+### 2.2. Connect Docker Containers
+- Create docker containers: container1, container2.
+- Connect them by a veth pair: veth1-veth2.
+- Check the connection with ping.
+
+{{< mermaid >}}
+flowchart LR
+    subgraph container1
+        veth1
+    end
+    subgraph container2
+        veth2
+    end
+
+    veth1 --- veth2
+{{< /mermaid >}}
+
+
+```sh
+# create containers
+$ docker run -id --cap-add=NET_ADMIN --name container1 alpine sh
+$ docker run -id --cap-add=NET_ADMIN --name container2 alpine sh
+
+# create veth pair: veth1-veth2
+$ ip link add veth1 type veth peer name veth2
+
+# move veth1 to namespace of container1
+$ pid_of_container1=$(docker inspect --format '{{.State.Pid}}' container1)
+$ ip link set veth1 netns ${pid_of_container1}
+
+# move veth2 to namespace of container2
+$ pid_of_container2=$(docker inspect --format '{{.State.Pid}}' container2)
+$ ip link set veth2 netns ${pid_of_container2}
+
+# set IP for veth1
+$ docker exec container1 ip addr add 192.168.0.10/24 dev veth1
+$ docker exec container1 ip link set veth1 up
+
+# set IP for veth2
+$ docker exec container2 ip addr add 192.168.0.20/24 dev veth2
+$ docker exec container2 ip link set veth2 up
+
+# check connection with ping
+$ docker exec container1 ping 192.168.0.20
+$ docker exec container2 ping 192.168.0.10
+```
 
 ## X. References
 - https://man7.org/linux/man-pages/man8/ip-link.8.html
 - https://man7.org/linux/man-pages/man4/veth.4.html
+- https://man7.org/linux/man-pages/man8/ip-netns.8.html
 - https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking
+- https://docs.windriver.com/r/bundle/Wind_River_Linux_Tutorial_Using_Docker_Containers_LTS_18_1/page/fah1569948054760.html
