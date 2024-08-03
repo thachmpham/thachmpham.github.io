@@ -15,14 +15,15 @@ Thanks for your visiting and have a nice day!
 
 
 # Table of Content
-## Computer Networking
-- [ARP - Address Resolution Protocol](docs/arp)
+## Virtual Network
+- [Bridge](/docs/virtual_network/bridge)
 
-## Distributed Systems
-- [TIPC - The Cluster Communication Protocol](docs/tipc)
+## Protocols
+- [ARP - Address Resolution Protocol](docs/protocols/arp)
+- [TIPC - The Cluster Communication Protocol](docs/protocols/tipc)
 
 ## Cheat Sheets
-- [Docker](docs/docker)
+- [Docker](docs/cheatsheets/docker)
 
 # Contact
 {{< columns >}}

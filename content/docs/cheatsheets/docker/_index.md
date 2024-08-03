@@ -2,7 +2,6 @@
 title: "Docker"
 bookToc: false
 bookFlatSection: true
-bookHidden: true
 ---
 
 
