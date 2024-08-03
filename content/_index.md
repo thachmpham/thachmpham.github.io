@@ -16,6 +16,7 @@ Thanks for your visiting and have a nice day!
 
 # Table of Content
 ## Virtual Network
+- [Virtual Ethernet Interface](/docs/virtual_network/veth)
 - [Bridge](/docs/virtual_network/bridge)
 
 ## Protocols
