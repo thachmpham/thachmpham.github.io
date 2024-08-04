@@ -114,4 +114,3 @@ $ docker exec container2 ping 192.168.0.10
 - https://man7.org/linux/man-pages/man8/ip-link.8.html
 - https://man7.org/linux/man-pages/man4/veth.4.html
 - https://man7.org/linux/man-pages/man8/ip-netns.8.html
-- https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking
