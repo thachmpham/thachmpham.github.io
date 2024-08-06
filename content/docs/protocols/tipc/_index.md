@@ -2,7 +2,6 @@
 weight: 1
 title: "TIPC"
 bookToc: false
-bookFlatSection: true
 ---
 
 # TIPC

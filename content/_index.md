@@ -23,7 +23,7 @@ In this blog, I would like to share with you some practices in computer networki
 - [ARP - Address Resolution Protocol](docs/protocols/arp)
 - [TIPC - The Cluster Communication Protocol](docs/protocols/tipc)
 
-## Cheat Sheets
+## Quick References
 - [Docker](docs/cheatsheets/docker)
 
 

@@ -1,8 +1,7 @@
 ---
 weight: 1
 title: "ARP"
-bookToc: true
-bookFlatSection: true
+bookToc: false
 ---
 
 # ARP
