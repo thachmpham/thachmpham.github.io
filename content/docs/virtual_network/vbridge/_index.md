@@ -158,8 +158,8 @@ $ docker exec container1 ip addr add 192.168.0.10/24 dev veth1
 $ docker exec container2 ip addr add 192.168.0.20/24 dev veth2
 
 # turn on devices
-$ docker exec container2 ip link set veth2 up
 $ docker exec container1 ip link set veth1 up
+$ docker exec container2 ip link set veth2 up
 $ ip link set vethbr1 up
 $ ip link set vethbr2 up
 $ ip link set virbr0 up
