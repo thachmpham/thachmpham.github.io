@@ -5,8 +5,7 @@ bookToc: false
 ---
 
 # Greeting
-*Hello and a warm welcome.*  
-*I'm so thankful for you taking time to visit.*
+*Hello and a warm welcome. I'm so thankful for you taking time to visit.*
 
 I'm Thach, a software developer at DEK Technologies, an Endava Company. At work, I have opportunity to join projects related to computer networking and distributed systems. Previously, I worked as a game developer at Gameloft.
 
@@ -18,7 +17,7 @@ In this blog, I would like to share with you some practices in computer networki
 # Table of Content
 ## Virtual Network
 - [Virtual Ethernet Interface](/docs/virtual_network/veth)
-- [Bridge](/docs/virtual_network/bridge)
+- [Virtual Bridge](/docs/virtual_network/vbridge)
 
 ## Protocols
 - [ARP - Address Resolution Protocol](docs/protocols/arp)

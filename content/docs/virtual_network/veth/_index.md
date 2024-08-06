@@ -1,17 +1,18 @@
 ---
 weight: 1
-title: "VETH"
+title: "vETH"
 bookToc: false
 ---
 
 # Virtual Ethernet Interface
 ## 1. Introduction
-- A virtual ethernet interface (**veth**) acts as tunnels between devices. Packets transmitted on one device in the pair are immediately received on the other device.
-- A veth could be similar to the following things in real life:
-    - A cable connecting two computers.
-    - A cable connecting between switches, bridges.
+A virtual ethernet interface (**veth**) acts as tunnels between devices. Packets transmitted on one device in the pair are immediately received on the other device.  
+  
+A veth could be similar to the following things in real life:
+- A cable connecting two computers.
+- A cable connecting between switches, bridges.
 
-A veth pair can be created using the command:
+Create a veth pair.
 ```sh
 $ ip link add <p1-name> type veth peer name <p2-name>
 ```
@@ -112,5 +113,5 @@ $ docker exec container2 ping 192.168.0.10
 
 ## References
 - https://man7.org/linux/man-pages/man8/ip-link.8.html
-- https://man7.org/linux/man-pages/man4/veth.4.html
 - https://man7.org/linux/man-pages/man8/ip-netns.8.html
+- https://man7.org/linux/man-pages/man4/veth.4.html
