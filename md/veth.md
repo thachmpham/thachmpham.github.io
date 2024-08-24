@@ -63,6 +63,7 @@ $ ip netns exec ns2 ip link set veth2 up
 # check connection with ping
 $ ip netns exec ns1 ping 192.168.0.20
 $ ip netns exec ns2 ping 192.168.0.10
+  
 ```
 
 ## 2.2. Connect Two Containers
@@ -110,6 +111,7 @@ $ docker exec container2 ip link set veth2 up
 # check connection with ping
 $ docker exec container1 ping 192.168.0.20
 $ docker exec container2 ping 192.168.0.10
+  
 ```
 
 # References

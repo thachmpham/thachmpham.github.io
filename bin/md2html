@@ -15,6 +15,12 @@ pandoc -f markdown -t html \
 
 
 pandoc -f markdown -t html \
-    -s \
+    -s --highlight-style kate \
     -o ${workspace}/html/veth.html \
     ${workspace}/md/veth.md
+
+
+pandoc -f markdown -t html \
+    -s --highlight-style kate \
+    -o ${workspace}/html/vbridge.html \
+    ${workspace}/md/vbridge.md
