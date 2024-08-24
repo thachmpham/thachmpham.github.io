@@ -1,3 +1,0 @@
-hugo server >/dev/null 2>&1 &
-
-echo http://localhost:1313
