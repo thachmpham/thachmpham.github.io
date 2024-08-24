@@ -12,3 +12,9 @@ pandoc -f markdown -t html \
     -s \
     -o ${workspace}/html/about.html \
     ${workspace}/md/about.md
+
+
+pandoc -f markdown -t html \
+    -s \
+    -o ${workspace}/html/veth.html \
+    ${workspace}/md/veth.md

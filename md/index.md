@@ -5,7 +5,7 @@ subtitle: "A Blog for Coders with Fun Drawings"
 
 ## Table of Content
 ### Virtual Network
-- [Virtual Ethernet Interface](/docs/virtual_network/veth)
+- [Virtual Ethernet Interface](html/veth.html)
 - [Virtual Bridge](/docs/virtual_network/vbridge)
 
 ### Protocols
