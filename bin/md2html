@@ -7,3 +7,8 @@ pandoc -f markdown -t html \
     -o ${workspace}/index.html \
     ${workspace}/md/index.md
 
+
+pandoc -f markdown -t html \
+    -s \
+    -o ${workspace}/html/about.html \
+    ${workspace}/md/about.md
