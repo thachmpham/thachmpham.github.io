@@ -1,0 +1,9 @@
+#! /usr/bin/bash
+
+workspace=$(git rev-parse --show-toplevel)
+
+pandoc -f markdown -t html \
+    -s \
+    -o ${workspace}/index.html \
+    ${workspace}/md/index.md
+
