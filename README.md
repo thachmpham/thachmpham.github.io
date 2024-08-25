@@ -1,12 +1,7 @@
-# Themes
-- https://themes.gohugo.io/themes/hugo-book/
-
-# Start Server
-```sh
-./start-server
-```
-Server listen at localhost:1313
-
+## References
+- https://pandoc.org/
+- http://mermaid.js.org/
+- https://github.com/ashki23/pandoc-bootstrap
 
 
 
