@@ -1,7 +1,8 @@
 ---
 title:  'Drawing to Coding'
-subtitle: "A Blog for Coders with Fun Illustrations"
+subtitle: "A Blog for Developers with Fun Illustrations"
 ---
+
 
 ## Table of Content
 ### Virtual Network
@@ -10,6 +11,6 @@ subtitle: "A Blog for Coders with Fun Illustrations"
 - [Dummy Interface](html/vdummy-interface.html)
 
 
-## [About](html/about.html)
-
+## About
+- [Author](html/about.html)
 
