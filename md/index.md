@@ -1,6 +1,6 @@
 ---
 title:  'Code Visualization'
-subtitle: "A Practical & Illustration Blog for Developers"
+subtitle: "A Practical & Illustrated Blog for Developers"
 ---
 
 
