@@ -15,7 +15,7 @@ Create a veth pair.
 $ ip link add <p1-name> type veth peer name <p2-name>
   
 ```
-- p1-name and p2-name are the names assigned to the two connected end points.
+- *p1-name* and *p2-name* are the names assigned to the two connected end points.
 
 # 2. Labs
 ## 2.1. Connect Two Namespaces

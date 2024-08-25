@@ -14,7 +14,7 @@ Create a dummy interface.
 $ ip link add <interface-name> type dummy
   
 ```
-- interface-name: the name assigned to the interface.
+- *interface-name*: the name assigned to the interface.
 
 # 2. Labs
 ## 2.1. Create a Dummy Interface
