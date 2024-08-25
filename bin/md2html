@@ -15,12 +15,18 @@ pandoc -f markdown -t html \
 
 
 pandoc -f markdown -t html \
-    -s --highlight-style kate \
+    -s --highlight-style breezeDark \
     -o ${workspace}/html/veth.html \
     ${workspace}/md/veth.md
 
 
 pandoc -f markdown -t html \
-    -s --highlight-style kate \
+    -s --highlight-style breezeDark \
     -o ${workspace}/html/vbridge.html \
     ${workspace}/md/vbridge.md
+
+
+pandoc -f markdown -t html \
+    -s --highlight-style breezeDark \
+    -o ${workspace}/html/vdummy-interface.html \
+    ${workspace}/md/vdummy-interface.md

@@ -5,13 +5,15 @@ title:  'Virtual Ethernet Interface'
 # 1. Introduction
 A virtual ethernet interface (**veth**) acts as tunnels between devices. Packets transmitted on one device in the pair are immediately received on the other device.  
   
-A veth could be similar to the following things in real life:
-- A cable connecting two computers.
-- A cable connecting between switches, bridges.
-
+A veth could be similar to the following things in real life:  
+- A cable connecting two computers.  
+- A cable connecting between switches, bridges.  
+  
 Create a veth pair.
 ```sh
+  
 $ ip link add <p1-name> type veth peer name <p2-name>
+  
 ```
 - p1-name and p2-name are the names assigned to the two connected end points.
 

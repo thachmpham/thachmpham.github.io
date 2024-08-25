@@ -5,19 +5,23 @@ title:  'Virtual Bridge Interface'
 # 1. Introduction
 A virtual bridge connects multiple network interfaces together, allowing them to communicate with each other as if they were on the same network.  
   
-A virtual bridge can simulate following things:
-- A switch.
-- A bridge.
+A virtual bridge can simulate following things:  
+- A switch.  
+- A bridge.  
 
 
 Create a virtual bridge.
 ```sh
+  
 $ ip link add <bridge_name> type bridge
+  
 ```
 
 Set the bridge as the master devive of another one.
 ```sh
+  
 $ ip link set <another_device> master <bridge_device>
+  
 ```
 
 Example:
@@ -33,6 +37,7 @@ $ ip link add veth1 type veth peer name veth2
 # Connect veth0, veth1 to virbr0
 $ ip link set veth0 master virbr0
 $ ip link set veth1 master virbr0
+  
 ```
 
 <script type="module">
@@ -104,6 +109,7 @@ $ ip link set virbr0 up
 # check connection with ping
 $ ip netns exec ns1 ping 192.168.0.20
 $ ip netns exec ns2 ping 192.168.0.10
+  
 ```
 
 
@@ -167,6 +173,7 @@ $ ip link set virbr0 up
 # check connection with ping
 $ docker exec container1 ping 192.168.0.20
 $ docker exec container2 ping 192.168.0.10
+  
 ```
 
 # References

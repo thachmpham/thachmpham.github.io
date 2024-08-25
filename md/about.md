@@ -8,7 +8,7 @@ title:  'About Me'
 
 I'm **Thach**, a software developer at **DEK Technologies**, an **Endava** Company. At work, I have opportunity to join projects related to computer networking and distributed systems.
 
-In this blog, I would like to share with you the illustrations of some concepts in computer networking and distributed systems.  
+In this blog, I would like to share with you some concepts in computer networking and distributed systems with illustrations.  
   
 *Thanks again and wishing you a great day ahead.*  
 

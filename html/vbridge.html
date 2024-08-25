@@ -189,46 +189,46 @@
         -khtml-user-select: none; -moz-user-select: none;
         -ms-user-select: none; user-select: none;
         padding: 0 4px; width: 4em;
-        background-color: #ffffff;
-        color: #a0a0a0;
+        background-color: #232629;
+        color: #7a7c7d;
       }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #7a7c7d;  padding-left: 4px; }
     div.sourceCode
-      { color: #1f1c1b; background-color: #ffffff; }
+      { color: #cfcfc2; background-color: #232629; }
     @media screen {
     pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
     }
-    code span { color: #1f1c1b; } /* Normal */
-    code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
-    code span.an { color: #ca60ca; } /* Annotation */
-    code span.at { color: #0057ae; } /* Attribute */
-    code span.bn { color: #b08000; } /* BaseN */
-    code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
-    code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #924c9d; } /* Char */
-    code span.cn { color: #aa5500; } /* Constant */
-    code span.co { color: #898887; } /* Comment */
-    code span.cv { color: #0095ff; } /* CommentVar */
-    code span.do { color: #607880; } /* Documentation */
-    code span.dt { color: #0057ae; } /* DataType */
-    code span.dv { color: #b08000; } /* DecVal */
-    code span.er { color: #bf0303; text-decoration: underline; } /* Error */
-    code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
-    code span.fl { color: #b08000; } /* Float */
-    code span.fu { color: #644a9b; } /* Function */
-    code span.im { color: #ff5500; } /* Import */
-    code span.in { color: #b08000; } /* Information */
-    code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
-    code span.op { color: #1f1c1b; } /* Operator */
-    code span.ot { color: #006e28; } /* Other */
-    code span.pp { color: #006e28; } /* Preprocessor */
-    code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+    code span { color: #cfcfc2; } /* Normal */
+    code span.al { color: #95da4c; background-color: #4d1f24; font-weight: bold; } /* Alert */
+    code span.an { color: #3f8058; } /* Annotation */
+    code span.at { color: #2980b9; } /* Attribute */
+    code span.bn { color: #f67400; } /* BaseN */
+    code span.bu { color: #7f8c8d; } /* BuiltIn */
+    code span.cf { color: #fdbc4b; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #3daee9; } /* Char */
+    code span.cn { color: #27aeae; font-weight: bold; } /* Constant */
+    code span.co { color: #7a7c7d; } /* Comment */
+    code span.cv { color: #7f8c8d; } /* CommentVar */
+    code span.do { color: #a43340; } /* Documentation */
+    code span.dt { color: #2980b9; } /* DataType */
+    code span.dv { color: #f67400; } /* DecVal */
+    code span.er { color: #da4453; text-decoration: underline; } /* Error */
+    code span.ex { color: #0099ff; font-weight: bold; } /* Extension */
+    code span.fl { color: #f67400; } /* Float */
+    code span.fu { color: #8e44ad; } /* Function */
+    code span.im { color: #27ae60; } /* Import */
+    code span.in { color: #c45b00; } /* Information */
+    code span.kw { color: #cfcfc2; font-weight: bold; } /* Keyword */
+    code span.op { color: #cfcfc2; } /* Operator */
+    code span.ot { color: #27ae60; } /* Other */
+    code span.pp { color: #27ae60; } /* Preprocessor */
+    code span.re { color: #2980b9; background-color: #153042; } /* RegionMarker */
     code span.sc { color: #3daee9; } /* SpecialChar */
-    code span.ss { color: #ff5500; } /* SpecialString */
-    code span.st { color: #bf0303; } /* String */
-    code span.va { color: #0057ae; } /* Variable */
-    code span.vs { color: #bf0303; } /* VerbatimString */
-    code span.wa { color: #bf0303; } /* Warning */
+    code span.ss { color: #da4453; } /* SpecialString */
+    code span.st { color: #f44f4f; } /* String */
+    code span.va { color: #27aeae; } /* Variable */
+    code span.vs { color: #da4453; } /* VerbatimString */
+    code span.wa { color: #da4453; } /* Warning */
   </style>
 </head>
 <body>
@@ -239,12 +239,17 @@
 <p>A virtual bridge connects multiple network interfaces together,
 allowing them to communicate with each other as if they were on the same
 network.</p>
-<p>A virtual bridge can simulate following things: - A switch. - A
-bridge.</p>
+<p>A virtual bridge can simulate following things:<br />
+- A switch.<br />
+- A bridge.</p>
 <p>Create a virtual bridge.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link add <span class="op">&lt;</span>bridge_name<span class="op">&gt;</span> type bridge</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link add <span class="op">&lt;</span>bridge_name<span class="op">&gt;</span> type bridge</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p>Set the bridge as the master devive of another one.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set <span class="op">&lt;</span>another_device<span class="op">&gt;</span> master <span class="op">&lt;</span>bridge_device<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set <span class="op">&lt;</span>another_device<span class="op">&gt;</span> master <span class="op">&lt;</span>bridge_device<span class="op">&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p>Example:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a virtual bridge: virbr0</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link add virbr0 type bridge</span>
@@ -255,7 +260,8 @@ bridge.</p>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Connect veth0, veth1 to virbr0</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth0 master virbr0</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth1 master virbr0</span></code></pre></div>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth1 master virbr0</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 </script>
@@ -319,7 +325,8 @@ flowchart TD
 <span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co"># check connection with ping</span></span>
 <span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns1 ping 192.168.0.20</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns2 ping 192.168.0.10</span></code></pre></div>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns2 ping 192.168.0.10</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h2 id="connect-docker-containers">2.2. Connect Docker Containers</h2>
 <ul>
 <li>Create containers: container1, container2.</li>
@@ -377,7 +384,8 @@ flowchart TD
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co"># check connection with ping</span></span>
 <span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker exec container1 ping 192.168.0.20</span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker exec container2 ping 192.168.0.10</span></code></pre></div>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker exec container2 ping 192.168.0.10</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="references">References</h1>
 <ul>
 <li>https://man7.org/linux/man-pages/man8/ip-link.8.html</li>
