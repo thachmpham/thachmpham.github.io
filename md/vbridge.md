@@ -52,7 +52,7 @@ flowchart TD
 </pre>
 
 
-# 2. Applications
+# 2. Labs
 ## 2.1. Connect Namespaces
 - Create namespaces: ns1, ns2.
 - Create veth pairs: veth1-vethbr1, veth2-vethbr2.

@@ -16,7 +16,7 @@ $ ip link add <interface-name> type dummy
 ```
 - interface-name: the name assigned to the interface.
 
-# 2. Applications
+# 2. Labs
 ## 2.1. Create a Dummy Interface
 - Create a dummy interface: dummy0
 - Assign IP and turn on the interface.
