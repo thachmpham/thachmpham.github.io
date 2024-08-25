@@ -1,6 +1,6 @@
 ---
-title:  'Drawing to Coding'
-subtitle: "A Blog for Developers with Fun Illustrations"
+title:  'Code Visualization'
+subtitle: "A Practical & Illustration Blog for Developers"
 ---
 
 
