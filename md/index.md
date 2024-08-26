@@ -1,6 +1,6 @@
 ---
-title:  'Code Visualization'
-subtitle: "A Practical & Illustrated Blog for Developers"
+title:  'Network Visualization'
+subtitle: "A Practical & Illustrated Blog for Developers<br/>*Virtualization - Computer Networking - Distributed Systems*"
 ---
 
 
