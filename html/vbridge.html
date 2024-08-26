@@ -263,13 +263,17 @@ network.</p>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth1 master virbr0</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+        look: 'handDrawn',
+        theme: 'neutral',
+    });
 </script>
 <pre class="mermaid">
 flowchart TD
-    veth0 --- virbr0
-    veth2 --- veth1
-    veth1 --- virbr0
+    veth0 <---> virbr0
+    veth2 <---> veth1
+    veth1 <---> virbr0
 </pre>
 <h1 id="labs">2. Labs</h1>
 <h2 id="connect-namespaces">2.1. Connect Namespaces</h2>
@@ -288,10 +292,10 @@ flowchart TD
     subgraph ns2
         veth2
     end    
-    veth1 --- vethbr1
-    veth2 --- vethbr2    
-    vethbr1 --- virbr0
-    vethbr2 --- virbr0    
+    veth1 <---> vethbr1
+    veth2 <---> vethbr2    
+    vethbr1 <---> virbr0
+    vethbr2 <---> virbr0    
 </pre>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create namepsaces</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns add ns1</span>
@@ -343,10 +347,10 @@ flowchart TD
     subgraph container2
         veth2
     end    
-    veth1 --- vethbr1
-    veth2 --- vethbr2    
-    vethbr1 --- virbr0
-    vethbr2 --- virbr0    
+    veth1 <---> vethbr1
+    veth2 <---> vethbr2    
+    vethbr1 <---> virbr0
+    vethbr2 <---> virbr0    
 </pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create containers</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker run <span class="at">-id</span> <span class="at">--cap-add</span><span class="op">=</span>NET_ADMIN <span class="at">--name</span> container1 alpine sh</span>

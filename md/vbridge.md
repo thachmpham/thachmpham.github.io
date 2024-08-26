@@ -41,14 +41,18 @@ $ ip link set veth1 master virbr0
 ```
 
 <script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+        look: 'handDrawn',
+        theme: 'neutral',
+    });
 </script>
 
 <pre class="mermaid">
 flowchart TD
-    veth0 --- virbr0
-    veth2 --- veth1
-    veth1 --- virbr0
+    veth0 <---> virbr0
+    veth2 <---> veth1
+    veth1 <---> virbr0
 </pre>
 
 
@@ -68,10 +72,10 @@ flowchart TD
     subgraph ns2
         veth2
     end    
-    veth1 --- vethbr1
-    veth2 --- vethbr2    
-    vethbr1 --- virbr0
-    vethbr2 --- virbr0    
+    veth1 <---> vethbr1
+    veth2 <---> vethbr2    
+    vethbr1 <---> virbr0
+    vethbr2 <---> virbr0    
 </pre>
 
 
@@ -128,10 +132,10 @@ flowchart TD
     subgraph container2
         veth2
     end    
-    veth1 --- vethbr1
-    veth2 --- vethbr2    
-    vethbr1 --- virbr0
-    vethbr2 --- virbr0    
+    veth1 <---> vethbr1
+    veth2 <---> vethbr2    
+    vethbr1 <---> virbr0
+    vethbr2 <---> virbr0    
 </pre>
 
 

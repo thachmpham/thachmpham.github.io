@@ -277,13 +277,12 @@ features of <code>balance-tlb</code> plus receiving load balancing.</li>
 </ul>
 <h1 id="labs">2. Labs</h1>
 <h2 id="create-a-bond-interface">2.1. Create a Bond Interface</h2>
-<ul>
-<li>Create a dummy interface: dummy1, dummy2</li>
-<li>Create a bond interface: bond0</li>
-<li>Add dummy1, dummy2 to bond0.</li>
-</ul>
 <script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+        look: 'handDrawn',
+        theme: 'neutral',
+    });
 </script>
 <pre class="mermaid">
 flowchart LR
@@ -293,10 +292,15 @@ flowchart LR
         dummy2
     end
 
-    network ---> bond0
-    bond0 -- primay --> dummy1
-    bond0 -. backup .-> dummy2
+    network <---> bond0
+    bond0 <-- primay --> dummy1
+    bond0 <-. backup .-> dummy2
 </pre>
+<ul>
+<li>Create dummy interfaces: dummy1, dummy2</li>
+<li>Create a bond interface: bond0</li>
+<li>Add dummy1, dummy2 to bond0.</li>
+</ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># create dummy interfaces</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link add dummy1 type dummy</span>

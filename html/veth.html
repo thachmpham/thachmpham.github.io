@@ -258,7 +258,11 @@ two connected end points.</li>
 <li>Check the connection with ping.</li>
 </ul>
 <script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+        look: 'handDrawn',
+        theme: 'neutral',
+    });
 </script>
 <pre class="mermaid">
 flowchart LR
@@ -269,7 +273,7 @@ flowchart LR
         veth2
     end
 
-    veth1 --- veth2
+    veth1 <---> veth2
 </pre>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create namepsaces: ns1, ns2</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns add ns1</span>
@@ -311,7 +315,7 @@ flowchart LR
         veth2
     end
 
-    veth1 --- veth2
+    veth1 <---> veth2
 </pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create containers</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker run <span class="at">-id</span> <span class="at">--cap-add</span><span class="op">=</span>NET_ADMIN <span class="at">--name</span> container1 alpine sh</span>
