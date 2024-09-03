@@ -1,5 +1,5 @@
 ---
-title:  'Distributed Systems Visualized'
+title:  'Distributed Systems Practitioners'
 subtitle: "A Practical & Illustrated Blog for Developers<br/>*Virtualization - Computer Networking - Distributed Systems*"
 ---
 

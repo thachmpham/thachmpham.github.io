@@ -5,6 +5,19 @@ title:  'Address Resolution Protocol'
 # 1. Introduction
 The Address Resolution Protocol (ARP) resolves **IP addresses** to **MAC addresses** in a local network, ensuring that data is sent to the correct physical device.  
 
+Send an ARP request:
+```sh
+  
+$ arping <ip_address>
+  
+```
+
+Modify ARP cache:
+```sh
+  
+$ arp [--set/--delete] <ip_address>
+  
+```
 # 2. Labs
 ## 2.1. Setup Virtual Network
 - Create namespaces: `ns1`, `ns2`, `ns3`
@@ -145,7 +158,7 @@ $ ping -c 1 192.168.0.30
 $ arp -n
 
 # remove an entry from cache.
-$ sudo arp --delete 192.168.0.30
+$ arp --delete 192.168.0.30
     
 ```
 
