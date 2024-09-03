@@ -239,41 +239,12 @@
 <p>The Address Resolution Protocol (ARP) resolves <strong>IP
 addresses</strong> to <strong>MAC addresses</strong> in a local network,
 ensuring that data is sent to the correct physical device.</p>
-<p>How ARP works:</p>
-<ul>
-<li><strong>ARP Request</strong>: When Device A wants to talk to another
-device (Device B) on the same network but only knows Device B’s IP
-address, Device A sends out an ARP request. This broadcast message asks,
-“Who has IP address X? Please send me your MAC address.”<br />
-</li>
-<li><strong>Broadcasting the Request</strong>: This ARP request is sent
-out to all devices on the local network. It includes the IP address
-Device A is trying to find, as well as Device A’s own MAC and IP
-addresses.<br />
-</li>
-<li><strong>ARP Response</strong>: Every device on the network sees the
-request, but only Device B (the one with the matching IP address)
-responds. Device B sends a direct reply to Device A, providing its MAC
-address.<br />
-</li>
-<li><strong>Updating the ARP Cache</strong>: Once Device A receives
-Device B’s MAC address, it updates its ARP cache with this new IP-to-MAC
-mapping. This helps Device A quickly communicate with Device B in the
-future without needing to send another ARP request.<br />
-</li>
-<li><strong>Communication</strong>: With the MAC address in hand, Device
-A can now send data directly to Device B using the MAC address, allowing
-smooth and efficient communication.</li>
-</ul>
-<p>Command to send an ARP request:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> arping <span class="op">&lt;</span>ip_address<span class="op">&gt;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="labs">2. Labs</h1>
 <h2 id="setup-virtual-network">2.1. Setup Virtual Network</h2>
 <ul>
-<li>Create namespaces: ns1, ns2, ns3</li>
-<li>Create virtual bridge: br0</li>
+<li>Create namespaces: <code>ns1</code>, <code>ns2</code>,
+<code>ns3</code></li>
+<li>Create virtual bridge: <code>br0</code></li>
 <li>Connect the namespaces to the virtual bridge.</li>
 </ul>
 <script type="module">
@@ -307,78 +278,93 @@ flowchart TD
     veth2 <---> veth2-br       
     veth3 <---> veth3-br       
 </pre>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># create namespaces</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns add ns1</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns add ns2</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns add ns3</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create virtual bridge</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link add br0 type bridge</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set br0 up</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># connect namespace 1 to the bridge</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link add veth1 type veth peer name veth1-br</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth1 netns ns1</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns1 ip link set veth1 up</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth1-br master br0</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth1-br up</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># connect namespace 2 to the bridge</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link add veth2 type veth peer name veth2-br</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth2 netns ns2</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns2 ip link set veth2 up</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth2-br master br0</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth2-br up</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># connect namespace 3 to the bridge</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link add veth3 type veth peer name veth3-br</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth3 netns ns3</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns3 ip link set veth3 up</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth3-br master br0</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth3-br up</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co"># show learned mac address of the bridge</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> brctl showmacs br0</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP addresses</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns1 ip addr add 192.168.0.10/24 dev veth1</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns2 ip addr add 192.168.0.20/24 dev veth2</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns3 ip addr add 192.168.0.30/24 dev veth3</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># create namespaces</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns add ns1</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns add ns2</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns add ns3</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create virtual bridge</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link add br0 type bridge</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set br0 up</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># connect namespace 1 to the bridge</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link add veth1 type veth peer name veth1-br</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth1 netns ns1</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns1 ip link set veth1 up</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth1-br master br0</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth1-br up</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># connect namespace 2 to the bridge</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link add veth2 type veth peer name veth2-br</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth2 netns ns2</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns2 ip link set veth2 up</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth2-br master br0</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth2-br up</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># connect namespace 3 to the bridge</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link add veth3 type veth peer name veth3-br</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth3 netns ns3</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns3 ip link set veth3 up</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth3-br master br0</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip link set veth3-br up</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co"># show learned mac address of the bridge</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> brctl showmacs br0</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP addresses</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns1 ip addr add 192.168.0.10/24 dev veth1</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns2 ip addr add 192.168.0.20/24 dev veth2</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns3 ip addr add 192.168.0.30/24 dev veth3</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h2 id="send-arp-requests">2.2. Send ARP Requests</h2>
 <ul>
-<li>From the ns1 namespace, send an ARP request to determine the MAC
-address of ns3 using its IP address.</li>
+<li>How the <code>ns1</code> namespace determine the MAC address of
+<code>ns3</code>:
+<ul>
+<li><code>ns1</code> sends an ARP request to <code>br0</code>.</li>
+<li><code>br0</code> forwards the request to <code>ns2</code>,
+<code>ns3</code>.</li>
+<li>The IP address of <code>ns2</code> is different from the IP address
+in the request. So, it ignores the request.</li>
+<li>The IP address of <code>ns3</code> matches the IP address specified
+in the request. So, it replies.</li>
+</ul></li>
 </ul>
 <p><a
 href="http://www.plantuml.com/plantuml/png/TOzD2i8m48NtSuhn005hTYwata2yGTgE93H_9XEmY7StrOqfk7pVlE_1z9bLuk8ivDdug99o-0Hu0MWp4Tv2u24yOCUQ766UYKUzY53O6ay0LM0pcgWyeyzTauUqtzmFcom1geJYj7QFUBvUCD6zK6QeOENL-SDbo-kGHD4kHRjy-n-X-yNGav_grsy0"
 target="_blank"><img
 src="http://www.plantuml.com/plantuml/png/TOzD2i8m48NtSuhn005hTYwata2yGTgE93H_9XEmY7StrOqfk7pVlE_1z9bLuk8ivDdug99o-0Hu0MWp4Tv2u24yOCUQ766UYKUzY53O6ay0LM0pcgWyeyzTauUqtzmFcom1geJYj7QFUBvUCD6zK6QeOENL-SDbo-kGHD4kHRjy-n-X-yNGav_grsy0" /></a></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> nsenter <span class="at">--net</span><span class="op">=</span>/var/run/netns/ns1 bash</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> arping <span class="at">-c</span> 1 192.168.0.30</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Send an ARP request with arping.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> nsenter <span class="at">--net</span><span class="op">=</span>/var/run/netns/ns1 bash</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> arping <span class="at">-c</span> 1 192.168.0.30</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
 <li>Use <code>tcpdump</code> to monitor ARP packets.</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tcpdump <span class="at">-i</span> br0 arp</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tcpdump <span class="at">-i</span> br0 arp</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h2 id="manipulate-arp-cache">2.3. Manipulate ARP Cache</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># enter namespace ns1</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> nsenter <span class="at">--net</span><span class="op">=</span>/var/run/netns/ns1 bash</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ping <span class="at">-c</span> 1 192.168.0.30</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># show arp cache</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> arp <span class="at">-n</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># remove an entry from cache.</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo arp <span class="at">--delete</span> 192.168.0.30</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div>
+<p>ARP cache is a table stored in the memory of a device that maps IP
+addresses to MAC addresses. It stores the results of recent ARP requests
+to reduce repeated requests.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># enter namespace ns1</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> nsenter <span class="at">--net</span><span class="op">=</span>/var/run/netns/ns1 bash</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ping <span class="at">-c</span> 1 192.168.0.30</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># show arp cache</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> arp <span class="at">-n</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># remove an entry from cache.</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo arp <span class="at">--delete</span> 192.168.0.30</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div>
 <h1 id="references">References</h1>
 <ul>
 <li>https://man7.org/linux/man-pages/man8/arp.8.html</li>

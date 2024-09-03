@@ -5,25 +5,10 @@ title:  'Address Resolution Protocol'
 # 1. Introduction
 The Address Resolution Protocol (ARP) resolves **IP addresses** to **MAC addresses** in a local network, ensuring that data is sent to the correct physical device.  
 
-How ARP works:  
-
-- **ARP Request**: When Device A wants to talk to another device (Device B) on the same network but only knows Device B's IP address, Device A sends out an ARP request. This broadcast message asks, "Who has IP address X? Please send me your MAC address."   
-- **Broadcasting the Request**: This ARP request is sent out to all devices on the local network. It includes the IP address Device A is trying to find, as well as Device A’s own MAC and IP addresses.  
-- **ARP Response**: Every device on the network sees the request, but only Device B (the one with the matching IP address) responds. Device B sends a direct reply to Device A, providing its MAC address.  
-- **Updating the ARP Cache**: Once Device A receives Device B’s MAC address, it updates its ARP cache with this new IP-to-MAC mapping. This helps Device A quickly communicate with Device B in the future without needing to send another ARP request.  
-- **Communication**: With the MAC address in hand, Device A can now send data directly to Device B using the MAC address, allowing smooth and efficient communication.  
-
-Command to send an ARP request:
-```sh
-  
-$ arping <ip_address>
-  
-```
-
 # 2. Labs
 ## 2.1. Setup Virtual Network
-- Create namespaces: ns1, ns2, ns3
-- Create virtual bridge: br0
+- Create namespaces: `ns1`, `ns2`, `ns3`
+- Create virtual bridge: `br0`
 - Connect the namespaces to the virtual bridge.
 
 <script type="module">
@@ -102,7 +87,11 @@ $ ip netns exec ns3 ip addr add 192.168.0.30/24 dev veth3
 ```
 
 ## 2.2. Send ARP Requests
-- From the ns1 namespace, send an ARP request to determine the MAC address of ns3 using its IP address.
+- How the `ns1` namespace determine the MAC address of `ns3`:  
+    - `ns1` sends an ARP request to `br0`.
+    - `br0` forwards the request to `ns2`, `ns3`.
+    - The IP address of `ns2` is different from the IP address in the request. So, it ignores the request.
+    - The IP address of `ns3` matches the IP address specified in the request. So, it replies.
 
 ```plantuml
 @startuml
@@ -124,6 +113,8 @@ br0 --> ns1: ARP reply
 @enduml
 ```
 
+
+- Send an ARP request with arping.
 ```sh
   
 $ nsenter --net=/var/run/netns/ns1 bash
@@ -141,6 +132,8 @@ $ tcpdump -i br0 arp
 
 
 ## 2.3. Manipulate ARP Cache
+ARP cache is a table stored in the memory of a device that maps IP addresses to MAC addresses. It stores the results of recent ARP requests to reduce repeated requests.
+
 ```sh
   
 # enter namespace ns1
