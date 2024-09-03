@@ -110,6 +110,9 @@ $ ip link set vethbr1 up
 $ ip link set vethbr2 up
 $ ip link set virbr0 up
 
+# show learned mac addressed of the bridge
+$ brctl showmacs virbr0
+
 # check connection with ping
 $ ip netns exec ns1 ping 192.168.0.20
 $ ip netns exec ns2 ping 192.168.0.10
