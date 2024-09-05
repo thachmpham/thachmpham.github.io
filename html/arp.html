@@ -248,7 +248,7 @@ ensuring that data is sent to the correct physical device.</p>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> arp <span class="pp">[--</span><span class="ss">set/</span><span class="pp">--</span><span class="ss">delete</span><span class="pp">]</span> <span class="op">&lt;</span>ip_address<span class="op">&gt;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="labs">2. Labs</h1>
-<h2 id="setup-virtual-network">2.1. Setup Virtual Network</h2>
+<h2 id="setup">2.1. Setup</h2>
 <ul>
 <li>Create namespaces: <code>ns1</code>, <code>ns2</code>,
 <code>ns3</code></li>
@@ -325,7 +325,28 @@ flowchart TD
 <span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns2 ip addr add 192.168.0.20/24 dev veth2</span>
 <span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns3 ip addr add 192.168.0.30/24 dev veth3</span>
 <span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="send-arp-requests">2.2. Send ARP Requests</h2>
+<h2 id="capture-arp-packets">2.2. Capture ARP Packets</h2>
+<ul>
+<li>Capture the ARP packets.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tshark <span class="at">-i</span> virbr0 <span class="at">-f</span> arp <span class="at">-w</span> test.pcap <span class="at">-P</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Send an ARP request.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> nsenter <span class="at">--net</span><span class="op">=</span>/var/run/netns/ns1 bash</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> arping <span class="at">-c</span> 1 192.168.0.30</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="analyze-arp-packets">2.3. Analyze ARP Packets</h2>
+<ul>
+<li>Read the ARP packets.</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tshark <span class="at">-r</span> test.pcap</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
 <li>How the <code>ns1</code> namespace determine the MAC address of
 <code>ns3</code>:
@@ -343,36 +364,22 @@ in the request. So, it replies.</li>
 href="http://www.plantuml.com/plantuml/png/TOzD2i8m48NtSuhn005hTYwata2yGTgE93H_9XEmY7StrOqfk7pVlE_1z9bLuk8ivDdug99o-0Hu0MWp4Tv2u24yOCUQ766UYKUzY53O6ay0LM0pcgWyeyzTauUqtzmFcom1geJYj7QFUBvUCD6zK6QeOENL-SDbo-kGHD4kHRjy-n-X-yNGav_grsy0"
 target="_blank"><img
 src="http://www.plantuml.com/plantuml/png/TOzD2i8m48NtSuhn005hTYwata2yGTgE93H_9XEmY7StrOqfk7pVlE_1z9bLuk8ivDdug99o-0Hu0MWp4Tv2u24yOCUQ766UYKUzY53O6ay0LM0pcgWyeyzTauUqtzmFcom1geJYj7QFUBvUCD6zK6QeOENL-SDbo-kGHD4kHRjy-n-X-yNGav_grsy0" /></a></p>
-<ul>
-<li>Send an ARP request with arping.</li>
-</ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> nsenter <span class="at">--net</span><span class="op">=</span>/var/run/netns/ns1 bash</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> arping <span class="at">-c</span> 1 192.168.0.30</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Use <code>tcpdump</code> to monitor ARP packets.</li>
-</ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tcpdump <span class="at">-i</span> br0 arp</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="manipulate-arp-cache">2.3. Manipulate ARP Cache</h2>
+<h2 id="manipulate-arp-cache">2.4. Manipulate ARP Cache</h2>
 <p>ARP cache is a table stored in the memory of a device that maps IP
 addresses to MAC addresses. It stores the results of recent ARP requests
 to reduce repeated requests.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># enter namespace ns1</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> nsenter <span class="at">--net</span><span class="op">=</span>/var/run/netns/ns1 bash</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ping <span class="at">-c</span> 1 192.168.0.30</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># show arp cache</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> arp <span class="at">-n</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># remove an entry from cache.</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> arp <span class="at">--delete</span> 192.168.0.30</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># enter namespace ns1</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> nsenter <span class="at">--net</span><span class="op">=</span>/var/run/netns/ns1 bash</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ping <span class="at">-c</span> 1 192.168.0.30</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># show arp cache</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> arp <span class="at">-n</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># remove an entry from cache.</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> arp <span class="at">--delete</span> 192.168.0.30</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div>
 <h1 id="references">References</h1>
 <ul>
 <li>https://man7.org/linux/man-pages/man8/arp.8.html</li>

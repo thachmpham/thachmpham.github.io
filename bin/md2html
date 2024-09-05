@@ -8,39 +8,39 @@ pandoc -f markdown -t html \
     ${workspace}/md/index.md
 
 
-pandoc -f markdown -t html \
-    -s \
-    --include-after-body ${workspace}/bin/footer.html \
-    -o ${workspace}/html/about.html \
-    ${workspace}/md/about.md
+# pandoc -f markdown -t html \
+#     -s \
+#     --include-after-body ${workspace}/bin/footer.html \
+#     -o ${workspace}/html/about.html \
+#     ${workspace}/md/about.md
 
 
-pandoc -f markdown -t html \
-    -s --highlight-style breezeDark \
-    --include-after-body ${workspace}/bin/footer.html \
-    -o ${workspace}/html/veth.html \
-    ${workspace}/md/veth.md
+# pandoc -f markdown -t html \
+#     -s --highlight-style breezeDark \
+#     --include-after-body ${workspace}/bin/footer.html \
+#     -o ${workspace}/html/veth.html \
+#     ${workspace}/md/veth.md
 
 
-pandoc -f markdown -t html \
-    -s --highlight-style breezeDark \
-    --include-after-body ${workspace}/bin/footer.html \
-    -o ${workspace}/html/vbridge.html \
-    ${workspace}/md/vbridge.md
+# pandoc -f markdown -t html \
+#     -s --highlight-style breezeDark \
+#     --include-after-body ${workspace}/bin/footer.html \
+#     -o ${workspace}/html/vbridge.html \
+#     ${workspace}/md/vbridge.md
 
 
-pandoc -f markdown -t html \
-    -s --highlight-style breezeDark \
-    --include-after-body ${workspace}/bin/footer.html \
-    -o ${workspace}/html/vdummy-interface.html \
-    ${workspace}/md/vdummy-interface.md
+# pandoc -f markdown -t html \
+#     -s --highlight-style breezeDark \
+#     --include-after-body ${workspace}/bin/footer.html \
+#     -o ${workspace}/html/vdummy-interface.html \
+#     ${workspace}/md/vdummy-interface.md
 
 
-pandoc -f markdown -t html \
-    -s --highlight-style breezeDark \
-    --include-after-body ${workspace}/bin/footer.html \
-    -o ${workspace}/html/vbond-interface.html \
-    ${workspace}/md/vbond-interface.md
+# pandoc -f markdown -t html \
+#     -s --highlight-style breezeDark \
+#     --include-after-body ${workspace}/bin/footer.html \
+#     -o ${workspace}/html/vbond-interface.html \
+#     ${workspace}/md/vbond-interface.md
 
 pandoc -f markdown -t html \
     -s --highlight-style breezeDark \

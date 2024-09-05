@@ -19,7 +19,7 @@ $ arp [--set/--delete] <ip_address>
   
 ```
 # 2. Labs
-## 2.1. Setup Virtual Network
+## 2.1. Setup
 - Create namespaces: `ns1`, `ns2`, `ns3`
 - Create virtual bridge: `br0`
 - Connect the namespaces to the virtual bridge.
@@ -99,7 +99,31 @@ $ ip netns exec ns3 ip addr add 192.168.0.30/24 dev veth3
   
 ```
 
-## 2.2. Send ARP Requests
+## 2.2. Capture ARP Packets
+- Capture the ARP packets.
+```sh
+  
+$ tshark -i virbr0 -f arp -w test.pcap -P
+  
+```
+
+- Send an ARP request.
+```sh
+  
+$ nsenter --net=/var/run/netns/ns1 bash
+
+$ arping -c 1 192.168.0.30
+  
+```
+
+## 2.3. Analyze ARP Packets
+- Read the ARP packets.
+```sh
+  
+$ tshark -r test.pcap
+  
+```
+
 - How the `ns1` namespace determine the MAC address of `ns3`:  
     - `ns1` sends an ARP request to `br0`.
     - `br0` forwards the request to `ns2`, `ns3`.
@@ -127,24 +151,7 @@ br0 --> ns1: ARP reply
 ```
 
 
-- Send an ARP request with arping.
-```sh
-  
-$ nsenter --net=/var/run/netns/ns1 bash
-
-$ arping -c 1 192.168.0.30
-  
-```
-
-- Use `tcpdump` to monitor ARP packets.
-```sh
-  
-$ tcpdump -i br0 arp
-  
-```
-
-
-## 2.3. Manipulate ARP Cache
+## 2.4. Manipulate ARP Cache
 ARP cache is a table stored in the memory of a device that maps IP addresses to MAC addresses. It stores the results of recent ARP requests to reduce repeated requests.
 
 ```sh
