@@ -20,9 +20,9 @@ $ arp [--set/--delete] <ip_address>
 ```
 # 2. Labs
 ## 2.1. Setup
-- Create namespaces: `ns1`, `ns2`, `ns3`
-- Create virtual bridge: `br0`
-- Connect the namespaces to the virtual bridge.
+- Create namespaces: `ns1`, `ns2`, `ns3`.
+- Create virtual bridge: `br0`.
+- Connect `ns1`, `ns2`, `ns3` to `br0`.
 
 <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
@@ -71,21 +71,18 @@ $ ip link set br0 up
 # connect namespace 1 to the bridge
 $ ip link add veth1 type veth peer name veth1-br
 $ ip link set veth1 netns ns1
-$ ip netns exec ns1 ip link set veth1 up
 $ ip link set veth1-br master br0
 $ ip link set veth1-br up
   
 # connect namespace 2 to the bridge
 $ ip link add veth2 type veth peer name veth2-br
 $ ip link set veth2 netns ns2
-$ ip netns exec ns2 ip link set veth2 up
 $ ip link set veth2-br master br0
 $ ip link set veth2-br up
 
 # connect namespace 3 to the bridge
 $ ip link add veth3 type veth peer name veth3-br
 $ ip link set veth3 netns ns3
-$ ip netns exec ns3 ip link set veth3 up
 $ ip link set veth3-br master br0
 $ ip link set veth3-br up
 
@@ -94,42 +91,48 @@ $ brctl showmacs br0
 
 # set IP addresses
 $ ip netns exec ns1 ip addr add 192.168.0.10/24 dev veth1
+$ ip netns exec ns1 ip link set veth1 up
+
 $ ip netns exec ns2 ip addr add 192.168.0.20/24 dev veth2
+$ ip netns exec ns2 ip link set veth2 up
+
 $ ip netns exec ns3 ip addr add 192.168.0.30/24 dev veth3
+$ ip netns exec ns3 ip link set veth3 up
   
 ```
 
 ## 2.2. Capture ARP Packets
-- Capture the ARP packets.
+Capture the ARP packets.
 ```sh
   
-$ tshark -i virbr0 -f arp -w test.pcap -P
+$ tshark -P -i br0 -f arp -w arp.pcap
   
 ```
 
-- Send an ARP request.
+From `ns1`, send an ARP request to find MAC of `ns3`.
 ```sh
   
-$ nsenter --net=/var/run/netns/ns1 bash
-
-$ arping -c 1 192.168.0.30
+$ ip netns exec ns1 arping -c 1 192.168.0.30
   
 ```
 
 ## 2.3. Analyze ARP Packets
-- Read the ARP packets.
+Read the ARP packets.
 ```sh
   
-$ tshark -r test.pcap
+$ tshark -r arp.pcap
   
 ```
 
-- How the `ns1` namespace determine the MAC address of `ns3`:  
-    - `ns1` sends an ARP request to `br0`.
-    - `br0` forwards the request to `ns2`, `ns3`.
-    - The IP address of `ns2` is different from the IP address in the request. So, it ignores the request.
-    - The IP address of `ns3` matches the IP address specified in the request. So, it replies.
+Output.
+```sh
+  
+1 0.000000000 fa:38:6b:d1:87:f1 → Broadcast    ARP 58 Who has 192.168.0.30? Tell 192.168.0.10
+2 0.000045275 92:58:f4:c7:45:b2 → fa:38:6b:d1:87:f1 ARP 42 192.168.0.30 is at 92:58:f4:c7:45:b2
+  
+```
 
+How `ns1` finds MAC of `ns3`.
 ```plantuml
 @startuml
 hide footbox
@@ -140,7 +143,7 @@ participant br0
 participant ns2
 participant ns3
 
-ns1 -> br0: ARP request
+ns1 -> br0: ARP broadcast
 br0 -> ns2: ARP request
 br0 -> ns3: ARP request
 
@@ -150,6 +153,12 @@ br0 --> ns1: ARP reply
 @enduml
 ```
 
+- `ns1` sends an ARP broadcast to `br0`.
+- `br0` forwards the request to `ns2`, `ns3`.
+- The IP address of `ns2` is different from the IP address in the request. So, it ignores.
+- The IP address of `ns3` matches the IP address specified in the request. So, it replies its MAC to `ns1`.
+
+ 
 
 ## 2.4. Manipulate ARP Cache
 ARP cache is a table stored in the memory of a device that maps IP addresses to MAC addresses. It stores the results of recent ARP requests to reduce repeated requests.
