@@ -12,7 +12,8 @@ subtitle: "A Practical & Illustrated Blog for Developers<br/>*Virtualization - C
 - [Bond Interface](html/vbond-interface.html)
 
 ### TCP/IP
-- [Address Resolution Protocol (ARP)](html/arp.html)
+- [ARP &nbsp;&nbsp; - &nbsp; Address Resolution Protocol](html/arp.html)
+- [DHCP &nbsp;&nbsp; - &nbsp; Dynamic Host Configuration Protocol](html/dhcp.html)
 
 ## About
 - [Author](html/about.html)
