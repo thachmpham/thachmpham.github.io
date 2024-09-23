@@ -9,7 +9,7 @@ The Dynamic Host Configuration Protocol (DHCP) is a network management protocol 
 DHCP operates based on a client-server model.
 
 - DHCP server is responsibles for assigning, renewing, and releasing IP addresses to devices that request them.
-- DHCP Client is any device that requests an IP address from the DHCP server.
+- DHCP client is any device that requests an IP address from the DHCP server.
 
 Start an IPv4 DHCP server.
 ```sh
@@ -92,41 +92,20 @@ Edit file `/etc/kea/kea-dhcp4.conf`.
 {
   "Dhcp4": {
 	"interfaces-config": {
-  	"interfaces": [ "br0" ]
-	},
-	"control-socket": {
-    	"socket-type": "unix",
-    	"socket-name": "/run/kea/kea4-ctrl-socket"
+  		"interfaces": [ "br0" ]
 	},
 	"lease-database": {
-    	"type": "memfile",
-    	"lfc-interval": 3600
+    	"type": "memfile"
 	},
-	"valid-lifetime": 600,
-	"max-valid-lifetime": 7200,
 	"subnet4": [
   	{
     	"id": 1,
     	"subnet": "192.168.1.0/24",
     	"pools": [
-      	{
-        	"pool": "192.168.1.150 - 192.168.1.200"
-      	}
+			{
+				"pool": "192.168.1.150 - 192.168.1.200"
+			}
     	],
-    	"option-data": [
-      	{
-        	"name": "routers",
-        	"data": "192.168.1.254"
-      	},
-      	{
-        	"name": "domain-name-servers",
-        	"data": "192.168.1.1, 192.168.1.2"
-      	},
-      	{
-        	"name": "domain-name",
-        	"data": "mydomain.example"
-      	}
-    	]
   	}
 	]
   }
@@ -242,7 +221,7 @@ $ tshark -r dhcp.pcap
 ```
 
 # Tips
-Observer live log of `kea-dhcp4-server` service.
+Observe live log of `kea-dhcp4-server` service.
 ```sh
   
 $ journalctl -f -u kea-dhcp4-server
