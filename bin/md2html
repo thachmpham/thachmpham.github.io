@@ -8,6 +8,14 @@ pandoc -f markdown -t html \
     ${workspace}/md/index.md
 
 
+pandoc -f markdown -t html \
+    -s --highlight-style breezeDark \
+    --include-after-body ${workspace}/bin/footer.html \
+    -F pandoc-plantuml \
+    -o ${workspace}/html/dhcp.html \
+    ${workspace}/md/dhcp.md
+
+
 # pandoc -f markdown -t html \
 #     -s \
 #     --include-after-body ${workspace}/bin/footer.html \
@@ -42,9 +50,9 @@ pandoc -f markdown -t html \
 #     -o ${workspace}/html/vbond-interface.html \
 #     ${workspace}/md/vbond-interface.md
 
-pandoc -f markdown -t html \
-    -s --highlight-style breezeDark \
-    --include-after-body ${workspace}/bin/footer.html \
-    -F pandoc-plantuml \
-    -o ${workspace}/html/arp.html \
-    ${workspace}/md/arp.md
+# pandoc -f markdown -t html \
+#     -s --highlight-style breezeDark \
+#     --include-after-body ${workspace}/bin/footer.html \
+#     -F pandoc-plantuml \
+#     -o ${workspace}/html/arp.html \
+#     ${workspace}/md/arp.md
