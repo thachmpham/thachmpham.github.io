@@ -382,7 +382,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">inet</span> 192.168.1.150/24 brd 192.168.1.255 scope global dynamic veth1</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p><em>For namespace <code>ns2</code>, we do the same steps as
-<code>ns1</code> to setup and send DHCP request.</em></p>
+<code>ns1</code> to setup and send DHCP requests.</em></p>
 <h2 id="remove-assigned-ip-address.">2.3. Remove Assigned IP
 Address.</h2>
 <p>From <code>ns1</code>, remove the assigned IP address.</p>
@@ -401,6 +401,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns1 dhclient veth1</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h2 id="analyze-dhcp-messages.">2.5. Analyze DHCP messages.</h2>
+<p>Read pcap.</p>
 <div class="sourceCode" id="cb15"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tshark <span class="at">-r</span> dhcp.pcap</span>

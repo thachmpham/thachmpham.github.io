@@ -7,7 +7,7 @@ subtitle: "A Practical & Illustrated Blog for Developers<br/>*Virtualization - C
 ## Table of Content
 ### Virtual Network
 - [Virtual Ethernet Interface](html/veth.html)
-- [Virtual Bridge](html/vbridge.html)
+- [Virtual Bridge Interface](html/vbridge.html)
 - [Dummy Interface](html/vdummy-interface.html)
 - [Bond Interface](html/vbond-interface.html)
 

@@ -177,7 +177,7 @@ $ ip netns exec ns1 ip addr show
   
 ```
 
-*For namespace `ns2`, we do the same steps as `ns1` to setup and send DHCP request.*
+*For namespace `ns2`, we do the same steps as `ns1` to setup and send DHCP requests.*
 
 
 ## 2.3. Remove Assigned IP Address.
@@ -204,6 +204,7 @@ $ ip netns exec ns1 dhclient veth1
 
 
 ## 2.5. Analyze DHCP messages.
+Read pcap.
 ```sh
   
 $ tshark -r dhcp.pcap
