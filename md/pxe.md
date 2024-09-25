@@ -89,8 +89,8 @@ $ systemctl restart dnsmasq
 ```
 
 
-## 2.2. Start a VM Boot from PXE.
-Start a virtual machine that boot from the PXE server.
+## 2.2. Start a VM booting from PXE.
+Start a virtual machine that boots from the PXE server.
 ```sh
   
 $ virt-install --name=vm1 \
@@ -102,9 +102,15 @@ $ virt-install --name=vm1 \
     --os-variant=ubuntu20.04
   
 ```
+Explain the command:
 
+- `--pxe --boot network,menu=on`
+    - Instruct the VM to boot from PXE.
+- `--network bridge=br0`
+    - The VM to connects to host (PXE server) through the br0 interface.
+    - The br0 interface is the interface that `dnsmasq` is running on.
 
-## 2.4. Capture messages.
+## 2.3. Capture messages.
 DHCP operates over UDP ports 67 (DHCP server), 68 (DHCP client) and 69 (TFTP server).
 ```sh
   

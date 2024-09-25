@@ -306,8 +306,9 @@ flowchart TD
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> systemctl restart dnsmasq</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="start-a-vm-boot-from-pxe.">2.2. Start a VM Boot from PXE.</h2>
-<p>Start a virtual machine that boot from the PXE server.</p>
+<h2 id="start-a-vm-booting-from-pxe.">2.2. Start a VM booting from
+PXE.</h2>
+<p>Start a virtual machine that boots from the PXE server.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> virt-install <span class="at">--name</span><span class="op">=</span>vm1 <span class="dt">\</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--ram</span><span class="op">=</span>2048 <span class="dt">\</span></span>
@@ -317,7 +318,21 @@ flowchart TD
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--graphic</span> vnc <span class="dt">\</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">--os-variant</span><span class="op">=</span>ubuntu20.04</span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="capture-messages.">2.4. Capture messages.</h2>
+<p>Explain the command:</p>
+<ul>
+<li><code>--pxe --boot network,menu=on</code>
+<ul>
+<li>Instruct the VM to boot from PXE.</li>
+</ul></li>
+<li><code>--network bridge=br0</code>
+<ul>
+<li>The VM to connects to host (PXE server) through the br0
+interface.</li>
+<li>The br0 interface is the interface that <code>dnsmasq</code> is
+running on.</li>
+</ul></li>
+</ul>
+<h2 id="capture-messages.">2.3. Capture messages.</h2>
 <p>DHCP operates over UDP ports 67 (DHCP server), 68 (DHCP client) and
 69 (TFTP server).</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
