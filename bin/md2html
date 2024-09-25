@@ -7,13 +7,19 @@ pandoc -f markdown -t html \
     -o ${workspace}/index.html \
     ${workspace}/md/index.md
 
-
 pandoc -f markdown -t html \
     -s --highlight-style breezeDark \
     --include-after-body ${workspace}/bin/footer.html \
     -F pandoc-plantuml \
-    -o ${workspace}/html/dhcp.html \
-    ${workspace}/md/dhcp.md
+    -o ${workspace}/html/pxe.html \
+    ${workspace}/md/pxe.md
+
+# pandoc -f markdown -t html \
+#     -s --highlight-style breezeDark \
+#     --include-after-body ${workspace}/bin/footer.html \
+#     -F pandoc-plantuml \
+#     -o ${workspace}/html/dhcp.html \
+#     ${workspace}/md/dhcp.md
 
 
 # pandoc -f markdown -t html \
