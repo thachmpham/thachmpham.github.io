@@ -7,12 +7,12 @@ pandoc -f markdown -t html \
     -o ${workspace}/index.html \
     ${workspace}/md/index.md
 
-pandoc -f markdown -t html \
-    -s --highlight-style breezeDark \
-    --include-after-body ${workspace}/bin/footer.html \
-    -F pandoc-plantuml \
-    -o ${workspace}/html/ip-routing.html \
-    ${workspace}/md/ip-routing.md
+# pandoc -f markdown -t html \
+#     -s --highlight-style breezeDark \
+#     --include-after-body ${workspace}/bin/footer.html \
+#     -F pandoc-plantuml \
+#     -o ${workspace}/html/ip-routing.html \
+#     ${workspace}/md/ip-routing.md
 
 # pandoc -f markdown -t html \
 #     -s --highlight-style breezeDark \
