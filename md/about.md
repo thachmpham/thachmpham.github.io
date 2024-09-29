@@ -4,11 +4,11 @@ title:  'About Me'
 ---
 
 # Greetings
-*Hello and a warm welcome. I'm so thankful for you taking time to visit.*  
+*Hello and a warm welcome. Thank you for taking time to visit.*  
   
-I'm **Thach**, a software developer at **Endava**. At work, I have opportunity to join telecom projects.  
+I'm **Thach**, a software developer at **Endava**. 
   
-In this blog, I would like to share with you some labs to explore and practice virtualization, computer networking and distributed systems.  
+In this blog, I would like to share with you some labs to explore computer networking and distributed systems.  
   
 *Thanks again and wishing you a great day ahead.*  
   
