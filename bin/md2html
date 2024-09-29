@@ -11,8 +11,15 @@ pandoc -f markdown -t html \
     -s --highlight-style breezeDark \
     --include-after-body ${workspace}/bin/footer.html \
     -F pandoc-plantuml \
-    -o ${workspace}/html/pxe.html \
-    ${workspace}/md/pxe.md
+    -o ${workspace}/html/ip-routing.html \
+    ${workspace}/md/ip-routing.md
+
+# pandoc -f markdown -t html \
+#     -s --highlight-style breezeDark \
+#     --include-after-body ${workspace}/bin/footer.html \
+#     -F pandoc-plantuml \
+#     -o ${workspace}/html/pxe.html \
+#     ${workspace}/md/pxe.md
 
 # pandoc -f markdown -t html \
 #     -s --highlight-style breezeDark \

@@ -13,19 +13,10 @@ subtitle: "A Practical & Illustrated Blog for Developers<br/>*Virtualization - C
 
 
 ### TCP/IP
-- **Application Layer**
-    - [DHCP &nbsp;&nbsp; - &nbsp; Dynamic Host Configuration Protocol](html/dhcp.html)
-    - [PXE &nbsp;&nbsp; - &nbsp; Preboot eXecution Environment](html/pxe.html)
-
-- **Transport Layer**
-    - TCP
-    - UDP
-
-- **Internet Layer**
-    - IP
-
-- **Link Layer**
-    - [ARP &nbsp;&nbsp; - &nbsp; Address Resolution Protocol](html/arp.html)
+- [DHCP &nbsp;&nbsp; - &nbsp; Dynamic Host Configuration Protocol](html/dhcp.html)  
+- [PXE &nbsp;&nbsp; - &nbsp; Preboot eXecution Environment](html/pxe.html)
+- [ARP &nbsp;&nbsp; - &nbsp; Address Resolution Protocol](html/arp.html)
+- [IP Routing](html/ip-routing.html)
 
 
 ## About
