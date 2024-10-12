@@ -18,6 +18,8 @@ subtitle: "A Practical & Illustrated Blog for Developers<br/>*Virtualization - C
 - [ARP &nbsp;&nbsp; - &nbsp; Address Resolution Protocol](html/arp.html)
 - [IP Routing &nbsp;&nbsp; - &nbsp; Pathfinding](html/ip-routing.html)
 
+### OpenSAF
+- [Build & Install OpenSAF](html/opensaf-install.html)
 
 ## About
 - [Author](html/about.html)

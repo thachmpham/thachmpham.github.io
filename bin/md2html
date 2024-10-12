@@ -7,6 +7,13 @@ pandoc -f markdown -t html \
     -o ${workspace}/index.html \
     ${workspace}/md/index.md
 
+pandoc -f markdown -t html \
+    -s --highlight-style breezeDark \
+    --include-after-body ${workspace}/bin/footer.html \
+    -F pandoc-plantuml \
+    -o ${workspace}/html/opensaf-install.html \
+    ${workspace}/md/opensaf-install.md
+
 # pandoc -f markdown -t html \
 #     -s --highlight-style breezeDark \
 #     --include-after-body ${workspace}/bin/footer.html \
