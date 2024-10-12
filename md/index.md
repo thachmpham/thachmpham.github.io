@@ -20,7 +20,7 @@ subtitle: "A Practical & Illustrated Blog for Developers<br/>*Computer Networkin
 
 ### OpenSAF
 - [Build & Install &nbsp;&nbsp; - &nbsp; Single Node Cluster](html/opensaf-install.html)
-- [IMM &nbsp;&nbsp; - &nbsp; Information Model Management](html/opensaf-install.html)
+- [IMM &nbsp;&nbsp; - &nbsp; Information Model Management](html/opensaf-imm.html)
 
 
 ## About

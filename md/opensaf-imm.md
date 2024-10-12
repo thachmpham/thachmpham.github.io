@@ -169,7 +169,8 @@ SaImmAttrAdminOwnerName                            SA_STRING_T  <Empty>
 ```
 
 ## 2.5. immadm.
-The command immcfg is used to change configuration attribute of an IMM object.
+The command immcfg is used to perform an adminstrative operation on an IMM object.
+
 
 # References
 - https://opensaf.sourceforge.io/documentation.html
