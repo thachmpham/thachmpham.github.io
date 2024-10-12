@@ -1,6 +1,6 @@
 ---
-title:  'Distributed Systems Practitioners'
-subtitle: "A Practical & Illustrated Blog for Developers<br/>*Virtualization - Computer Networking - Distributed Systems*"
+title:  'Distributed Systems In Practice'
+subtitle: "A Practical & Illustrated Blog for Developers<br/>*Computer Networking - Distributed Systems*"
 ---
 
 

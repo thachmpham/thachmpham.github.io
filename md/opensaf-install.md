@@ -112,6 +112,6 @@ safSISU=safSu=SC-1\,safSg=2N\,safApp=OpenSAF,safSi=SC-2N,safApp=OpenSAF
 
 
 # References
-- [OpenSAF as an application](https://sourceforge.net/p/opensaf/wiki/OpenSAF%20as%20an%20application)
-- [OpenSAF quick-start guide](https://sourceforge.net/p/opensaf/wiki/OpenSAF%20quick-start%20guide%20%28simulated%20cluster%29)
+- [OpenSAF As An Application.](https://sourceforge.net/p/opensaf/wiki/OpenSAF%20as%20an%20application)
+- [OpenSAF Quick Start Guide.](https://sourceforge.net/p/opensaf/wiki/OpenSAF%20quick-start%20guide%20%28simulated%20cluster%29)
 
