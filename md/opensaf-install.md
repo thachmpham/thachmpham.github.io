@@ -6,7 +6,7 @@ title:  'Build & Install OpenSAF'
 # 1. Introduction.
 - Create an Ubuntu docker container.
 - In this container, clone source, build and install OpenSAF.
-- Start OpenSAF and check the status.
+- Start OpenSAF and check status.
 
 
 # 2. Setup Docker Container.
@@ -53,42 +53,40 @@ $ ldconfig
 
 
 # 4. Setup Configuration.
-Generate `nodes.cfg`.
+
+Configure `/etc/opensaf/imm.xml`.
 ```sh
   
 $ cd /usr/local/share/opensaf/immxml/
 
+# generate nodes.cfg
 $ ./immxml-clustersize --sc-count 1
 Successful, result stored in the file ./nodes.cfg
-
-```
-
-Configure `/etc/opensaf/imm.xml`.
-```sh
-$ cd /usr/local/share/opensaf/immxml/
 
 $ ./immxml-configure
 Successfully generated the imm file: ./imm.xml.20241012_1044
 
 $ cp imm.xml.20241012_1044 /etc/opensaf/imm.xml
+  
 ```
+
 
 Configure `/etc/opensaf/dtmd.conf`.
 ```sh
   
 DTM_NODE_IP=172.17.0.2
+# 172.17.0.2: IP of the eth0 interface.
   
 ```
-- 172.17.0.2: IP of the eth0 interface.
 
 
 Configure `/etc/opensaf/node_name`.
 ```sh
   
 SC-1
+# SC-1: hostname.
   
 ```
-- SC-1 is the hostname.
 
 
 # 5. Start OpenSAF.
