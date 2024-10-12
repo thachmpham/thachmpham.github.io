@@ -5,8 +5,10 @@ title:  'Build & Install OpenSAF'
 
 # 1. Introduction.
 - Create an Ubuntu docker container.
-- In this container, clone source, build and install OpenSAF.
-- Start OpenSAF and check status.
+- In this container,
+    - Clone source.
+    - Build and install OpenSAF.
+    - Start OpenSAF.
 
 
 # 2. Setup Docker Container.
