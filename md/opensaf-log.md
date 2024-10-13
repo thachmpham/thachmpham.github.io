@@ -4,14 +4,14 @@ title:  'OpenSAF LOG'
 
 
 # 1. Introduction.
-In OpenSAF, the Log Service (LOGSv) provides a standardized means for applications to express and forward log records through well-known streams that leads to an associated named file.  
+In OpenSAF, the Log Service (LOGSv) provides a standardized means for applications to write log messages.
   
 There are two options to configure LOGSv:
 
 - Using IMM object.
 - Using environment variables (deprecated).
 
-The `saflogger` program is used to write log records to a log stream.  
+The `saflogger` program is used to write OpenSAF log. 
 
 
 # 2. Configure.
