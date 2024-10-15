@@ -18,8 +18,12 @@ subtitle: "A Practical & Illustrated Blog for Developers<br/>*Computer Networkin
 - [ARP &nbsp;&nbsp; - &nbsp; Address Resolution Protocol](html/arp.html)
 - [IP Routing &nbsp;&nbsp; - &nbsp; Pathfinding](html/ip-routing.html)
 
+
 ### OpenSAF
-- [Build & Install &nbsp;&nbsp; - &nbsp; Single Node Cluster](html/opensaf-install.html)
+- [Build & Install](html/opensaf-install.html)
+- [Setup Cluster &nbsp;&nbsp; - &nbsp; 1 SC](html/opensaf-1sc.html)
+- [Setup Cluster &nbsp;&nbsp; - &nbsp; 2 SCs](html/opensaf-2sc.html)
+- [Setup Cluster &nbsp;&nbsp; - &nbsp; 2 SCs + 2 PLs](html/opensaf-2sc-2pl.html)
 - [IMM &nbsp;&nbsp; - &nbsp; Information Model Management](html/opensaf-imm.html)
 - [LOG &nbsp;&nbsp; - &nbsp; Log Service](html/opensaf-log.html)
 

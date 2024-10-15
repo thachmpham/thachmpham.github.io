@@ -237,10 +237,10 @@
 </header>
 <h1 id="introduction.">1. Introduction.</h1>
 <ul>
-<li>Create an Ubuntu docker container.</li>
-<li>In this container,
+<li>Create an Ubuntu Docker container.</li>
+<li>Inside the container:
 <ul>
-<li>Clone source.</li>
+<li>Clone the OpenSAF source.</li>
 <li>Build and install OpenSAF.</li>
 <li>Start OpenSAF.</li>
 </ul></li>
@@ -275,7 +275,7 @@
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ldconfig</span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div>
 <h1 id="setup-configuration.">4. Setup Configuration.</h1>
-<p>Configure <code>/etc/opensaf/imm.xml</code>.</p>
+<p>Generate <code>/etc/opensaf/imm.xml</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd /usr/local/share/opensaf/immxml/</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -288,12 +288,12 @@
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cp imm.xml.20241012_1044 /etc/opensaf/imm.xml</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Configure <code>/etc/opensaf/dtmd.conf</code>.</p>
+<p>Edit <code>/etc/opensaf/dtmd.conf</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="va">DTM_NODE_IP</span><span class="op">=</span>172.17.0.2</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 172.17.0.2: IP of the eth0 interface.</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Configure <code>/etc/opensaf/node_name</code>.</p>
+<p>Edit <code>/etc/opensaf/node_name</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">SC-1</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># SC-1: hostname.</span></span>
