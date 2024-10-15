@@ -198,6 +198,30 @@ safSISU=safSu=SC-2\,safSg=2N\,safApp=OpenSAF,safSi=SC-2N,safApp=OpenSAF
   
 ```
 
+# 5. Test.
+Create an IMM object on SC-1.
+```sh
+  
+$ immcfg -c SaAmfApplication -a saAmfAppType=safVersion=4.0.0,safAppType=OpenSafApplicationType safApp=myTestApp1
+
+$ immfind -c SaAmfApplication
+...
+safApp=myTestApp1
+...
+  
+```
+
+Verify if the change is visible to SC-2.
+```sh
+  
+$ immfind -c SaAmfApplication
+...
+safApp=myTestApp1
+...
+  
+```
+
+
 # References
 - [OpenSAF quick-start guide.](https://sourceforge.net/p/opensaf/wiki/OpenSAF%20quick-start%20guide%20%28simulated%20cluster%29)
 - [Using OpenSAF as an application.](https://sourceforge.net/p/opensaf/wiki/OpenSAF%20as%20an%20application)
