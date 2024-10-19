@@ -24,7 +24,7 @@ RUN apt install -y \
     m4 autoconf libtool pkg-config \
     make python-dev libsqlite3-dev binutils
 RUN apt install -y \
-    vim iputils-ping
+    vim iputils-ping rsyslog
 
 RUN cd /root && hg clone http://hg.code.sf.net/p/opensaf/staging opensaf-staging
 

@@ -256,7 +256,7 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb1-
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    m4 autoconf libtool pkg-config <span class="dt">\</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    make python-dev libsqlite3-dev binutils</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apt</span> install <span class="at">-y</span> <span class="dt">\</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    vim iputils-ping</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    vim iputils-ping rsyslog</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="bu">cd</span> /root <span class="kw">&amp;&amp;</span> <span class="ex">hg</span> clone http://hg.code.sf.net/p/opensaf/staging opensaf-staging</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
