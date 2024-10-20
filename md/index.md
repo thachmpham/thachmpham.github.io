@@ -23,8 +23,8 @@ subtitle: "A Practical & Illustrated Blog for Developers<br/>*Computer Networkin
 - [Build & Install](html/opensaf-install.html)
 - [Setup Cluster &nbsp;&nbsp; - &nbsp; 1 SC](html/opensaf-1sc.html)
 - [Setup Cluster &nbsp;&nbsp; - &nbsp; 2 SCs](html/opensaf-2sc.html)
-- [Setup Cluster &nbsp;&nbsp; - &nbsp; 2 SCs + 2 PLs](html/opensaf-2sc-2pl.html)
 - [IMM &nbsp;&nbsp; - &nbsp; Information Model Management](html/opensaf-imm.html)
+- [SMF &nbsp;&nbsp; - &nbsp; Software Management Framework](html/opensaf-smf.html)
 - [LOG &nbsp;&nbsp; - &nbsp; Log Service](html/opensaf-log.html)
 
 
