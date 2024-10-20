@@ -18,9 +18,9 @@ Admin Operations:
 typedef enum
 {
     SA_SMF_ADMIN_EXECUTE    = 1,
-    SA_SMF_ADMIN_ROLLBACK   = 1,
-    SA_SMF_ADMIN_SUSPEND    = 1,
-    SA_SMF_ADMIN_COMMIT     = 1,
+    SA_SMF_ADMIN_ROLLBACK   = 2,
+    SA_SMF_ADMIN_SUSPEND    = 3,
+    SA_SMF_ADMIN_COMMIT     = 4,
 }
 SaSmfAdminOperationIdT;
   
