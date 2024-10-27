@@ -52,6 +52,7 @@ $ docker run --privileged -it --name node1 -h SC-1 opensaf
   
 ```
 
+
 ## 3.2. Configure.
 Generate `/etc/opensaf/imm.xml`.
 ```sh
@@ -107,6 +108,7 @@ controller
   
 ```
 
+
 ## 3.3. Start OpenSAF.
 Start OpenSAF.
 ```sh
@@ -127,6 +129,7 @@ safSISU=safSu=SC-1\,safSg=2N\,safApp=OpenSAF,safSi=SC-2N,safApp=OpenSAF
   
 ```
 
+
 # 4. Setup SC-2.
 ## 4.1. Launch Docker Container.
 ```sh
@@ -134,6 +137,7 @@ safSISU=safSu=SC-1\,safSg=2N\,safApp=OpenSAF,safSi=SC-2N,safApp=OpenSAF
 $ docker run --privileged -it --name node2 -h SC-2 opensaf
   
 ```
+
 
 ## 4.2. Configure.
 Edit `/etc/opensaf/node_name`.
@@ -174,8 +178,16 @@ controller
   
 ```
 
+
 ## 4.3. Start OpenSAF.
-Start OpenSAF.
+Start rsyslog because opensaf print logs to rsyslog.
+```sh
+  
+$ /etc/init.d/rsyslog start
+  
+```
+
+Start opensaf.
 ```sh
    
 $ /etc/init.d/opensafd start
@@ -198,26 +210,35 @@ safSISU=safSu=SC-2\,safSg=2N\,safApp=OpenSAF,safSi=SC-2N,safApp=OpenSAF
   
 ```
 
+
 # 5. Test.
-Create an IMM object on SC-1.
+Check state of nodes.
 ```sh
   
-$ immcfg -c SaAmfApplication -a saAmfAppType=safVersion=4.0.0,safAppType=OpenSafApplicationType safApp=myTestApp1
-
-$ immfind -c SaAmfApplication
-...
-safApp=myTestApp1
-...
+$ amf-state node
+safAmfNode=SC-1,safAmfCluster=myAmfCluster
+        saAmfNodeAdminState=UNLOCKED(1)
+        saAmfNodeOperState=ENABLED(1)
+safAmfNode=SC-2,safAmfCluster=myAmfCluster
+        saAmfNodeAdminState=UNLOCKED(1)
+        saAmfNodeOperState=ENABLED(1)
   
 ```
 
-Verify if the change is visible to SC-2.
+Check `/var/log/syslog` on SC-1.
 ```sh
   
-$ immfind -c SaAmfApplication
-...
-safApp=myTestApp1
-...
+SC-1 osafdtmd[133]: NO Established contact with 'SC-2'
+SC-1 osafamfd[224]: NO Node 'SC-2' joined the cluster
+  
+```
+
+Check `/var/log/syslog` on SC-2.
+```sh
+  
+SC-2 osafdtmd[70]: NO Established contact with 'SC-1'
+SC-2 osafclmna[83]: NO safNode=SC-2,safCluster=myClmCluster Joined cluster, nodeid=2020f
+SC-2 osafamfd[154]: NO Cold sync complete!
   
 ```
 

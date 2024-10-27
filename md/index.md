@@ -26,7 +26,7 @@ subtitle: "A Practical & Illustrated Blog for Developers<br/>*Computer Networkin
 - [IMM &nbsp;&nbsp; - &nbsp; Information Model Management](html/opensaf-imm.html)
 - [SMF &nbsp;&nbsp; - &nbsp; Software Management Framework](html/opensaf-smf.html)
 - [LOG &nbsp;&nbsp; - &nbsp; Log Service](html/opensaf-log.html)
-
+- [AMF &nbsp;&nbsp; - &nbsp; High Available SNMP](html/opensaf-amf-snmp.html)
 
 ## About
 - [Author](html/about.html)
