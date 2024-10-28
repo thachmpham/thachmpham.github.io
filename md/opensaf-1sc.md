@@ -106,6 +106,14 @@ safSISU=safSu=SC-1\,safSg=2N\,safApp=OpenSAF,safSi=SC-2N,safApp=OpenSAF
   
 ```
 
+Check node.
+```sh
+  
+$ amf-find node
+safAmfNode=SC-1,safAmfCluster=myAmfCluster
+  
+```
+
 
 # References
 - [OpenSAF quick-start guide.](https://sourceforge.net/p/opensaf/wiki/OpenSAF%20quick-start%20guide%20%28simulated%20cluster%29)
