@@ -244,26 +244,31 @@
 </script>
 <h1 id="introduction.">1. Introduction.</h1>
 <h1 id="setup-cluster.">2. Setup Cluster.</h1>
-<p>Setup a cluster with 2 SCs.</p>
+<ul>
+<li>Setup a cluster with 2 SCs.</li>
+<li>Install snmp.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> apt install <span class="at">-y</span> snmpd snmp</span></code></pre></div>
 <h1 id="setup-imm-model.">3. Setup IMM Model.</h1>
 <h2 id="create-basetypes.">3.1. Create BaseTypes.</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># app</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfAppBaseType safAppType=net-snmp</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># sg</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSGBaseType safSgType=2N-net-snmp</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># su</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSUBaseType safSuType=snmpd</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># si</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSvcBaseType safSvcType=snmpd</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># comp</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfCompBaseType safCompType=snmpd</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># csi</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfCSBaseType safCSType=snmpd</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># app</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfAppBaseType safAppType=net-snmp</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># sg</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSGBaseType safSgType=2N-net-snmp</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># su</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSUBaseType safSuType=snmpd</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># si</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSvcBaseType safSvcType=snmpd</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># comp</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfCompBaseType safCompType=snmpd</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># csi</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfCSBaseType safCSType=snmpd</span></code></pre></div>
 <h2 id="create-types.">3.2. Create Types.</h2>
 <p>Dependencies between entity types.</p>
 <pre class="mermaid">
@@ -273,7 +278,7 @@ classDiagram
     }
     SaAmfAppType --> SaAmfSGType
 
-    
+
     class SaAmfSGType {
         saAmfSgtValidSuTypes
     }
@@ -285,7 +290,7 @@ classDiagram
     }
     SaAmfSUType --> SaAmfSvcType
 
-    
+
     class SaAmfCompType {
         saAmfCtSwBundle
     }
@@ -293,52 +298,52 @@ classDiagram
 
     class SaAmfCSType
 </pre>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># swbundle</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaSmfSwBundle safSmfBundle=net-snmp-5.6.1-4.5.1.x86_64</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># csi</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfCSType safVersion=1,safCSType=snmpd</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># comp</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfCompType <span class="dt">\</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtCompCategory=8 <span class="dt">\</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtSwBundle=safSmfBundle=net-snmp-5.6.1-4.5.1.x86_64 <span class="dt">\</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtDefClcCliTimeout=10000000000 <span class="dt">\</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathInstantiateCmd=<span class="st">&#39;snmpd start&#39;</span> <span class="dt">\</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathCleanupCmd=<span class="st">&#39;snmpd stop&#39;</span> <span class="dt">\</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathTerminateCmd=<span class="st">&#39;snmpd stop&#39;</span> <span class="dt">\</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathAmStartCmd=<span class="st">&#39;./../usr/local/sbin/amfpm --start&#39;</span> <span class="dt">\</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathAmStopCmd=<span class="st">&#39;../../usr/local/sbin/amfpm --stop&#39;</span> <span class="dt">\</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtDefRecoveryOnError=3 <span class="dt">\</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtDefDisableRestart=0 <span class="dt">\</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    safVersion=5.6.1-4.5.1,safCompType=snmpd</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># si</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSvcType safVersion=1,safSvcType=snmpd</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># su</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSUType <span class="dt">\</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSutIsExternal=0 <span class="dt">\</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSutDefSUFailover=1 <span class="dt">\</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSutProvidesSvcTypes=safVersion=1,safSvcType=snmpd <span class="dt">\</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    safVersion=1,safSuType=snmpd</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co"># sg</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSGType <span class="dt">\</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtRedundancyModel=1 <span class="dt">\</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtValidSuTypes=safVersion=1,safSuType=snmpd <span class="dt">\</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefAutoAdjustProb=10000000000 <span class="dt">\</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefCompRestartProb=4000000000 <span class="dt">\</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefCompRestartMax=10 <span class="dt">\</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefSuRestartProb=4000000000 <span class="dt">\</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefSuRestartMax=10 <span class="dt">\</span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    safVersion=1,safSgType=2N-net-snmp</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co"># app</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfAppType <span class="dt">\</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfApptSGTypes=safVersion=1,safSgType=2N-net-snmp <span class="dt">\</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    safVersion=1,safAppType=net-snmp</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># swbundle</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaSmfSwBundle safSmfBundle=net-snmp-5.6.1-4.5.1.x86_64</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># csi</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfCSType safVersion=1,safCSType=snmpd</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># comp</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfCompType <span class="dt">\</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtCompCategory=8 <span class="dt">\</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtSwBundle=safSmfBundle=net-snmp-5.6.1-4.5.1.x86_64 <span class="dt">\</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtDefClcCliTimeout=10000000000 <span class="dt">\</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathInstantiateCmd=<span class="st">&#39;snmpd start&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathCleanupCmd=<span class="st">&#39;snmpd stop&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathTerminateCmd=<span class="st">&#39;snmpd stop&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathAmStartCmd=<span class="st">&#39;../../usr/local/sbin/amfpm --start&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathAmStopCmd=<span class="st">&#39;../../usr/local/sbin/amfpm --stop&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtDefRecoveryOnError=3 <span class="dt">\</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtDefDisableRestart=0 <span class="dt">\</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    safVersion=5.6.1-4.5.1,safCompType=snmpd</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co"># si</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSvcType safVersion=1,safSvcType=snmpd</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co"># su</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSUType <span class="dt">\</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSutIsExternal=0 <span class="dt">\</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSutDefSUFailover=1 <span class="dt">\</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSutProvidesSvcTypes=safVersion=1,safSvcType=snmpd <span class="dt">\</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    safVersion=1,safSuType=snmpd</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co"># sg</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSGType <span class="dt">\</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtRedundancyModel=1 <span class="dt">\</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtValidSuTypes=safVersion=1,safSuType=snmpd <span class="dt">\</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefAutoAdjustProb=10000000000 <span class="dt">\</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefCompRestartProb=4000000000 <span class="dt">\</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefCompRestartMax=10 <span class="dt">\</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefSuRestartProb=4000000000 <span class="dt">\</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefSuRestartMax=10 <span class="dt">\</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    safVersion=1,safSgType=2N-net-snmp</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co"># app</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfAppType <span class="dt">\</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfApptSGTypes=safVersion=1,safSgType=2N-net-snmp <span class="dt">\</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    safVersion=1,safAppType=net-snmp</span></code></pre></div>
 <h2 id="create-connector-types.">2.3. Create Connector Types.</h2>
 <pre class="mermaid">
 classDiagram
@@ -360,23 +365,159 @@ classDiagram
     SaAmfSutCompType --> SaAmfSUType
     SaAmfSutCompType --> SaAmfCompType
 </pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># connect si - csi</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSvcTypeCSTypes <span class="dt">\</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;safMemberCSType=safVersion=1\,safCSType=snmpd,safVersion=1,safSvcType=snmpd&#39;</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># connect comp - csi</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfCtCsType <span class="dt">\</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtCompCapability=1 <span class="dt">\</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;safSupportedCsType=safVersion=1\,safCSType=snmpd,safVersion=5.6.1-4.5.1,safCompType=snmpd&#39;</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># connect su - comp</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSutCompType <span class="dt">\</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;safMemberCompType=safVersion=5.6.1-4.5.1\,safCompType=snmpd,safVersion=1,safSuType=snmpd&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># connect si - csi</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSvcTypeCSTypes <span class="dt">\</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;safMemberCSType=safVersion=1\,safCSType=snmpd,safVersion=1,safSvcType=snmpd&#39;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># connect comp - csi</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfCtCsType <span class="dt">\</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtCompCapability=1 <span class="dt">\</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;safSupportedCsType=safVersion=1\,safCSType=snmpd,safVersion=5.6.1-4.5.1,safCompType=snmpd&#39;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># connect su - comp</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSutCompType <span class="dt">\</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;safMemberCompType=safVersion=5.6.1-4.5.1\,safCompType=snmpd,safVersion=1,safSuType=snmpd&#39;</span></span></code></pre></div>
+<h2 id="create-common-entities.">3.3. Create Common Entities.</h2>
+<pre class="mermaid">
+classDiagram
+    class SaAmfApplication {
+        dn: "safApp=..."
+    }
+
+    class SaAmfSG {
+        dn: "safSg=...,safApp=..."
+    }
+    SaAmfSG --> SaAmfApplication
+
+    class SaAmfSI {
+        dn: "safSi=...,safApp=..."
+        saAmfSIProtectedbySG
+    }
+    SaAmfSI --> SaAmfApplication
+    SaAmfSI --> SaAmfSG
+
+    class SaAmfCSI {
+        dn: "safCsi=...,safSi=...,safApp=..."
+    }
+    SaAmfCSI --> SaAmfSI
+
+</pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfApplication <span class="dt">\</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfAppType=safVersion=1,safAppType=net-snmp <span class="dt">\</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    safApp=net-snmp</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSG <span class="dt">\</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSGType=safVersion=1,safSgType=2N-net-snmp <span class="dt">\</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSGAutoRepair=0 <span class="dt">\</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSGAutoAdjust=0 <span class="dt">\</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSGNumPrefInserviceSUs=10 <span class="dt">\</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSGNumPrefAssignedSUs=10 <span class="dt">\</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    safSg=2N,safApp=net-snmp</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSI <span class="dt">\</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSvcType=safVersion=1,safSvcType=snmpd <span class="dt">\</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSIProtectedbySG=safSg=2N,safApp=net-snmp <span class="dt">\</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSIRank=1 <span class="dt">\</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    safSi=1,safApp=net-snmp</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfCSI <span class="dt">\</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCSType=safVersion=1,safCSType=snmpd <span class="dt">\</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    safCsi=snmpd,safSi=1,safApp=net-snmp</span></code></pre></div>
+<h2 id="create-entities-for-sc-1.">3.4. Create Entities for SC-1.</h2>
+<h3 id="create-entities.">3.4.1. Create Entities.</h3>
+<pre class="mermaid">
+classDiagram
+    class SaAmfSU {
+        dn: "safSu=...,safSg=..."
+        safAmfSUHostNodeOrNodeGroup
+    }
+    SaAmfSU --> SaAmfNode
+    SaAmfSU --> SaAmfNodeGroup
+
+    class SaAmfComp {
+        dn: "safComp=...,safSu=..."
+        saAmfCtRelPathInstantiateCmd
+        saAmfCtRelPathAmStartCmd
+    }
+    SaAmfComp --> SaAmfSU
+    SaAmfComp --> SaAmfNodeSwBundle
+
+    class SaAmfNodeSwBundle {
+        dn: "safInstalledSwBundle=...,safAmfNode=..."
+        saAmfNodeSwBundlePathPrefix
+    }
+    SaAmfNodeSwBundle --> SaAmfNode
+
+    class SaAmfNode {
+        dn: "safAmfNode=...,safAmfCluster=..."
+    }
+
+    class SaAmfNodeGroup {
+        dn: "safAmfNodeGroup=...,safAmfCluster=..."
+        saAmfNGNodeList
+    }
+    SaAmfNodeGroup --> SaAmfNode
+</pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSU <span class="dt">\</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSUType=safVersion=1,safSuType=snmpd <span class="dt">\</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSUHostNodeOrNodeGroup=safAmfNode=SC-1,safAmfCluster=myAmfCluster <span class="dt">\</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSURank=1 <span class="dt">\</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSUAdminState=3 <span class="dt">\</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    safSu=1,safSg=2N,safApp=net-snmp</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfComp <span class="dt">\</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCompType=safVersion=5.6.1-4.5.1,safCompType=snmpd <span class="dt">\</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    safComp=snmpd,safSu=1,safSg=2N,safApp=net-snmp</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfNodeSwBundle <span class="dt">\</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfNodeSwBundlePathPrefix=/etc/init.d <span class="dt">\</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    safInstalledSwBundle=safSmfBundle=net-snmp-5.6.1-4.5.1.x86_64,safAmfNode=SC-1,safAmfCluster=myAmfCluster</span></code></pre></div>
+<h3 id="create-connector-entities.">3.4.2. Create Connector
+Entities.</h3>
+<pre class="mermaid">
+classDiagram
+    class SaAmfCompCsType {
+        dn: "safSupportedCsType=...,safCSType=...,safComp=...,safSu=...,safSg=...,safApp=..."
+    }
+    SaAmfCompCsType --> SaAmfComp
+    SaAmfCompCsType --> SaAmfCSType
+
+    SaAmfCSType <|-- SaAmfCSI
+</pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfCompCsType <span class="dt">\</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;safSupportedCsType=safVersion=1\,safCSType=snmpd,safComp=snmpd,safSu=1,safSg=2N,safApp=net-snmp&#39;</span></span></code></pre></div>
+<h2 id="unlock-su-on-sc-1.">3.4.3. Unlock SU on SC-1.</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> amf-adm unlock-in safSu=1,safSg=2N,safApp=net-snmp</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> amf-adm unlock safSu=1,safSg=2N,safApp=net-snmp</span></code></pre></div>
+<p>Check su status.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> amf-state su</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="va">safSu</span><span class="op">=</span>1,safSg=2N,safApp=net-snmp</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">saAmfSUAdminState</span><span class="op">=</span>UNLOCKED<span class="kw">(</span><span class="ex">1</span><span class="kw">)</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">saAmfSUOperState</span><span class="op">=</span>ENABLED<span class="kw">(</span><span class="ex">1</span><span class="kw">)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">saAmfSUPresenceState</span><span class="op">=</span>INSTANTIATED<span class="kw">(</span><span class="ex">3</span><span class="kw">)</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="va">saAmfSUReadinessState</span><span class="op">=</span>IN-SERVICE<span class="kw">(</span><span class="ex">2</span><span class="kw">)</span></span></code></pre></div>
+<p>Check <code>/var/log/syslog</code>.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">SC-1</span> osafamfnd<span class="pp">[</span><span class="ss">352</span><span class="pp">]</span>: NO Assigning <span class="st">&#39;safSi=1,safApp=net-snmp&#39;</span> ACTIVE to <span class="st">&#39;safSu=1,safSg=2N,safApp=net-snmp&#39;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">SC-1</span> osafamfnd<span class="pp">[</span><span class="ss">352</span><span class="pp">]</span>: NO <span class="st">&#39;safSu=1,safSg=2N,safApp=net-snmp&#39;</span> Presence State UNINSTANTIATED =<span class="op">&gt;</span> INSTANTIATING</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">SC-1</span> osafamfnd<span class="pp">[</span><span class="ss">352</span><span class="pp">]</span>: NO <span class="st">&#39;safSu=1,safSg=2N,safApp=net-snmp&#39;</span> Presence State INSTANTIATING =<span class="op">&gt;</span> INSTANTIATED</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">SC-1</span> osafamfnd<span class="pp">[</span><span class="ss">352</span><span class="pp">]</span>: NO Assigned <span class="st">&#39;safSi=1,safApp=net-snmp&#39;</span> ACTIVE to <span class="st">&#39;safSu=1,safSg=2N,safApp=net-snmp&#39;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">SC-1</span> snmpd<span class="pp">[</span><span class="ss">1185</span><span class="pp">]</span>: NET-SNMP version 5.7.3</span></code></pre></div>
+<p>Check snmp status.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> /etc/init.d/snmpd status</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">snmpd</span> is running</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="references">References</h1>
 <ul>
 <li>https://opensaf.sourceforge.io/documentation.html</li>
-<li>SAI-AIS-AMF-B.04.01.AL, 8.3 DN Formats for Objects</li>
+<li>SAI-AIS-AMF-B.04.01.AL, 8.3 DN Formats for AMF UML Classes</li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">
