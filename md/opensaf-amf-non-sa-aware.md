@@ -180,7 +180,7 @@ $ immcfg -c SaAmfCSBaseType safCSType=demo
 <pre class="mermaid">
 classDiagram
     class SaAmfCompType {
-        dn: "safSmfBundle=..."
+        dn: "safVersion=...,safCompType=..."
         saAmfCtSwBundle
     }
     SaAmfCompType --> SaSmfSwBundle: saAmfCtSwBundle
