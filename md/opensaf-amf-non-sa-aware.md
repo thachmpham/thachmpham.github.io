@@ -607,7 +607,7 @@ SC-1 osafamfnd[16640]: NO Informing director of sufailover
 SC-1 osafamfnd[16640]: NO 'safSu=1,safSg=demo,safApp=demo' Presence State TERMINATING => UNINSTANTIATED
   
 ```
-- The **demo** program is **stopped on SC-2**.
+- The **demo** program is **stopped on SC-1**.
 
 
 Check syslog of SC-2.
