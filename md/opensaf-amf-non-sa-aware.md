@@ -584,7 +584,7 @@ If stop the program on SC-1, AMF will restart it on SC-2.
 On SC-1, stop the program.
 ```sh
   
-$ /opt/demo/
+$ /opt/demo/main.sh stop
   
 ```
 
