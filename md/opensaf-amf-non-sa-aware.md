@@ -22,15 +22,18 @@ subtitle: '**Convert a Linux Program to High Availability**'
 - [Setup a cluster with 2 SCs.](./opensaf-2sc.html)
 
 
-# 2. Create Linux Program.
-Create directory `/opt/demo`.
-```sh
-  
-$ mkdir /opt/demo
-  
-```
+# 2. The Linux Program.
+The program is located at /opt/demo, consists of two scripts:
 
-Create script `/opt/demo/loop.sh` that continuous print 'hello' to syslog every 5 seconds.
+- /opt/demo/loop.sh
+    - Continuous print 'hello' to syslog every 5 seconds
+- /opt/demo/main.sh
+    - Start, stop the loop.sh script.
+    - Check status of the loop.
+
+The program is installed to SC-1 and SC-2.
+
+File /opt/demo/loop.sh.
 ```sh
 
 counter=1
@@ -43,7 +46,7 @@ done
   
 ```
 
-Create script `/opt/demo/main.sh` to manage the loop, allowing to start, stop and check status of the loop.
+File /opt/demo/main.sh.
 ```sh
   
 program='/opt/demo/loop.sh'
@@ -98,13 +101,15 @@ exit 0
   
 ```
 
-Grant permissions.
+Permissions.
 ```sh
   
 chmod +x /opt/demo/loop.sh
 chmod +x /opt/demo/main.sh
   
 ```
+
+
 
 
 # 3. Wrap Program by AMF.
@@ -293,16 +298,16 @@ classDiagram
 ```sh
   
 # connect su - comp
-immcfg -c SaAmfSutCompType \
+$ immcfg -c SaAmfSutCompType \
     'safMemberCompType=safVersion=1\,safCompType=demo,safVersion=1,safSuType=demo'
 
 # connect comp - csi
-immcfg -c SaAmfCtCsType \
+$ immcfg -c SaAmfCtCsType \
     -a saAmfCtCompCapability=1 \
     'safSupportedCsType=safVersion=1\,safCSType=demo,safVersion=1,safCompType=demo'
 
 # connect csi - si
-immcfg -c SaAmfSvcTypeCSTypes \
+$ immcfg -c SaAmfSvcTypeCSTypes \
     'safMemberCSType=safVersion=1\,safCSType=demo,safVersion=1,safSvcType=demo'
   
 ```
@@ -335,11 +340,11 @@ classDiagram
 
 ```sh
   
-immcfg -c SaAmfApplication \
+$ immcfg -c SaAmfApplication \
     -a saAmfAppType=safVersion=1,safAppType=demo \
     safApp=demo
 
-immcfg -c SaAmfSG \
+$ immcfg -c SaAmfSG \
     -a saAmfSGType=safVersion=1,safSgType=demo \
     -a saAmfSGAutoRepair=0 \
     -a saAmfSGAutoAdjust=0 \
@@ -347,13 +352,13 @@ immcfg -c SaAmfSG \
     -a saAmfSGNumPrefAssignedSUs=10 \
     safSg=demo,safApp=demo
 
-immcfg -c SaAmfSI \
+$ immcfg -c SaAmfSI \
     -a saAmfSvcType=safVersion=1,safSvcType=demo \
     -a saAmfSIProtectedbySG=safSg=demo,safApp=demo \
     -a saAmfSIRank=1 \
     safSi=demo,safApp=demo
 
-immcfg -c SaAmfCSI \
+$ immcfg -c SaAmfCSI \
     -a saAmfCSType=safVersion=1,safCSType=demo \
     safCsi=demo,safSi=demo,safApp=demo
   
@@ -403,7 +408,11 @@ classDiagram
 
 
 ```sh
-  
+    
+$ immcfg -c SaAmfNodeSwBundle \
+    -a saAmfNodeSwBundlePathPrefix=/opt/demo \
+    safInstalledSwBundle=safSmfBundle=demo,safAmfNode=SC-1,safAmfCluster=myAmfCluster
+
 $ immcfg -c SaAmfSU \
     -a saAmfSUType=safVersion=1,safSuType=demo \
     -a saAmfSUHostNodeOrNodeGroup=safAmfNode=SC-1,safAmfCluster=myAmfCluster \
@@ -417,10 +426,6 @@ $ immcfg -c SaAmfComp \
 
 $ immcfg -c SaAmfCompCsType \
     'safSupportedCsType=safVersion=1\,safCSType=demo,safComp=demo,safSu=1,safSg=demo,safApp=demo'
-
-$ immcfg -c SaAmfNodeSwBundle \
-    -a saAmfNodeSwBundlePathPrefix=/opt/demo \
-    safInstalledSwBundle=safSmfBundle=demo,safAmfNode=SC-1,safAmfCluster=myAmfCluster
   
 ```
 
@@ -428,6 +433,10 @@ $ immcfg -c SaAmfNodeSwBundle \
 ## 3.6. AMF Entities for SC-2.
 ```sh
   
+$ immcfg -c SaAmfNodeSwBundle \
+    -a saAmfNodeSwBundlePathPrefix=/opt/demo \
+    safInstalledSwBundle=safSmfBundle=demo,safAmfNode=SC-2,safAmfCluster=myAmfCluster
+
 $ immcfg -c SaAmfSU \
     -a saAmfSUType=safVersion=1,safSuType=demo \
     -a saAmfSUHostNodeOrNodeGroup=safAmfNode=SC-2,safAmfCluster=myAmfCluster \
@@ -441,16 +450,13 @@ $ immcfg -c SaAmfComp \
 
 $ immcfg -c SaAmfCompCsType \
     'safSupportedCsType=safVersion=1\,safCSType=demo,safComp=demo,safSu=2,safSg=demo,safApp=demo'
-
-$ immcfg -c SaAmfNodeSwBundle \
-    -a saAmfNodeSwBundlePathPrefix=/opt/demo \
-    safInstalledSwBundle=safSmfBundle=demo,safAmfNode=SC-2,safAmfCluster=myAmfCluster
   
 ```
 
 
-# 4. Unlock SUs.
-## 4.1. SC-1.
+# 4. Start Program by AMF.
+## 4.1. Unlock SU for SC-1.
+Unlock SU for SC-1.
 ```sh
   
 $ amf-adm unlock-in safSu=1,safSg=demo,safApp=demo
@@ -459,7 +465,62 @@ $ amf-adm unlock safSu=1,safSg=demo,safApp=demo
   
 ```
 
-## 4.2. SC-2.
+Check `/var/log/syslog`.
+```sh
+  
+SC-1 osafamfnd[12182]: NO Assigning 'safSi=demo,safApp=demo' ACTIVE to 'safSu=1,safSg=demo,safApp=demo'
+SC-1 osafamfnd[12182]: NO 'safSu=1,safSg=demo,safApp=demo' Presence State UNINSTANTIATED => INSTANTIATING
+SC-1 root: demo starting...
+SC-1 root: demo started
+SC-1 osafamfnd[12182]: NO 'safSu=1,safSg=demo,safApp=demo' Presence State INSTANTIATING => INSTANTIATED
+SC-1 osafamfnd[12182]: NO Assigned 'safSi=demo,safApp=demo' ACTIVE to 'safSu=1,safSg=demo,safApp=demo'
+SC-1 root: hello 1
+SC-1 root: hello 2
+SC-1 root: hello 3
+  
+```
+- As the syslog, we can see that the **demo** program **started successfully**.
+
+Check AMF state.
+```sh
+  
+$ amf-state su
+safSu=1,safSg=demo,safApp=demo
+        saAmfSUAdminState=UNLOCKED(1)
+        saAmfSUOperState=ENABLED(1)
+        saAmfSUPresenceState=INSTANTIATED(3)
+        saAmfSUReadinessState=IN-SERVICE(2)
+safSu=2,safSg=demo,safApp=demo
+        saAmfSUAdminState=LOCKED-INSTANTIATION(3)
+        saAmfSUOperState=ENABLED(1)
+        saAmfSUPresenceState=UNINSTANTIATED(1)
+        saAmfSUReadinessState=OUT-OF-SERVICE(1)
+
+$ amf-state si
+safSi=demo,safApp=demo
+        saAmfSIAdminState=UNLOCKED(1)
+        saAmfSIAssignmentState=PARTIALLY_ASSIGNED(3)
+
+$ amf-state comp
+safComp=demo,safSu=1,safSg=demo,safApp=demo
+        saAmfCompOperState=ENABLED(1)
+        saAmfCompPresenceState=INSTANTIATED(3)
+        saAmfCompReadinessState=IN-SERVICE(2)
+safComp=demo,safSu=2,safSg=demo,safApp=demo
+        saAmfCompOperState=ENABLED(1)
+        saAmfCompPresenceState=UNINSTANTIATED(1)
+        saAmfCompReadinessState=OUT-OF-SERVICE(1)
+
+$ amf-state csiass
+safCSIComp=safComp=demo\,safSu=1\,safSg=demo\,safApp=demo,safCsi=demo,safSi=demo,safApp=demo
+        saAmfCSICompHAState=ACTIVE(1)
+        saAmfCSICompHAReadinessState=READY_FOR_ASSIGNMENT(1)
+  
+```
+
+
+## 4.2. Unlock SU for SC-2.
+Unlock SU for SC-2.
 ```sh
   
 $ amf-adm unlock-in safSu=2,safSg=demo,safApp=demo
@@ -468,6 +529,121 @@ $ amf-adm unlock safSu=2,safSg=demo,safApp=demo
   
 ```
 
+
+Check `/var/log/syslog`.
+```sh
+  
+Oct 29 05:25:29 SC-2 osafamfnd[185]: NO Assigning 'safSi=demo,safApp=demo' STANDBY to 'safSu=2,safSg=demo,safApp=demo'
+Oct 29 05:25:29 SC-2 osafamfnd[185]: NO Assigned 'safSi=demo,safApp=demo' STANDBY to 'safSu=2,safSg=demo,safApp=demo'
+  
+```
+
+Check AMF state.
+```sh
+  
+$ amf-state su
+safSu=1,safSg=demo,safApp=demo
+        saAmfSUAdminState=UNLOCKED(1)
+        saAmfSUOperState=ENABLED(1)
+        saAmfSUPresenceState=INSTANTIATED(3)
+        saAmfSUReadinessState=IN-SERVICE(2)
+safSu=2,safSg=demo,safApp=demo
+        saAmfSUAdminState=UNLOCKED(1)
+        saAmfSUOperState=ENABLED(1)
+        saAmfSUPresenceState=UNINSTANTIATED(1)
+        saAmfSUReadinessState=IN-SERVICE(2)
+
+$ amf-state si
+safSi=demo,safApp=demo
+        saAmfSIAdminState=UNLOCKED(1)
+        saAmfSIAssignmentState=FULLY_ASSIGNED(2)
+
+$ amf-state comp
+safComp=demo,safSu=1,safSg=demo,safApp=demo
+        saAmfCompOperState=ENABLED(1)
+        saAmfCompPresenceState=INSTANTIATED(3)
+        saAmfCompReadinessState=IN-SERVICE(2)
+safComp=demo,safSu=2,safSg=demo,safApp=demo
+        saAmfCompOperState=ENABLED(1)
+        saAmfCompPresenceState=UNINSTANTIATED(1)
+        saAmfCompReadinessState=IN-SERVICE(2)
+
+$ amf-state csiass
+safCSIComp=safComp=demo\,safSu=2\,safSg=demo\,safApp=demo,safCsi=demo,safSi=demo,safApp=demo
+        saAmfCSICompHAState=STANDBY(2)
+        saAmfCSICompHAReadinessState=READY_FOR_ASSIGNMENT(1)
+safCSIComp=safComp=demo\,safSu=1\,safSg=demo\,safApp=demo,safCsi=demo,safSi=demo,safApp=demo
+        saAmfCSICompHAState=ACTIVE(1)
+        saAmfCSICompHAReadinessState=READY_FOR_ASSIGNMENT(1)
+  
+```
+
+# 5. Fault Tolerance.
+If stop the program on SC-1, AMF will restart it on SC-2.
+
+On SC-1, stop the program.
+```sh
+  
+$ /opt/demo/
+  
+```
+
+Check syslog of SC-1.
+```sh
+  
+SC-1 root: demo stopping...
+SC-1 osafamfnd[16640]: NO saAmfSUFailover is true for 'safSu=1,safSg=demo,safApp=demo'
+SC-1 osafamfnd[16640]: NO Performing failover of 'safSu=1,safSg=demo,safApp=demo' (SU failover count: 2)
+SC-1 osafamfnd[16640]: NO 'safComp=demo,safSu=1,safSg=demo,safApp=demo' recovery action escalated from 'noRecommendation' to 'suFailover'
+SC-1 osafamfnd[16640]: NO 'safComp=demo,safSu=1,safSg=demo,safApp=demo' faulted due to 'passiveMonitorFailed' : Recovery is 'suFailover'
+SC-1 osafamfnd[16640]: NO Terminating components of 'safSu=1,safSg=demo,safApp=demo'(abruptly & unordered)
+SC-1 root: demo stopped
+SC-1 osafamfnd[16640]: NO 'safSu=1,safSg=demo,safApp=demo' Presence State INSTANTIATED => TERMINATING
+SC-1 osafamfnd[16640]: NO 'safSu=1,safSg=demo,safApp=demo' Presence State TERMINATING => TERMINATING
+SC-1 root: demo stopping...
+SC-1 root: demo stopped
+SC-1 osafamfnd[16640]: NO Terminated all components in 'safSu=1,safSg=demo,safApp=demo'
+SC-1 osafamfnd[16640]: NO Informing director of sufailover
+SC-1 osafamfnd[16640]: NO 'safSu=1,safSg=demo,safApp=demo' Presence State TERMINATING => UNINSTANTIATED
+  
+```
+- The **demo** program is **stopped on SC-2**.
+
+
+Check syslog of SC-2.
+```sh
+  
+C-2 osafamfnd[1028]: NO Assigning 'safSi=demo,safApp=demo' ACTIVE to 'safSu=2,safSg=demo,safApp=demo'
+C-2 rsyslogd-2007: action 'action 9' suspended, next retry is Tue Oct 29 06:11:50 2024 [v8.16.0 try http://www.rsyslog.com/e/2007 ]
+C-2 osafamfnd[1028]: NO 'safSu=2,safSg=demo,safApp=demo' Presence State UNINSTANTIATED => INSTANTIATING
+C-2 root: demo starting...
+C-2 root: demo started
+C-2 osafamfnd[1028]: NO 'safSu=2,safSg=demo,safApp=demo' Presence State INSTANTIATING => INSTANTIATED
+C-2 osafamfnd[1028]: NO Assigned 'safSi=demo,safApp=demo' ACTIVE to 'safSu=2,safSg=demo,safApp=demo'
+C-2 root: hello 1
+SC-2 root: hello 2
+SC-2 root: hello 3
+  
+```
+- The **demo** program is **restarted successfully on SC-2**.
+
+
+Check AMF state.
+```sh
+  
+$ amf-state su
+safSu=1,safSg=demo,safApp=demo
+        saAmfSUAdminState=UNLOCKED(1)
+        saAmfSUOperState=DISABLED(2)
+        saAmfSUPresenceState=UNINSTANTIATED(1)
+        saAmfSUReadinessState=OUT-OF-SERVICE(1)
+safSu=2,safSg=demo,safApp=demo
+        saAmfSUAdminState=UNLOCKED(1)
+        saAmfSUOperState=ENABLED(1)
+        saAmfSUPresenceState=INSTANTIATED(3)
+        saAmfSUReadinessState=IN-SERVICE(2)
+  
+```
 
 # References
 - https://opensaf.sourceforge.io/documentation.html
