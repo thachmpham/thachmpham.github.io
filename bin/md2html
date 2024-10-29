@@ -11,8 +11,15 @@ pandoc -f markdown -t html \
     -s --highlight-style breezeDark \
     --include-after-body ${workspace}/bin/footer.html \
     -F pandoc-plantuml \
-    -o ${workspace}/html/opensaf-amf-snmp.html \
-    ${workspace}/md/opensaf-amf-snmp.md
+    -o ${workspace}/html/opensaf-amf-non-sa-aware.html \
+    ${workspace}/md/opensaf-amf-non-sa-aware.md
+
+# pandoc -f markdown -t html \
+#     -s --highlight-style breezeDark \
+#     --include-after-body ${workspace}/bin/footer.html \
+#     -F pandoc-plantuml \
+#     -o ${workspace}/html/opensaf-amf-snmp.html \
+#     ${workspace}/md/opensaf-amf-snmp.md
 
 # pandoc -f markdown -t html \
 #     -s --highlight-style breezeDark \

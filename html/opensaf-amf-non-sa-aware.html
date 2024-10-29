@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>OpenSAF AMF</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        background-color: #232629;
+        color: #7a7c7d;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #7a7c7d;  padding-left: 4px; }
+    div.sourceCode
+      { color: #cfcfc2; background-color: #232629; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #cfcfc2; } /* Normal */
+    code span.al { color: #95da4c; background-color: #4d1f24; font-weight: bold; } /* Alert */
+    code span.an { color: #3f8058; } /* Annotation */
+    code span.at { color: #2980b9; } /* Attribute */
+    code span.bn { color: #f67400; } /* BaseN */
+    code span.bu { color: #7f8c8d; } /* BuiltIn */
+    code span.cf { color: #fdbc4b; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #3daee9; } /* Char */
+    code span.cn { color: #27aeae; font-weight: bold; } /* Constant */
+    code span.co { color: #7a7c7d; } /* Comment */
+    code span.cv { color: #7f8c8d; } /* CommentVar */
+    code span.do { color: #a43340; } /* Documentation */
+    code span.dt { color: #2980b9; } /* DataType */
+    code span.dv { color: #f67400; } /* DecVal */
+    code span.er { color: #da4453; text-decoration: underline; } /* Error */
+    code span.ex { color: #0099ff; font-weight: bold; } /* Extension */
+    code span.fl { color: #f67400; } /* Float */
+    code span.fu { color: #8e44ad; } /* Function */
+    code span.im { color: #27ae60; } /* Import */
+    code span.in { color: #c45b00; } /* Information */
+    code span.kw { color: #cfcfc2; font-weight: bold; } /* Keyword */
+    code span.op { color: #cfcfc2; } /* Operator */
+    code span.ot { color: #27ae60; } /* Other */
+    code span.pp { color: #27ae60; } /* Preprocessor */
+    code span.re { color: #2980b9; background-color: #153042; } /* RegionMarker */
+    code span.sc { color: #3daee9; } /* SpecialChar */
+    code span.ss { color: #da4453; } /* SpecialString */
+    code span.st { color: #f44f4f; } /* String */
+    code span.va { color: #27aeae; } /* Variable */
+    code span.vs { color: #da4453; } /* VerbatimString */
+    code span.wa { color: #da4453; } /* Warning */
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">OpenSAF AMF</h1>
+<p class="subtitle"><strong>Convert a Linux Program to High
+Availability</strong></p>
+</header>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+        look: 'handDrawn',
+        theme: 'neutral',
+    });
+</script>
+<h1 id="introduction.">1. Introduction.</h1>
+<h4 id="agenda.">Agenda.</h4>
+<ul>
+<li>Create a daemon Linux program.</li>
+<li>Convert the program to be high available using AMF 2N redundancy
+model. Active on SC-1, standby on SC-2, or vise versa.</li>
+</ul>
+<h4 id="prerequisite.">Prerequisite.</h4>
+<ul>
+<li><a href="./opensaf-2sc.html">Setup a cluster with 2 SCs.</a></li>
+</ul>
+<h1 id="create-linux-program.">2. Create Linux Program.</h1>
+<p>Create directory <code>/opt/demo</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mkdir /opt/demo</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<p>Create script <code>/opt/demo/loop.sh</code> that continuous print
+‘hello’ to syslog every 5 seconds.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="va">counter</span><span class="op">=</span>1</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="fu">true</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">logger</span> <span class="st">&quot;hello </span><span class="va">$counter</span><span class="st">&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">((</span><span class="va">counter</span><span class="op">++</span><span class="kw">))</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> 5</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<p>Create script <code>/opt/demo/main.sh</code> to manage the loop,
+allowing to start, stop and check status of the loop.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">program</span><span class="op">=</span><span class="st">&#39;/opt/demo/loop.sh&#39;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="va">pidfile</span><span class="op">=</span><span class="st">&#39;/var/run/demo.pid&#39;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">start()</span> <span class="kw">{</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&#39;demo starting...&#39;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">logger</span> <span class="st">&#39;demo starting...&#39;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">start-stop-daemon</span> <span class="at">--start</span> <span class="at">--background</span> <span class="dt">\</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">--make-pidfile</span> <span class="at">--pidfile</span> <span class="va">$pidfile</span> <span class="dt">\</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">--exec</span> /bin/bash <span class="at">--</span> <span class="va">$program</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&#39;demo started&#39;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="ex">logger</span> <span class="st">&#39;demo started&#39;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">stop()</span> <span class="kw">{</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&#39;demo stopping...&#39;</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="ex">logger</span> <span class="st">&#39;demo stopping...&#39;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="ex">start-stop-daemon</span> <span class="at">--stop</span> <span class="at">--pidfile</span> <span class="va">$pidfile</span> <span class="dt">\</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">--retry</span> 5</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&#39;stopped&#39;</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="ex">logger</span> <span class="st">&#39;demo stopped&#39;</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="fu">status()</span> <span class="kw">{</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> <span class="va">$pidfile</span> <span class="bu">]</span> <span class="dt">\</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>        <span class="kw">&amp;&amp;</span> <span class="ex">start-stop-daemon</span> <span class="at">--status</span> <span class="at">--pidfile</span> <span class="va">$pidfile</span><span class="kw">;</span><span class="dt">\</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">then</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        <span class="bu">echo</span> <span class="st">&quot;running, pid: </span><span class="va">$(</span><span class="fu">cat</span> <span class="va">$pidfile)</span><span class="st">&quot;</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>        <span class="bu">echo</span> <span class="st">&#39;not running&#39;</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">fi</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> <span class="va">$1</span> <span class="kw">in</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="ss">start</span><span class="kw">)</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>        <span class="ex">start</span><span class="cf">;;</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="ss">stop</span><span class="kw">)</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        <span class="ex">stop</span><span class="cf">;;</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="ss">status</span><span class="kw">)</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        <span class="ex">status</span><span class="cf">;;</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    <span class="pp">*</span><span class="kw">)</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>        <span class="bu">echo</span> <span class="st">&#39;Usage: main.sh {start|stop|status}&#39;</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>        <span class="bu">exit</span> 1<span class="cf">;;</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="cf">esac</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span> 0</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<p>Grant permissions.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x /opt/demo/loop.sh</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x /opt/demo/main.sh</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="wrap-program-by-amf.">3. Wrap Program by AMF.</h1>
+<h4 id="agenda.-1">Agenda.</h4>
+<ul>
+<li>Create basetypes: APP, SG, SU, SI, COMP, CSI.</li>
+<li>Create types: APP, SG, SU, SI, COMP, CSI, SwBundle.</li>
+<li>Create associated types: SU-COMP, COMP-CSI, CSI-SI.</li>
+<li>Create common entities: APP, SG, SI, CSI.</li>
+<li>Create entities for SC-1: SU, COMP, NodeSwBundle, COMP-CSI.</li>
+<li>Create entities for SC-2: SU, COMP, NodeSwBundle, COMP-CSI.</li>
+</ul>
+<h2 id="amf-basetypes.">3.1. AMF BaseTypes.</h2>
+<pre class="mermaid">
+classDiagram
+    class SafAmfAppBaseType {
+        dn: "safAppType=..."
+    }
+
+    class SafAmfSGBaseType {
+        dn: "safSgType=..."
+    }
+
+    class SafAmfSUBaseType {
+        dn: "safSuType=..."
+    }
+</pre>
+<pre class="mermaid">
+classDiagram
+    class SaAmfSvcBaseType {
+        dn: "safSvcType=..."
+    }
+
+    class SaAmfCompBaseType {
+        dn: "safCompType=..."
+    }
+
+    class SaAmfCSBaseType {
+        dn: "safCSType=..."
+    }
+</pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># app</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfAppBaseType safAppType=demo</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># sg</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSGBaseType safSgType=demo</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># su</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSUBaseType safSuType=demo</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># si</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSvcBaseType safSvcType=demo</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># comp</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfCompBaseType safCompType=demo</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># csi</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfCSBaseType safCSType=demo</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="amf-types.">3.2. AMF Types.</h2>
+<pre class="mermaid">
+classDiagram
+    class SaAmfCompType {
+        dn: "safSmfBundle=..."
+        saAmfCtSwBundle
+    }
+    SaAmfCompType --> SaSmfSwBundle: saAmfCtSwBundle
+
+    class SaAmfAppType {
+        dn: "safVersion=...,safAppType=..."
+        saAmfApptSGTypes
+    }
+    SaAmfAppType --> SaAmfSGType: saAmfApptSGTypes
+
+    class SaAmfSGType {
+        dn: "safVersion=...,safSgType=..."
+        saAmfSgtValidSuTypes
+    }
+    SaAmfSGType --> SaAmfSUType: saAmfSgtValidSuTypes
+
+    class SaAmfSUType {
+        dn: "safVersion=...,safSuType=..."
+        saAmfSutProvidesSvcTypes
+    }
+    SaAmfSUType --> SaAmfSvcType: saAmfSutProvidesSvcTypes
+
+    class SaSmfSwBundle {
+        dn: "safSmfBundle=..."
+    }
+
+    class SaAmfSvcType {
+        dn: "safVersion=...,safSvcType=..."
+    }
+</pre>
+<pre class="mermaid">
+classDiagram
+    class SaAmfCSType {
+        dn: "safVersion=...,safCSType=..."
+    }
+</pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># swbundle</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaSmfSwBundle safSmfBundle=demo</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># csi</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfCSType safVersion=1,safCSType=demo</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># comp</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfCompType <span class="dt">\</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtCompCategory=8 <span class="dt">\</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtSwBundle=safSmfBundle=demo <span class="dt">\</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtDefClcCliTimeout=10000000000 <span class="dt">\</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathInstantiateCmd=<span class="st">&#39;main.sh start&#39;</span> <span class="dt">\</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathCleanupCmd=<span class="st">&#39;main.sh stop&#39;</span> <span class="dt">\</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathTerminateCmd=<span class="st">&#39;main.sh stop&#39;</span> <span class="dt">\</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathAmStartCmd=<span class="st">&#39;../../usr/local/sbin/amfpm --start&#39;</span> <span class="dt">\</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtRelPathAmStopCmd=<span class="st">&#39;../../usr/local/sbin/amfpm --stop&#39;</span> <span class="dt">\</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtDefRecoveryOnError=3 <span class="dt">\</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtDefDisableRestart=0 <span class="dt">\</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    safVersion=1,safCompType=demo</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co"># si</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSvcType safVersion=1,safSvcType=demo</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co"># su</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSUType <span class="dt">\</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSutIsExternal=0 <span class="dt">\</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSutDefSUFailover=1 <span class="dt">\</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSutProvidesSvcTypes=safVersion=1,safSvcType=demo <span class="dt">\</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    safVersion=1,safSuType=demo</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co"># sg</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSGType <span class="dt">\</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtRedundancyModel=1 <span class="dt">\</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtValidSuTypes=safVersion=1,safSuType=demo <span class="dt">\</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefAutoAdjustProb=10000000000 <span class="dt">\</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefCompRestartProb=4000000000 <span class="dt">\</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefCompRestartMax=10 <span class="dt">\</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefSuRestartProb=4000000000 <span class="dt">\</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSgtDefSuRestartMax=10 <span class="dt">\</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    safVersion=1,safSgType=demo</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="co"># app</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfAppType <span class="dt">\</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfApptSGTypes=safVersion=1,safSgType=demo <span class="dt">\</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    safVersion=1,safAppType=demo</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="amf-associated-types.">3.3. AMF Associated Types.</h2>
+The associated type establishes a connection between two different type
+using distinguished name (DN). Its DN includes the DNs of the two types
+it links.
+<pre class="mermaid">
+classDiagram    
+    class SaAmfSutCompType {
+        dn: "safMemberCompType=..."
+    }
+    SaAmfSutCompType --> SaAmfSUType: dn
+    SaAmfSutCompType --> SaAmfCompType: dn  
+
+    class SaAmfCtCsType {
+        dn: "safSupportedCsType=..."
+    }
+    SaAmfCtCsType --> SaAmfCompType: dn
+    SaAmfCtCsType --> SaAmfCSType: dn
+
+    class SaAmfSvcTypeCSTypes {
+        dn: "safMemberCSType=..."
+    }
+    SaAmfSvcTypeCSTypes --> SaAmfSvcType: dn
+    SaAmfSvcTypeCSTypes --> SaAmfCSType: dn
+</pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># connect su - comp</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSutCompType <span class="dt">\</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;safMemberCompType=safVersion=1\,safCompType=demo,safVersion=1,safSuType=demo&#39;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># connect comp - csi</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfCtCsType <span class="dt">\</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCtCompCapability=1 <span class="dt">\</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;safSupportedCsType=safVersion=1\,safCSType=demo,safVersion=1,safCompType=demo&#39;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># connect csi - si</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSvcTypeCSTypes <span class="dt">\</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;safMemberCSType=safVersion=1\,safCSType=demo,safVersion=1,safSvcType=demo&#39;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="amf-common-entities.">3.4. AMF Common Entities.</h2>
+Create common AMF entities for both SC-1, SC-2.
+<pre class="mermaid">
+classDiagram
+    class SaAmfApplication {
+        dn: "safApp=..."
+    }
+
+    class SaAmfSG {
+        dn: "safSg=...,safApp=..."
+    }
+    SaAmfSG --> SaAmfApplication: dn
+
+    class SaAmfSI {
+        dn: "safSi=...,safApp=..."
+        saAmfSIProtectedbySG
+    }
+    SaAmfSI --> SaAmfApplication: dn
+    SaAmfSI --> SaAmfSG: saAmfSIProtectedbySG
+
+    class SaAmfCSI {
+        dn: "safCsi=...,safSi=..."
+    }
+    SaAmfCSI --> SaAmfSI: dn
+</pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfApplication <span class="dt">\</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfAppType=safVersion=1,safAppType=demo <span class="dt">\</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    safApp=demo</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSG <span class="dt">\</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSGType=safVersion=1,safSgType=demo <span class="dt">\</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSGAutoRepair=0 <span class="dt">\</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSGAutoAdjust=0 <span class="dt">\</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSGNumPrefInserviceSUs=10 <span class="dt">\</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSGNumPrefAssignedSUs=10 <span class="dt">\</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    safSg=demo,safApp=demo</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfSI <span class="dt">\</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSvcType=safVersion=1,safSvcType=demo <span class="dt">\</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSIProtectedbySG=safSg=demo,safApp=demo <span class="dt">\</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSIRank=1 <span class="dt">\</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    safSi=demo,safApp=demo</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="ex">immcfg</span> <span class="at">-c</span> SaAmfCSI <span class="dt">\</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCSType=safVersion=1,safCSType=demo <span class="dt">\</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    safCsi=demo,safSi=demo,safApp=demo</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="amf-entities-for-sc-1.">3.5. AMF Entities for SC-1.</h2>
+<pre class="mermaid">
+classDiagram
+    class SaAmfSU {
+        dn: "safSu=...,safSg=..."
+        saAmfSUHostNodeOrNodeGroup
+    }
+    SaAmfSU --> SaAmfNodeGroup: saAmfSUHostNodeOrNodeGroup
+    SaAmfSU --> SaAmfNode: saAmfSUHostNodeOrNodeGroup
+
+    class SaAmfNodeGroup {
+        dn:"safAmfNode=..."
+        safAmfNGNodeList
+    }
+    SaAmfNodeGroup o-- SaAmfNode: safAmfNGNodeList
+
+    class SaAmfNode {
+        dn: "safAmfNode=..."
+    }
+
+    class SaAmfComp {
+        dn: "safComp=...,safSu=..."
+    }
+    SaAmfComp --> SaAmfSU: dn
+    
+    class SaAmfCompCsType {
+        dn: "safSupportedCsType=..."
+    }
+    SaAmfCompCsType --> SaAmfComp: dn
+    SaAmfCompCsType --> SaAmfCSType: dn
+
+    class SaAmfCSType {
+        dn: "safVersion=...,safCSType=..."
+    }
+
+        class SaAmfNodeSwBundle {
+        dn: "safInstalledSwBundle=..."
+        saAmfNodeSwBundlePathPrefix
+    }
+    SaAmfNodeSwBundle --> SaAmfNode: dn
+</pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSU <span class="dt">\</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSUType=safVersion=1,safSuType=demo <span class="dt">\</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSUHostNodeOrNodeGroup=safAmfNode=SC-1,safAmfCluster=myAmfCluster <span class="dt">\</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSURank=1 <span class="dt">\</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSUAdminState=3 <span class="dt">\</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    safSu=1,safSg=demo,safApp=demo</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfComp <span class="dt">\</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCompType=safVersion=1,safCompType=demo <span class="dt">\</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    safComp=demo,safSu=1,safSg=demo,safApp=demo</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfCompCsType <span class="dt">\</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;safSupportedCsType=safVersion=1\,safCSType=demo,safComp=demo,safSu=1,safSg=demo,safApp=demo&#39;</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfNodeSwBundle <span class="dt">\</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfNodeSwBundlePathPrefix=/opt/demo <span class="dt">\</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    safInstalledSwBundle=safSmfBundle=demo,safAmfNode=SC-1,safAmfCluster=myAmfCluster</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="amf-entities-for-sc-2.">3.6. AMF Entities for SC-2.</h2>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfSU <span class="dt">\</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSUType=safVersion=1,safSuType=demo <span class="dt">\</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSUHostNodeOrNodeGroup=safAmfNode=SC-2,safAmfCluster=myAmfCluster <span class="dt">\</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSURank=1 <span class="dt">\</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfSUAdminState=3 <span class="dt">\</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    safSu=2,safSg=demo,safApp=demo</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfComp <span class="dt">\</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfCompType=safVersion=1,safCompType=demo <span class="dt">\</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    safComp=demo,safSu=2,safSg=demo,safApp=demo</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfCompCsType <span class="dt">\</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;safSupportedCsType=safVersion=1\,safCSType=demo,safComp=demo,safSu=2,safSg=demo,safApp=demo&#39;</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfNodeSwBundle <span class="dt">\</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfNodeSwBundlePathPrefix=/opt/demo <span class="dt">\</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    safInstalledSwBundle=safSmfBundle=demo,safAmfNode=SC-2,safAmfCluster=myAmfCluster</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="unlock-sus.">4. Unlock SUs.</h1>
+<h2 id="sc-1.">4.1. SC-1.</h2>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> amf-adm unlock-in safSu=1,safSg=demo,safApp=demo</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> amf-adm unlock safSu=1,safSg=demo,safApp=demo</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="sc-2.">4.2. SC-2.</h2>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> amf-adm unlock-in safSu=2,safSg=demo,safApp=demo</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> amf-adm unlock safSu=2,safSg=demo,safApp=demo</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="references">References</h1>
+<ul>
+<li>https://opensaf.sourceforge.io/documentation.html</li>
+<li>SAI-AIS-AMF-B.04.01.AL, 8.3 DN Formats for AMF UML Classes</li>
+</ul>
+<footer class="footer text-muted">
+   <div align="center">
+      <a href="../index.html">Home</a>
+   </div>
+ </footer>
+</body>
+</html>
