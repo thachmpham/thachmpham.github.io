@@ -9,10 +9,18 @@ pandoc -f markdown -t html \
 
 pandoc -f markdown -t html \
     -s --highlight-style breezeDark \
+    --include-in-header ${workspace}/bin/header.html \
     --include-after-body ${workspace}/bin/footer.html \
     -F pandoc-plantuml \
-    -o ${workspace}/html/opensaf-amf-non-sa-aware.html \
-    ${workspace}/md/opensaf-amf-non-sa-aware.md
+    -o ${workspace}/html/2pc.html \
+    ${workspace}/md/2pc.md
+
+# pandoc -f markdown -t html \
+#     -s --highlight-style breezeDark \
+#     --include-after-body ${workspace}/bin/footer.html \
+#     -F pandoc-plantuml \
+#     -o ${workspace}/html/opensaf-amf-non-sa-aware.html \
+#     ${workspace}/md/opensaf-amf-non-sa-aware.md
 
 # pandoc -f markdown -t html \
 #     -s --highlight-style breezeDark \
