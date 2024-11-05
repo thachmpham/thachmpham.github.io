@@ -7,13 +7,13 @@ pandoc -f markdown -t html \
     -o ${workspace}/index.html \
     ${workspace}/md/index.md
 
-pandoc -f markdown -t html \
-    -s --highlight-style breezeDark \
-    --include-in-header ${workspace}/bin/header.html \
-    --include-after-body ${workspace}/bin/footer.html \
-    -F pandoc-plantuml \
-    -o ${workspace}/html/2pc.html \
-    ${workspace}/md/2pc.md
+# pandoc -f markdown -t html \
+#     -s --highlight-style breezeDark \
+#     --include-in-header ${workspace}/bin/header.html \
+#     --include-after-body ${workspace}/bin/footer.html \
+#     -F pandoc-plantuml \
+#     -o ${workspace}/html/2pc.html \
+#     ${workspace}/md/2pc.md
 
 # pandoc -f markdown -t html \
 #     -s --highlight-style breezeDark \
@@ -114,11 +114,11 @@ pandoc -f markdown -t html \
 #     ${workspace}/md/veth.md
 
 
-# pandoc -f markdown -t html \
-#     -s --highlight-style breezeDark \
-#     --include-after-body ${workspace}/bin/footer.html \
-#     -o ${workspace}/html/vbridge.html \
-#     ${workspace}/md/vbridge.md
+pandoc -f markdown -t html \
+    -s --highlight-style breezeDark \
+    --include-after-body ${workspace}/bin/footer.html \
+    -o ${workspace}/html/vbridge.html \
+    ${workspace}/md/vbridge.md
 
 
 # pandoc -f markdown -t html \
