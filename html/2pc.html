@@ -232,7 +232,7 @@
   </style>
   <script src="../3pp/d3.v7.js"></script>
   <script type="module">
-      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      import mermaid from '../3pp/mermaid.min.js';
       mermaid.initialize({
           look: 'handDrawn',
           theme: 'neutral',
@@ -247,8 +247,22 @@
 <p>The Dynamic Host Configuration Protocol (DHCP) is a network
 management protocol used to dynamically assign IP addresses to devices
 on a network.</p>
+<div id="prepare">
+
+</div>
 <script>
-  d3.select("body").append("p").text("wow, impressed")
+// Select the div and append an SVG container
+const svg = d3.select("#prepare")
+  .append("svg")
+  .attr("width", 400)
+  .attr("height", 400);
+
+// Add a circle to the SVG container
+svg.append("circle")
+  .attr("cx", 200)    // x-position of the center
+  .attr("cy", 200)    // y-position of the center
+  .attr("r", 50)      // radius
+  .attr("fill", "blue");  // color of the circle
 </script>
 <p>DHCP operates based on a client-server model.</p>
 <ul>
@@ -265,6 +279,23 @@ server.</li>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dhclient <span class="op">&lt;</span>network_interface<span class="op">&gt;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div id="commit">
+
+</div>
+<script>
+// Select the div and append an SVG container
+const svg2 = d3.select("#commit")
+  .append("svg")
+  .attr("width", 400)
+  .attr("height", 400);
+
+// Add a circle to the SVG container
+svg2.append("circle")
+  .attr("cx", 200)    // x-position of the center
+  .attr("cy", 200)    // y-position of the center
+  .attr("r", 50)      // radius
+  .attr("fill", "red");  // color of the circle
+</script>
 <footer class="footer text-muted">
    <div align="center">
       <a href="../index.html">Home</a>
