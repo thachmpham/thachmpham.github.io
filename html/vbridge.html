@@ -473,12 +473,15 @@ vethbr1, vethbr2 and vise versa.</li>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <pre class="mermaid">
 flowchart TD
-    subgraph container1
+    subgraph ns1
         veth1
     end
-    subgraph container2
+    subgraph ns2
         veth2
     end    
+    subgraph ns3
+        veth3
+    end  
     veth1 <---> vethbr1
     veth2 <---> vethbr2    
     veth3 <---> vethbr3    
@@ -502,12 +505,15 @@ flowchart TD
 <h3 id="split-network.">3.3.2. Split Network.</h3>
 <pre class="mermaid">
 flowchart TD
-    subgraph container1
+    subgraph ns1
         veth1
     end
-    subgraph container2
+    subgraph ns2
         veth2
     end    
+    subgraph ns3
+        veth3
+    end  
     veth1 <---> vethbr1
     veth2 <---> vethbr2    
     veth3 <---> vethbr3    

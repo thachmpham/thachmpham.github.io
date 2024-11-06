@@ -262,12 +262,15 @@ br0               1 PVID Egress Untagged
 
 <pre class="mermaid">
 flowchart TD
-    subgraph container1
+    subgraph ns1
         veth1
     end
-    subgraph container2
+    subgraph ns2
         veth2
     end    
+    subgraph ns3
+        veth3
+    end  
     veth1 <---> vethbr1
     veth2 <---> vethbr2    
     veth3 <---> vethbr3    
@@ -294,12 +297,15 @@ $ ip netns exec ns1 ping -c 1 192.168.0.30
 ### 3.3.2. Split Network.
 <pre class="mermaid">
 flowchart TD
-    subgraph container1
+    subgraph ns1
         veth1
     end
-    subgraph container2
+    subgraph ns2
         veth2
     end    
+    subgraph ns3
+        veth3
+    end  
     veth1 <---> vethbr1
     veth2 <---> vethbr2    
     veth3 <---> vethbr3    
