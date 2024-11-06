@@ -185,7 +185,7 @@ $ docker exec container2 ping 192.168.0.10
   
 ```
 
-## 3.3. Segment Network with VLAN.
+## 3.3. Split Network with VLAN.
 #### Agenda
 - Setup connected network.  
     - Create namespaces: ns1, ns2, ns3.
