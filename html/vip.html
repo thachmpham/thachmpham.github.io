@@ -261,6 +261,11 @@ Keepalived.</h1>
 <li>Verify that the virtual IP is automatically reassigned to
 node2.</li>
 </ul></li>
+<li>Ping test.
+<ul>
+<li>From host to the virtual IP when node1 is master.</li>
+<li>From host to the virtual IP when node2 is master.</li>
+</ul></li>
 </ul>
 <h2 id="build-docker-image.">2.1. Build Docker Image.</h2>
 <p>Create Dockerfile.</p>
@@ -308,11 +313,11 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p>Start syslog to monitor keepalived activity.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> service rsyslog start</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> service rsyslog start</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p>Start keepalived.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> service keepalived start</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> service keepalived start</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p>Check /var/log/syslog</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -331,7 +336,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p>Check IP address.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip addr show eth0</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> ip addr show eth0</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">12:</span> eth0@if13: <span class="op">&lt;</span>BROADCAST,MULTICAST,UP,LOWER_UP<span class="op">&gt;</span> mtu 1500 qdisc noqueue state UP group default </span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">link/ether</span> 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">inet</span> 172.17.0.2/16 brd 172.17.255.255 scope global eth0</span>
@@ -371,12 +376,12 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a h
 <p>Start syslog to monitor keepalived activity.</p>
 <div class="sourceCode" id="cb13"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> service rsyslog start</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> service rsyslog start</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p>Start keepalived.</p>
 <div class="sourceCode" id="cb14"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> service keepalived start</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> service keepalived start</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p>Check /var/log/syslog</p>
 <div class="sourceCode" id="cb15"><pre
@@ -395,7 +400,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#
 <p>Check IP address.</p>
 <div class="sourceCode" id="cb16"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip addr show eth0</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> ip addr show eth0</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">14:</span> eth0@if15: <span class="op">&lt;</span>BROADCAST,MULTICAST,UP,LOWER_UP<span class="op">&gt;</span> mtu 1500 qdisc noqueue state UP group default </span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">link/ether</span> 02:42:ac:11:00:03 brd ff:ff:ff:ff:ff:ff link-netnsid 0</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">inet</span> 172.17.0.3/16 brd 172.17.255.255 scope global eth0</span>
@@ -405,11 +410,105 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#
 <li>Currently, node2 in backup state. So, the address 192.168.200.11/24
 still not exist.</li>
 </ul>
+<h2 id="fault-tolerance.">2.3. Fault Tolerance.</h2>
+<p>Stop keepalived on node1.</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> service keepalived stop</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<p>Show IP addresses on node1.</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> ip addr show eth0</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">12:</span> eth0@if13: <span class="op">&lt;</span>BROADCAST,MULTICAST,UP,LOWER_UP<span class="op">&gt;</span> mtu 1500 qdisc noqueue state UP group default </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">link/ether</span> 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">inet</span> 172.17.0.2/16 brd 172.17.255.255 scope global eth0</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>       <span class="ex">valid_lft</span> forever preferred_lft forever</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>The address 192.168.200.11/24 is removed from eth0, because
+keepalived is stopped.</li>
+</ul>
+<p>Verify that the virtual IP is automatically reassigned to node2.</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> ip addr show eth0</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">14:</span> eth0@if15: <span class="op">&lt;</span>BROADCAST,MULTICAST,UP,LOWER_UP<span class="op">&gt;</span> mtu 1500 qdisc noqueue state UP group default </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">link/ether</span> 02:42:ac:11:00:03 brd ff:ff:ff:ff:ff:ff link-netnsid 0</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">inet</span> 172.17.0.3/16 brd 172.17.255.255 scope global eth0</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>       <span class="ex">valid_lft</span> forever preferred_lft forever</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">inet</span> 192.168.200.11/24 scope global eth0</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>       <span class="ex">valid_lft</span> forever preferred_lft forever</span></code></pre></div>
+<ul>
+<li>After keepalived on node1 is stopped, the instance on node2 becomes
+master, so the address 192.168.200.11/24 is ressigned to node2.</li>
+</ul>
+<p>Capture packets.</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># master node sends VRRP Announcement to backup nodes to inform that master is still alive</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 224.0.0.18 is a multicast address for nodes in the VRRP group.</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># node1 -&gt; multicast: VRRP Announcement</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.2</span> <span class="pp">?</span> 224.0.0.18   VRRP 54 Announcement <span class="er">(</span><span class="ex">v2</span><span class="kw">)</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.2</span> <span class="pp">?</span> 224.0.0.18   VRRP 54 Announcement <span class="er">(</span><span class="ex">v2</span><span class="kw">)</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.2</span> <span class="pp">?</span> 224.0.0.18   VRRP 54 Announcement <span class="er">(</span><span class="ex">v2</span><span class="kw">)</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co"># master node sends IGMPv3 Membership Report / Leave group to backup nodes to inform that master leaves</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co"># node1 -&gt; multicast: IGMP Membership Report / Leave group</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.2</span> <span class="pp">?</span> 224.0.0.22   IGMPv3 54 Membership Report / Leave group 224.0.0.18</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.2</span> <span class="pp">?</span> 224.0.0.22   IGMPv3 54 Membership Report / Leave group 224.0.0.18</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co"># node2 informs that the virtual IP is assigned to it</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co"># node2 become master</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co"># node2 -&gt; multicast: ARP Gratuitous</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="ex">02:42:ac:11:00:03</span> <span class="pp">?</span> Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 <span class="er">(</span><span class="ex">Request</span><span class="kw">)</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="ex">02:42:ac:11:00:03</span> <span class="pp">?</span> Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 <span class="er">(</span><span class="ex">Request</span><span class="kw">)</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="ex">02:42:ac:11:00:03</span> <span class="pp">?</span> Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 <span class="er">(</span><span class="ex">Request</span><span class="kw">)</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="ex">02:42:ac:11:00:03</span> <span class="pp">?</span> Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 <span class="er">(</span><span class="ex">Request</span><span class="kw">)</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="ex">02:42:ac:11:00:03</span> <span class="pp">?</span> Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 <span class="er">(</span><span class="ex">Request</span><span class="kw">)</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="co"># # node2 -&gt; multicast: VRRP Announcement</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.3</span> <span class="pp">?</span> 224.0.0.18   VRRP 54 Announcement <span class="er">(</span><span class="ex">v2</span><span class="kw">)</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.3</span> <span class="pp">?</span> 224.0.0.18   VRRP 54 Announcement <span class="er">(</span><span class="ex">v2</span><span class="kw">)</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.3</span> <span class="pp">?</span> 224.0.0.18   VRRP 54 Announcement <span class="er">(</span><span class="ex">v2</span><span class="kw">)</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="ping-test.">2.4. Ping test.</h2>
+<p>Setup route.</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> sudo ip route add 192.168.200.0/24 dev docker0</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<p>From host, ping to the virtual IP when node1 is master.</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> sudo arping <span class="at">-C</span> 1 <span class="at">-i</span> docker0 192.168.200.11</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ARPING</span> 192.168.200.11</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="ex">42</span> bytes from 02:42:ac:11:00:02 <span class="er">(</span><span class="ex">192.168.200.11</span><span class="kw">)</span><span class="bu">:</span> index=0 time=9.639 usec</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="ex">---</span> 192.168.200.11 statistics <span class="at">---</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span> packets transmitted, 1 packets received,   0% unanswered <span class="er">(</span><span class="ex">0</span> extra<span class="kw">)</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="ex">rtt</span> min/avg/max/std-dev = 0.010/0.010/0.010/0.000 ms</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>02:42:ac:11:00:02 is MAC of node1.</li>
+</ul>
+<p>From host, ping to the virtual IP when node2 is master.</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> sudo arping <span class="at">-C</span> 1 <span class="at">-i</span> docker0 192.168.200.11</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ARPING</span> 192.168.200.11</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="ex">42</span> bytes from 02:42:ac:11:00:03 <span class="er">(</span><span class="ex">192.168.200.11</span><span class="kw">)</span><span class="bu">:</span> index=0 time=7.195 usec</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="ex">---</span> 192.168.200.11 statistics <span class="at">---</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span> packets transmitted, 1 packets received,   0% unanswered <span class="er">(</span><span class="ex">0</span> extra<span class="kw">)</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="ex">rtt</span> min/avg/max/std-dev = 0.007/0.007/0.007/0.000 ms</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>02:42:ac:11:00:03 is MAC of node2.</li>
+</ul>
 <h1 id="references">References</h1>
 <ul>
-<li>https://man7.org/linux/man-pages/man8/ip-link.8.html</li>
-<li>https://man7.org/linux/man-pages/man8/ip-netns.8.html</li>
-<li>https://man7.org/linux/man-pages/man4/veth.4.html</li>
+<li>https://www.keepalived.org</li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">

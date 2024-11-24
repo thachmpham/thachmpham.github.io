@@ -16,7 +16,9 @@ A Virtual IP address (VIP) is an IP address shared among multiple devices. If on
 - Failover test:
     - Shutdown node1.
     - Verify that the virtual IP is automatically reassigned to node2.
-
+- Ping test.
+    - From host to the virtual IP when node1 is master.
+    - From host to the virtual IP when node2 is master.
 
 ## 2.1. Build Docker Image.
 Create Dockerfile.
@@ -79,14 +81,14 @@ vrrp_instance VI_1 {
 Start syslog to monitor keepalived activity.
 ```sh
   
-$ service rsyslog start
+node1$ service rsyslog start
   
 ```
 
 Start keepalived.
 ```sh
   
-$ service keepalived start
+node1$ service keepalived start
   
 ```
 
@@ -111,7 +113,7 @@ node1 Keepalived_vrrp[82]: (VI_1) Entering MASTER STATE
 Check IP address.
 ```sh
   
-$ ip addr show eth0
+node1$ ip addr show eth0
 12: eth0@if13: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
     link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
     inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
@@ -158,14 +160,14 @@ vrrp_instance VI_1 {
 Start syslog to monitor keepalived activity.
 ```sh
   
-$ service rsyslog start
+node1$ service rsyslog start
   
 ```
 
 Start keepalived.
 ```sh
   
-$ service keepalived start
+node1$ service keepalived start
   
 ```
 
@@ -188,7 +190,7 @@ node2 Keepalived_vrrp[59]: (VI_1) Entering BACKUP STATE (init)
 Check IP address.
 ```sh
   
-$ ip addr show eth0
+node1$ ip addr show eth0
 14: eth0@if15: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
     link/ether 02:42:ac:11:00:03 brd ff:ff:ff:ff:ff:ff link-netnsid 0
     inet 172.17.0.3/16 brd 172.17.255.255 scope global eth0
@@ -198,7 +200,108 @@ $ ip addr show eth0
 - Currently, node2 in backup state. So, the address 192.168.200.11/24 still not exist.
 
 
+## 2.3. Fault Tolerance.
+Stop keepalived on node1.
+```sh
+  
+node1$ service keepalived stop
+  
+```
+
+Show IP addresses on node1.
+```sh
+  
+node1$ ip addr show eth0
+12: eth0@if13: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+  
+```
+- The address 192.168.200.11/24 is removed from eth0, because keepalived is stopped.
+
+Verify that the virtual IP is automatically reassigned to node2.
+```sh
+  
+node2$ ip addr show eth0
+14: eth0@if15: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 02:42:ac:11:00:03 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.17.0.3/16 brd 172.17.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet 192.168.200.11/24 scope global eth0
+       valid_lft forever preferred_lft forever
+
+```
+- After keepalived on node1 is stopped, the instance on node2 becomes master, so the address 192.168.200.11/24 is ressigned to node2.
+
+Capture packets.
+```sh
+
+# master node sends VRRP Announcement to backup nodes to inform that master is still alive
+# 224.0.0.18 is a multicast address for nodes in the VRRP group.
+# node1 -> multicast: VRRP Announcement
+172.17.0.2 ? 224.0.0.18   VRRP 54 Announcement (v2)
+172.17.0.2 ? 224.0.0.18   VRRP 54 Announcement (v2)
+172.17.0.2 ? 224.0.0.18   VRRP 54 Announcement (v2)
+
+# master node sends IGMPv3 Membership Report / Leave group to backup nodes to inform that master leaves
+# node1 -> multicast: IGMP Membership Report / Leave group
+172.17.0.2 ? 224.0.0.22   IGMPv3 54 Membership Report / Leave group 224.0.0.18
+172.17.0.2 ? 224.0.0.22   IGMPv3 54 Membership Report / Leave group 224.0.0.18
+
+# node2 informs that the virtual IP is assigned to it
+# node2 become master
+# node2 -> multicast: ARP Gratuitous
+02:42:ac:11:00:03 ? Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 (Request)
+02:42:ac:11:00:03 ? Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 (Request)
+02:42:ac:11:00:03 ? Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 (Request)
+02:42:ac:11:00:03 ? Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 (Request)
+02:42:ac:11:00:03 ? Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 (Request)
+
+# # node2 -> multicast: VRRP Announcement
+172.17.0.3 ? 224.0.0.18   VRRP 54 Announcement (v2)
+172.17.0.3 ? 224.0.0.18   VRRP 54 Announcement (v2)
+172.17.0.3 ? 224.0.0.18   VRRP 54 Announcement (v2)
+  
+```
+
+
+## 2.4. Ping test.
+Setup route.
+```sh
+  
+host$ sudo ip route add 192.168.200.0/24 dev docker0
+  
+```
+
+From host, ping to the virtual IP when node1 is master.
+```sh
+  
+host$ sudo arping -C 1 -i docker0 192.168.200.11
+ARPING 192.168.200.11
+42 bytes from 02:42:ac:11:00:02 (192.168.200.11): index=0 time=9.639 usec
+
+--- 192.168.200.11 statistics ---
+1 packets transmitted, 1 packets received,   0% unanswered (0 extra)
+rtt min/avg/max/std-dev = 0.010/0.010/0.010/0.000 ms
+  
+```
+- 02:42:ac:11:00:02 is MAC of node1.
+
+From host, ping to the virtual IP when node2 is master.
+```sh
+  
+host$ sudo arping -C 1 -i docker0 192.168.200.11
+ARPING 192.168.200.11
+42 bytes from 02:42:ac:11:00:03 (192.168.200.11): index=0 time=7.195 usec
+
+--- 192.168.200.11 statistics ---
+1 packets transmitted, 1 packets received,   0% unanswered (0 extra)
+rtt min/avg/max/std-dev = 0.007/0.007/0.007/0.000 ms
+  
+```
+- 02:42:ac:11:00:03 is MAC of node2.
+
+
 # References
-- https://man7.org/linux/man-pages/man8/ip-link.8.html
-- https://man7.org/linux/man-pages/man8/ip-netns.8.html
-- https://man7.org/linux/man-pages/man4/veth.4.html
+- https://www.keepalived.org
