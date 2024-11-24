@@ -230,7 +230,7 @@ node2$ ip addr show eth0
        valid_lft forever preferred_lft forever
     inet 192.168.200.11/24 scope global eth0
        valid_lft forever preferred_lft forever
-
+  
 ```
 - After keepalived on node1 is stopped, the instance on node2 becomes master, so the address 192.168.200.11/24 is ressigned to node2.
 
