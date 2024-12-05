@@ -247,8 +247,7 @@
 <p>A Virtual IP address (VIP) is an IP address shared among multiple
 devices. If one device fails, another takes over, ensuring the address
 remains active.</p>
-<h1 id="setup-virtual-ip-with-keepalived.">2. Setup Virtual IP with
-Keepalived.</h1>
+<h1 id="virtual-ip-with-keepalived">2. Virtual IP with Keepalived</h1>
 <p><strong>Agenda</strong></p>
 <ul>
 <li>Build a Docker image for Keepalived.</li>
@@ -258,7 +257,7 @@ Keepalived.</h1>
 <li>After configuration, the virtual IP will be active on node1. If
 node1 stops, the virtual IP will automatically switch to node2.</li>
 </ul>
-<h2 id="build-docker-image.">2.1. Build Docker Image.</h2>
+<h2 id="build-docker-image">2.1. Build Docker Image</h2>
 <p>Create Dockerfile.</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -278,7 +277,7 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb1-
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker build <span class="at">--progress</span><span class="op">=</span>plain <span class="at">-t</span> keepalived .</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="setup-virtual-ip-on-node1.">2.2. Setup Virtual IP on Node1.</h2>
+<h2 id="setup-node1">2.2. Setup Node1</h2>
 <p>Create container node1.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker run <span class="at">--privileged</span> <span class="at">-d</span> <span class="at">--name</span> node1 <span class="at">--hostname</span> node1 keepalived</span>
@@ -316,7 +315,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">inet</span> 192.168.200.11/24 scope global eth0</span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>       <span class="ex">valid_lft</span> forever preferred_lft forever</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="setup-virtual-ip-on-node2.">2.3. Setup Virtual IP on Node2.</h2>
+<h2 id="setup-node2">2.3. Setup Node2</h2>
 <p>Create container node2.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker run <span class="at">--privileged</span> <span class="at">-d</span> <span class="at">--name</span> node2 <span class="at">--hostname</span> node2 keepalived</span>
@@ -355,7 +354,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">inet</span> 172.17.0.3/16 brd 172.17.255.255 scope global eth0</span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>       <span class="ex">valid_lft</span> forever preferred_lft forever</span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="fault-tolerance.">2.3. Fault Tolerance.</h2>
+<h2 id="fault-tolerance">2.3. Fault Tolerance</h2>
 <p>Stop keepalived on node1.</p>
 <div class="sourceCode" id="cb13"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -412,7 +411,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#
 <span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.3</span> <span class="pp">?</span> 224.0.0.18   VRRP 54 Announcement <span class="er">(</span><span class="ex">v2</span><span class="kw">)</span></span>
 <span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.3</span> <span class="pp">?</span> 224.0.0.18   VRRP 54 Announcement <span class="er">(</span><span class="ex">v2</span><span class="kw">)</span></span>
 <span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="ping-test.">2.4. Ping test.</h2>
+<h2 id="ping">2.4. Ping</h2>
 <p>Setup route.</p>
 <div class="sourceCode" id="cb17"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -434,8 +433,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ARPING</span> 192.168.200.11</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">42</span> bytes from 02:42:ac:11:00:03 <span class="er">(</span><span class="ex">192.168.200.11</span><span class="kw">)</span><span class="bu">:</span> index=0 time=7.195 usec</span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="troubleshooting.">3. Troubleshooting.</h1>
-<p>Syslog.</p>
+<h1 id="troubleshooting">3. Troubleshooting</h1>
+<p>Enable syslog and monitor the log of Keepalived.</p>
 <div class="sourceCode" id="cb20"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> service rsyslog start</span>

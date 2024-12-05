@@ -6,7 +6,7 @@ title:  'Virtual IP Address'
 A Virtual IP address (VIP) is an IP address shared among multiple devices. If one device fails, another takes over, ensuring the address remains active.
 
 
-# 2. Setup Virtual IP with Keepalived.
+# 2. Virtual IP with Keepalived
 **Agenda**
 
 - Build a Docker image for Keepalived.
@@ -15,7 +15,7 @@ A Virtual IP address (VIP) is an IP address shared among multiple devices. If on
 - Configure the same virtual IP on node2 to act as the backup.
 - After configuration, the virtual IP will be active on node1. If node1 stops, the virtual IP will automatically switch to node2.
 
-## 2.1. Build Docker Image.
+## 2.1. Build Docker Image
 Create Dockerfile.
 ```Dockerfile
   
@@ -41,7 +41,7 @@ $ docker build --progress=plain -t keepalived .
 ```
 
 
-## 2.2. Setup Virtual IP on Node1.
+## 2.2. Setup Node1
 Create container node1.
 ```sh
   
@@ -94,7 +94,7 @@ node1$ ip addr show eth0
 ```
 
 
-## 2.3. Setup Virtual IP on Node2.
+## 2.3. Setup Node2
 Create container node2.
 ```sh
   
@@ -145,7 +145,7 @@ node1$ ip addr show eth0
 ```
 
 
-## 2.3. Fault Tolerance.
+## 2.3. Fault Tolerance
 Stop keepalived on node1.
 ```sh
   
@@ -212,7 +212,7 @@ node1$ tshark -i eth0
 ```
 
 
-## 2.4. Ping test.
+## 2.4. Ping
 Setup route.
 ```sh
   
@@ -240,8 +240,8 @@ ARPING 192.168.200.11
 ``` 
 
 
-# 3. Troubleshooting.
-Syslog.
+# 3. Troubleshooting
+Enable syslog and monitor the log of Keepalived.
 ```sh
   
 $ service rsyslog start
