@@ -80,7 +80,7 @@ node1$ service keepalived start
   
 ```
 
-The virtual IP 192.168.200.11/24 will be added to interface eth0.
+The virtual IP 192.168.200.11 will be assigned to node1.
 ```sh
   
 node1$ ip addr show eth0
@@ -133,7 +133,7 @@ node1$ service keepalived start
   
 ```
 
-Currently, node2 in backup state. So, the virtual IP 192.168.200.11/24 still not exist.
+Currently, node2 in backup state. So, the virtual IP still not exist.
 ```sh
   
 node1$ ip addr show eth0
@@ -153,7 +153,7 @@ node1$ service keepalived stop
   
 ```
 
-On node1, the virtual IP 192.168.200.11/24 is removed from eth0.
+The virtual IP is removed from node1.
 ```sh
   
 node1$ ip addr show eth0
@@ -165,7 +165,7 @@ node1$ ip addr show eth0
 ```
 
 
-After stop keepalived on node1, the instance on node2 becomes master, so the virtual IP 192.168.200.11/24 is ressigned to node2.
+After stop keepalived on node1, the instance on node2 becomes master, so the virtual IP is ressigned to node2.
 ```sh
   
 node2$ ip addr show eth0
@@ -179,8 +179,9 @@ node2$ ip addr show eth0
 ```
 
 
-Capture packets.
+Analyze pcap packets.
 ```sh
+node1$ tshark -i eth0
 
 # master node sends VRRP Announcement to backup nodes to inform that master is still alive
 # 224.0.0.18 is a multicast address for nodes in the VRRP group.
@@ -219,7 +220,7 @@ host$ sudo ip route add 192.168.200.0/24 dev docker0
   
 ```
 
-From host, ping to the virtual IP when node1 is master, we will receive MAC address of node1.
+Ping to the virtual IP when node1 is master, we receive MAC address of node1.
 ```sh
   
 host$ sudo arping -C 1 -i docker0 192.168.200.11
@@ -229,7 +230,7 @@ ARPING 192.168.200.11
 ```
 
 
-From host, ping to the virtual IP when node2 is master, we will receive MAC address of node2.
+Ping to the virtual IP when node2 is master, we receive MAC address of node2.
 ```sh
   
 host$ sudo arping -C 1 -i docker0 192.168.200.11
@@ -239,10 +240,8 @@ ARPING 192.168.200.11
 ``` 
 
 
-
-# Troubleshooting
-## Log
-- Keepalived prints log using syslog.
+# 3. Troubleshooting.
+Syslog.
 ```sh
   
 $ service rsyslog start
