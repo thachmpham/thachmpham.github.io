@@ -15,6 +15,7 @@ A Virtual IP address (VIP) is an IP address shared among multiple devices. If on
 - Configure the same virtual IP on node2 to act as the backup.
 - After configuration, the virtual IP will be active on node1. If node1 stops, the virtual IP will automatically switch to node2.
 
+
 ## 2.1. Build Docker Image
 Create Dockerfile.
 ```Dockerfile
@@ -84,12 +85,7 @@ The virtual IP 192.168.200.11 will be assigned to node1.
 ```sh
   
 node1$ ip addr show eth0
-12: eth0@if13: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
-    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
-    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
-       valid_lft forever preferred_lft forever
-    inet 192.168.200.11/24 scope global eth0
-       valid_lft forever preferred_lft forever
+eth0    UP      172.17.0.2/16   192.168.200.11/24
   
 ```
 
@@ -137,12 +133,28 @@ Currently, node2 in backup state. So, the virtual IP still not exist.
 ```sh
   
 node1$ ip addr show eth0
-14: eth0@if15: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
-    link/ether 02:42:ac:11:00:03 brd ff:ff:ff:ff:ff:ff link-netnsid 0
-    inet 172.17.0.3/16 brd 172.17.255.255 scope global eth0
-       valid_lft forever preferred_lft forever
+eth0    UP      172.17.0.3/16
   
 ```
+
+<pre class="mermaid">
+flowchart LR
+    if1[eth0]
+    if2[eth0]
+
+    subgraph node1
+        if1 <--> 172.17.0.2
+        if1 <--> 192.168.200.11
+    end 
+
+    subgraph node2
+        if2 <--> 172.17.0.3
+    end
+
+    docker0 <---> ARPING 192.168.200.11if1
+    docker0 <---> if2
+
+</pre>
 
 
 ## 2.3. Fault Tolerance
@@ -156,11 +168,8 @@ node1$ service keepalived stop
 The virtual IP is removed from node1.
 ```sh
   
-node1$ ip addr show eth0
-12: eth0@if13: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
-    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
-    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
-       valid_lft forever preferred_lft forever
+node1$ ip -brief addr show eth0
+eth0    UP      172.17.0.2/16
   
 ```
 
@@ -168,45 +177,50 @@ node1$ ip addr show eth0
 After stop keepalived on node1, the instance on node2 becomes master, so the virtual IP is ressigned to node2.
 ```sh
   
-node2$ ip addr show eth0
-14: eth0@if15: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
-    link/ether 02:42:ac:11:00:03 brd ff:ff:ff:ff:ff:ff link-netnsid 0
-    inet 172.17.0.3/16 brd 172.17.255.255 scope global eth0
-       valid_lft forever preferred_lft forever
-    inet 192.168.200.11/24 scope global eth0
-       valid_lft forever preferred_lft forever
+node2$ ip -brief addr show eth0
+eth0    UP      172.17.0.3/16   192.168.200.11/24
   
 ```
 
+<pre class="mermaid">
+flowchart LR
+    if1[eth0]
+    if2[eth0]
+
+    subgraph node1
+        if1 <--> 172.17.0.2
+    end
+
+    subgraph node2
+        if2 <--> 172.17.0.3
+        if2 <--> 192.168.200.11
+    end 
+
+    docker0 <---> if1
+    docker0 <---> if2
+
+</pre>
 
 Analyze pcap packets.
 ```sh
+  
 node1$ tshark -i eth0
 
 # master node sends VRRP Announcement to backup nodes to inform that master is still alive
 # 224.0.0.18 is a multicast address for nodes in the VRRP group.
 # node1 -> multicast: VRRP Announcement
 172.17.0.2 ? 224.0.0.18   VRRP 54 Announcement (v2)
-172.17.0.2 ? 224.0.0.18   VRRP 54 Announcement (v2)
-172.17.0.2 ? 224.0.0.18   VRRP 54 Announcement (v2)
 
 # master node sends IGMPv3 Membership Report / Leave group to backup nodes to inform that master leaves
 # node1 -> multicast: IGMP Membership Report / Leave group
-172.17.0.2 ? 224.0.0.22   IGMPv3 54 Membership Report / Leave group 224.0.0.18
 172.17.0.2 ? 224.0.0.22   IGMPv3 54 Membership Report / Leave group 224.0.0.18
 
 # node2 informs that the virtual IP is assigned to it
 # node2 become master
 # node2 -> multicast: ARP Gratuitous
 02:42:ac:11:00:03 ? Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 (Request)
-02:42:ac:11:00:03 ? Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 (Request)
-02:42:ac:11:00:03 ? Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 (Request)
-02:42:ac:11:00:03 ? Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 (Request)
-02:42:ac:11:00:03 ? Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 (Request)
 
 # # node2 -> multicast: VRRP Announcement
-172.17.0.3 ? 224.0.0.18   VRRP 54 Announcement (v2)
-172.17.0.3 ? 224.0.0.18   VRRP 54 Announcement (v2)
 172.17.0.3 ? 224.0.0.18   VRRP 54 Announcement (v2)
   
 ```
@@ -224,17 +238,14 @@ Ping to the virtual IP when node1 is master, we receive MAC address of node1.
 ```sh
   
 host$ sudo arping -C 1 -i docker0 192.168.200.11
-ARPING 192.168.200.11
 42 bytes from 02:42:ac:11:00:02 (192.168.200.11): index=0 time=9.639 usec
   
 ```
-
 
 Ping to the virtual IP when node2 is master, we receive MAC address of node2.
 ```sh
   
 host$ sudo arping -C 1 -i docker0 192.168.200.11
-ARPING 192.168.200.11
 42 bytes from 02:42:ac:11:00:03 (192.168.200.11): index=0 time=7.195 usec
   
 ``` 
