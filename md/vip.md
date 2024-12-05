@@ -9,16 +9,11 @@ A Virtual IP address (VIP) is an IP address shared among multiple devices. If on
 # 2. Setup Virtual IP with Keepalived.
 **Agenda**
 
-- Build a Docker image with Keepalived installed.
-- Create two containers: node1, node2.
-- Configure virtual IP on node1 as master.
-- Configure virtual IP on node2 as backup.
-- Failover test:
-    - Shutdown node1.
-    - Verify that the virtual IP is automatically reassigned to node2.
-- Ping test.
-    - From host to the virtual IP when node1 is master.
-    - From host to the virtual IP when node2 is master.
+- Build a Docker image for Keepalived.
+- Create two containers named node1 and node2.
+- Configure a virtual IP on node1 to act as the master.
+- Configure the same virtual IP on node2 to act as the backup.
+- After configuration, the virtual IP will be active on node1. If node1 stops, the virtual IP will automatically switch to node2.
 
 ## 2.1. Build Docker Image.
 Create Dockerfile.
@@ -78,13 +73,6 @@ vrrp_instance VI_1 {
   
 ```
 
-Start syslog to monitor keepalived activity.
-```sh
-  
-node1$ service rsyslog start
-  
-```
-
 Start keepalived.
 ```sh
   
@@ -92,25 +80,7 @@ node1$ service keepalived start
   
 ```
 
-Check /var/log/syslog
-```sh
-  
-node1 Keepalived[80]: Starting Keepalived v2.0.19 (10/19,2019)
-node1 Keepalived[80]: Running on Linux 6.8.0-47-generic #47-Ubuntu SMP PREEMPT_DYNAMIC Fri Sep 27 21:40:26 UTC 2024 (built for Linux 5.4.166)
-node1 Keepalived[80]: Command line: '/usr/sbin/keepalived'
-node1 Keepalived[80]: Opening file '/etc/keepalived/keepalived.conf'.
-node1 Keepalived[81]: Starting VRRP child process, pid=82
-node1 Keepalived_vrrp[82]: Registering Kernel netlink reflector
-node1 Keepalived_vrrp[82]: Registering Kernel netlink command channel
-node1 Keepalived_vrrp[82]: Opening file '/etc/keepalived/keepalived.conf'.
-node1 Keepalived_vrrp[82]: (VI_1) Warning - nopreempt will not work with initial state MASTER - clearing
-node1 Keepalived_vrrp[82]: Registering gratuitous ARP shared channel
-node1 Keepalived_vrrp[82]: (VI_1) Entering BACKUP STATE (init)
-node1 Keepalived_vrrp[82]: (VI_1) Entering MASTER STATE
-  
-```
-
-Check IP address.
+The virtual IP 192.168.200.11/24 will be added to interface eth0.
 ```sh
   
 node1$ ip addr show eth0
@@ -122,7 +92,6 @@ node1$ ip addr show eth0
        valid_lft forever preferred_lft forever
   
 ```
-- The address 192.168.200.11/24 is added to interface eth0.
 
 
 ## 2.3. Setup Virtual IP on Node2.
@@ -157,13 +126,6 @@ vrrp_instance VI_1 {
   
 ```
 
-Start syslog to monitor keepalived activity.
-```sh
-  
-node1$ service rsyslog start
-  
-```
-
 Start keepalived.
 ```sh
   
@@ -171,23 +133,7 @@ node1$ service keepalived start
   
 ```
 
-Check /var/log/syslog
-```sh
-  
-node2 Keepalived[57]: Starting Keepalived v2.0.19 (10/19,2019)
-node2 Keepalived[57]: Running on Linux 6.8.0-47-generic #47-Ubuntu SMP PREEMPT_DYNAMIC Fri Sep 27 21:40:26 UTC 2024 (built for Linux 5.4.166)
-node2 Keepalived[57]: Command line: '/usr/sbin/keepalived'
-node2 Keepalived[57]: Opening file '/etc/keepalived/keepalived.conf'.
-node2 Keepalived[58]: Starting VRRP child process, pid=59
-node2 Keepalived_vrrp[59]: Registering Kernel netlink reflector
-node2 Keepalived_vrrp[59]: Registering Kernel netlink command channel
-node2 Keepalived_vrrp[59]: Opening file '/etc/keepalived/keepalived.conf'.
-node2 Keepalived_vrrp[59]: Registering gratuitous ARP shared channel
-node2 Keepalived_vrrp[59]: (VI_1) Entering BACKUP STATE (init)
-  
-```
-
-Check IP address.
+Currently, node2 in backup state. So, the virtual IP 192.168.200.11/24 still not exist.
 ```sh
   
 node1$ ip addr show eth0
@@ -197,7 +143,6 @@ node1$ ip addr show eth0
        valid_lft forever preferred_lft forever
   
 ```
-- Currently, node2 in backup state. So, the address 192.168.200.11/24 still not exist.
 
 
 ## 2.3. Fault Tolerance.
@@ -208,7 +153,7 @@ node1$ service keepalived stop
   
 ```
 
-Show IP addresses on node1.
+On node1, the virtual IP 192.168.200.11/24 is removed from eth0.
 ```sh
   
 node1$ ip addr show eth0
@@ -218,9 +163,9 @@ node1$ ip addr show eth0
        valid_lft forever preferred_lft forever
   
 ```
-- The address 192.168.200.11/24 is removed from eth0, because keepalived is stopped.
 
-Verify that the virtual IP is automatically reassigned to node2.
+
+After stop keepalived on node1, the instance on node2 becomes master, so the virtual IP 192.168.200.11/24 is ressigned to node2.
 ```sh
   
 node2$ ip addr show eth0
@@ -232,7 +177,7 @@ node2$ ip addr show eth0
        valid_lft forever preferred_lft forever
   
 ```
-- After keepalived on node1 is stopped, the instance on node2 becomes master, so the address 192.168.200.11/24 is ressigned to node2.
+
 
 Capture packets.
 ```sh
@@ -274,33 +219,36 @@ host$ sudo ip route add 192.168.200.0/24 dev docker0
   
 ```
 
-From host, ping to the virtual IP when node1 is master.
+From host, ping to the virtual IP when node1 is master, we will receive MAC address of node1.
 ```sh
   
 host$ sudo arping -C 1 -i docker0 192.168.200.11
 ARPING 192.168.200.11
 42 bytes from 02:42:ac:11:00:02 (192.168.200.11): index=0 time=9.639 usec
-
---- 192.168.200.11 statistics ---
-1 packets transmitted, 1 packets received,   0% unanswered (0 extra)
-rtt min/avg/max/std-dev = 0.010/0.010/0.010/0.000 ms
   
 ```
-- 02:42:ac:11:00:02 is MAC of node1.
 
-From host, ping to the virtual IP when node2 is master.
+
+From host, ping to the virtual IP when node2 is master, we will receive MAC address of node2.
 ```sh
   
 host$ sudo arping -C 1 -i docker0 192.168.200.11
 ARPING 192.168.200.11
 42 bytes from 02:42:ac:11:00:03 (192.168.200.11): index=0 time=7.195 usec
+  
+``` 
 
---- 192.168.200.11 statistics ---
-1 packets transmitted, 1 packets received,   0% unanswered (0 extra)
-rtt min/avg/max/std-dev = 0.007/0.007/0.007/0.000 ms
+
+
+# Troubleshooting
+## Log
+- Keepalived prints log using syslog.
+```sh
+  
+$ service rsyslog start
+$ tail -f /var/log/syslog
   
 ```
-- 02:42:ac:11:00:03 is MAC of node2.
 
 
 # References
