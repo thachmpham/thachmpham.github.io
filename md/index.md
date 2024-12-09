@@ -28,6 +28,7 @@ subtitle: "A Practical Blog for Developers<br/>*Computer Networking - Distribute
 - [SMF &nbsp;&nbsp; - &nbsp; Software Management Framework](html/opensaf-smf.html)
 - [LOG &nbsp;&nbsp; - &nbsp; Log Service](html/opensaf-log.html)
 - [AMF &nbsp;&nbsp; - &nbsp; Convert a Linux Program to High Availability](html/opensaf-amf-non-sa-aware.html)
+- [AMF &nbsp;&nbsp; - &nbsp; Build High Availability App with AMF API](html/opensaf-amf-sa-aware.html)
 
 ## About
 - [Author](html/about.html)
