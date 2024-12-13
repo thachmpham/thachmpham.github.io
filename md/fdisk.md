@@ -64,7 +64,7 @@ sda9    5G      part    /mnt/test
 ```
 
 
-### 2.3. Resize Partition
+### 2.2. Resize Partition
 Resize partition /dev/sda9 from 5G to 10G.
 
 - Unmount.
@@ -113,6 +113,39 @@ NAME    SIZE    TYPE    MOUNTPOINTS
 sda9    10G      part    /mnt/test
   
 ```
+
+
+## 3. Mount
+### 3.1 Mount permanently
+Mount partition /dev/sda9 to directory /mnt/test permanently.
+
+- Get filesystem of partition.
+```sh
+  
+$ lsblk -f
+NAME    FSTYPE
+sda9    ext4
+  
+```
+
+- Edit /etc/fstab.
+```sh
+  
+/dev/sda9   /mnt/test   ext4    defaults    0   0
+  
+```
+
+- Mount
+```sh
+  
+$ mount -a
+
+$ lsblk -l
+NAME    SIZE    MOUNTPOINTS
+sda9    10G     /mnt/test
+  
+```
+
 
 # References
 - https://man7.org/linux/man-pages/man8/fdisk.8.html
