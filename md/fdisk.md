@@ -115,7 +115,7 @@ sda9    10G      part    /mnt/test
 ```
 
 
-## 3. Mount
+## 3. mount
 ### 3.1 Mount permanently
 Mount partition /dev/sda9 to directory /mnt/test permanently.
 
