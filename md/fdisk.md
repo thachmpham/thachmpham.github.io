@@ -3,7 +3,7 @@ title:  'Disk Manipulation'
 ---
 
 
-# 1. lsblk
+## 1. lsblk
 - Find unpartitioned disk space.
 ```sh
   
@@ -27,7 +27,9 @@ sda8    20G     part    /home
 
 ## 2. fdisk
 ### 2.1. Create Partition
-- Create a new partition of with a size of 5G.
+Create a 5G partition on /dev/sda9.
+
+- Create partition.
 ```sh
   
 $ fdisk /dev/sda
@@ -61,6 +63,56 @@ sda9    5G      part    /mnt/test
     
 ```
 
+
+### 2.3. Resize Partition
+Resize partition /dev/sda9 from 5G to 10G.
+
+- Unmount.
+```sh
+  
+$ umount /mnt/test
+  
+```
+
+- Delete partition /dev/sda9.
+```sh
+   
+$ fdisk /dev/sda
+> Command:              d
+> Partition number:     9
+> Command:              w
+
+```
+
+- Re-create partition /dev/sda9.
+```sh
+  
+$ fdisk /dev/sda
+> Command:              n
+> First sector:         default
+> Last sector:          +10G
+> Command:              w
+  
+```
+
+- Resize filesystem.
+```sh
+  
+$ e2fsck -f /dev/sda9
+$ resize2fs /dev/sda9 10G
+  
+```
+
+- Mount.
+```sh
+  
+$ mount /dev/sda9 /mnt/test
+
+$ lsblk -l
+NAME    SIZE    TYPE    MOUNTPOINTS
+sda9    10G      part    /mnt/test
+  
+```
 
 # References
 - https://man7.org/linux/man-pages/man8/fdisk.8.html

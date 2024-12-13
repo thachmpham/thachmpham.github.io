@@ -243,7 +243,7 @@
 <header id="title-block-header">
 <h1 class="title">Disk Manipulation</h1>
 </header>
-<h1 id="lsblk">1. lsblk</h1>
+<h2 id="lsblk">1. lsblk</h2>
 <ul>
 <li>Find unpartitioned disk space.</li>
 </ul>
@@ -265,8 +265,9 @@
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h2 id="fdisk">2. fdisk</h2>
 <h3 id="create-partition">2.1. Create Partition</h3>
+<p>Create a 5G partition on /dev/sda9.</p>
 <ul>
-<li>Create a new partition of with a size of 5G.</li>
+<li>Create partition.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> fdisk /dev/sda</span>
@@ -296,6 +297,49 @@
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>    SIZE    TYPE    MOUNTPOINTS</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">sda9</span>    5G      part    /mnt/test</span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div>
+<h3 id="resize-partition">2.3. Resize Partition</h3>
+<p>Resize partition /dev/sda9 from 5G to 10G.</p>
+<ul>
+<li>Unmount.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> umount /mnt/test</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Delete partition /dev/sda9.</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> fdisk /dev/sda</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> Command:              <span class="ex">d</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> Partition <span class="ex">number:</span>     9</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> Command:              <span class="fu">w</span></span></code></pre></div>
+<ul>
+<li>Re-create partition /dev/sda9.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> fdisk /dev/sda</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> Command:              <span class="ex">n</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> First <span class="ex">sector:</span>         default</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> Last <span class="ex">sector:</span>          +10G</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> Command:              <span class="fu">w</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Resize filesystem.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> e2fsck <span class="at">-f</span> /dev/sda9</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> resize2fs /dev/sda9 10G</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Mount.</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mount /dev/sda9 /mnt/test</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> lsblk <span class="at">-l</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>    SIZE    TYPE    MOUNTPOINTS</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">sda9</span>    10G      part    /mnt/test</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="references">References</h1>
 <ul>
 <li>https://man7.org/linux/man-pages/man8/fdisk.8.html</li>
