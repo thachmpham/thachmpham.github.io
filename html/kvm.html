@@ -243,7 +243,7 @@
 <header id="title-block-header">
 <h1 class="title">Kernel-based Virtual Machine</h1>
 </header>
-<h1 id="create-virtual-machines">1. Create Virtual Machines</h1>
+<h2 id="create-virtual-machines">1. Create Virtual Machines</h2>
 <ul>
 <li>Create Debian VM using net-installer and nographics.</li>
 </ul>
@@ -256,7 +256,26 @@
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--nographics</span> <span class="dt">\</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">--extra-args</span> <span class="st">&#39;console=ttyS0,1152000n8 serial&#39;</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="references">References</h1>
+<h2 id="snapshot">2. Snapshot</h2>
+<ul>
+<li>Create a snapshot.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> virsh snapshot-create-as node1 <span class="at">--name</span> snapshot1</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>List snapshots.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> virsh snapshot-list node1</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Delete a snapshot.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> virsh snapshot-delete node1 <span class="at">--snapshotname</span> snapshot1</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="references">References</h2>
 <ul>
 <li>https://linux.die.net/man/1/virt-install</li>
 <li>https://www.libvirt.org/manpages/virsh.html</li>

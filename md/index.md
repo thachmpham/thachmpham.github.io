@@ -10,7 +10,7 @@ subtitle: "A Practical Blog for Developers<br/>*Computer Networking - Distribute
 - [Virtual Bridge Interface](html/vbridge.html)
 - [Dummy Interface](html/vdummy-interface.html)
 - [Bond Interface](html/vbond-interface.html)
-- [Kernel-based Virtual Machine](html/kvm.html)
+
 
 ### Networking
 - [ARP &nbsp;&nbsp; - &nbsp; Address Resolution Protocol](html/arp.html)
@@ -29,6 +29,11 @@ subtitle: "A Practical Blog for Developers<br/>*Computer Networking - Distribute
 - [LOG &nbsp;&nbsp; - &nbsp; Log Service](html/opensaf-log.html)
 - [AMF &nbsp;&nbsp; - &nbsp; Convert a Linux Program to High Availability](html/opensaf-amf-non-sa-aware.html)
 - [AMF &nbsp;&nbsp; - &nbsp; Build High Availability App with AMF API](html/opensaf-amf-sa-aware.html)
+
+
+### Shortcut
+- [Kernel-based Virtual Machine](html/kvm.html)
+
 
 ## About
 - [Author](html/about.html)
