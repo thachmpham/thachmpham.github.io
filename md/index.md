@@ -33,6 +33,7 @@ subtitle: "A Practical Blog for Developers<br/>*Computer Networking - Distribute
 
 ### Shortcut
 - [Kernel-based Virtual Machine](html/kvm.html)
+- [FDISK](html/fdisk.html)
 
 
 ## About

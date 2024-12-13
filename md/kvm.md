@@ -2,7 +2,7 @@
 title:  'Kernel-based Virtual Machine'
 ---
 
-## 1. Create Virtual Machines
+## 1. Create VM
 - Create Debian VM using net-installer and nographics.
 ```sh
   
@@ -38,6 +38,13 @@ $ virsh snapshot-delete node1 --snapshotname snapshot1
   
 ```
 
+## 3. Inspect VM
+- Get IPs of a VM.
+```sh
+  
+$ virsh domifaddr node1
+  
+```
 
 ## References
 - https://linux.die.net/man/1/virt-install

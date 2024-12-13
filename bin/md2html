@@ -18,6 +18,13 @@ pandoc -f markdown -t html \
     -s --highlight-style breezeDark \
     --include-in-header ${workspace}/bin/header.html \
     --include-after-body ${workspace}/bin/footer.html \
+    -o ${workspace}/html/fdisk.html \
+    ${workspace}/md/fdisk.md
+
+pandoc -f markdown -t html \
+    -s --highlight-style breezeDark \
+    --include-in-header ${workspace}/bin/header.html \
+    --include-after-body ${workspace}/bin/footer.html \
     -o ${workspace}/html/kvm.html \
     ${workspace}/md/kvm.md
 
