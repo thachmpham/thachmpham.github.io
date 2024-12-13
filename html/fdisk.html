@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>FDISK</title>
+  <title>Disk Manipulation</title>
   <style>
     html {
       color: #1a1a1a;
@@ -241,9 +241,9 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">FDISK</h1>
+<h1 class="title">Disk Manipulation</h1>
 </header>
-<h2 id="create-partition">1. Create Partition</h2>
+<h1 id="lsblk">1. lsblk</h1>
 <ul>
 <li>Find unpartitioned disk space.</li>
 </ul>
@@ -261,8 +261,10 @@
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># free  = sda - sda1 - sda2 - sda3 - sda5 - sda6 - sda7 - sda8</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#       = 50  - 9.6                - 3.5  - 0.97 - 0.68 - 20</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="ex">=</span> 15.25 <span class="er">(</span><span class="ex">G</span><span class="kw">)</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">#       = 15.25 (G)</span></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="fdisk">2. fdisk</h2>
+<h3 id="create-partition">2.1. Create Partition</h3>
 <ul>
 <li>Create a new partition of with a size of 5G.</li>
 </ul>
@@ -272,7 +274,11 @@
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> First <span class="ex">sector:</span>     default</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> Last <span class="ex">sector:</span>      +5G</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> Command:          <span class="fu">w</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> lsblk <span class="at">-l</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>    SIZE    TYPE    MOUNTPOINTS</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">sda9</span>    5G      part</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
 <li>Make filesystem.</li>
 </ul>
@@ -285,23 +291,17 @@
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mkdir /mnt/test</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mount /dev/sda9 /mnt/test</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> lsblk <span class="at">-l</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>    SIZE    TYPE    MOUNTPOINTS</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">sda9</span>    5G      part    /mnt/test</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div>
+<h1 id="references">References</h1>
 <ul>
-<li>Check result.</li>
+<li>https://man7.org/linux/man-pages/man8/fdisk.8.html</li>
+<li>https://man7.org/linux/man-pages/man8/mkfs.8.html</li>
+<li>https://man7.org/linux/man-pages/man8/lsblk.8.html</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> lsblk <span class="at">-l</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>    SIZE    TYPE    MOUNTPOINTS</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">sda</span>     50G     disk    </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">sda1</span>    9.6G    part    /</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">sda2</span>    1K      part</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="ex">sda3</span>    1K      part</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">sda5</span>    3.5G    part    /var</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ex">sda6</span>    976M    part</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="ex">sda7</span>    685M    part    /tmp</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="ex">sda8</span>    20G     part    /home</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="ex">sda9</span>    5G      part    /mnt/test</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="../index.html">Home</a>
