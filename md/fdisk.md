@@ -64,7 +64,7 @@ sda9    5G      part    /mnt/test
 ```
 
 
-### 2.2. Resize Partition
+### 2.2. Expand Partition
 Resize partition /dev/sda9 from 5G to 10G.
 
 - Unmount.
@@ -111,6 +111,64 @@ $ mount /dev/sda9 /mnt/test
 $ lsblk -l
 NAME    SIZE    TYPE    MOUNTPOINTS
 sda9    10G      part    /mnt/test
+  
+```
+
+
+### 2.2. Shrink Partition
+Resize partition /dev/sda9 from 10G to 5G.
+
+- Unmount.
+```sh
+  
+$ umount /mnt/test
+  
+```
+
+- Resize filesystem.
+```sh
+  
+$ e2fsck -f /dev/sda9
+$ resize2fs /dev/sda9 5G
+  
+```
+
+- Delete partition /dev/sda9.
+```sh
+   
+$ fdisk /dev/sda
+> Command:              d
+> Partition number:     9
+> Command:              w
+  
+```
+
+- Re-create partition /dev/sda9.
+```sh
+  
+$ fdisk /dev/sda
+> Command:              n
+> First sector:         default
+> Last sector:          +5G
+> Command:              w
+  
+```
+
+- Check filesystem.
+```sh
+  
+$ e2fsck -f /dev/sda9
+  
+```
+
+- Mount.
+```sh
+  
+$ mount /dev/sda9 /mnt/test
+
+$ lsblk -l
+NAME    SIZE    TYPE    MOUNTPOINTS
+sda9    5G      part    /mnt/test
   
 ```
 
