@@ -17,8 +17,10 @@ subtitle: "A Practical Blog for Developers<br/>*Computer Networking - Distribute
 - [IP Routing &nbsp;&nbsp; - &nbsp; Pathfinding](html/ip-routing.html)
 - [DHCP &nbsp;&nbsp; - &nbsp; Dynamic Host Configuration Protocol](html/dhcp.html)
 - [PXE &nbsp;&nbsp; - &nbsp; Preboot eXecution Environment](html/pxe.html)
-- [VIP &nbsp;&nbsp; - &nbsp; Virtual IP Address](html/vip.html)
 
+### Distributed Systems
+- [VIP &nbsp;&nbsp; - &nbsp; Virtual IP Address](html/vip.html)
+- [DRBD &nbsp;&nbsp; - &nbsp; Distributed Replicated Block Device](html/drbd.html)
 
 ### OpenSAF
 - [Build & Install](html/opensaf-install.html)
