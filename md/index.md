@@ -1,5 +1,5 @@
 ---
-title:  'Distributed Systems in Practice'
+title:  'A Distributed Systems Blog'
 subtitle: "A Practical Blog for Developers<br/>*Computer Networking - Distributed Systems*"
 ---
 
