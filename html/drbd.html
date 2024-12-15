@@ -243,12 +243,12 @@
 <header id="title-block-header">
 <h1 class="title">Distributed Replicated Block Device</h1>
 </header>
-<h2 id="introduction">1. Introduction</h2>
+<h1 id="introduction">1. Introduction</h1>
 <p>Distributed Replicated Block Device (DRBD) is a tool for data
 replication at the block level between servers.</p>
-<h2 id="setup-drbd">2. Setup DRBD</h2>
-<p>Set up DRBD to replicate partition /dev/sda9 between two hosts node1
-and node2.</p>
+<h1 id="setup">2. Setup</h1>
+<p>Set up DRBD to replicate partition /dev/sda9 between two hosts node 1
+and node 2.</p>
 <pre class="mermaid">
 flowchart LR
     node1_drbd0["/dev/drbd0"]
@@ -268,22 +268,17 @@ flowchart LR
 
     node1_drbd0 <---> node2_drbd0
 </pre>
-<ul>
-<li>/dev/sda9 are the existing partitions in nodes.</li>
-<li>/dev/drbd0 are the abstract partitions which will be created by
-DRBD.</li>
-<li>/dev/drbd0 between two nodes are sync with each other.</li>
-</ul>
-<h3 id="install-drbd">2.1. Install DRBD</h3>
+<h2 id="install-drbd">2.1. Install DRBD</h2>
 <ul>
 <li>Install DRBD in two nodes.</li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> apt install drbd-utils  </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h3 id="configuration-file">2.2. Configuration File</h3>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> apt install drbd-utils  </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> apt install drbd-utils  </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="configuration-file">2.2. Configuration File</h2>
 <ul>
-<li>Edit files /etc/drbd.conf on node1 and node2 as below.</li>
+<li>Edit files /etc/drbd.conf on node 1 and node 2 as below.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -314,249 +309,239 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#c
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h3 id="create-meta-data">2.3. Create meta-data</h3>
 <ul>
-<li>Create meta-data on node1.</li>
+<li>/dev/sda9 is the existing partition.</li>
+<li>/dev/drbd0 will be created by drbd, no need to be pre-existing.</li>
+<li>Size of filesystem on /dev/sda9 should be smaller than size of
+partition /dev/sda9.
+<ul>
+<li>Use lsblk or fdisk to check size of partition /dev/sda9.<br />
+</li>
+<li>Use resize2fs to resize filesystem on /dev/sda9.</li>
+</ul></li>
+</ul>
+<h2 id="create-meta-data">2.3. Create Meta-data</h2>
+<ul>
+<li>Create meta-data on both node 1 and node 2.</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> drbdadm create-md r0</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Create meta-data on node2.</li>
-</ul>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> drbdadm create-md r0</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="start-drbd">2.4. Start DRBD</h2>
+<h3 id="start-drbd-on-node-1">2.4.1. Start DRBD on Node 1</h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> drbdadm create-md r0</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> systemctl start drbd</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h3 id="start-service">2.4. Start service</h3>
 <ul>
-<li>Start drbd service on node1.</li>
+<li>Check syslog.</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> systemctl start drbd</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> systemd:  Starting drbd.service</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> drbd:     [</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> drbd:         create res:     r0</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> drbd:         prepare disk:   r0</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:           block drbd0:    disk<span class="er">(</span> <span class="ex">Diskless</span>  <span class="at">-</span><span class="op">&gt;</span>  Attaching <span class="kw">)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:           block drbd0:    disk<span class="er">(</span> <span class="ex">Attaching</span> <span class="at">-</span><span class="op">&gt;</span>  Inconsistent <span class="kw">)</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> drbd:         adjust disk:    r0</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> drbd:         adjust net:     r0</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:           drbd r0:        conn<span class="er">(</span> <span class="ex">StandAlone</span>    <span class="at">-</span><span class="op">&gt;</span>  Unconnected <span class="kw">)</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> drbd:     ]</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:           drbd r0:        conn<span class="er">(</span> <span class="ex">Unconnected</span>   <span class="at">-</span><span class="op">&gt;</span>  WFConnection <span class="kw">)</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> systemd:  Finished drdb.service</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h3 id="start-drbd-on-node-2">2.4.2. Start DRBD on Node 2</h3>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># syslog</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> systemd:  Starting drbd.service</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> drbd:     [</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> drbd:         create res:     r0</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> drbd:         prepare disk:   r0</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:           block drbd0:    disk<span class="er">(</span> <span class="ex">Diskless</span>  <span class="at">-</span><span class="op">&gt;</span>  Attaching <span class="kw">)</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:           block drbd0:    disk<span class="er">(</span> <span class="ex">Attaching</span> <span class="at">-</span><span class="op">&gt;</span>  Inconsistent <span class="kw">)</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> drbd:         adjust disk:    r0</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> drbd:         adjust net:     r0</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:           drbd r0:        conn<span class="er">(</span> <span class="ex">StandAlone</span>    <span class="at">-</span><span class="op">&gt;</span>  Unconnected <span class="kw">)</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> drbd:     ]</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:           drbd r0:        conn<span class="er">(</span> <span class="ex">Unconnected</span>   <span class="at">-</span><span class="op">&gt;</span>  WFConnection <span class="kw">)</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> systemd:  Finished drdb.service</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> systemctl start drbd</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>Start drbd service on node2.</li>
+<li>Check syslog.</li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> systemctl start drbd</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># node2 starts service</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> systemd:  Starting drbd.service</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> drbd:     [</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> drbd:         create res:     r0</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> drbd:         prepare disk:   r0</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:           block drbd0:    disk<span class="er">(</span> <span class="ex">Diskless</span>  <span class="at">-</span><span class="op">&gt;</span>  Attaching <span class="kw">)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:           block drbd0:    disk<span class="er">(</span> <span class="ex">Attaching</span> <span class="at">-</span><span class="op">&gt;</span>  Inconsistent <span class="kw">)</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> drbd:         adjust disk:    r0</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> drbd:         adjust net:     r0</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:           drbd r0:        conn<span class="er">(</span> <span class="ex">StandAlone</span>    <span class="at">-</span><span class="op">&gt;</span>  Unconnected <span class="kw">)</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> drbd:     ]</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:           drbd r0:        conn<span class="er">(</span> <span class="ex">Unconnected</span>   <span class="at">-</span><span class="op">&gt;</span>  WFConnection <span class="kw">)</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># node2 handshakes node1</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   drbd r0:    Handshake sucessfull</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   drbd r0:    conn<span class="er">(</span> <span class="ex">WFConnection</span>  <span class="at">-</span><span class="op">&gt;</span>  WFReportParams <span class="kw">)</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block r0:   peer<span class="er">(</span> <span class="ex">Unknown</span> <span class="at">-</span><span class="op">&gt;</span> Secondary <span class="kw">)</span><span class="ex">,</span> conn<span class="er">(</span> <span class="ex">WFReportParams</span> <span class="at">-</span><span class="op">&gt;</span> Connected <span class="kw">)</span><span class="ex">,</span> pdsk<span class="er">(</span> <span class="ex">DUnknown</span> <span class="at">-</span><span class="op">&gt;</span> Inconsistent <span class="kw">)</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> systemds: Finish drbd.service</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co"># node1 handshakes node2</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   drbd r0:    Handshake sucessfull</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   drbd r0:    conn<span class="er">(</span> <span class="ex">WFConnection</span>  <span class="at">-</span><span class="op">&gt;</span>  WFReportParams <span class="kw">)</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   block r0:   peer<span class="er">(</span> <span class="ex">Unknown</span> <span class="at">-</span><span class="op">&gt;</span> Secondary <span class="kw">)</span><span class="ex">,</span> conn<span class="er">(</span> <span class="ex">WFReportParams</span> <span class="at">-</span><span class="op">&gt;</span> Connected <span class="kw">)</span><span class="ex">,</span> pdsk<span class="er">(</span> <span class="ex">DUnknown</span> <span class="at">-</span><span class="op">&gt;</span> Inconsistent <span class="kw">)</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> systemds: Finish drbd.service</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="promote-primary">2.5. Promote Primary</h2>
+<h3 id="promote-node1-to-primary">2.5.1. Promote Node1 to Primary</h3>
 <ul>
-<li>After drbd started, node2 connects to node1.</li>
+<li>Promote node 1 to be primary and overwrite the current state of node
+2.</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># syslog</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   start service</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> systemd:  Starting drbd.service</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> drbd:     [</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> drbd:         create res:     r0</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> drbd:         prepare disk:   r0</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:           block drbd0:    disk<span class="er">(</span> <span class="ex">Diskless</span>  <span class="at">-</span><span class="op">&gt;</span>  Attaching <span class="kw">)</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:           block drbd0:    disk<span class="er">(</span> <span class="ex">Attaching</span> <span class="at">-</span><span class="op">&gt;</span>  Inconsistent <span class="kw">)</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> drbd:         adjust disk:    r0</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> drbd:         adjust net:     r0</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:           drbd r0:        conn<span class="er">(</span> <span class="ex">StandAlone</span>    <span class="at">-</span><span class="op">&gt;</span>  Unconnected <span class="kw">)</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> drbd:     ]</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:           drbd r0:        conn<span class="er">(</span> <span class="ex">Unconnected</span>   <span class="at">-</span><span class="op">&gt;</span>  WFConnection <span class="kw">)</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   connect to node1</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   drbd r0:    Handshake sucessfull</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   drbd r0:    conn<span class="er">(</span> <span class="ex">WFConnection</span>  <span class="at">-</span><span class="op">&gt;</span>  WFReportParams <span class="kw">)</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block r0:   peer<span class="er">(</span> <span class="ex">Unknown</span> <span class="at">-</span><span class="op">&gt;</span> Secondary <span class="kw">)</span><span class="ex">,</span> conn<span class="er">(</span> <span class="ex">WFReportParams</span> <span class="at">-</span><span class="op">&gt;</span> Connected <span class="kw">)</span><span class="ex">,</span> pdsk<span class="er">(</span> <span class="ex">DUnknown</span> <span class="at">-</span><span class="op">&gt;</span> Inconsistent <span class="kw">)</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> systemds: Finish drbd.service</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># syslog</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   connect to node1</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   drbd r0:    Handshake sucessfull</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   drbd r0:    conn<span class="er">(</span> <span class="ex">WFConnection</span>  <span class="at">-</span><span class="op">&gt;</span>  WFReportParams <span class="kw">)</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block r0:   peer<span class="er">(</span> <span class="ex">Unknown</span> <span class="at">-</span><span class="op">&gt;</span> Secondary <span class="kw">)</span><span class="ex">,</span> conn<span class="er">(</span> <span class="ex">WFReportParams</span> <span class="at">-</span><span class="op">&gt;</span> Connected <span class="kw">)</span><span class="ex">,</span> pdsk<span class="er">(</span> <span class="ex">DUnknown</span> <span class="at">-</span><span class="op">&gt;</span> Inconsistent <span class="kw">)</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> systemds: Finish drbd.service</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h3 id="set-primary">2.5. Set primary</h3>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> drbdadm <span class="at">--</span> <span class="at">--overwrite-date-of-peer</span> primary all</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>Promote node1 to be primary, overwrite the current state of
-node2.</li>
+<li>Check syslog.</li>
 </ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># node1 becomes sync source</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   block drbd0:    role<span class="er">(</span> <span class="ex">Secondary</span>  <span class="at">-</span><span class="op">&gt;</span>  Primary <span class="kw">)</span>   <span class="ex">disk</span><span class="er">(</span> <span class="ex">Inconsistent</span>    <span class="at">-</span><span class="op">&gt;</span>  UpToDate <span class="kw">)</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   block drbd0:    conn<span class="er">(</span> <span class="ex">Connected</span>  <span class="at">-</span><span class="op">&gt;</span>  WFBitMapS <span class="kw">)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   block drbd0:    conn<span class="er">(</span> <span class="ex">WFBitMapS</span>  <span class="at">-</span><span class="op">&gt;</span>  SyncSource <span class="kw">)</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># node2 becomes sync target</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block drbd0:    peer<span class="er">(</span> <span class="ex">Secondary</span>  <span class="at">-</span><span class="op">&gt;</span>  Primary <span class="kw">)</span>   <span class="ex">disk</span><span class="er">(</span> <span class="ex">Inconsistent</span>    <span class="at">-</span><span class="op">&gt;</span>  UpToDate <span class="kw">)</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block drbd0:    conn<span class="er">(</span> <span class="ex">Connected</span>  <span class="at">-</span><span class="op">&gt;</span>  WFBitMapT <span class="kw">)</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block drbd0:    conn<span class="er">(</span> <span class="ex">WFBitMapT</span>  <span class="at">-</span><span class="op">&gt;</span>  WFSyncUUID <span class="kw">)</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block drbd0:    conn<span class="er">(</span> <span class="ex">WFSyncUUID</span> <span class="at">-</span><span class="op">&gt;</span>  SyncTarget <span class="kw">)</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># sync done.</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   block drbd0:    conn<span class="er">(</span> <span class="ex">SyncSource</span>  <span class="at">-</span><span class="op">&gt;</span>  Connected <span class="kw">)</span>   <span class="ex">pdsk</span> <span class="er">(</span><span class="ex">Inconsistent</span>  <span class="at">-</span><span class="op">&gt;</span>  UpToDate <span class="kw">)</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block drbd0:    conn<span class="er">(</span> <span class="ex">SyncTarget</span>  <span class="at">-</span><span class="op">&gt;</span>  Connected <span class="kw">)</span>   <span class="ex">pdsk</span> <span class="er">(</span><span class="ex">Inconsistent</span>  <span class="at">-</span><span class="op">&gt;</span>  UpToDate <span class="kw">)</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h3 id="monitor-sync-progress">2.5.2. Monitor Sync Progress</h3>
 <div class="sourceCode" id="cb10"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> drbdadm <span class="at">--</span> <span class="at">--overwrite-date-of-peer</span> primary all</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> watch <span class="at">-n1</span> cat /proc/drbd</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>node1 becomes sync source.</li>
-</ul>
+<h3 id="check-drbd-status">2.5.3. Check DRBD Status</h3>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># syslog</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   block drbd0:    role<span class="er">(</span> <span class="ex">Secondary</span>  <span class="at">-</span><span class="op">&gt;</span>  Primary <span class="kw">)</span>   <span class="ex">disk</span><span class="er">(</span> <span class="ex">Inconsistent</span>    <span class="at">-</span><span class="op">&gt;</span>  UpToDate <span class="kw">)</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   block drbd0:    conn<span class="er">(</span> <span class="ex">Connected</span>  <span class="at">-</span><span class="op">&gt;</span>  WFBitMapS <span class="kw">)</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   block drbd0:    conn<span class="er">(</span> <span class="ex">WFBitMapS</span>  <span class="at">-</span><span class="op">&gt;</span>  SyncSource <span class="kw">)</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>node2 becomes sync target.</li>
-</ul>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> drbdadm status</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">r0</span>  role:Primary</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">disk:UpToDate</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">peer</span>    role:Secondary</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>            <span class="ex">replication:Established</span>     peer-disk:UpToDate</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># syslog</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block drbd0:    peer<span class="er">(</span> <span class="ex">Secondary</span>  <span class="at">-</span><span class="op">&gt;</span>  Primary <span class="kw">)</span>   <span class="ex">disk</span><span class="er">(</span> <span class="ex">Inconsistent</span>    <span class="at">-</span><span class="op">&gt;</span>  UpToDate <span class="kw">)</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block drbd0:    conn<span class="er">(</span> <span class="ex">Connected</span>  <span class="at">-</span><span class="op">&gt;</span>  WFBitMapT <span class="kw">)</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block drbd0:    conn<span class="er">(</span> <span class="ex">WFBitMapT</span>  <span class="at">-</span><span class="op">&gt;</span>  WFSyncUUID <span class="kw">)</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block drbd0:    conn<span class="er">(</span> <span class="ex">WFSyncUUID</span> <span class="at">-</span><span class="op">&gt;</span>  SyncTarget <span class="kw">)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> drbdadm status</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">r0</span>  role:Secondary</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">disk:UpToDate</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">peer</span>    role:Primary</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>            <span class="ex">replication:Established</span>     peer-disk:UpToDate</span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>sync done.</li>
-</ul>
-<div class="sourceCode" id="cb13"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># syslog</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   block drbd0:    conn<span class="er">(</span> <span class="ex">SyncSource</span>  <span class="at">-</span><span class="op">&gt;</span>  Connected <span class="kw">)</span>   <span class="ex">pdsk</span> <span class="er">(</span><span class="ex">Inconsistent</span>  <span class="at">-</span><span class="op">&gt;</span>  UpToDate <span class="kw">)</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># syslog</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block drbd0:    conn<span class="er">(</span> <span class="ex">SyncTarget</span>  <span class="at">-</span><span class="op">&gt;</span>  Connected <span class="kw">)</span>   <span class="ex">pdsk</span> <span class="er">(</span><span class="ex">Inconsistent</span>  <span class="at">-</span><span class="op">&gt;</span>  UpToDate <span class="kw">)</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Command to monitor during sync progress.</li>
-</ul>
-<div class="sourceCode" id="cb15"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> watch <span class="at">-n1</span> cat /proc/drbd</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Check status</li>
-</ul>
-<div class="sourceCode" id="cb16"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> drbdadm status</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">r0</span>  role:Primary</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">disk:UpToDate</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">peer</span>    role:Secondary</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>            <span class="ex">replication:Established</span>     peer-disk:UpToDate</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> drbdadm status</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">r0</span>  role:Secondary</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">disk:UpToDate</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">peer</span>    role:Primary</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>            <span class="ex">replication:Established</span>     peer-disk:UpToDate</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h3 id="add-filesystem">2.7. Add filesystem</h3>
+<h2 id="setup-filesystem">2.6. Setup Filesystem</h2>
+<h3 id="check-partition">2.6.1. Check Partition</h3>
 <ul>
 <li>After sync completed, the partition /dev/drbd0 will be created.</li>
 </ul>
-<div class="sourceCode" id="cb18"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> lsblk <span class="at">-f</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>        FSTYPE      MOUNTPOINTS</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="ex">sda</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="ex">├─</span> sda8     ext4        /home</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="ex">└─</span> sda9     drbd</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>   <span class="ex">└─</span> drbd0</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> lsblk <span class="at">-f</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>        FSTYPE      MOUNTPOINTS</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">sda</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="ex">├─</span> sda8     ext4        /home</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="ex">└─</span> sda9     drbd</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>   <span class="ex">└─</span> drbd0</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Make filesystem.</li>
-</ul>
-<div class="sourceCode" id="cb20"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mkfs.ext3 /dev/drbd0</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h3 id="mount">2.7. Mount</h3>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> lsblk <span class="at">-f</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>        FSTYPE      MOUNTPOINTS</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ex">sda</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">├─</span> sda8     ext4        /home</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ex">└─</span> sda9     drbd</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>   <span class="ex">└─</span> drbd0</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> lsblk <span class="at">-f</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>        FSTYPE      MOUNTPOINTS</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">sda</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">├─</span> sda8     ext4        /home</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="ex">└─</span> sda9     drbd</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>   <span class="ex">└─</span> drbd0</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h3 id="make-filesystem">2.6.2. Make Filesystem</h3>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mkfs.ext3 /dev/drbd0</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="mount">2.8. Mount</h2>
 <ul>
 <li>On node1, mount partition /dev/drbd0 to /mnt/test (<em>only primary
 node can mount</em>).</li>
 </ul>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> mkdir /mnt/test</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> mount /dev/drbd0 /mnt/test</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="fault-tolerance">3. Fault Tolerance</h1>
+<p><strong>Agenda</strong><br />
+- Create a file on node 1.<br />
+- Stop drbd on node 1.<br />
+- Check if the file available on node 2.</p>
+<h2 id="simulate-fault-on-node-1">3.1. Simulate Fault on Node 1</h2>
+<h3 id="create-a-file">3.1.1. Create a File</h3>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> touch /mnt/test/hello</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h3 id="stop-drbd">3.1.2 Stop DRBD</h3>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> systemctl stop drbd</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Check syslog.</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># node1 stops drbd</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> systemd:  Stopping drbd.service</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   EXT4-fs <span class="er">(</span><span class="ex">drbd0</span><span class="kw">)</span><span class="bu">:</span> unmounting filesystem</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> drbd:     Stopping all DRBD resources</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   block drbd0:    role<span class="er">(</span> <span class="ex">Primary</span>   <span class="at">-</span><span class="op">&gt;</span>  Secondary <span class="kw">)</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   drbd r0:        peer<span class="er">(</span> <span class="ex">Secondary</span> <span class="at">-</span><span class="op">&gt;</span>  Unknown <span class="kw">)</span><span class="ex">,</span> conn<span class="er">(</span><span class="ex">Connected</span>   <span class="at">-</span><span class="op">&gt;</span>  Disconnecting <span class="kw">)</span> <span class="ex">pdsk</span><span class="er">(</span> <span class="ex">UpToDate</span>   <span class="at">-</span><span class="op">&gt;</span>  DUnknown <span class="kw">)</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   drbd r0:        conn<span class="er">(</span> <span class="ex">Disconnecting</span> <span class="at">-</span><span class="op">&gt;</span>  StandAlone <span class="kw">)</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   drbd r0:        disk<span class="er">(</span> <span class="ex">UpToDate</span>  <span class="at">-</span><span class="op">&gt;</span>  Failed <span class="kw">)</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   drbd r0:        disk<span class="er">(</span> <span class="ex">Failed</span>    <span class="at">-</span><span class="op">&gt;</span>  Diskless <span class="kw">)</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> systemds: Stopped drbd.service</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co"># node2 updates state</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block drbd0:    peer<span class="er">(</span> <span class="ex">Primary</span>   <span class="at">-</span><span class="op">&gt;</span>  Secondary<span class="kw">)</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   drbd r0:        peer<span class="er">(</span> <span class="ex">Secondary</span> <span class="at">-</span><span class="op">&gt;</span>  Unknown <span class="kw">)</span> <span class="ex">conn</span><span class="er">(</span> <span class="ex">Connected</span>   <span class="at">-</span><span class="op">&gt;</span>  TearDown <span class="kw">)</span> <span class="ex">pdsk</span><span class="er">(</span> <span class="ex">UpToDate</span>   <span class="at">-</span><span class="op">&gt;</span>  DUnknown <span class="kw">)</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   drbd r0:        conn<span class="er">(</span> <span class="ex">TearDown</span>  <span class="at">-</span><span class="op">&gt;</span>  Unconnected <span class="kw">)</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   drbd r0:        conn<span class="er">(</span> <span class="ex">Unconnected</span>  <span class="at">-</span><span class="op">&gt;</span>  WFConnection <span class="kw">)</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="recover-on-node-2">3.2. Recover on Node 2</h2>
+<h3 id="promote-to-primary">3.2.1. Promote to Primary</h3>
+<ul>
+<li>Promote node 2 to primary. Need to promote to primary before
+mount.</li>
+</ul>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> drbdadm primary r0</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Check syslog.</li>
+</ul>
 <div class="sourceCode" id="cb21"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> mkdir /mnt/test</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> mount /dev/drbd0 /mnt/test</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="fault-tolerance">3. Fault Tolerance</h2>
-<ul>
-<li>On node1, create a file /mnt/test/hello.</li>
-</ul>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel: block drbd0: role<span class="er">(</span> <span class="ex">Secondary</span>  <span class="at">-</span><span class="op">&gt;</span>  Primary <span class="kw">)</span>  </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h3 id="mount-1">3.2.2. Mount</h3>
 <div class="sourceCode" id="cb22"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> touch /mnt/test/hello</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> mount /dev/drbd0 /mnt/test</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Stop drbd on node1.</li>
-</ul>
-<div class="sourceCode" id="cb23"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> systemctl stop drbd</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> systemd:  Stopping drbd.service</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   EXT4-fs <span class="er">(</span><span class="ex">drbd0</span><span class="kw">)</span><span class="bu">:</span> unmounting filesystem</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> drbd:     Stopping all DRBD resources</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   block drbd0:    role<span class="er">(</span> <span class="ex">Primary</span>   <span class="at">-</span><span class="op">&gt;</span>  Secondary <span class="kw">)</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   drbd r0:        peer<span class="er">(</span> <span class="ex">Secondary</span> <span class="at">-</span><span class="op">&gt;</span>  Unknown <span class="kw">)</span><span class="ex">,</span> conn<span class="er">(</span><span class="ex">Connected</span>   <span class="at">-</span><span class="op">&gt;</span>  Disconnecting <span class="kw">)</span> <span class="ex">pdsk</span><span class="er">(</span> <span class="ex">UpToDate</span>   <span class="at">-</span><span class="op">&gt;</span>  DUnknown <span class="kw">)</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   drbd r0:        conn<span class="er">(</span> <span class="ex">Disconnecting</span> <span class="at">-</span><span class="op">&gt;</span>  StandAlone <span class="kw">)</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   drbd r0:        disk<span class="er">(</span> <span class="ex">UpToDate</span>  <span class="at">-</span><span class="op">&gt;</span>  Failed <span class="kw">)</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> kernel:   drbd r0:        disk<span class="er">(</span> <span class="ex">Failed</span>    <span class="at">-</span><span class="op">&gt;</span>  Diskless <span class="kw">)</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="ex">node1</span> systemds: Stopped drbd.service</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb25"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   block drbd0:    peer<span class="er">(</span> <span class="ex">Primary</span>   <span class="at">-</span><span class="op">&gt;</span>  Secondary<span class="kw">)</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   drbd r0:        peer<span class="er">(</span> <span class="ex">Secondary</span> <span class="at">-</span><span class="op">&gt;</span>  Unknown <span class="kw">)</span> <span class="ex">conn</span><span class="er">(</span> <span class="ex">Connected</span>   <span class="at">-</span><span class="op">&gt;</span>  TearDown <span class="kw">)</span> <span class="ex">pdsk</span><span class="er">(</span> <span class="ex">UpToDate</span>   <span class="at">-</span><span class="op">&gt;</span>  DUnknown <span class="kw">)</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   drbd r0:        conn<span class="er">(</span> <span class="ex">TearDown</span>  <span class="at">-</span><span class="op">&gt;</span>  Unconnected <span class="kw">)</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel:   drbd r0:        conn<span class="er">(</span> <span class="ex">Unconnected</span>  <span class="at">-</span><span class="op">&gt;</span>  WFConnection <span class="kw">)</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Promote node2 becomes primary. (<em>Need to promote to Primary
-before mount</em>).</li>
-</ul>
-<div class="sourceCode" id="cb26"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> drbdadm primary r0</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2</span> kernel: block drbd0: role<span class="er">(</span> <span class="ex">Secondary</span>  <span class="at">-</span><span class="op">&gt;</span>  Primary <span class="kw">)</span>  </span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Mount.</li>
-</ul>
-<div class="sourceCode" id="cb28"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node$</span> mount /dev/drbd0 /mnt/test</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h3 id="fault-tolerance-1">3.2.3. Fault Tolerance</h3>
 <ul>
 <li>The /mnt/test/hello file will exist on node2.</li>
 </ul>
-<div class="sourceCode" id="cb29"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> ls /mnt/test</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hello</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> ls /mnt/test</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hello</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="references">References</h1>
 <ul>
 <li>https://manpages.ubuntu.com/manpages/xenial/man5/drbd.conf.5.html</li>
