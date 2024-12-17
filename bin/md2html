@@ -11,8 +11,15 @@ pandoc -f markdown -t html \
     -s --highlight-style breezeDark \
     --include-in-header ${workspace}/bin/header.html \
     --include-after-body ${workspace}/bin/footer.html \
-    -o ${workspace}/html/drbd.html \
-    ${workspace}/md/drbd.md
+    -o ${workspace}/html/systemd.html \
+    ${workspace}/md/systemd.md
+
+# pandoc -f markdown -t html \
+#     -s --highlight-style breezeDark \
+#     --include-in-header ${workspace}/bin/header.html \
+#     --include-after-body ${workspace}/bin/footer.html \
+#     -o ${workspace}/html/drbd.html \
+#     ${workspace}/md/drbd.md
 
 # pandoc -f markdown -t html \
 #     -s --highlight-style breezeDark \
