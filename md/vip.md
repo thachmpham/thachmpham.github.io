@@ -5,19 +5,21 @@ title:  'Virtual IP Address'
 # 1. Introduction
 A Virtual IP address (VIP) is an IP address shared among multiple devices. If one device fails, another takes over, ensuring the address remains active.
 
+Some tools to setup a virtual IP:  
+- Keepalived.  
+- Linux Heartbeat.  
 
-# 2. Virtual IP with Keepalived
-**Agenda**
 
-- Build a Docker image for Keepalived.
-- Create two containers named node1 and node2.
-- Configure a virtual IP on node1 to act as the master.
-- Configure the same virtual IP on node2 to act as the backup.
-- After configuration, the virtual IP will be active on node1. If node1 stops, the virtual IP will automatically switch to node2.
+# 2. Lab
+- Build keepalived docker image.
+- Create two containers node 1 and node 2.
+- Setup a virtual IP shared between node1 and node2.
+    - Node 1 is master. The virtual IP will assigned to node 1.
+    - Node 2 is backup. If node 1 stops, the virtual IP will automatically switch to node 2.
 
 
 ## 2.1. Build Docker Image
-Create Dockerfile.
+- Dockerfile.
 ```Dockerfile
   
 FROM ubuntu:20.04
@@ -34,7 +36,7 @@ CMD ["tail", "-f", "/dev/null"]
   
 ```
 
-Build docker image.
+- Build image.
 ```sh
   
 $ docker build --progress=plain -t keepalived .
@@ -42,22 +44,22 @@ $ docker build --progress=plain -t keepalived .
 ```
 
 
-## 2.2. Setup Node1
-Create container node1.
+## 2.2. Setup Node 1
+- Create container.
 ```sh
   
 $ docker run --privileged -d --name node1 --hostname node1 keepalived
   
 ```
 
-Access to node1.
+- Access terminal.
 ```sh
   
 $ docker exec -it node1 bash
   
 ```
 
-Edit /etc/keepalived/keepalived.conf
+- Edit /etc/keepalived/keepalived.conf
 ```python
   
 vrrp_instance VI_1 {
@@ -74,38 +76,40 @@ vrrp_instance VI_1 {
   
 ```
 
-Start keepalived.
+- Start keepalived.
 ```sh
   
 node1$ service keepalived start
   
 ```
 
-The virtual IP 192.168.200.11 will be assigned to node1.
+- Show IP.
 ```sh
   
 node1$ ip addr show eth0
 eth0    UP      172.17.0.2/16   192.168.200.11/24
+
+# node 1 was master, so the virtual IP 192.168.200.11 assigned to it.
   
 ```
 
 
-## 2.3. Setup Node2
-Create container node2.
+## 2.3. Setup Node 2
+- Create container.
 ```sh
   
 $ docker run --privileged -d --name node2 --hostname node2 keepalived
   
 ```
 
-Access to node1.
+- Access terminal.
 ```sh
   
 $ docker exec -it node2 bash
   
 ```
 
-Edit /etc/keepalived/keepalived.conf
+- Edit /etc/keepalived/keepalived.conf
 ```python
   
 vrrp_instance VI_1 {
@@ -122,18 +126,20 @@ vrrp_instance VI_1 {
   
 ```
 
-Start keepalived.
+- Start keepalived.
 ```sh
   
 node1$ service keepalived start
   
 ```
 
-Currently, node2 in backup state. So, the virtual IP still not exist.
+- Show IP.
 ```sh
   
 node1$ ip addr show eth0
 eth0    UP      172.17.0.3/16
+
+# the virtual IP not shown, because node 2 was backup.
   
 ```
 
@@ -158,27 +164,25 @@ flowchart LR
 
 
 ## 2.3. Fault Tolerance
-Stop keepalived on node1.
+- Stop keepalived on node 1.
 ```sh
   
 node1$ service keepalived stop
-  
-```
 
-The virtual IP is removed from node1.
-```sh
-  
 node1$ ip -brief addr show eth0
 eth0    UP      172.17.0.2/16
+
+# the virtual IP is removed from node1.
   
 ```
 
-
-After stop keepalived on node1, the instance on node2 becomes master, so the virtual IP is ressigned to node2.
+- Check IP on node 2.
 ```sh
   
 node2$ ip -brief addr show eth0
 eth0    UP      172.17.0.3/16   192.168.200.11/24
+
+# after node 1 stopped, the virtual IP  automatically assigned to node 2.
   
 ```
 
@@ -201,7 +205,7 @@ flowchart LR
 
 </pre>
 
-Analyze pcap packets.
+- Check pcap.
 ```sh
   
 node1$ tshark -i eth0
@@ -227,32 +231,36 @@ node1$ tshark -i eth0
 
 
 ## 2.4. Ping
-Setup route.
+- Setup route to allow ping from host to container.
 ```sh
   
 host$ sudo ip route add 192.168.200.0/24 dev docker0
   
 ```
 
-Ping to the virtual IP when node1 is master, we receive MAC address of node1.
+- Ping the virtual IP when node 1 is master.
 ```sh
   
 host$ sudo arping -C 1 -i docker0 192.168.200.11
 42 bytes from 02:42:ac:11:00:02 (192.168.200.11): index=0 time=9.639 usec
+
+# when node 1 was master, ping got MAC of node 1.
   
 ```
 
-Ping to the virtual IP when node2 is master, we receive MAC address of node2.
+- Ping the virtual IP when node 2 is master.
 ```sh
   
 host$ sudo arping -C 1 -i docker0 192.168.200.11
 42 bytes from 02:42:ac:11:00:03 (192.168.200.11): index=0 time=7.195 usec
+
+# when node 2 was master, ping got MAC of node 2.
   
 ``` 
 
 
 # 3. Troubleshooting
-Enable syslog and monitor the log of Keepalived.
+- Check log of keepalived.
 ```sh
   
 $ service rsyslog start
