@@ -236,7 +236,7 @@ $ mkfs.ext3 /dev/drbd0
 ```
 
 
-## 2.8. Mount
+## 2.7. Mount
 - On node1, mount drbd partition.
 ```sh
   
