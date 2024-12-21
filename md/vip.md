@@ -12,6 +12,8 @@ Some tools to setup a virtual IP:
 
 
 # 2. Lab
+Use **keepalived** to setup a virtual IP on two nodes:
+
 - Build keepalived docker image.
 - Create two containers node 1 and node 2.
 - Setup a virtual IP shared between node1 and node2.
