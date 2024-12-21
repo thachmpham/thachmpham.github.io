@@ -6,9 +6,11 @@ title:  'About Me'
 # Greetings
 *Hello and a warm welcome. Thank you for taking time to visit.*  
   
-I'm **Thach**, a software developer at **Endava**. 
+I'm **Thach**, a software developer. 
   
-In this blog, I would like to share with you some labs to explore computer networking and distributed systems.  
+This blog is a personal record of things I find interesting, created in my free time. My aim is to document some explorations and build a resource for easy reference for my future self.
+
+The posts here are primarily focused on technical and programming topics. I hope you’ll find something interesting or helpful as well.
   
 *Thanks again and wishing you a great day ahead.*  
   

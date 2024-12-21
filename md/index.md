@@ -1,6 +1,6 @@
 ---
-title:  'A Distributed Systems Blog'
-subtitle: "A Practical Blog for Developers<br/>*Computer Networking - Distributed Systems*"
+title:  "Thach Pham's Blog"
+subtitle: "A Practical Blog for Software Developers<br/>*Computer Networking - Distributed Systems - Software Debugging*"
 ---
 
 
@@ -33,10 +33,11 @@ subtitle: "A Practical Blog for Developers<br/>*Computer Networking - Distribute
 - [AMF &nbsp;&nbsp; - &nbsp; Build High Availability App with AMF API](html/opensaf-amf-sa-aware.html)
 
 
+
 ### Cheatsheets
 - [KVM](html/kvm.html)
 - [Disk](html/fdisk.html)
-- [Systemd](html/systemd.html)
+- [systemd](html/systemd.html)
 
 
 ## About
