@@ -34,7 +34,7 @@ subtitle: "A Practical Blog for Developers<br/>*Computer Networking - Distribute
 
 
 ### Quick Reference
-- [Kernel-based Virtual Machine](html/kvm.html)
+- [KVM](html/kvm.html)
 - [Disk Manipulation](html/fdisk.html)
 - [Systemd](html/systemd.html)
 

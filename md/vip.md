@@ -5,7 +5,8 @@ title:  'Virtual IP Address'
 # 1. Introduction
 A Virtual IP address (VIP) is an IP address shared among multiple devices. If one device fails, another takes over, ensuring the address remains active.
 
-Some tools to setup a virtual IP:  
+Some tools to setup a virtual IP:
+
 - Keepalived.  
 - Linux Heartbeat.  
 
@@ -270,4 +271,5 @@ $ tail -f /var/log/syslog
 
 
 # References
-- https://www.keepalived.org
+- [keepalived.org](https://www.keepalived.org)
+- [keepalived.readthedocs.io](https://keepalived.readthedocs.io/en/latest)

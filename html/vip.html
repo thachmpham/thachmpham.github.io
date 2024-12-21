@@ -247,18 +247,27 @@
 <p>A Virtual IP address (VIP) is an IP address shared among multiple
 devices. If one device fails, another takes over, ensuring the address
 remains active.</p>
-<h1 id="virtual-ip-with-keepalived">2. Virtual IP with Keepalived</h1>
-<p><strong>Agenda</strong></p>
+<p>Some tools to setup a virtual IP:</p>
 <ul>
-<li>Build a Docker image for Keepalived.</li>
-<li>Create two containers named node1 and node2.</li>
-<li>Configure a virtual IP on node1 to act as the master.</li>
-<li>Configure the same virtual IP on node2 to act as the backup.</li>
-<li>After configuration, the virtual IP will be active on node1. If
-node1 stops, the virtual IP will automatically switch to node2.</li>
+<li>Keepalived.<br />
+</li>
+<li>Linux Heartbeat.</li>
+</ul>
+<h1 id="lab">2. Lab</h1>
+<ul>
+<li>Build keepalived docker image.</li>
+<li>Create two containers node 1 and node 2.</li>
+<li>Setup a virtual IP shared between node1 and node2.
+<ul>
+<li>Node 1 is master. The virtual IP will assigned to node 1.</li>
+<li>Node 2 is backup. If node 1 stops, the virtual IP will automatically
+switch to node 2.</li>
+</ul></li>
 </ul>
 <h2 id="build-docker-image">2.1. Build Docker Image</h2>
-<p>Create Dockerfile.</p>
+<ul>
+<li>Dockerfile.</li>
+</ul>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ubuntu:20.04</span>
@@ -273,20 +282,28 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb1-
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># keep container running</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;tail&quot;</span>, <span class="st">&quot;-f&quot;</span>, <span class="st">&quot;/dev/null&quot;</span>]</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Build docker image.</p>
+<ul>
+<li>Build image.</li>
+</ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker build <span class="at">--progress</span><span class="op">=</span>plain <span class="at">-t</span> keepalived .</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="setup-node1">2.2. Setup Node1</h2>
-<p>Create container node1.</p>
+<h2 id="setup-node-1">2.2. Setup Node 1</h2>
+<ul>
+<li>Create container.</li>
+</ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker run <span class="at">--privileged</span> <span class="at">-d</span> <span class="at">--name</span> node1 <span class="at">--hostname</span> node1 keepalived</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Access to node1.</p>
+<ul>
+<li>Access terminal.</li>
+</ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker exec <span class="at">-it</span> node1 bash</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Edit /etc/keepalived/keepalived.conf</p>
+<ul>
+<li>Edit /etc/keepalived/keepalived.conf</li>
+</ul>
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>vrrp_instance VI_1 {</span>
@@ -301,25 +318,37 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Start keepalived.</p>
+<ul>
+<li>Start keepalived.</li>
+</ul>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> service keepalived start</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>The virtual IP 192.168.200.11 will be assigned to node1.</p>
+<ul>
+<li>Show IP.</li>
+</ul>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> ip addr show eth0</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">eth0</span>    UP      172.17.0.2/16   192.168.200.11/24</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="setup-node2">2.3. Setup Node2</h2>
-<p>Create container node2.</p>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># node 1 was master, so the virtual IP 192.168.200.11 assigned to it.</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="setup-node-2">2.3. Setup Node 2</h2>
+<ul>
+<li>Create container.</li>
+</ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker run <span class="at">--privileged</span> <span class="at">-d</span> <span class="at">--name</span> node2 <span class="at">--hostname</span> node2 keepalived</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Access to node1.</p>
+<ul>
+<li>Access terminal.</li>
+</ul>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker exec <span class="at">-it</span> node2 bash</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Edit /etc/keepalived/keepalived.conf</p>
+<ul>
+<li>Edit /etc/keepalived/keepalived.conf</li>
+</ul>
 <div class="sourceCode" id="cb10"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>vrrp_instance VI_1 {</span>
@@ -334,18 +363,23 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a h
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Start keepalived.</p>
+<ul>
+<li>Start keepalived.</li>
+</ul>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> service keepalived start</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Currently, node2 in backup state. So, the virtual IP still not
-exist.</p>
+<ul>
+<li>Show IP.</li>
+</ul>
 <div class="sourceCode" id="cb12"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> ip addr show eth0</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">eth0</span>    UP      172.17.0.3/16</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># the virtual IP not shown, because node 2 was backup.</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <pre class="mermaid">
 flowchart LR
     if1[eth0]
@@ -365,24 +399,28 @@ flowchart LR
 
 </pre>
 <h2 id="fault-tolerance">2.3. Fault Tolerance</h2>
-<p>Stop keepalived on node1.</p>
+<ul>
+<li>Stop keepalived on node 1.</li>
+</ul>
 <div class="sourceCode" id="cb13"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> service keepalived stop</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>The virtual IP is removed from node1.</p>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> ip <span class="at">-brief</span> addr show eth0</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">eth0</span>    UP      172.17.0.2/16</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># the virtual IP is removed from node1.</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Check IP on node 2.</li>
+</ul>
 <div class="sourceCode" id="cb14"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> ip <span class="at">-brief</span> addr show eth0</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">eth0</span>    UP      172.17.0.2/16</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>After stop keepalived on node1, the instance on node2 becomes master,
-so the virtual IP is ressigned to node2.</p>
-<div class="sourceCode" id="cb15"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> ip <span class="at">-brief</span> addr show eth0</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">eth0</span>    UP      172.17.0.3/16   192.168.200.11/24</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node2$</span> ip <span class="at">-brief</span> addr show eth0</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">eth0</span>    UP      172.17.0.3/16   192.168.200.11/24</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># after node 1 stopped, the virtual IP  automatically assigned to node 2.</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <pre class="mermaid">
 flowchart LR
     if1[eth0]
@@ -401,58 +439,72 @@ flowchart LR
     docker0 <---> if2
 
 </pre>
-<p>Analyze pcap packets.</p>
+<ul>
+<li>Check pcap.</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> tshark <span class="at">-i</span> eth0</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># master node sends VRRP Announcement to backup nodes to inform that master is still alive</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 224.0.0.18 is a multicast address for nodes in the VRRP group.</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># node1 -&gt; multicast: VRRP Announcement</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.2</span> <span class="pp">?</span> 224.0.0.18   VRRP 54 Announcement <span class="er">(</span><span class="ex">v2</span><span class="kw">)</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co"># master node sends IGMPv3 Membership Report / Leave group to backup nodes to inform that master leaves</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># node1 -&gt; multicast: IGMP Membership Report / Leave group</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.2</span> <span class="pp">?</span> 224.0.0.22   IGMPv3 54 Membership Report / Leave group 224.0.0.18</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co"># node2 informs that the virtual IP is assigned to it</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co"># node2 become master</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co"># node2 -&gt; multicast: ARP Gratuitous</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="ex">02:42:ac:11:00:03</span> <span class="pp">?</span> Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 <span class="er">(</span><span class="ex">Request</span><span class="kw">)</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co"># # node2 -&gt; multicast: VRRP Announcement</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.3</span> <span class="pp">?</span> 224.0.0.18   VRRP 54 Announcement <span class="er">(</span><span class="ex">v2</span><span class="kw">)</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="ping">2.4. Ping</h2>
+<ul>
+<li>Setup route to allow ping from host to container.</li>
+</ul>
 <div class="sourceCode" id="cb16"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node1$</span> tshark <span class="at">-i</span> eth0</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># master node sends VRRP Announcement to backup nodes to inform that master is still alive</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 224.0.0.18 is a multicast address for nodes in the VRRP group.</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># node1 -&gt; multicast: VRRP Announcement</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.2</span> <span class="pp">?</span> 224.0.0.18   VRRP 54 Announcement <span class="er">(</span><span class="ex">v2</span><span class="kw">)</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># master node sends IGMPv3 Membership Report / Leave group to backup nodes to inform that master leaves</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># node1 -&gt; multicast: IGMP Membership Report / Leave group</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.2</span> <span class="pp">?</span> 224.0.0.22   IGMPv3 54 Membership Report / Leave group 224.0.0.18</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co"># node2 informs that the virtual IP is assigned to it</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co"># node2 become master</span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co"># node2 -&gt; multicast: ARP Gratuitous</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="ex">02:42:ac:11:00:03</span> <span class="pp">?</span> Broadcast    ARP 42 Gratuitous ARP for 192.168.200.11 <span class="er">(</span><span class="ex">Request</span><span class="kw">)</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co"># # node2 -&gt; multicast: VRRP Announcement</span></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="ex">172.17.0.3</span> <span class="pp">?</span> 224.0.0.18   VRRP 54 Announcement <span class="er">(</span><span class="ex">v2</span><span class="kw">)</span></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="ping">2.4. Ping</h2>
-<p>Setup route.</p>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> sudo ip route add 192.168.200.0/24 dev docker0</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Ping the virtual IP when node 1 is master.</li>
+</ul>
 <div class="sourceCode" id="cb17"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> sudo ip route add 192.168.200.0/24 dev docker0</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Ping to the virtual IP when node1 is master, we receive MAC address
-of node1.</p>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> sudo arping <span class="at">-C</span> 1 <span class="at">-i</span> docker0 192.168.200.11</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">42</span> bytes from 02:42:ac:11:00:02 <span class="er">(</span><span class="ex">192.168.200.11</span><span class="kw">)</span><span class="bu">:</span> index=0 time=9.639 usec</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># when node 1 was master, ping got MAC of node 1.</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Ping the virtual IP when node 2 is master.</li>
+</ul>
 <div class="sourceCode" id="cb18"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> sudo arping <span class="at">-C</span> 1 <span class="at">-i</span> docker0 192.168.200.11</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">42</span> bytes from 02:42:ac:11:00:02 <span class="er">(</span><span class="ex">192.168.200.11</span><span class="kw">)</span><span class="bu">:</span> index=0 time=9.639 usec</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Ping to the virtual IP when node2 is master, we receive MAC address
-of node2.</p>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">42</span> bytes from 02:42:ac:11:00:03 <span class="er">(</span><span class="ex">192.168.200.11</span><span class="kw">)</span><span class="bu">:</span> index=0 time=7.195 usec</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># when node 2 was master, ping got MAC of node 2.</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="troubleshooting">3. Troubleshooting</h1>
+<ul>
+<li>Check log of keepalived.</li>
+</ul>
 <div class="sourceCode" id="cb19"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> sudo arping <span class="at">-C</span> 1 <span class="at">-i</span> docker0 192.168.200.11</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">42</span> bytes from 02:42:ac:11:00:03 <span class="er">(</span><span class="ex">192.168.200.11</span><span class="kw">)</span><span class="bu">:</span> index=0 time=7.195 usec</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> service rsyslog start</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tail <span class="at">-f</span> /var/log/syslog</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="troubleshooting">3. Troubleshooting</h1>
-<p>Enable syslog and monitor the log of Keepalived.</p>
-<div class="sourceCode" id="cb20"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> service rsyslog start</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tail <span class="at">-f</span> /var/log/syslog</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="references">References</h1>
 <ul>
-<li>https://www.keepalived.org</li>
+<li><a href="https://www.keepalived.org">keepalived.org</a></li>
+<li><a
+href="https://keepalived.readthedocs.io/en/latest">keepalived.readthedocs.io</a></li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">
