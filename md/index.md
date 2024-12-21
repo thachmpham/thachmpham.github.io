@@ -33,7 +33,7 @@ subtitle: "A Practical Blog for Developers<br/>*Computer Networking - Distribute
 - [AMF &nbsp;&nbsp; - &nbsp; Build High Availability App with AMF API](html/opensaf-amf-sa-aware.html)
 
 
-### Quick Reference
+### Cheatsheets
 - [KVM](html/kvm.html)
 - [Disk](html/fdisk.html)
 - [Systemd](html/systemd.html)

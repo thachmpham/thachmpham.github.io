@@ -2,10 +2,10 @@
 title:  'Kernel-based Virtual Machine'
 ---
 
-## 1. VM
-- Create Debian VM using net-installer and nographics.
+## 1. Create VM
 ```sh
   
+# create Debian VM: net-installer, nographics.
 $ virt-install --name node1 \
     --memory 4096 \
     --vcpus 2 \
@@ -16,41 +16,51 @@ $ virt-install --name node1 \
   
 ```
 
-- Get IPs of a VM.
+- [linux.die.net/man/1/virt-install](https://linux.die.net/man/1/virt-install)
+
+
+## 2. Inspect VM
 ```sh
   
+# show IP of VM
 $ virsh domifaddr node1
   
 ```
 
-## 2. Snapshot
-- Create a snapshot.
+- [www.libvirt.org/manpages/virsh.html](https://www.libvirt.org/manpages/virsh.html)
+
+
+## 3. Snapshot
 ```sh
   
 $ virsh snapshot-create-as node1 --name snapshot1
-  
-```
 
-- List snapshots.
-```sh
-  
 $ virsh snapshot-list node1
-  
-```
 
-- Delete a snapshot.
-```sh
-  
 $ virsh snapshot-delete node1 --snapshotname snapshot1
   
 ```
 
-## 3. Network
-- A sample network config.
+
+## 4. Network
+```sh
+  
+$ virsh net-define mynetwork.xml
+
+$ virsh net-start mynetwork
+
+$ virsh net-autostart mynetwork
+
+$ virsh net-list --all
+
+$ virsh net-dumpxml mynetwork
+  
+```
+
 ```xml
   
 <network>
-    <name>network_1</name>
+    <name>mynetwork</name>
     <forward mode="nat"/>
     <ip address="192.168.122.1" netmask="255.255.255.0">
         <dhcp>
@@ -61,38 +71,4 @@ $ virsh snapshot-delete node1 --snapshotname snapshot1
   
 ```
 
-- Create a network.
-```sh
-  
-$ virsh net-define network_1.xml
-  
-```
-
-- Start a network.
-```sh
-  
-$ virsh net-start network_1
-  
-```
-
-- Enable autostart.
-```sh
-  
-$ virsh net-autostart network_1
-  
-```
-
-- Show info.
-```sh
-  
-$ virsh net-list --all
-
-$ virsh net-dumpxml network_1
-  
-```
-
-
-## References
-- https://linux.die.net/man/1/virt-install
-- https://www.libvirt.org/manpages/virsh.html
-- https://libvirt.org/formatnetwork.html
+- [libvirt.org/formatnetwork.html](https://libvirt.org/formatnetwork.html)
