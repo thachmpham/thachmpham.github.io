@@ -35,7 +35,7 @@ subtitle: "A Practical Blog for Developers<br/>*Computer Networking - Distribute
 
 ### Quick Reference
 - [KVM](html/kvm.html)
-- [Disk Manipulation](html/fdisk.html)
+- [Disk](html/fdisk.html)
 - [Systemd](html/systemd.html)
 
 
