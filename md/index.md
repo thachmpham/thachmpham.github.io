@@ -31,12 +31,12 @@ subtitle: "A Practical Blog for Software Developers<br/>*Computer Networking - D
 - [IMM &nbsp;&nbsp; - &nbsp; Information Model Management](html/opensaf-imm.html)
 - [SMF &nbsp;&nbsp; - &nbsp; Software Management Framework](html/opensaf-smf.html)
 - [LOG &nbsp;&nbsp; - &nbsp; Log Service](html/opensaf-log.html)
-- [AMF &nbsp;&nbsp; - &nbsp; Convert a Linux Program to High Availability](html/opensaf-amf-non-sa-aware.html)
+- [AMF &nbsp;&nbsp; - &nbsp; Convert A Linux Program To High Availability](html/opensaf-amf-non-sa-aware.html)
 - [AMF &nbsp;&nbsp; - &nbsp; Build High Availability App with AMF API](html/opensaf-amf-sa-aware.html)
 
 
 ### GDB
-- [Debug a Program Started by a Script](html/gdb-program-started-by-script.html)
+- [Debug A Program Started By A Script](html/gdb-program-started-by-script.html)
 
 ### Cheatsheets
 - [KVM](html/kvm.html)

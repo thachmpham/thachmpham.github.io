@@ -9,7 +9,7 @@
 
 ---
 title:  'OpenSAF AMF'
-subtitle: '**Convert a Linux Program to High Availability**'
+subtitle: '**Convert A Linux Program To High Availability**'
 ---
 
 

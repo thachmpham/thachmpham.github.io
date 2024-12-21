@@ -242,7 +242,7 @@
 <body>
 <header id="title-block-header">
 <h1 class="title">GDB</h1>
-<p class="subtitle"><strong>Debug a Program Started by a
+<p class="subtitle"><strong>Debug A Program Started By A
 Script</strong></p>
 </header>
 <h1 id="introduction">1. Introduction</h1>
@@ -289,7 +289,7 @@ Forks</a></li>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">./demo</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;==== end     ====&quot;</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="debug">2.2. Debug</h2>
+<h2 id="debug-with-gdb">2.2. Debug with GDB</h2>
 <ul>
 <li>Launch script with GDB.</li>
 </ul>
@@ -329,10 +329,10 @@ than the parent.</li>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[Attaching</span> after Thread 0x7ffff7f73740 <span class="er">(</span><span class="ex">LWP</span> 42499<span class="kw">)</span> <span class="ex">fork</span> to child process 42502]</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">[New</span> inferior 2 <span class="er">(</span><span class="ex">process</span> 42502<span class="kw">)</span><span class="ex">]</span></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="ex">process</span> 42502 is executing new program: /home/mm/demo/demo</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="ex">process</span> 42502 is executing new program: /opt/app/demo</span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="ex">[Switching</span> to process 42502]</span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 2.1 <span class="st">&quot;demo&quot;</span> hit Catchpoint 1 <span class="er">(</span><span class="ex">exec</span><span class="st">&#39;d /home/mm/demo/demo), 0x00007ffff7fe4540 in ?? () from /lib64/ld-linux-x86-64.so.2</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 2.1 <span class="st">&quot;demo&quot;</span> hit Catchpoint 1 <span class="er">(</span><span class="ex">exec</span><span class="st">&#39;d /opt/app/demo), 0x00007ffff7fe4540 in ?? () from /lib64/ld-linux-x86-64.so.2</span></span>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span></code></pre></div>
 <ul>
 <li>Set breakpoint.</li>
@@ -368,8 +368,104 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Num</span>  Description       Connection           Executable        </span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">1</span>    process 42499     1 <span class="er">(</span><span class="ex">native</span><span class="kw">)</span>           <span class="ex">/usr/bin/bash</span>     </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 2    process 42502     1 <span class="er">(</span><span class="ex">native</span><span class="kw">)</span>           <span class="ex">/home/mm/demo/demo</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 2    process 42502     1 <span class="er">(</span><span class="ex">native</span><span class="kw">)</span>           <span class="ex">/opt/app/demo</span></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="gdb-gdbserver">2.3. GDB &amp; GDBServer</h2>
+<p>During debugging, the program’s output to the GDB terminal can
+trigger a SIGTTOU signal, causing GDB to stop.</p>
+<p>To prevent this, we can use gdb with gdbserver, allows GDB to run in
+one terminal while the program executes in a separate terminal, ensuring
+the program’s output does not interfere with the debugging session.</p>
+<h3 id="gdbserver-on-terminal-1">2.3.1. GDBServer on Terminal 1</h3>
+<ul>
+<li>Launch script with gdbserver.</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">term1$</span> gdbserver localhost:5555 bash run.sh</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Process</span> bash created<span class="kw">;</span> <span class="ex">pid</span> = 53908</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Listening</span> on port 5555</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h3 id="gdb-on-terminal-2">2.3.2. GDB on Terminal 2</h3>
+<ul>
+<li>Attach gdb.</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">term2$</span> gdb <span class="at">-ex</span> <span class="st">&quot;target remote localhost:5555&quot;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Remote</span> debugging using localhost:5555</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Reading</span> /opt/app/demo from remote target...</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Configure gdb.</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> detach-on-fork off</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> follow-fork-mode child</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">catch</span> exec</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Continue.</li>
+</ul>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">continue</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[Attaching</span> after Thread 53908.53908 fork to child Thread 54343.54343]</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[New</span> inferior 2 <span class="er">(</span><span class="ex">process</span> 54343<span class="kw">)</span><span class="ex">]</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="ex">process</span> 54343 is executing new program: /opt/app/demo</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="ex">[Switching</span> to Thread 54343.54343]</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 2.1 hit Catchpoint 1 <span class="er">(</span><span class="ex">exec</span><span class="st">&#39;d /opt/app/demo), 0x00007ffff7fe4540 in ?? ()</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="st">   from target:/lib64/ld-linux-x86-64.so.2</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span></code></pre></div>
+<ul>
+<li>Set breakpoint.</li>
+</ul>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">main</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Continue.</li>
+</ul>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">continue</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 2.1 hit Breakpoint 2.1, main <span class="er">(</span><span class="va">argc</span><span class="op">=</span>1, <span class="va">argv</span><span class="op">=</span>0x7fffffffdc58<span class="kw">)</span> <span class="ex">at</span> demo.c:5</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="ex">5</span>           printf<span class="er">(</span><span class="st">&quot;hello\n&quot;</span><span class="kw">);</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Show inferiors.</li>
+</ul>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> inferiors</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 2.1 hit Breakpoint 2.1, main <span class="er">(</span><span class="va">argc</span><span class="op">=</span>1, <span class="va">argv</span><span class="op">=</span>0x7fffffffdc58<span class="kw">)</span> <span class="ex">at</span> demo.c:5</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="ex">5</span>           printf<span class="er">(</span><span class="st">&quot;hello\n&quot;</span><span class="kw">);</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> inferiors</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Num</span>  Description       Connection                Executable        </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">1</span>    process 53908     1 <span class="er">(</span><span class="ex">remote</span> localhost:5555<span class="kw">)</span> <span class="ex">target:/usr/bin/bash</span> </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 2    process 54343     1 <span class="er">(</span><span class="ex">remote</span> localhost:5555<span class="kw">)</span> <span class="ex">target:/opt/app/demo</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="references">References</h1>
 <ul>
 <li><a href="https://sourceware.org/gdb">sourceware.org/gdb</a></li>
