@@ -3,31 +3,22 @@ title: Distributed Replicated Block Device
 ---
 
 # 1. Introduction
-Distributed Replicated Block Device (DRBD) is a tool for data replication at the block level between servers.
+Distributed Replicated Block Device (DRBD) is a tool for data replication at the block level between servers.  
+
+`drbd-utils` is the package for managing and configuring DRBD. The package provides the below commands:
+
+- `drbdadm`: Manage resources (configure, start/stop, promote/demote).
+- `drbdsetup`: Low-level control for debugging/custom setups.
+- `drbdmeta`: Manage DRBD metadata (create, inspect, remove).
+- `drbdmon`: Monitor real-time states and sync progress.
 
 
-# 2. Setup
-Set up DRBD to replicate partition /dev/sda9 between two hosts node 1 and node 2.
+# 2. Lab
+Set up DRBD to replicate a partition between two hosts:
 
-<pre class="mermaid">
-flowchart LR
-    node1_drbd0["/dev/drbd0"]
-    node2_drbd0["/dev/drbd0"]
-
-    subgraph node1
-        subgraph node1_sda9["/dev/sda9"]
-            node1_drbd0
-        end
-    end
-
-    subgraph node2
-        subgraph node2_sda9["/dev/sda9"]
-            node2_drbd0
-        end
-    end
-
-    node1_drbd0 <---> node2_drbd0
-</pre>
+- Install drbd-utils on node 1 and node 2.
+- Modify /etc/drbd.conf on both nodes.
+- Start drbd service.
 
 
 ## 2.1. Install DRBD
@@ -41,6 +32,7 @@ node2$ apt install drbd-utils
 
 
 ## 2.2. Configuration File
+
 - Edit files /etc/drbd.conf on node 1 and node 2 as below.
 ```c++
   
@@ -73,34 +65,49 @@ resource r0 {
   
 ```
 
-- /dev/sda9 is the existing partition.
-- /dev/drbd0 will be created by drbd, no need to be pre-existing.
-- Size of filesystem on /dev/sda9 should be smaller than size of partition /dev/sda9.
-    - Use lsblk or fdisk to check size of partition /dev/sda9.  
-    - Use resize2fs to resize filesystem on /dev/sda9.  
+<pre class="mermaid">
+flowchart TD
+    node1_drbd0["/dev/drbd0"]
+    node2_drbd0["/dev/drbd0"]
+
+    subgraph node1
+        node1_sda9["/dev/sda9"]
+        node1_sda9 <---> node1_drbd0
+    end
+
+    subgraph node2
+        node2_sda9["/dev/sda9"]
+        node2_sda9 <---> node2_drbd0
+    end
+
+    node1_drbd0 <---> node2_drbd0
+</pre>
+
+- `/dev/sda9` is the existing partition.
+- `/dev/drbd0` is drbd partition, no need to be pre-existing, it will be created automatically by drbd service.
+- `/dev/sda9` serves as the underlying storage for `/dev/drbd0`.
 
 
-## 2.3. Create Meta-data
-- Create meta-data on both node 1 and node 2.
+## 2.3. Meta-data
+- Create drbd meta-data.
 ```sh
   
 node1$ drbdadm create-md r0
-
 node2$ drbdadm create-md r0
   
 ```
 
 ## 2.4. Start DRBD
-### 2.4.1. Start DRBD on Node 1
+- Start drbd on node 1.
 ```sh
   
 node1$ systemctl start drbd
   
 ```
 
-- Check syslog.
 ```sh
-
+  
+# syslog
 node1 systemd:  Starting drbd.service
 node1 drbd:     [
 node1 drbd:         create res:     r0
@@ -116,16 +123,16 @@ node1 systemd:  Finished drdb.service
   
 ```
 
-### 2.4.2. Start DRBD on Node 2
+- Start drbd on node 2.
 ```sh
   
 node2$ systemctl start drbd
   
 ```
 
-- Check syslog.
 ```sh
   
+# syslog
 # node2 starts service
 node2 systemd:  Starting drbd.service
 node2 drbd:     [
@@ -155,17 +162,16 @@ node1 systemds: Finish drbd.service
 
 
 ## 2.5. Promote Primary
-### 2.5.1. Promote Node1 to Primary
-- Promote node 1 to be primary and overwrite the current state of node 2.
+- Promote node 1 to primary and overwrite state of node 2.
 ```sh
   
 node1$ drbdadm -- --overwrite-date-of-peer primary all
   
 ```
 
-- Check syslog.
 ```sh
   
+# syslog
 # node1 becomes sync source
 node1 kernel:   block drbd0:    role( Secondary  ->  Primary )   disk( Inconsistent    ->  UpToDate )
 node1 kernel:   block drbd0:    conn( Connected  ->  WFBitMapS )
@@ -183,39 +189,23 @@ node2 kernel:   block drbd0:    conn( SyncTarget  ->  Connected )   pdsk (Incons
   
 ```
 
-
-### 2.5.2. Monitor Sync Progress
+- Monitor sync progress.
 ```sh
   
 $ watch -n1 cat /proc/drbd
   
 ```
 
-### 2.5.3. Check DRBD Status
+- Check drbd status.
 ```sh
   
-node1$ drbdadm status
-r0  role:Primary
-    disk:UpToDate
-    peer    role:Secondary
-            replication:Established     peer-disk:UpToDate
-  
-```
-
-```sh
-  
-node2$ drbdadm status
-r0  role:Secondary
-    disk:UpToDate
-    peer    role:Primary
-            replication:Established     peer-disk:UpToDate
+$ drbdadm status
   
 ```
 
 
-## 2.6. Setup Filesystem
-### 2.6.1. Check Partition
-- After sync completed, the partition /dev/drbd0 will be created.
+## 2.6. Make Filesystem
+- After sync finished, drbd partition /dev/drbd0 will be created automatically by drbd service.
 ```sh
   
 node1$ lsblk -f
@@ -238,7 +228,7 @@ sda
   
 ```
 
-### 2.6.2. Make Filesystem
+- Make filesystem for drbd partition.
 ```sh
   
 $ mkfs.ext3 /dev/drbd0
@@ -247,40 +237,36 @@ $ mkfs.ext3 /dev/drbd0
 
 
 ## 2.8. Mount
-- On node1, mount partition /dev/drbd0 to /mnt/test (*only primary node can mount*).
+- On node1, mount drbd partition.
 ```sh
   
 node1$ mkdir /mnt/test
-
 node1$ mount /dev/drbd0 /mnt/test
   
 ```
 
+*Notes: the drbd partition can only be mounted on the primary node.*
+
 
 # 3. Fault Tolerance
-**Agenda**  
-- Create a file on node 1.  
-- Stop drbd on node 1.  
-- Check if the file available on node 2.  
-
 ## 3.1. Simulate Fault on Node 1
-### 3.1.1. Create a File
+- Create a file on node 1.  
 ```sh
   
 node1$ touch /mnt/test/hello
   
 ```
 
-### 3.1.2 Stop DRBD
+- Stop drbd on node 1.
 ```sh
   
 node1$ systemctl stop drbd
   
 ```
 
-- Check syslog.
 ```sh
   
+# syslog
 # node1 stops drbd
 node1 systemd:  Stopping drbd.service
 node1 kernel:   EXT4-fs (drbd0): unmounting filesystem
@@ -301,30 +287,28 @@ node2 kernel:   drbd r0:        conn( Unconnected  ->  WFConnection )
 ```
 
 ## 3.2. Recover on Node 2
-### 3.2.1. Promote to Primary
-- Promote node 2 to primary. Need to promote to primary before mount.
+- Promote node 2 to primary.
 ```sh
   
 node2$ drbdadm primary r0
   
 ```
 
-- Check syslog.
 ```sh
   
+# syslog
 node2 kernel: block drbd0: role( Secondary  ->  Primary )  
   
 ```
 
-### 3.2.2. Mount
+- Mount drbd partition.
 ```sh
   
 node2$ mount /dev/drbd0 /mnt/test
   
 ```
 
-### 3.2.3. Fault Tolerance
-- The /mnt/test/hello file will exist on node2.
+- Check if the file can be recoverd on node 2.
 ```sh
   
 node2$ ls /mnt/test
@@ -334,6 +318,6 @@ hello
 
 
 # References
-- https://manpages.ubuntu.com/manpages/xenial/man5/drbd.conf.5.html
-- https://manpages.ubuntu.com/manpages/jammy/man8/drbdadm.8.html
-- https://ubuntu.com/server/docs/distributed-replicated-block-device-drbd
+- [manpages.ubuntu.com/manpages/xenial/man5/drbd.conf.5.html](https://manpages.ubuntu.com/manpages/xenial/man5/drbd.conf.5.html)
+- [manpages.ubuntu.com/manpages/jammy/man8/drbdadm.8.html](https://manpages.ubuntu.com/manpages/jammy/man8/drbdadm.8.html)
+- [ubuntu.com/server/docs/distributed-replicated-block-device-drbd](https://ubuntu.com/server/docs/distributed-replicated-block-device-drbd)
