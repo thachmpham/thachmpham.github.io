@@ -36,7 +36,7 @@ subtitle: "A Practical Blog for Software Developers<br/>*Computer Networking - D
 
 
 ### GDB
-- [Debug Programs Started by Scripts](html/gdb-program-started-by-script.html)
+- [Debug a Program Started by a Script](html/gdb-program-started-by-script.html)
 
 ### Cheatsheets
 - [KVM](html/kvm.html)
