@@ -382,7 +382,7 @@ $ gdbserver localhost:5555 bash run.sh
 - GDB.
 ```sh
   
-$ gdb -q -x debug.gdb
+$ gdb -q --args bash run.sh
 $ gdb -q -ex "target remote localhost:5555"
 $ gdb -q -x debug.gdb -ex "target remote localhost:5555"
   
