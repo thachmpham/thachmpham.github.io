@@ -45,6 +45,11 @@ echo "==== end     ===="
   
 ```
 
+We will debug the demo program when it is started by the run.sh script using two methods:
+
+- Debugging with GDB (see Section 2.2).
+- Debugging with GDB and GDBServer (see Section 2.3).
+
 
 ## 2.2. Debug with GDB
 - Launch script with GDB.
@@ -89,7 +94,6 @@ Starting program: /usr/bin/bash run.sh
 ====  begin   ====
 [Attaching after Thread 0x7ffff7f73740 (LWP 42499) fork to child process 42502]
 [New inferior 2 (process 42502)]
-
 process 42502 is executing new program: /opt/app/demo
 [Switching to process 42502]
 
@@ -137,6 +141,65 @@ Thread 2.1 "demo" hit Breakpoint 2.1, main (argc=1, argv=0x7fffffffdc38) at demo
   
 ```
 
+- Continue the demo program.
+```sh
+  
+(gdb) continue
+  
+```
+
+```sh
+  
+Continuing.
+hello
+[Inferior 2 (process 42502) exited normally]
+  
+```
+
+- The demo program already exited.
+```sh
+  
+(gdb) info inferiors
+  
+```
+
+```sh
+  
+  Num  Description       Connection           Executable        
+  1    process 42499     1 (native)           /usr/bin/bash     
+* 2    <null>  42502     1 (native)           /opt/app/demo
+  
+```
+
+- Move debugger to the script.
+```sh
+  
+(gdb) inferior 1
+  
+```
+
+```sh
+  
+[Switching to inferior 1 [process 42499] (/usr/bin/bash)]
+[Switching to thread 1.1 (Thread 0x7ffff7f73740 (LWP 42499))]
+  
+```
+
+- Continue the script.
+```sh
+  
+(gdb) continue
+  
+```
+
+```sh
+  
+Continuing.
+==== end     ====
+[Inferior 1 (process 42499) exited normally]
+  
+```
+
 
 ## 2.3. GDB & GDBServer
 During debugging, the program's output to the GDB terminal can trigger a SIGTTOU signal, causing GDB to stop.
@@ -178,6 +241,12 @@ Reading /opt/app/demo from remote target...
   
 (gdb) set detach-on-fork off
 (gdb) set follow-fork-mode child
+  
+```
+
+- Set catchpoint.
+```sh
+  
 (gdb) catch exec
   
 ```
@@ -243,6 +312,95 @@ Thread 2.1 hit Breakpoint 2.1, main (argc=1, argv=0x7fffffffdc58) at demo.c:5
   
 ```
 
+- Continue the demo program.
+```sh
+  
+(gdb) continue
+  
+```
+
+```sh
+  
+Continuing.
+[Inferior 2 (process 54343) exited normally]
+  
+```
+
+- Move debugger to the script.
+```sh
+  
+gdb) inferior 1
+  
+```
+
+```sh
+  
+[Switching to inferior 1 [process 53908] (target:/usr/bin/bash)]
+[Switching to thread 1.1 (Thread 53908.53908)]
+  
+```
+
+- Continue the script.
+```sh
+  
+gdb) continue
+  
+```
+
+```sh
+  
+Continuing.
+[Inferior 1 (process 53908) exited normally]
+  
+```
+
+- Output of gdbserver on terminal 1.
+```sh
+  
+Process bash created; pid = 53908
+Listening on port 5555
+Remote debugging from host 127.0.0.1, port 47264
+====  begin   ====
+hello
+
+Child exited with status 0
+==== end     ====
+
+Child exited with status 0
+  
+```
+
+
+# 3. Cheatsheets
+- GDBServer.
+```sh
+  
+$ gdbserver localhost:5555 bash run.sh
+  
+```
+
+- GDB.
+```sh
+  
+$ gdb -q -x debug.gdb
+$ gdb -q -ex "target remote localhost:5555"
+$ gdb -q -x debug.gdb -ex "target remote localhost:5555"
+  
+```
+
+- GDB script.
+```sh
+  
+set confirm off
+set pagination off
+
+set detach-on-fork off
+set follow-fork-mode child
+
+catch exec
+  
+```
+
 
 # References
-- [sourceware.org/gdb](https://sourceware.org/gdb)
+- [sourceware.org/gdb/current/onlinedocs/gdb.html](https://sourceware.org/gdb/current/onlinedocs/gdb.html)
