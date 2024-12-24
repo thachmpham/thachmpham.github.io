@@ -247,8 +247,8 @@ Service</strong></p>
 </header>
 <h1 id="introduction">1. Introduction</h1>
 <p>Debugging a program launched by a systemd service can be challenging
-due to its execution flow. When the program runs in the background,
-attaching a debugger to the process becomes trickier.</p>
+due to its execution flow, the program runs in the background, attaching
+a debugger to the process started by systemd becomes trickier.</p>
 <p>In this post, we will examine how to debug with gdbserver and
 gdb.</p>
 <h1 id="lab">2. Lab</h1>
@@ -422,7 +422,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">quit</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="debug-running-process">2.2. Debug Running Process</h2>
+<h2 id="debug-running-process">2.3. Debug Running Process</h2>
 <ul>
 <li>List processes under service.</li>
 </ul>
@@ -450,12 +450,11 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">bt</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co">#0  0x00007ffff7ceca7a in clock_nanosleep () from /lib/x86_64-linux-gnu/libc.so.6</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">#1  0x00007ffff7cf9a27 in nanosleep () from /lib/x86_64-linux-gnu/libc.so.6</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">#2  0x00007ffff7d0ec63 in sleep () from /lib/x86_64-linux-gnu/libc.so.6</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">#3  0x0000555555555201 in main (argc=1, argv=0x7fffffffec78) at main.c:15</span></span>
+<div class="sourceCode" id="cb23"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#0  0x00007ffff7ceca7a in clock_nanosleep () from /lib/x86_64-linux-gnu/libc.so.6</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#1  0x00007ffff7cf9a27 in nanosleep () from /lib/x86_64-linux-gnu/libc.so.6</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#2  0x00007ffff7d0ec63 in sleep () from /lib/x86_64-linux-gnu/libc.so.6</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#3  0x0000555555555201 in main (argc=1, argv=0x7fffffffec78) at main.c:15</span></span>
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="references">References</h1>
 <ul>

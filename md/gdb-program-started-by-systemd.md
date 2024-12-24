@@ -5,7 +5,7 @@ subtitle: '**Debug A Program Started By A Systemd Service**'
 
 
 # 1. Introduction
-Debugging a program launched by a systemd service can be challenging due to its execution flow. When the program runs in the background, attaching a debugger to the process becomes trickier.
+Debugging a program launched by a systemd service can be challenging due to its execution flow, the program runs in the background, attaching a debugger to the process started by systemd becomes trickier.
 
 In this post, we will examine how to debug with gdbserver and gdb.
 
@@ -202,7 +202,7 @@ Detaching from program: target:/opt/demo/main, process 86099
 ```
 
 
-## 2.2. Debug Running Process
+## 2.3. Debug Running Process
 - List processes under service.
 ```sh
   
@@ -232,7 +232,7 @@ $ gdb -q -p `pidof /opt/demo/main`
   
 ```
 
-```sh
+```c
   
 #0  0x00007ffff7ceca7a in clock_nanosleep () from /lib/x86_64-linux-gnu/libc.so.6
 #1  0x00007ffff7cf9a27 in nanosleep () from /lib/x86_64-linux-gnu/libc.so.6
