@@ -85,10 +85,7 @@ ExecStart=/opt/demo/control.sh start
 ExecStop=/opt/demo/control.sh stop
 Type=forking
 KillMode=non
-
-[Install]
-WantedBy=multi-user.target
-  
+    
 ```
 
 We will debug the program in two phases:
