@@ -61,7 +61,8 @@ pandoc -f markdown -t html -s \
 # generate_post opensaf-amf-sa-aware
 
 # ====  GDB
-generate_post gdb-program-started-by-script
+# generate_post gdb-program-started-by-script
+generate_post gdb-program-started-by-systemd
 
 # ====  Cheatsheets
 # generate_post kvm
