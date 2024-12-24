@@ -51,23 +51,23 @@ $ gcc -g main.c -o main
 #!/bin/bash
 
 start() {
-        start-stop-daemon --start --background \
-                --make-pidfile --pidfile /var/run/demo.pid \
-                --exec /opt/demo/main
+    start-stop-daemon --start --background \
+        --make-pidfile --pidfile /var/run/demo.pid \
+        --exec /opt/demo/main
 }
 
 stop() {
-        start-stop-daemon --stop --pidfile /var/run/demo.pid
+    start-stop-daemon --stop --pidfile /var/run/demo.pid
 }
 
-case $1 in 
-        start)
-                start;;
-        stop)
-                stop;;
-        *)
-                echo 'Usage: control.sh {start|stop}'
-                exit 1;;
+case $1 in
+    start)
+        start;;
+    stop)
+        stop;;
+    *)
+        echo 'Usage: control.sh {start|stop}'
+        exit 1;;
 esac
 
 exit 0
@@ -98,7 +98,24 @@ We will debug the program in two phases:
 
 
 ## 2.2. Debug Entrypoint
-- Modify the control.sh script to launch the program under gdbserver.
+- Modify start() and stop() functions in control.sh script.
+```sh
+  
+start() {
+    start-stop-daemon --start --background \
+        --make-pidfile --pidfile /var/run/demo.pid \
+        --exec /usr/bin/gdbserver localhost:5555 /opt/demo/main
+}
+
+stop() {
+    # start-stop-daemon --stop --pidfile /var/run/demo.pid
+
+    kill -9 $(cat /var/run/demo.pid)
+}
+  
+```
+
+- Start service.
 ```sh
   
 $ systemctl start demo
