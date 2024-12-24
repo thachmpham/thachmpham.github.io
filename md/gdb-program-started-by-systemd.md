@@ -93,8 +93,8 @@ WantedBy=multi-user.target
 
 We will debug the program in two phases:
 
-- In the first phase, debug the entry point of the program when the service is started (Section 2.2).
-- In the second phase, debug the program while it is running (Section 2.3).
+- Debug the entry point of the program when the service is started (Section 2.2).
+- Debug the program while it is running (Section 2.3).
 
 
 ## 2.2. Debug Entrypoint
