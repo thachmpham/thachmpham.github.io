@@ -108,8 +108,6 @@ start() {
 }
 
 stop() {
-    # start-stop-daemon --stop --pidfile /var/run/demo.pid
-
     kill -9 $(cat /var/run/demo.pid)
 }
   
