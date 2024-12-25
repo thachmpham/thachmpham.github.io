@@ -8,7 +8,7 @@ title:  'About Me'
   
 I'm **Thach**, a software developer. 
   
-This blog is a personal record of things I find interesting, created in my free time. My aim is to document some explorations and build a resource for future reference.
+This blog is where I document what I’m learning in my free time. My aim is to build a resource for easy reference.
 
 The posts here are primarily focused on technical and programming topics. I hope you’ll find something interesting or helpful as well.
   
