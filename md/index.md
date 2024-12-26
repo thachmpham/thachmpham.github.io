@@ -33,6 +33,7 @@ subtitle: "A Practical Blog for Software Developers<br/>*Computer Networking - D
 - [LOG &nbsp;&nbsp; - &nbsp; Log Service](html/opensaf-log.html)
 - [AMF &nbsp;&nbsp; - &nbsp; Convert A Linux Program To High Availability](html/opensaf-amf-non-sa-aware.html)
 - [AMF &nbsp;&nbsp; - &nbsp; Build High Availability App with AMF API](html/opensaf-amf-sa-aware.html)
+- [AMF &nbsp;&nbsp; - &nbsp; AMF Healthcheck](html/opensaf-healthcheck.html)
 
 
 ### GDB
