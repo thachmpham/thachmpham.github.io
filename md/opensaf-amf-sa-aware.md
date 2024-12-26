@@ -224,8 +224,8 @@ immcfg -c SaAmfCompType \
     -a saAmfCtDefCallbackTimeout=10000000000 \
     -a saAmfCtRelPathInstantiateCmd=control.sh \
     -a saAmfCtDefInstantiateCmdArgv=start \
-    -a saAmfCtRelPathTerminateCmd=control.sh \
-    -a saAmfCtDefTerminateCmdArgv=stop \
+    -a saAmfCtRelPathCleanupCmd=control.sh \
+    -a saAmfCtDefCleanupCmdArgv=stop \
     -a saAmfCtDefQuiescingCompleteTimeout=10000000000 \
     -a saAmfCtDefRecoveryOnError=2 \
     -a saAmfCtDefDisableRestart=0 \
