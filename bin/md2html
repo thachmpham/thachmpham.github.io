@@ -51,7 +51,7 @@ pandoc -f markdown -t html -s \
 # generate_post drbd
 
 # ====  OpenSAF
-# generate_post opensaf-install
+generate_post opensaf-install
 # generate_post opensaf-1sc
 # generate_post opensaf-2sc
 # generate_post opensaf-imm

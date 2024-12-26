@@ -6,10 +6,7 @@ title:  'About Me'
 # Greetings
 *Hello and a warm welcome. Thank you for taking time to visit.*  
   
-I'm **Thach**, a software developer. 
-  
-This blog is where I document what I’m learning in my free time. My aim is to build a resource for easy reference.
-
+I'm **Thach**, a software developer. I write this blog to build a resource for easy reference.
 The posts here are primarily focused on technical and programming topics. I hope you’ll find something interesting or helpful as well.
   
 *Thanks again and wishing you a great day ahead.*  

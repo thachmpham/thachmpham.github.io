@@ -114,4 +114,11 @@ safSISU=safSu=SC-1\,safSg=2N\,safApp=OpenSAF,safSi=SC-2N,safApp=OpenSAF
 # References
 - [OpenSAF quick-start guide.](https://sourceforge.net/p/opensaf/wiki/OpenSAF%20quick-start%20guide%20%28simulated%20cluster%29)
 - [Using OpenSAF as an application.](https://sourceforge.net/p/opensaf/wiki/OpenSAF%20as%20an%20application)
-- https://github.com/adrian77/docker
+- [github.com/adrian77/docker](https://github.com/adrian77/docker)
+
+If you prefer to install on virtual machine, you can use the below iso images:
+
+- [Ubuntu 16.04](https://releases.ubuntu.com/16.04)
+- [Debian 12.08](https://mirror.accum.se/debian-cd/12.8.0)
+
+
