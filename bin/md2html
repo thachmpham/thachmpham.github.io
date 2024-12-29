@@ -58,8 +58,8 @@ pandoc -f markdown -t html -s \
 # generate_post opensaf-smf
 # generate_post opensaf-log
 # generate_post opensaf-amf-non-sa-aware
-# generate_post opensaf-amf-sa-aware
-generate_post opensaf-healthcheck
+generate_post opensaf-amf-sa-aware
+# generate_post opensaf-healthcheck
 
 
 # ====  GDB
