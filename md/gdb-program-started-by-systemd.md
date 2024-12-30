@@ -135,7 +135,7 @@ $ gdb -q -ex "target extended-remote localhost:5555"
 - Show processes.
 ```sh
   
-info inferiors
+(gdb) info inferiors
   
 ```
 
@@ -250,6 +250,34 @@ $ gdb -q -p `pidof /opt/demo/main`
 #1  0x00007ffff7cf9a27 in nanosleep () from /lib/x86_64-linux-gnu/libc.so.6
 #2  0x00007ffff7d0ec63 in sleep () from /lib/x86_64-linux-gnu/libc.so.6
 #3  0x0000555555555201 in main (argc=1, argv=0x7fffffffec78) at main.c:15
+  
+```
+
+
+# 3. Cheatsheets
+- GDB.
+```sh
+  
+$ gdb -q --args bash run.sh
+$ gdb -q -ex "target remote localhost:5555"
+$ gdb -q -ex "target extended-remote localhost:5555"
+$ gdb -q -x debug.gdb -ex "target remote localhost:5555"
+  
+```
+
+- GDB script.
+```sh
+  
+set confirm off
+set pagination off
+
+set detach-on-fork off
+set follow-fork-mode child
+
+set tcp auto-retry on
+set tcp connect-timeout unlimited
+
+catch exec
   
 ```
 
