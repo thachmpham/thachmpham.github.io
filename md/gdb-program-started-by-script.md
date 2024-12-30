@@ -397,6 +397,9 @@ set pagination off
 set detach-on-fork off
 set follow-fork-mode child
 
+set tcp auto-retry on
+set tcp connect-timeout unlimited
+
 catch exec
   
 ```

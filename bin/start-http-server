@@ -1,0 +1,6 @@
+#! /usr/bin/bash
+
+# ====  global variables
+workspace=$(git rev-parse --show-toplevel)
+
+python3 -m http.server 8000 --directory $workspace > /dev/null 2>&1 &
