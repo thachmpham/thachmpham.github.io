@@ -63,8 +63,8 @@ pandoc -f markdown -t html -s \
 
 
 # ====  GDB
-generate_post gdb-program-started-by-script
-generate_post gdb-program-started-by-systemd
+# generate_post gdb-program-started-by-script
+# generate_post gdb-program-started-by-systemd
 generate_post gdb-ha-program
 
 

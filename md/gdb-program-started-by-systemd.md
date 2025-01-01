@@ -84,7 +84,7 @@ Type=forking
 
 
 ## 2.2. Debug.
-- Modify start() functions in control.sh script to launch the program with gdbserver.
+- Modify start() function in script control.sh to launch the program with gdbserver.
 ```sh
   
 start() {
@@ -110,14 +110,14 @@ $ gdb
   
 ```
 
-- Connect and wait for gdbserver which will be started by systemctl.
+- Connect and wait for gdbserver.
 ```sh
   
 (gdb) target remote localhost:5555
   
 ```
 
-- Start service.
+- Start service, which will start gdbserver.
 ```sh
   
 $ systemctl start demo
@@ -132,7 +132,7 @@ systemd[1]: Started demo.service - Demo Service.
   
 ```
 
-- After gdbserver started by systemctl, gdb automatically attached.
+- After gdbserver started, gdb automatically attached.
 ```sh
   
 # console log

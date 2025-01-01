@@ -39,7 +39,7 @@ subtitle: "A Practical Blog for Software Developers<br/>*Computer Networking - D
 ### GDB
 - [Debug A Program Started By A Script](html/gdb-program-started-by-script.html)
 - [Debug A Program Started By A Systemd Service](html/gdb-program-started-by-systemd.html)
-- [Debug A HA Program](html/gdb-ha-program.html)
+- [Debug A High Availability Program](html/gdb-ha-program.html)
 
 
 ### Cheatsheets

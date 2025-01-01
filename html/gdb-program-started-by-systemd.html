@@ -312,7 +312,7 @@ make debugging more challenging.</p>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div>
 <h2 id="debug.">2.2. Debug.</h2>
 <ul>
-<li>Modify start() functions in control.sh script to launch the program
+<li>Modify start() function in script control.sh to launch the program
 with gdbserver.</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -337,14 +337,13 @@ program is launched in parallel with GDB.</li>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> tcp connect-timeout unlimited</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>Connect and wait for gdbserver which will be started by
-systemctl.</li>
+<li>Connect and wait for gdbserver.</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">target</span> remote localhost:5555</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>Start service.</li>
+<li>Start service, which will start gdbserver.</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> systemctl start demo</span>
@@ -356,8 +355,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="va">systemd</span><span class="op">[</span><span class="dv">1</span><span class="op">]</span><span class="ex">:</span> Started demo.service <span class="at">-</span> Demo Service.</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>After gdbserver started by systemctl, gdb automatically
-attached.</li>
+<li>After gdbserver started, gdb automatically attached.</li>
 </ul>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  </span>

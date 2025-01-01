@@ -5,22 +5,25 @@ subtitle: '**Debug A High Availability Program**'
 
 
 # 1. Introduction
-High-availability (HA) systems need uninterrupted service, often using multi-threaded programs where some threads handle real-time tasks or must continue to respond to external events. That makes debugging HA programs more complex.
-
-GDB supports non-stop mode that lets you pause specific threads for debugging while other threads keep running.
+High availability systems are designed for continuous service, typically relying on multi-threaded programs where some threads manage real-time tasks while others handle external events. Debugging these systems is more challenging because interrupting or pausing the program to investigate issues can disrupt service and affect system reliability.
 
 
 # 2. Lab
-## 2.1. OpenSAF AMF Program
+## 2.1. High Availability Program
 In this lab, we will the debug the below OpenSAF AMF program.
 
-- [github.com/thachmpham/samples/tree/main/opensaf/worker_thread](https://github.com/thachmpham/samples/tree/main/opensaf/worker_thread)
+- Source code: [github.com/thachmpham/samples](https://github.com/thachmpham/samples/tree/main/opensaf/worker_thread)
 
+- File main.c
 ```c
   
 int main(int argc, char ** argv)
 {
     //...    
+    saAmfInitialize_o4(&amfHandler, &callbacks, &apiVersion);
+    
+    saAmfComponentRegister(amfHandler, &name, 0);
+
     pthread_create(&thread, NULL, threadFunction, NULL);
 
     saAmfSelectionObjectGet(amfHandler, &monitorFd);    
@@ -49,53 +52,190 @@ void* threadFunction(void* arg)
   
 ```
 
+- File control.sh.
+```sh
+  
+start() {
+    logger -st demo 'start'
+    start-stop-daemon --start --background \
+        --make-pidfile --pidfile /var/run/demo.pid \
+        --exec /opt/demo/main
+}
+
+stop() {
+    logger -st demo 'stop'
+    start-stop-daemon --stop --pidfile /var/run/demo.pid
+}
+  
+```
+
+- Build and install.
+```sh
+  
+$ mkdir /opt/demo
+$ cp worker_thread/* /opt/demo
+$ cd /opt/demo
+$ ./build.sh
+$ systemctl start opensafd
+$ ./import-imm.sh
+$ amf-state su all safSu=SC-1,safSg=demo,safApp=demo
+  
+```
 
 We will debug the program in two phases:
 
-- Debug the entry point of the program when the service unit is started (Section 2.2).
+- Debug the entrypoint when the program started (Section 2.2).
 - Debug the program while it is running (Section 2.3).
 
 
 ## 2.2. Debug Entrypoint
-### 2.2.1. Problems
-When debugging entry point of a AMF application, we encounters the below problems:
+When debugging entrypoint of a AMF application, we encounters the below points:
 
 - The program starts as daemon via the command configured by attribute `saAmfCtRelPathInstantiateCmd` of class `SaAmfCompType`.
-- If the AMF operation cannot finished within `saAmfCtDefClcCliTimeout` of class `SaAmfCompType`, AMF will assume that the operation failed and stop it.
+- If the AMF operation cannot finished within `saAmfCtDefClcCliTimeout` of class `SaAmfCompType`, AMF will assume that the operation failed and stop the operation.
 - If the component does not register within `saAmfCompInstantiateTimeout` of class `SaAmfComp`, AMF will automatically kill and restart the process.
 
+First, we adjust these timeouts to have enough time for debugging.
+
+- Adjust saAmfCtDefClcCliTimeout. Time unit is nanosecond.
 ```sh
   
-$ amf-find comptype
-safVersion=1,safCompType=demo
+$ immcfg -a saAmfCtDefClcCliTimeout=600000000000 safVersion=1,safCompType=demo
+  
+```
 
-$ immlist safVersion=1,safCompType=demo
-Name                                               Type         Value(s)
-========================================================================
-saAmfCtRelPathInstantiateCmd                       SA_STRING_T  control.sh
-saAmfCtDefInstantiateCmdArgv                       SA_STRING_T  start
-saAmfCtDefClcCliTimeout                            SA_TIME_T    10000000000
+- Modify function start() in script control.sh to launch the program with gdbserver.
+```sh
+  
+start() {
+    logger -st demo 'start'
+    start-stop-daemon --start --background \
+        --make-pidfile --pidfile /var/run/demo.pid \
+        --exec /usr/bin/gdbserver localhost:5555 /opt/demo/main
+}
+  
+```
+
+- Start gdb.
+```sh
+  
+$ gdb
+  
+```
+
+- Enable tcp auto-retry, unlimited timeout. This is useful when the program is launched in parallel with GDB.
+```sh
+  
+(gdb) set tcp auto-retry on
+(gdb) set tcp connect-timeout unlimited
+  
+```
+
+- Connect and wait for gdbserver.
+```sh
+  
+(gdb) target remote localhost:5555
+  
+```
+
+- Instantiate service unit, which will start gdbserver.
+```sh
+  
+$ amf-adm unlock-in safSu=SC-1,safSg=demo,safApp=demo
+  
+```
+
+- After gdbserver started, gdb automatically attached.
+```sh
+  
+# console log
+Remote debugging using localhost:5555
+Reading /opt/demo/main from remote target...
+  
+```
+
+- Show inferiors.
+```sh
+  
+(gdb) info inferiors
+  
+```
+
+```sh
+  
+# console log
+  Num  Description       Connection                Executable        
+* 1    process 379783    1 (remote localhost:5555) target:/opt/demo/main
+  
+```
+
+- Set breakpoints.
+```sh
+  
+(gdb) break main
+  
+```
+
+```sh
+  
+# console log
+Breakpoint 1 at 0xaaaaaaaa0b64: file main.c, line 40.
+  
+```
+
+- Continue.
+```sh
+  
+(gdb) continue
+  
+```
+
+```sh
+  
+# console log
+Continuing.
+
+Breakpoint 1, main (argc=1, argv=0xfffffffffba8) at main.c:40
+40          openlog("demo", LOG_PID, LOG_USER);
   
 ```
 
 
-### 2.2.1. Steps
-- Modify service startup script.
-```sh
-
-```
-
-- Extend saAmfCtDefClcCliTimeout enough to debug.
+- Continue.
 ```sh
   
-$ immcfg -a saAmfCtDefClcCliTimeout=60000000000 safVersion=1,safCompType=demo
-
-$ immcfg -a saAmfCompInstantiateTimeout=60000000000 safComp=demo,safSu=SC-1,safSg=demo,safApp=demo
+(gdb) continue
   
 ```
+
+```sh
+  
+# syslog
+SC-1 demo[379783]: main: start
+SC-1 demo[379783]: threadFunction: 
+SC-1 demo[379783]: threadFunction: continue... i=0
+SC-1 demo[379783]: threadFunction: continue... i=1
+SC-1 demo[379783]: threadFunction: continue... i=2
+SC-1 demo[379783]: threadFunction: continue... i=3
+  
+```
+
+- Detach and quit.
+```sh
+  
+(gdb) detach
+(gdb) quit
+  
+```
+
+
+## 2.2. Debug Running Program
+When debugging entrypoint of a AMF application, we encounters the below points:
+
+
 
 
 
 # References
-- [sourceware.org/gdb/current/onlinedocs/gdb.html/Server.html](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Server.html)
-- [sourceware.org/gdb/current/onlinedocs/gdb.html/Connecting.html](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Connecting.html)
+- [GDB Connecting to a Remote Target](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Connecting.html)
+- [GDB Non-Stop Mode](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Non_002dStop-Mode.html)
