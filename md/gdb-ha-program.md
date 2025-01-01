@@ -241,6 +241,15 @@ After each healthcheck timeout, AMF sends a ping to the running process. If ther
 - Attribute `saAmfHctDefPeriod` in class `SaAmfHealthcheckType`.
 - Attribute `saAmfHealthcheckPeriod` in class `SaAmfHealthcheck`.
 
+For convinience, we can adjust these timeouts to have more time for debugging.
+
+- Adjust saAmfHctDefPeriod. Time unit is nanosecond.
+```sh
+  
+$ immcfg -a saAmfHctDefPeriod=600000000000 safHealthcheckKey=demo,safVersion=1,safCompType=demo
+  
+```
+
 The healthcheck ping will be handled by some threads of the AMF program, while other threads manage different tasks. In the below output, threads 1, 2, 3 handle ping requests; while thread 4 executes function threadFunction() - a while loop.
 
 ```sh
