@@ -243,7 +243,7 @@ programs more complex.</p>
 <p>GDB supports non-stop mode that lets you pause specific threads for
 debugging while other threads keep running.</p>
 <h1 id="lab">2. Lab</h1>
-<h2 id="systemd-service">2.1. Systemd Service</h2>
+<h2 id="opensaf-amf-program">2.1. OpenSAF AMF Program</h2>
 <p>In this lab, we will the debug the below OpenSAF AMF program.</p>
 <ul>
 <li><a
@@ -293,14 +293,14 @@ below problems:</p>
 <li>The program starts as daemon via the command configured by attribute
 <code>saAmfCtRelPathInstantiateCmd</code> of class
 <code>SaAmfCompType</code>.</li>
-<li>If the component does not register within the bellow attributes, AMF
-will automatically kill and restart the process.
-<ul>
-<li>Attribute <code>saAmfCtDefClcCliTimeout</code> in class
-<code>SaAmfCompType</code>. Time unit is nanosecond.</li>
-<li>Attribute <code>saAmfCompInstantiateTimeout</code> in class
-<code>SaAmfComp</code>.</li>
-</ul></li>
+<li>If the AMF operation cannot finished within
+<code>saAmfCtDefClcCliTimeout</code> of class
+<code>SaAmfCompType</code>, AMF will assume that the operation failed
+and stop it.</li>
+<li>If the component does not register within
+<code>saAmfCompInstantiateTimeout</code> of class
+<code>SaAmfComp</code>, AMF will automatically kill and restart the
+process.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> amf-find comptype</span>

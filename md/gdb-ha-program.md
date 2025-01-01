@@ -11,7 +11,7 @@ GDB supports non-stop mode that lets you pause specific threads for debugging wh
 
 
 # 2. Lab
-## 2.1. Systemd Service
+## 2.1. OpenSAF AMF Program
 In this lab, we will the debug the below OpenSAF AMF program.
 
 - [github.com/thachmpham/samples/tree/main/opensaf/worker_thread](https://github.com/thachmpham/samples/tree/main/opensaf/worker_thread)
@@ -61,9 +61,8 @@ We will debug the program in two phases:
 When debugging entry point of a AMF application, we encounters the below problems:
 
 - The program starts as daemon via the command configured by attribute `saAmfCtRelPathInstantiateCmd` of class `SaAmfCompType`.
-- If the component does not register within the bellow attributes, AMF will automatically kill and restart the process.
-    - Attribute `saAmfCtDefClcCliTimeout` in class `SaAmfCompType`. Time unit is nanosecond.
-    - Attribute `saAmfCompInstantiateTimeout` in class `SaAmfComp`.
+- If the AMF operation cannot finished within `saAmfCtDefClcCliTimeout` of class `SaAmfCompType`, AMF will assume that the operation failed and stop it.
+- If the component does not register within `saAmfCompInstantiateTimeout` of class `SaAmfComp`, AMF will automatically kill and restart the process.
 
 ```sh
   

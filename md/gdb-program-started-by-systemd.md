@@ -7,8 +7,6 @@ subtitle: '**Debug A Program Started By A Systemd Service**'
 # 1. Introduction
 Debugging a program launched by a systemd service can be challenging due to its execution flow, the program runs in the background, attaching a debugger to the process started by systemd becomes trickier.
 
-In this post, we will examine how to debug with gdbserver and gdb.
-
 
 # 2. Lab
 ## 2.1. Systemd Service
@@ -77,14 +75,10 @@ exit 0
 - File /etc/systemd/system/demo.service.
 ```sh
   
-[Unit]
 Description=Demo Service
-
-[Service]
 ExecStart=/opt/demo/control.sh start
 ExecStop=/opt/demo/control.sh stop
 Type=forking
-KillMode=non
     
 ```
 
@@ -95,7 +89,7 @@ We will debug the program in two phases:
 
 
 ## 2.2. Debug Entrypoint
-- Modify start() and stop() functions in control.sh script.
+- Modify start() functions in control.sh script to launch the program with gdbserver.
 ```sh
   
 start() {
@@ -103,10 +97,28 @@ start() {
         --make-pidfile --pidfile /var/run/demo.pid \
         --exec /usr/bin/gdbserver localhost:5555 /opt/demo/main
 }
+  
+```
 
-stop() {
-    kill -9 $(cat /var/run/demo.pid)
-}
+- Start gdb.
+```sh
+  
+$ gdb
+  
+```
+
+- Enable tcp auto-retry, unlimited timeout. This is useful when the program is launched in parallel with GDB.
+```sh
+  
+(gdb) set tcp auto-retry on
+(gdb) set tcp connect-timeout unlimited
+  
+```
+
+- Connect gdb and wait for the program launched by gdbserver at port 5555.
+```sh
+  
+(gdb) target remote localhost:5555
   
 ```
 
@@ -125,14 +137,17 @@ systemd[1]: Started demo.service - Demo Service.
   
 ```
 
-- Attach gdb.
+- After service started, gdb automatically attached to the program.
 ```sh
   
-$ gdb -q -ex "target extended-remote localhost:5555"
+# console log
+Remote debugging using localhost:5555
+Reading /opt/demo/main from remote target...
+_start () at ../sysdeps/aarch64/dl-start.S:22
   
 ```
 
-- Show processes.
+- Show inferiors.
 ```sh
   
 (gdb) info inferiors
@@ -141,6 +156,7 @@ $ gdb -q -ex "target extended-remote localhost:5555"
 
 ```sh
   
+# console log
   Num  Description       Connection                         Executable        
 * 1    process 86099     1 (extended-remote localhost:5555) target:/opt/demo/main
   
@@ -155,6 +171,7 @@ $ gdb -q -ex "target extended-remote localhost:5555"
 
 ```sh
   
+# console log
 Breakpoint 1 at 0x55555555519c: file main.c, line 7.
   
 ```
@@ -168,6 +185,7 @@ Breakpoint 1 at 0x55555555519c: file main.c, line 7.
 
 ```sh
   
+# console log
 Continuing.
 
 Breakpoint 1, main (argc=1, argv=0x7fffffffec78) at main.c:7
@@ -175,7 +193,7 @@ Breakpoint 1, main (argc=1, argv=0x7fffffffec78) at main.c:7
   
 ```
 
-- Continue
+- Continue.
 ```sh
   
 (gdb) continue
@@ -201,6 +219,7 @@ main[86099]: running... 2
 
 ```sh
   
+# console log
 Detaching from program: target:/opt/demo/main, process 86099
 [Inferior 1 (process 86099) detached]
   
@@ -224,6 +243,7 @@ $ systemd-cgls
 
 ```sh
   
+# console log
 ├─demo.service
   │ ├─86095 /usr/bin/gdbserver localhost:5555 /opt/demo/main
   │ └─86099 /opt/demo/main
@@ -246,6 +266,7 @@ $ gdb -q -p `pidof /opt/demo/main`
 
 ```c
   
+# console log
 #0  0x00007ffff7ceca7a in clock_nanosleep () from /lib/x86_64-linux-gnu/libc.so.6
 #1  0x00007ffff7cf9a27 in nanosleep () from /lib/x86_64-linux-gnu/libc.so.6
 #2  0x00007ffff7d0ec63 in sleep () from /lib/x86_64-linux-gnu/libc.so.6
@@ -255,29 +276,28 @@ $ gdb -q -p `pidof /opt/demo/main`
 
 
 # 3. Cheatsheets
-- GDB.
-```sh
-  
-$ gdb -q --args bash run.sh
-$ gdb -q -ex "target remote localhost:5555"
-$ gdb -q -ex "target extended-remote localhost:5555"
-$ gdb -q -x debug.gdb -ex "target remote localhost:5555"
-  
-```
-
 - GDB script.
 ```sh
   
 set confirm off
 set pagination off
 
-set detach-on-fork off
-set follow-fork-mode child
-
 set tcp auto-retry on
 set tcp connect-timeout unlimited
+  
+```
 
-catch exec
+- GDB.
+```sh
+  
+gdb -q -x debug.gdb -ex "target remote localhost:5555"
+  
+```
+
+- GDBServer.
+```sh
+  
+gdbserver localhost:5555 main
   
 ```
 
