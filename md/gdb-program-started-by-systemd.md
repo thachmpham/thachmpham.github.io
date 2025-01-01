@@ -250,7 +250,7 @@ gdb -q -x debug.gdb -ex "target remote localhost:5555"
 - GDBServer.
 ```sh
   
-gdbserver localhost:5555 main
+/usr/bin/gdbserver localhost:5555 /opt/demo/main
   
 ```
 
