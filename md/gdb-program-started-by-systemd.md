@@ -5,7 +5,7 @@ subtitle: '**Debug A Program Started By A Systemd Service**'
 
 
 # 1. Introduction
-Debugging a program launched by a systemd service can be challenging due to its execution flow, the program runs in the background, attaching a debugger to the process started by systemd becomes trickier.
+Debugging a program launched by systemd can be tricky, especially when trying to find the debug entrypoint of the program due to the lifecycle of the systemd service. The way systemd manages services can make debugging more challenging.
 
 
 # 2. Lab
@@ -82,13 +82,8 @@ Type=forking
     
 ```
 
-We will debug the program in two phases:
 
-- Debug the entry point of the program when the service is started (Section 2.2).
-- Debug the program while it is running (Section 2.3).
-
-
-## 2.2. Debug Entrypoint
+## 2.2. Debug.
 - Modify start() functions in control.sh script to launch the program with gdbserver.
 ```sh
   
@@ -115,7 +110,7 @@ $ gdb
   
 ```
 
-- Connect gdb and wait for the program launched by gdbserver at port 5555.
+- Connect and wait for gdbserver which will be started by systemctl.
 ```sh
   
 (gdb) target remote localhost:5555
@@ -137,7 +132,7 @@ systemd[1]: Started demo.service - Demo Service.
   
 ```
 
-- After service started, gdb automatically attached to the program.
+- After gdbserver started by systemctl, gdb automatically attached.
 ```sh
   
 # console log
@@ -233,48 +228,6 @@ Detaching from program: target:/opt/demo/main, process 86099
 ```
 
 
-## 2.3. Debug Running Process
-- List processes under service.
-```sh
-  
-$ systemd-cgls
-  
-```
-
-```sh
-  
-# console log
-├─demo.service
-  │ ├─86095 /usr/bin/gdbserver localhost:5555 /opt/demo/main
-  │ └─86099 /opt/demo/main
-  
-```
-
-- Attach gdb
-```sh
-  
-$ gdb -q -p `pidof /opt/demo/main`
-  
-```
-
-- Show backtrace.
-```sh
-  
-(gdb) bt
-  
-```
-
-```c
-  
-# console log
-#0  0x00007ffff7ceca7a in clock_nanosleep () from /lib/x86_64-linux-gnu/libc.so.6
-#1  0x00007ffff7cf9a27 in nanosleep () from /lib/x86_64-linux-gnu/libc.so.6
-#2  0x00007ffff7d0ec63 in sleep () from /lib/x86_64-linux-gnu/libc.so.6
-#3  0x0000555555555201 in main (argc=1, argv=0x7fffffffec78) at main.c:15
-  
-```
-
-
 # 3. Cheatsheets
 - GDB script.
 ```sh
@@ -303,5 +256,5 @@ gdbserver localhost:5555 main
 
 
 # References
-- [sourceware.org/gdb/current/onlinedocs/gdb.html/Server.html](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Server.html)
-- [sourceware.org/gdb/current/onlinedocs/gdb.html/Connecting.html](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Connecting.html)
+- [GDBServer](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Server.html)
+- [GDB Connecting to a Remote Target](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Connecting.html)
