@@ -1,22 +1,78 @@
 
 ```Dockerfile
-FROM bash:4.3 AS bash-stage
+  
+FROM fedora:24
 
-FROM fedora
-
-COPY --from=bash-stage /usr/local/bin/bash /bin/
-COPY --from=bash-stage /lib/ld-musl-aarch64.so.1 /lib
-COPY --from=bash-stage /lib/ld-musl-aarch64.so.1 /lib
-COPY --from=bash-stage /usr/lib/libncursesw.so.6 /usr/lib
-
-RUN dnf -y update
-RUN dnf -y install gcc rpm-build rpm-devel rpmlint make python coreutils rpmdevtools
+RUN dnf -y install rpm-build rpm-devel rpmlint make rpmdevtools
 RUN dnf -y install autoconf automake texinfo
-
-CMD ["/bin/bash"]
+RUN dnf -y install wget git
+  
 ```
 
 
 ```sh
-docker build --progress=plain -t bashdb-builder .
+  
+docker build --progress=plain -t fedora.24 .
+  
+```
+
+
+```sh
+  
+rpmdev-setuptree
+
+cd /root/rpmbuild/SOURCES
+
+wget --no-check-certificate https://sourceforge.net/projects/bashdb/files/bashdb/4.3-0.91/bashdb-4.3-0.91.tar.gz
+  
+```
+
+
+```sh
+  
+Name:           bashdb
+Version:        4.3
+Release:        0
+Summary:        bashdb debugger
+License:        GPLv2+
+
+BuildArch:      noarch
+Source0:        bashdb-4.3-0.91.tar.gz
+
+
+%description
+debugger for bash script
+
+
+%prep
+tar xf /root/rpmbuild/SOURCES/bashdb-4.3-0.91.tar.gz
+
+
+%build
+mkdir -p /build
+cd bashdb-4.3-0.91
+./configure --prefix=/build
+make
+
+
+%install
+cd bashdb-4.3-0.91
+make install
+mkdir -p %{buildroot}/usr
+mkdir -p %{buildroot}/usr/share
+cp -r /build/bin %{buildroot}/usr
+cp -r /build/share/bashdb %{buildroot}/usr/share
+
+
+%files
+/usr/bin/bashdb
+/usr/share/bashdb
+  
+```
+
+
+```sh
+  
+rpmbuild -bp /root/rpmbuild/SPECS/bashdb.spec
+  
 ```
