@@ -33,13 +33,17 @@ subtitle: "A Practical Blog for Software Developers<br/>*Computer Networking - D
 - [LOG &nbsp;&nbsp; - &nbsp; Log Service](html/opensaf-log.html)
 - [AMF &nbsp;&nbsp; - &nbsp; Convert A Linux Program To High Availability](html/opensaf-amf-non-sa-aware.html)
 - [AMF &nbsp;&nbsp; - &nbsp; Build High Availability App with AMF API](html/opensaf-amf-sa-aware.html)
-- [AMF &nbsp;&nbsp; - &nbsp; AMF Healthcheck](html/opensaf-healthcheck.html)
+- [AMF &nbsp;&nbsp; - &nbsp; Healthcheck](html/opensaf-healthcheck.html)
 
 
 ### GDB
 - [Debug A Program Started By A Script](html/gdb-program-started-by-script.html)
 - [Debug A Program Started By A Systemd Service](html/gdb-program-started-by-systemd.html)
 - [Debug A High Availability Program](html/gdb-ha-program.html)
+
+
+## BASHDB
+- [Build & Install](html/bashdb-build.html)
 
 
 ### Cheatsheets
