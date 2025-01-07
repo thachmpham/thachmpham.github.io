@@ -115,7 +115,7 @@ $ cp /root/rpmbuild/RPMS/noarch/bashdb-4.3-0.noarch.rpm /root
 - Install rpm.
 ```sh
   
-$ rpm -ivh bashdb-4.3-0.noarch.rpm
+$ rpm -ivh --nodeps bashdb-4.3-0.noarch.rpm
   
 ```
 
