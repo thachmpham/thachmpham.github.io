@@ -42,7 +42,7 @@ subtitle: "A Practical Blog for Software Developers<br/>*Computer Networking - D
 - [Debug A High Availability Program](html/gdb-ha-program.html)
 
 
-## BASHDB
+## BashDB
 - [Build & Install](html/bashdb-build.html)
 
 

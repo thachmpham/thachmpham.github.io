@@ -1,5 +1,5 @@
 ---
-title: BASHDB - Build & Install
+title: BashDB - Build & Install
 ---
 
 # 1. Introduction
