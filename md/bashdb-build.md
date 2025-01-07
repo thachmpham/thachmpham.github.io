@@ -104,6 +104,13 @@ $ rpmbuild -bb /root/rpmbuild/SPECS/bashdb.spec
   
 ```
 
+## 2.3. Install
+- Install rpm.
+```sh
+  
+$ rpm -ivh /root/rpmbuild/RPMS/noarch/bashdb-4.3-0.noarch.rpm
+  
+```
 
 # References
 - [bashdb.sourceforge.net](https://bashdb.sourceforge.net/)
