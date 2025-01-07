@@ -31,7 +31,7 @@ $ docker build --progress=plain -t fedora.24 .
 - Create docker container.
 ```sh
   
-$ docker run -it fedora.24 bash
+$ docker run -it -v /root:/root fedora.24 bash
   
 ```
 
@@ -105,10 +105,17 @@ $ rpmbuild -bb /root/rpmbuild/SPECS/bashdb.spec
 ```
 
 ## 2.3. Install
+- Copy rpm to shared folder.
+```sh
+  
+$ cp /root/rpmbuild/RPMS/noarch/bashdb-4.3-0.noarch.rpm /root
+  
+```
+
 - Install rpm.
 ```sh
   
-$ rpm -ivh /root/rpmbuild/RPMS/noarch/bashdb-4.3-0.noarch.rpm
+$ rpm -ivh bashdb-4.3-0.noarch.rpm
   
 ```
 
