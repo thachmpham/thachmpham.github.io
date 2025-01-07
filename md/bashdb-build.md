@@ -76,24 +76,22 @@ tar xf /root/rpmbuild/SOURCES/bashdb-4.3-0.91.tar.gz
 
 
 %build
-mkdir -p /build
+mkdir -p /opt/bashdb
 cd bashdb-4.3-0.91
-./configure --prefix=/build
+./configure --prefix=/opt/bashdb
 make
 
 
 %install
 cd bashdb-4.3-0.91
 make install
-mkdir -p %{buildroot}/usr
-mkdir -p %{buildroot}/usr/share
-cp -r /build/bin %{buildroot}/usr
-cp -r /build/share/bashdb %{buildroot}/usr/share
+mkdir -p %{buildroot}/opt/bashdb
+cp -r /opt/bashdb/bin %{buildroot}/opt/bashdb
+cp -r /opt/bashdb/share %{buildroot}/opt/bashdb
 
 
 %files
-/usr/bin/bashdb
-/usr/share/bashdb
+/opt/bashdb
   
 ```
 
@@ -116,6 +114,13 @@ $ cp /root/rpmbuild/RPMS/noarch/bashdb-4.3-0.noarch.rpm /root
 ```sh
   
 $ rpm -ivh --nodeps bashdb-4.3-0.noarch.rpm
+  
+```
+
+- Run bashdb.
+```sh
+  
+$ /opt/bashdb/bin/bashdb --help
   
 ```
 
