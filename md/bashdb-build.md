@@ -124,6 +124,22 @@ $ /opt/bashdb/bin/bashdb --help
   
 ```
 
+# 3. Issues
+## 3.1. Could not found /usr/bin/bash
+- Error.
+```sh
+  
+bashdb: /usr/bin/bash: bad interpreter: No such file or directory
+  
+```
+
+- Fix:
+```sh
+  
+$ ln -s /bin/bash /usr/bin/bash
+  
+```
+
 # References
 - [bashdb.sourceforge.net](https://bashdb.sourceforge.net/)
 - [bashdb.readthedocs.io](https://bashdb.readthedocs.io)
