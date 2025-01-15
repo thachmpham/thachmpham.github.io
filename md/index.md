@@ -44,7 +44,7 @@ subtitle: "A Practical Blog for Software Developers<br/>*Computer Networking - D
 
 ### BashDB
 - [Build & Install](html/bashdb-build.html)
-
+- [Manual](html/bashdb-manual.html)
 
 ### Cheatsheets
 - [KVM](html/kvm.html)

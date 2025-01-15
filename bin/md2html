@@ -69,7 +69,8 @@ pandoc -f markdown -t html -s \
 
 
 # ====  BASHDB
-generate_post bashdb-build
+# generate_post bashdb-build
+generate_post bashdb-manual
 
 
 # ====  Cheatsheets
