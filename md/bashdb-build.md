@@ -125,23 +125,23 @@ $ /opt/bashdb/bin/bashdb --help
 ```
 
 # 3. Issues
-## 3.1. Could not found /usr/bin/bash
-- Error.
+### 3.1. Could not found /usr/bin/bash
+Problem.
 ```sh
   
 bashdb: /usr/bin/bash: bad interpreter: No such file or directory
   
 ```
 
-- Fix:
+Solution.
 ```sh
   
 $ ln -s /bin/bash /usr/bin/bash
   
 ```
 
-## 3.2. Argument $0 is bashdb, but the expected $0 is the target script.
--Fix: Invoke bashdb from the script.
+### 3.2. Argument $0 is bashdb, but the expected $0 is the target script.
+Solution: Invoke bashdb from the script.
 ```sh
   
 # add the below line to the script

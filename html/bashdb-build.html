@@ -364,26 +364,22 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> /opt/bashdb/bin/bashdb <span class="at">--help</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="issues">3. Issues</h1>
-<h2 id="could-not-found-usrbinbash">3.1. Could not found
-/usr/bin/bash</h2>
-<ul>
-<li>Error.</li>
-</ul>
+<h3 id="could-not-found-usrbinbash">3.1. Could not found
+/usr/bin/bash</h3>
+<p>Problem.</p>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">bashdb:</span> /usr/bin/bash: bad interpreter: No such file or directory</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Fix:</li>
-</ul>
+<p>Solution.</p>
 <div class="sourceCode" id="cb12"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ln <span class="at">-s</span> /bin/bash /usr/bin/bash</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2
+<h3
 id="argument-0-is-bashdb-but-the-expected-0-is-the-target-script.">3.2.
-Argument $0 is bashdb, but the expected $0 is the target script.</h2>
-<p>-Fix: Invoke bashdb from the script.</p>
+Argument $0 is bashdb, but the expected $0 is the target script.</h3>
+<p>Solution: Invoke bashdb from the script.</p>
 <div class="sourceCode" id="cb13"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># add the below line to the script</span></span>
