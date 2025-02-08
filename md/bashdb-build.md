@@ -140,6 +140,16 @@ $ ln -s /bin/bash /usr/bin/bash
   
 ```
 
+## 3.2. Argument $0 is bashdb, but the expected $0 is the target script.
+-Fix: Invoke bashdb from the script.
+```sh
+  
+# add the below line to the script
+source /opt/bashdb/share/bashdb/bashdb-trace -L /opt/bashdb/share/bashdb
+_Dbg_debugger
+  
+```
+
 # References
 - [bashdb.sourceforge.net](https://bashdb.sourceforge.net/)
 - [bashdb.readthedocs.io](https://bashdb.readthedocs.io)
