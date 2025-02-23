@@ -327,31 +327,83 @@ class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#c
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> smf-adm execute safSmfCampaign=demo,safApp=safSmfService</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># syslog</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO STEP: Executing AU lock step safSmfStep=0001,safSmfProc=SingleStepProc,safSmfCampaign=demo,safApp=safSmfService</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO STEP: Online installation of new software</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfnd:</span> NO Successful start of command execution: logger demo: online  install smf bundle, timeout 600000</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">root:</span> demo: online install smf bundle</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO STEP: Lock deactivation units</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO STEP: Terminate deactivation units</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO STEP: Offline uninstallation of old software</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO STEP: Modify information model and set maintenance status</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO STEP: Offline installation of new software</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfnd:</span> NO Successful start of command execution: logger demo: offline install smf bundle, timeout 600000</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="ex">root:</span> demo: offline install smf bundle</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO STEP: Create new SaAmfNodeSwBundle objects</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO STEP: Instantiate activation units</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO STEP: Unlock activation units</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO STEP: Upgrade AU lock step completed safSmfStep=0001,safSmfProc=SingleStepProc,safSmfCampaign=demo,safApp=safSmfService</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO PROC: Online uninstallation of old software</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO PROC: Delete SaAmfNodeSwBundle objects</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO PROC: All steps has been executed</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO PROC: Start procedure wrapup actions</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfnd:</span> NO Successful start of command execution: logger demo: do   complete action, timeout 600000</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="ex">root:</span> demo: do complete action</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
 <li>Commit.</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> smf-adm commit safSmfCampaign=demo,safApp=safSmfService</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="troubleshooting">3. Troubleshooting</h1>
-<h2 id="setup-environment-variables">3.1. Setup environment
-variables</h2>
-<p>Set environment variables in <code>/etc/opensaf/smfd.conf</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># needed for script smf-repository-check</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">REPOSITORY</span><span class="op">=</span>/root/smf</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># needed for script smf-backup-create</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">SMFREPOSITORY</span><span class="op">=</span>/root/smf</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">SMF_BACKUP_DIR</span><span class="op">=</span>/root/smf</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Restart opensafd to load new environment vairables.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> /etc/init.d/opensafd restart</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> smf-adm commit safSmfCampaign=demo,safApp=safSmfService</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># syslog</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO CAMP: Commit upgrade campaign safSmfCampaign=demo</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO CAMP: Campaign wrapup, start wrapup actions <span class="er">(</span><span class="ex">0</span><span class="kw">)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO CAMP: Campaign wrapup, start remove from IMM <span class="er">(</span><span class="ex">0</span><span class="kw">)</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO CAMP: Campaign wrapup actions completed</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO CAMP: Campaign wrapup, reset saAmfSUMaintenanceCampaign flags</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO CAMP: Campaign wrapup, Remove runtime objects</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO CAMP: Campaign wrapup, Remove config objects</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ex">osafsmfd:</span> NO CAMP: Upgrade campaign committed safSmfCampaign=demo</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>   </span></code></pre></div>
+<h1 id="troubleshooting">3. Troubleshooting</h1>
+<h2 id="environment-variables">3.1. Environment Variables</h2>
+<ul>
+<li>Set environment variables in
+<code>/etc/opensaf/smfd.conf</code>.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># needed for script smf-repository-check</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">REPOSITORY</span><span class="op">=</span>/root/smf</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># needed for script smf-backup-create</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">SMFREPOSITORY</span><span class="op">=</span>/root/smf</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">SMF_BACKUP_DIR</span><span class="op">=</span>/root/smf</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Restart opensafd to load new environment vairables.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> /etc/init.d/opensafd restart</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="references">References</h1>
 <ul>
 <li>https://opensaf.sourceforge.io/documentation.html</li>
+<li>SAI-AIS-SMF-A.01.02, Figure 3: Upgrade Campaign Activity
+Diagram</li>
+<li>SAI-AIS-SMF-A.01.02, 3.3.2.3 Actions of The Upgrade Step</li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">
