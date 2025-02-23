@@ -60,6 +60,10 @@
     img {
       max-width: 100%;
     }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
     h1, h2, h3, h4, h5, h6 {
       margin-top: 1.4em;
     }
@@ -175,7 +179,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -243,7 +247,7 @@
 <header id="title-block-header">
 <h1 class="title">OpenSAF SMF</h1>
 </header>
-<h1 id="introduction.">1. Introduction.</h1>
+<h1 id="introduction">1. Introduction</h1>
 <p>Software Management Framwork (SMF) supports high availability during
 system upgrade, such as addition, removal, replacement or
 reconfiguration of software or hardware elements.</p>
@@ -253,110 +257,98 @@ reconfiguration of software or hardware elements.</p>
 <li>smf-find</li>
 <li>smf-state</li>
 </ul>
-<p>Admin Operations:</p>
+<h1 id="labs">2. Labs</h1>
+<p>In this lab, we will create a demo campaign and install to the
+cluster.</p>
+<ul>
+<li>Create a file <code>/opt/demo/demo_campaign.xml</code>.</li>
+</ul>
 <div class="sourceCode" id="cb1"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    SA_SMF_ADMIN_EXECUTE    <span class="op">=</span> <span class="dv">1</span><span class="op">,</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    SA_SMF_ADMIN_ROLLBACK   <span class="op">=</span> <span class="dv">2</span><span class="op">,</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    SA_SMF_ADMIN_SUSPEND    <span class="op">=</span> <span class="dv">3</span><span class="op">,</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    SA_SMF_ADMIN_COMMIT     <span class="op">=</span> <span class="dv">4</span><span class="op">,</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>SaSmfAdminOperationIdT<span class="op">;</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="labs.">2. Labs.</h1>
-<h2 id="install-campaign-on-a-node.">2.1. Install Campaign on a
-Node.</h2>
-<h3 id="steps.">2.1.1. Steps.</h3>
-<p>Create a file name <code>test_campaign.xml</code>.</p>
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span><span class="ot"> encoding=</span><span class="st">&quot;utf-8&quot;</span><span class="fu">?&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">upgradeCampaign</span><span class="ot"> safSmfCampaign=</span><span class="st">&quot;safSmfCampaign=demo&quot;</span>&gt;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">campaignInitialization</span>&gt;</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">addToImm</span>&gt;</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">softwareBundle</span><span class="ot"> name=</span><span class="st">&quot;safSmfBundle=demo&quot;</span>&gt;</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                &lt;<span class="kw">removal</span>&gt;</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                    &lt;<span class="kw">offline</span><span class="ot"> command=</span><span class="st">&quot;logger&quot;</span><span class="ot"> args=</span><span class="st">&quot;demo: offline remove smf bundle&quot;</span><span class="ot"> saSmfBundleRemoveOfflineScope=</span><span class="st">&quot;0&quot;</span>/&gt;</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                    &lt;<span class="kw">online</span><span class="ot">  command=</span><span class="st">&quot;logger&quot;</span><span class="ot"> args=</span><span class="st">&quot;demo: online  remove smf bundle&quot;</span>/&gt;</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                &lt;/<span class="kw">removal</span>&gt;</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                &lt;<span class="kw">installation</span>&gt;</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                    &lt;<span class="kw">offline</span><span class="ot"> command=</span><span class="st">&quot;logger&quot;</span><span class="ot"> args=</span><span class="st">&quot;demo: offline install smf bundle&quot;</span><span class="ot"> saSmfBundleInstallOfflineScope=</span><span class="st">&quot;0&quot;</span>/&gt;</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                    &lt;<span class="kw">online</span><span class="ot">  command=</span><span class="st">&quot;logger&quot;</span><span class="ot"> args=</span><span class="st">&quot;demo: online  install smf bundle&quot;</span>/&gt;</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                &lt;/<span class="kw">installation</span>&gt;</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                &lt;<span class="kw">defaultCliTimeout</span>/&gt;</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>            &lt;/<span class="kw">softwareBundle</span>&gt;</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">addToImm</span>&gt;</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">campaignInitialization</span>&gt;</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">upgradeProcedure</span><span class="ot"> safSmfProcedure=</span><span class="st">&quot;safSmfProc=SingleStepProc&quot;</span>&gt;</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">upgradeMethod</span>&gt;</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">singleStepUpgrade</span>&gt;</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                &lt;<span class="kw">upgradeScope</span>&gt;</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                    &lt;<span class="kw">forAddRemove</span>&gt;</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                        &lt;<span class="kw">deactivationUnit</span>/&gt;</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>                            &lt;<span class="kw">swAdd</span><span class="ot"> bundleDN=</span><span class="st">&quot;safSmfBundle=demo&quot;</span><span class="ot"> pathnamePrefix=</span><span class="st">&quot;/opt/demo&quot;</span>&gt;</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>                                &lt;<span class="kw">plmExecEnv</span><span class="ot"> amfNode=</span><span class="st">&quot;safAmfNode=SC-1,safAmfCluster=myAmfCluster&quot;</span>/&gt;</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>                            &lt;/<span class="kw">swAdd</span>&gt;</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>                        &lt;<span class="kw">activationUnit</span>&gt;</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>                            &lt;<span class="kw">swAdd</span><span class="ot"> bundleDN=</span><span class="st">&quot;safSmfBundle=demo&quot;</span><span class="ot"> pathnamePrefix=</span><span class="st">&quot;/opt/demo&quot;</span>&gt;</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>                                &lt;<span class="kw">plmExecEnv</span><span class="ot"> amfNode=</span><span class="st">&quot;safAmfNode=SC-1,safAmfCluster=myAmfCluster&quot;</span>/&gt;</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>                            &lt;/<span class="kw">swAdd</span>&gt;</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>                        &lt;/<span class="kw">activationUnit</span>&gt;</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                    &lt;/<span class="kw">forAddRemove</span>&gt;</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                &lt;/<span class="kw">upgradeScope</span>&gt;</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>            &lt;/<span class="kw">singleStepUpgrade</span>&gt;</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">upgradeMethod</span>&gt;</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">upgradeProcedure</span>&gt;</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">campaignWrapup</span>&gt;</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>       &lt;<span class="kw">campCompleteAction</span>&gt;</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">doCliCommand</span><span class="ot">   command=</span><span class="st">&quot;logger&quot;</span><span class="ot"> args=</span><span class="st">&quot;demo: do   complete action&quot;</span>&gt;&lt;/<span class="kw">doCliCommand</span>&gt;</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">undoCliCommand</span><span class="ot"> command=</span><span class="st">&quot;logger&quot;</span><span class="ot"> args=</span><span class="st">&quot;demo: undo complete action&quot;</span>&gt;&lt;/<span class="kw">undoCliCommand</span>&gt;</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">plmExecEnv</span><span class="ot"> amfNode=</span><span class="st">&quot;safAmfNode=SC-1,safAmfCluster=myAmfCluster&quot;</span>&gt;&lt;/<span class="kw">plmExecEnv</span>&gt;</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">campCompleteAction</span>&gt;</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">campaignWrapup</span>&gt;</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">upgradeCampaign</span>&gt;</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Create SaSmfCampaign object.</li>
+</ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mkdir <span class="at">-p</span> /root/smf</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> touch /root/smf/test_campaign.xml</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Copy the below text to <code>test_campaign.xml</code>.</p>
-<div class="sourceCode" id="cb3"><pre
-class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span><span class="ot"> encoding=</span><span class="st">&quot;utf-8&quot;</span><span class="fu">?&gt;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">upgradeCampaign</span><span class="ot"> xmlns:xsi=</span><span class="st">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><span class="ot"> safSmfCampaign=</span><span class="st">&quot;safSmfCampaign=install_bundles&quot;</span>&gt;</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">campaignInitialization</span>&gt;</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">addToImm</span>&gt;</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">softwareBundle</span><span class="ot"> name=</span><span class="st">&quot;safSmfBundle=TestCampaign&quot;</span>&gt;</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                &lt;<span class="kw">removal</span>&gt;</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                    &lt;<span class="kw">offline</span><span class="ot"> command=</span><span class="st">&quot;logger&quot;</span><span class="ot"> args=</span><span class="st">&quot;-t TestCampaign removal offline&quot;</span><span class="ot"> saSmfBundleRemoveOfflineScope=</span><span class="st">&quot;0&quot;</span>/&gt;</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                    &lt;<span class="kw">online</span><span class="ot"> command=</span><span class="st">&quot;logger&quot;</span><span class="ot"> args=</span><span class="st">&quot;-t TestCampaign removal online&quot;</span>/&gt;</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                &lt;/<span class="kw">removal</span>&gt;</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                &lt;<span class="kw">installation</span>&gt;</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                    &lt;<span class="kw">offline</span><span class="ot"> command=</span><span class="st">&quot;logger&quot;</span><span class="ot"> args=</span><span class="st">&quot;-t TestCampaign installation offline&quot;</span><span class="ot"> saSmfBundleInstallOfflineScope=</span><span class="st">&quot;0&quot;</span>/&gt;</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                    &lt;<span class="kw">online</span><span class="ot"> command=</span><span class="st">&quot;logger&quot;</span><span class="ot"> args=</span><span class="st">&quot;-t TestCampaign installation online&quot;</span>/&gt;</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                &lt;/<span class="kw">installation</span>&gt;</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>            &lt;/<span class="kw">softwareBundle</span>&gt;</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">addToImm</span>&gt;</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">campaignInitialization</span>&gt;</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">upgradeProcedure</span><span class="ot"> safSmfProcedure=</span><span class="st">&quot;safSmfProc=SingleStepProc&quot;</span>&gt;</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">upgradeMethod</span>&gt;</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">singleStepUpgrade</span>&gt;</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>                &lt;<span class="kw">upgradeScope</span>&gt;</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>                    &lt;<span class="kw">forAddRemove</span>&gt;</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>                        &lt;<span class="kw">deactivationUnit</span>/&gt;</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>                        &lt;<span class="kw">activationUnit</span>&gt;</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>                            &lt;<span class="kw">swAdd</span><span class="ot"> bundleDN=</span><span class="st">&quot;safSmfBundle=TestCampaign&quot;</span><span class="ot"> pathnamePrefix=</span><span class="st">&quot;/root/smf/test_campaign&quot;</span>&gt;</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>                                &lt;<span class="kw">plmExecEnv</span><span class="ot"> amfNode=</span><span class="st">&quot;safAmfNode=SC-1,safAmfCluster=myAmfCluster&quot;</span>/&gt;</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>                            &lt;/<span class="kw">swAdd</span>&gt;</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>                        &lt;/<span class="kw">activationUnit</span>&gt;</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>                    &lt;/<span class="kw">forAddRemove</span>&gt;</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>                &lt;/<span class="kw">upgradeScope</span>&gt;</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>            &lt;/<span class="kw">singleStepUpgrade</span>&gt;</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">upgradeMethod</span>&gt;</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">upgradeProcedure</span>&gt;</span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">upgradeCampaign</span>&gt;</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Set environment variables in <code>/etc/opensaf/smfd.conf</code>.</p>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaSmfCampaign <span class="at">-a</span> saSmfCmpgFileUri=/opt/demo/demo_campaign.xml safSmfCampaign=demo,safApp=safSmfService</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Execute campaign.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> smf-adm execute safSmfCampaign=demo,safApp=safSmfService</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Commit.</li>
+</ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># needed for script smf-repository-check</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">REPOSITORY</span><span class="op">=</span>/root/smf</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># needed for script smf-backup-create</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">SMFREPOSITORY</span><span class="op">=</span>/root/smf</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">SMF_BACKUP_DIR</span><span class="op">=</span>/root/smf</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> smf-adm commit safSmfCampaign=demo,safApp=safSmfService</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="troubleshooting">3. Troubleshooting</h1>
+<h2 id="setup-environment-variables">3.1. Setup environment
+variables</h2>
+<p>Set environment variables in <code>/etc/opensaf/smfd.conf</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># needed for script smf-repository-check</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">REPOSITORY</span><span class="op">=</span>/root/smf</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># needed for script smf-backup-create</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">SMFREPOSITORY</span><span class="op">=</span>/root/smf</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">SMF_BACKUP_DIR</span><span class="op">=</span>/root/smf</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p>Restart opensafd to load new environment vairables.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> /etc/init.d/opensafd restart</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Install campaign.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaSmfCampaign <span class="at">-a</span> saSmfCmpgFileUri=/root/smf/test_campaign.xml <span class="dt">\</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    safSmfCampaign=TestCampaign,safApp=safSmfService</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immadm <span class="at">-o</span> 1 safSmfCampaign=TestCampaign,safApp=safSmfService</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immlist safSmfCampaign=TestCampaign,safApp=safSmfService</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immadm <span class="at">-o</span> 4 safSmfCampaign=TestCampaign,safApp=safSmfService</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h3 id="expected-outcome.">2.1.2. Expected Outcome.</h3>
-<p>The TestCampaign bundles should exist.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immfind <span class="at">-c</span> SaSmfSwBundle</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="va">safSmfBundle</span><span class="op">=</span>OpenSAF</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="va">safSmfBundle</span><span class="op">=</span>TestCampaign</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immfind <span class="at">-c</span> SaAmfNodeSwBundle</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="va">safInstalledSwBundle</span><span class="op">=</span>safSmfBundle=OpenSAF,safAmfNode=SC-1,safAmfCluster=myAmfCluster</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="va">safInstalledSwBundle</span><span class="op">=</span>safSmfBundle=TestCampaign,safAmfNode=SC-1,safAmfCluster=myAmfCluster</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="tips">3. Tips</h1>
-<h2 id="monitor-syslog.">3.1. Monitor syslog.</h2>
-<p>Before installing campaign, monitor syslog to check the progress.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> /etc/init.d/rsyslog start</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tail <span class="at">-f</span> /var/log/syslog</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> /etc/init.d/opensafd restart</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="references">References</h1>
 <ul>
 <li>https://opensaf.sourceforge.io/documentation.html</li>

@@ -55,7 +55,7 @@ pandoc -f markdown -t html -s \
 # generate_post opensaf-1sc
 # generate_post opensaf-2sc
 # generate_post opensaf-imm
-# generate_post opensaf-smf
+generate_post opensaf-smf
 # generate_post opensaf-log
 # generate_post opensaf-amf-non-sa-aware
 # generate_post opensaf-amf-sa-aware
@@ -69,7 +69,7 @@ pandoc -f markdown -t html -s \
 
 
 # ====  BASHDB
-generate_post bashdb-build
+# generate_post bashdb-build
 # generate_post bashdb-manual
 
 
