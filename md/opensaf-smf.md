@@ -141,6 +141,19 @@ osafsmfd: NO CAMP: Upgrade campaign committed safSmfCampaign=demo
    
 ```
 
+- Check result.
+```sh
+  
+$ amf-find nodeswbundle
+  
+```
+```sh
+  
+safInstalledSwBundle=safSmfBundle=OpenSAF,safAmfNode=SC-1,safAmfCluster=myAmfCluster
+safInstalledSwBundle=safSmfBundle=demo,safAmfNode=SC-1,safAmfCluster=myAmfCluster
+  
+```
+
 # 3. Troubleshooting
 ## 3.1. Environment Variables
 - Set environment variables in `/etc/opensaf/smfd.conf`.
