@@ -17,7 +17,7 @@ FROM fedora:24
 
 RUN dnf -y install rpm-build rpm-devel rpmlint make rpmdevtools
 RUN dnf -y install autoconf automake texinfo
-RUN dnf -y install wget git
+RUN dnf -y install wget
   
 ```
 
