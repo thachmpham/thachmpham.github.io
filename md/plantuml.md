@@ -52,9 +52,43 @@ class Dummy {
   
 ```
 
-2.3. Mindmap
-```python
 
+## 2.3. Activity Diagram
+```python
+  
+@startuml
+
+start
+
+if (Graphviz installed?) then (yes)
+  :process all\ndiagrams;
+else (no)
+  :process only
+  __sequence__ and __activity__ diagrams;
+endif
+
+stop
+
+@enduml
+  
+```
+
+
+## 2.3. Gantt Diagram
+```python
+  
+@startgantt
+Project starts 2020-07-01
+[Prototype design] starts 2020-07-01 and ends 2020-07-15
+[Test prototype] starts 2020-07-16 and requires 10 days
+@endgantt
+  
+```
+
+
+## 2.3. Mindmap
+```python
+  
 @startmindmap
 * Debian
 ** Ubuntu
@@ -69,8 +103,8 @@ class Dummy {
 *** <s>Raspmbc</s> => OSMC
 *** <s>Raspyfi</s> => Volumio
 @endmindmap
-
+  
 ```
 
 # References
-- https://plantuml.com
+- [plantuml.com](https://plantuml.com)
