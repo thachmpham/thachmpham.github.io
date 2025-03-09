@@ -12,11 +12,15 @@ subtitle: "A Practical Blog for Software Developers<br/>*Computer Networking - D
 - [Bond Interface](html/vbond-interface.html)
 
 
-### Networking
+### TCP/IP
 - [ARP &nbsp;&nbsp; - &nbsp; Address Resolution Protocol](html/arp.html)
 - [IP Routing &nbsp;&nbsp; - &nbsp; Pathfinding](html/ip-routing.html)
 - [DHCP &nbsp;&nbsp; - &nbsp; Dynamic Host Configuration Protocol](html/dhcp.html)
+
+
+### Protocols
 - [PXE &nbsp;&nbsp; - &nbsp; Preboot eXecution Environment](html/pxe.html)
+- [LDAP &nbsp;&nbsp; - &nbsp; Lightweight Directory Access Protocol](html/ldap.html)
 
 
 ### Distributed Systems
@@ -50,6 +54,7 @@ subtitle: "A Practical Blog for Software Developers<br/>*Computer Networking - D
 ### Visualization
 - [PlantUML](html/plantuml.html)
 - [Graphviz](html/graphviz.html)
+
 
 ### Cheatsheets
 - [KVM](html/kvm.html)
