@@ -10,7 +10,7 @@ convert_markdown_to_html() {
     local output_file=$2
 
     pandoc -f markdown -t html \
-    -s --highlight-style breezedark \
+    -s --highlight-style tango \
     --include-in-header ${workspace}/bin/header.html \
     --include-after-body ${workspace}/bin/footer.html \
     -F pandoc-plantuml \
@@ -35,53 +35,54 @@ pandoc -f markdown -t html -s \
 
 # ====  generate posts
 # ====  Virtualization
-# generate_post veth
-# generate_post vbridge
-# generate_post vdummy-interface
-# generate_post vbond-interface
+generate_post veth
+generate_post vbridge
+generate_post vdummy-interface
+generate_post vbond-interface
 
 # ====  Networking
-# generate_post arp
-# generate_post ip-routing
-# generate_post dhcp
-# generate_post pxe
+generate_post arp
+generate_post ip-routing
+generate_post dhcp
+generate_post pxe
 
 # ====  Distributed Systems
-# generate_post vip
-# generate_post drbd
+generate_post vip
+generate_post drbd
 
 # ====  OpenSAF
-# generate_post opensaf-install
-# generate_post opensaf-1sc
-# generate_post opensaf-2sc
-# generate_post opensaf-imm
-# generate_post opensaf-smf
-# generate_post opensaf-log
-# generate_post opensaf-amf-non-sa-aware
-# generate_post opensaf-amf-sa-aware
-# generate_post opensaf-healthcheck
+generate_post opensaf-install
+generate_post opensaf-1sc
+generate_post opensaf-2sc
+generate_post opensaf-imm
+generate_post opensaf-smf
+generate_post opensaf-log
+generate_post opensaf-amf-non-sa-aware
+generate_post opensaf-amf-sa-aware
+generate_post opensaf-healthcheck
 
 
 # ====  GDB
-# generate_post gdb-program-started-by-script
-# generate_post gdb-program-started-by-systemd
-# generate_post gdb-ha-program
+generate_post gdb-program-started-by-script
+generate_post gdb-program-started-by-systemd
+generate_post gdb-ha-program
 
 
 # ====  BASHDB
-# generate_post bashdb-build
-# generate_post bashdb-manual
+generate_post bashdb-build
+generate_post bashdb-manual
 
 
 # ====  Visualization
 generate_post plantuml
+generate_post graphviz
 
 # ====  Cheatsheets
-# generate_post kvm
-# generate_post fdisk
-# generate_post systemd
+generate_post kvm
+generate_post fdisk
+generate_post systemd
 
 
 # ====  About
-# generate_post about
+generate_post about
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>BashDB Manual</title>
+  <title>Graphviz</title>
   <style>
     html {
       color: #1a1a1a;
@@ -237,31 +237,72 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">BashDB Manual</h1>
+<h1 class="title">Graphviz</h1>
 </header>
-<h1 id="start">1. Start</h1>
+<h1 id="install">1. Install</h1>
 <ul>
-<li>Start a program.</li>
+<li>Ubuntu</li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> bashdb /usr/bin/ldd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> apt install graphviz</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>Start &amp; redirect output to another terminal.</li>
+<li>Fedora</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">term1$</span> tty</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">/dev/pts/1</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dnf install graphviz</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="command">2. Command</h1>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">term0$</span> bashdb /usr/bin/ldd <span class="op">&gt;</span> /dev/pts/1</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dot <span class="at">-Tpng</span> hello.dot <span class="at">-o</span> hello.png</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="graphs">3. Graphs</h1>
+<h2 id="directed-graph">3.1. Directed Graph</h2>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode dot"><code class="sourceCode dot"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">digraph</span> <span class="va">G</span> <span class="ot">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">    </span><span class="va">A</span><span class="co"> </span><span class="ot">-&gt;</span><span class="co"> </span><span class="va">B</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span><span class="va">B</span><span class="co"> </span><span class="ot">-&gt;</span><span class="co"> </span><span class="va">C</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ot">}</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="undirected-graph">3.2. Undirected Graph</h2>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode dot"><code class="sourceCode dot"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="va">graph</span> <span class="va">G</span> <span class="ot">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">    </span><span class="va">A</span><span class="co"> -- </span><span class="va">B</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span><span class="va">B</span><span class="co"> -- </span><span class="va">C</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ot">}</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="subgraph">3.3. Subgraph</h2>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode dot"><code class="sourceCode dot"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">digraph</span> <span class="va">G</span> <span class="ot">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    </span><span class="kw">subgraph</span><span class="co"> </span><span class="va">cluster_0</span><span class="co"> </span><span class="ot">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">        </span><span class="at">style</span><span class="ot">=</span><span class="va">filled</span><span class="ot">;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">        </span><span class="at">color</span><span class="ot">=</span><span class="va">lightgrey</span><span class="ot">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">        </span><span class="at">label</span><span class="co"> </span><span class="ot">=</span><span class="co"> </span><span class="st">&quot;cluster 1&quot;</span><span class="ot">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">        </span><span class="va">a0</span><span class="co"> </span><span class="ot">-&gt;</span><span class="co"> </span><span class="va">a1</span><span class="co"> </span><span class="ot">-&gt;</span><span class="co"> </span><span class="va">a2</span><span class="co"> </span><span class="ot">-&gt;</span><span class="co"> </span><span class="va">a3</span><span class="ot">;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">    </span><span class="ot">}</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">    </span><span class="kw">subgraph</span><span class="co"> </span><span class="va">cluster_1</span><span class="co"> </span><span class="ot">{</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">        </span><span class="at">label</span><span class="co"> </span><span class="ot">=</span><span class="co"> </span><span class="st">&quot;cluster 2&quot;</span><span class="ot">;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">        </span><span class="va">b0</span><span class="co"> </span><span class="ot">-&gt;</span><span class="co"> </span><span class="va">b1</span><span class="co"> </span><span class="ot">-&gt;</span><span class="co"> </span><span class="va">b2</span><span class="co"> </span><span class="ot">-&gt;</span><span class="co"> </span><span class="va">b3</span><span class="ot">;</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">    </span><span class="ot">}</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">    </span><span class="va">a1</span><span class="co"> </span><span class="ot">-&gt;</span><span class="co"> </span><span class="va">b3</span><span class="ot">;</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">    </span><span class="va">b2</span><span class="co"> </span><span class="ot">-&gt;</span><span class="co"> </span><span class="va">a3</span><span class="ot">;</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">    </span><span class="va">a3</span><span class="co"> </span><span class="ot">-&gt;</span><span class="co"> </span><span class="va">a0</span><span class="ot">;</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="ot">}</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="references">References</h1>
 <ul>
+<li><a href="https://graphviz.org">graphviz.org</a></li>
 <li><a
-href="https://bashdb.sourceforge.net/">bashdb.sourceforge.net</a></li>
-<li><a
-href="https://bashdb.readthedocs.io">bashdb.readthedocs.io</a></li>
+href="https://magjac.com/graphviz-visual-editor">magjac.com/graphviz-visual-editor</a></li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">

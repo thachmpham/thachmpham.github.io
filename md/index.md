@@ -49,7 +49,7 @@ subtitle: "A Practical Blog for Software Developers<br/>*Computer Networking - D
 
 ### Visualization
 - [PlantUML](html/plantuml.html)
-
+- [Graphviz](html/graphviz.html)
 
 ### Cheatsheets
 - [KVM](html/kvm.html)
