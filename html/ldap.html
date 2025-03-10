@@ -245,24 +245,18 @@ store, organize, and access directory information in a structured way.
 It is commonly used for user authentication, access control, and
 identity management in networks, allowing multiple applications and
 systems to share a centralized directory of users and resources.</p>
-<p>Some libraries implemented LDAP:</p>
-<ul>
-<li>OpenLDAP</li>
-<li>389 Directory Server</li>
-<li>Go-LDAP</li>
-<li>Python-LDAP</li>
-</ul>
-<h1 id="openldap">2. OpenLDAP</h1>
+<p>OpenLDAP is an open-source implementation of the LDAP. OpenLDAP is
+widely used in enterprise environments to manage identities and enforce
+security policies efficiently.</p>
+<h1 id="lab">2. Lab</h1>
 <p>We will setup a ldap server using OpenLDAP and send some requests to
-test the server.</p>
+the server.</p>
 <h2 id="install">2.1. Install</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> apt install slapd ldap-utils</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h2 id="slapd-server">2.2. Slapd Server</h2>
-<ul>
-<li>Create file /etc/ldap/slapd.conf.</li>
-</ul>
+<p>Create file /etc/ldap/slapd.conf.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">include</span>     /etc/ldap/schema/core.schema</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">include</span>     /etc/ldap/schema/cosine.schema</span>
@@ -290,23 +284,17 @@ test the server.</p>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>            <span class="ex">by</span> self write</span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>            <span class="ex">by</span> <span class="pp">*</span> none</span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Validate configuration.</li>
-</ul>
+<p>Validate configuration.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> slaptest <span class="at">-v</span> <span class="at">-f</span> /etc/ldap/slapd.conf</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Start slapd server.</li>
-</ul>
+<p>Start slapd server.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> slapd <span class="at">-f</span> /etc/ldap/slapd.conf <span class="at">-h</span> ldap://127.0.0.1:12345</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h2 id="ldap-requests">2.3. LDAP Requests</h2>
 <h3 id="ldapadd">2.3.1. ldapadd</h3>
-<ul>
-<li>Create file data.ldif</li>
-</ul>
+<p>Create file data.ldif</p>
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>dn:             dc<span class="op">=</span>example,dc<span class="op">=</span>com</span>
@@ -331,15 +319,11 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>objectClass:    organizationalPerson</span>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>objectClass:    inetorgperson</span>
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Validate data.</li>
-</ul>
+<p>Validate data.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> slapadd <span class="at">-v</span> <span class="at">-u</span> <span class="at">-c</span> <span class="at">-f</span> /etc/ldap/slapd.conf <span class="at">-l</span> data.ldif</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Send ldapadd request.</li>
-</ul>
+<p>Send ldapadd request.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ldapadd <span class="at">-x</span> <span class="at">-H</span> ldap://127.0.0.1:12345 <span class="at">-w</span> fakepass <span class="at">-D</span> <span class="st">&#39;cn=Manager,dc=example,dc=com&#39;</span> <span class="at">-f</span> data.ldif</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
@@ -353,31 +337,37 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ldapdelete <span class="at">-x</span> <span class="at">-H</span> ldap://127.0.0.1:12345 <span class="at">-w</span> fakepass <span class="at">-D</span> <span class="st">&#39;cn=Manager,dc=example,dc=com&#39;</span> <span class="st">&#39;uid=alice,ou=users,dc=example,dc=com&#39;</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="dump-database">2.4. Dump Database</h2>
+<h1 id="troubleshooting">3. Troubleshooting</h1>
+<h3 id="dump-database">3.1. Dump Database</h3>
 <div class="sourceCode" id="cb10"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> slapcat</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="troubleshooting">2.5. Troubleshooting</h2>
-<h3 id="enable-debug.">2.5.1. Enable debug.</h3>
+<h3 id="enable-debug">3.2. Enable debug</h3>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> slapd <span class="at">-d</span> 1 <span class="at">-f</span> /etc/ldap/slapd.conf <span class="at">-h</span> ldap://127.0.0.1:389</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h3 id="could-not-open-config-file-slapd.conf-permission-denied.">2.5.2.
-Could not open config file “slapd.conf”: Permission denied.</h3>
-<ul>
-<li>AppArmor prevents slapd to open file from unconfigured folders.</li>
-</ul>
+<h3 id="permission-denied-when-open-slapd.conf">3.3. Permission denied
+when open slapd.conf</h3>
+<p>Problem: The below error message is shown when start slapd
+server.</p>
 <div class="sourceCode" id="cb12"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dmesg</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Could</span> not open config file “slapd.conf”: Permission denied.</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<p>Reason: AppArmor prevents slapd to open file from unconfigured
+folders.</p>
 <div class="sourceCode" id="cb13"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">audit:</span> type=1400 apparmor=<span class="st">&quot;DENIED&quot;</span> operation=<span class="st">&quot;open&quot;</span> class=<span class="st">&quot;file&quot;</span> profile=<span class="st">&quot;/usr/sbin/slapd&quot;</span> </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="va">name</span><span class="op">=</span><span class="st">&quot;/root/ldap/slapd.conf&quot;</span> <span class="va">pid</span><span class="op">=</span>30197 <span class="va">comm</span><span class="op">=</span><span class="st">&quot;slapd&quot;</span> <span class="va">requested_mask</span><span class="op">=</span><span class="st">&quot;r&quot;</span> <span class="va">denied_mask</span><span class="op">=</span><span class="st">&quot;r&quot;</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dmesg</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">audit:</span> type=1400 apparmor=<span class="st">&quot;DENIED&quot;</span> operation=<span class="st">&quot;open&quot;</span> class=<span class="st">&quot;file&quot;</span> profile=<span class="st">&quot;/usr/sbin/slapd&quot;</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="va">name</span><span class="op">=</span><span class="st">&quot;/root/ldap/slapd.conf&quot;</span> <span class="va">pid</span><span class="op">=</span>30197 <span class="va">comm</span><span class="op">=</span><span class="st">&quot;slapd&quot;</span> <span class="va">requested_mask</span><span class="op">=</span><span class="st">&quot;r&quot;</span> <span class="va">denied_mask</span><span class="op">=</span><span class="st">&quot;r&quot;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<p>Solution: Put slapd.conf in folder /etc/ldap.</p>
 <h1 id="references">References</h1>
 <ul>
 <li><a href="https://www.openldap.org/">openldap.org</a></li>

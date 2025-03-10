@@ -6,16 +6,11 @@ title:  'LDAP'
 # 1. Introduction
 LDAP (Lightweight Directory Access Protocol) is a protocol used to store, organize, and access directory information in a structured way. It is commonly used for user authentication, access control, and identity management in networks, allowing multiple applications and systems to share a centralized directory of users and resources.
 
-Some libraries implemented LDAP:
-
-- OpenLDAP
-- 389 Directory Server
-- Go-LDAP
-- Python-LDAP
+OpenLDAP is an open-source implementation of the LDAP. OpenLDAP is widely used in enterprise environments to manage identities and enforce security policies efficiently.
 
 
-# 2. OpenLDAP
-We will setup a ldap server using OpenLDAP and send some requests to test the server.
+# 2. Lab
+We will setup a ldap server using OpenLDAP and send some requests to the server.
 
 ## 2.1. Install
 ```sh
@@ -26,7 +21,7 @@ $ apt install slapd ldap-utils
 
 
 ## 2.2. Slapd Server
-- Create file /etc/ldap/slapd.conf.
+Create file /etc/ldap/slapd.conf.
 ```sh
   
 include     /etc/ldap/schema/core.schema
@@ -57,14 +52,14 @@ access      to *
   
 ```
 
-- Validate configuration.
+Validate configuration.
 ```sh
   
 $ slaptest -v -f /etc/ldap/slapd.conf
   
 ```
 
-- Start slapd server.
+Start slapd server.
 ```sh
   
 $ slapd -f /etc/ldap/slapd.conf -h ldap://127.0.0.1:12345
@@ -73,7 +68,7 @@ $ slapd -f /etc/ldap/slapd.conf -h ldap://127.0.0.1:12345
 
 ## 2.3. LDAP Requests
 ### 2.3.1. ldapadd
-- Create file data.ldif
+Create file data.ldif
 ```python
   
 dn:             dc=example,dc=com
@@ -100,14 +95,14 @@ objectClass:    inetorgperson
   
 ```
 
-- Validate data.
+Validate data.
 ```sh
     
 $ slapadd -v -u -c -f /etc/ldap/slapd.conf -l data.ldif
   
 ```
 
-- Send ldapadd request.
+Send ldapadd request.
 ```sh
   
 $ ldapadd -x -H ldap://127.0.0.1:12345 -w fakepass -D 'cn=Manager,dc=example,dc=com' -f data.ldif
@@ -132,15 +127,16 @@ $ ldapdelete -x -H ldap://127.0.0.1:12345 -w fakepass -D 'cn=Manager,dc=example,
 ```
 
 
-## 2.4. Dump Database
+# 3. Troubleshooting
+### 3.1. Dump Database
 ```sh
   
 $ slapcat
   
 ```
 
-## 2.5. Troubleshooting
-### 2.5.1. Enable debug.
+
+### 3.2. Enable debug
 ```sh
   
 $ slapd -d 1 -f /etc/ldap/slapd.conf -h ldap://127.0.0.1:389
@@ -148,8 +144,15 @@ $ slapd -d 1 -f /etc/ldap/slapd.conf -h ldap://127.0.0.1:389
 ```
 
 
-### 2.5.2. Could not open config file "slapd.conf": Permission denied.
-- AppArmor prevents slapd to open file from unconfigured folders.
+### 3.3. Permission denied when open slapd.conf
+Problem: The below error message is shown when start slapd server.
+```sh
+  
+Could not open config file “slapd.conf”: Permission denied.
+  
+```
+
+Reason: AppArmor prevents slapd to open file from unconfigured folders.
 ```sh
   
 $ dmesg
@@ -162,6 +165,8 @@ audit: type=1400 apparmor="DENIED" operation="open" class="file" profile="/usr/s
 name="/root/ldap/slapd.conf" pid=30197 comm="slapd" requested_mask="r" denied_mask="r"
   
 ```
+
+Solution: Put slapd.conf in folder /etc/ldap.
 
 
 # References
