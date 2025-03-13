@@ -44,6 +44,7 @@ subtitle: "A Practical Blog for Software Developers<br/>*Computer Networking - D
 - [Debug A Program Started By A Script](html/gdb-program-started-by-script.html)
 - [Debug A Program Started By A Systemd Service](html/gdb-program-started-by-systemd.html)
 - [Debug A High Availability Program](html/gdb-ha-program.html)
+- [Search Memory With GDB Find](http/gdb-find.html)
 
 
 ### BashDB

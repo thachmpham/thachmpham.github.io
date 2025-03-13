@@ -133,25 +133,22 @@ Output.
 ```
 
 How `ns1` finds MAC of `ns3`.
-```plantuml
-@startuml
-hide footbox
-!theme sketchy-outline
+<pre class="mermaid">
+sequenceDiagram
 
 participant ns1
 participant br0
 participant ns2
 participant ns3
 
-ns1 -> br0: ARP broadcast
-br0 -> ns2: ARP request
-br0 -> ns3: ARP request
+ns1 ->> br0: ARP broadcast
+br0 ->> ns2: ARP request
+br0 ->> ns3: ARP request
 
-ns3 --> br0: ARP reply
-br0 --> ns1: ARP reply
+ns3 -->> br0: ARP reply
+br0 -->> ns1: ARP reply
 
-@enduml
-```
+</pre>
 
 - `ns1` sends an ARP broadcast to `br0`.
 - `br0` forwards the request to `ns2`, `ns3`.

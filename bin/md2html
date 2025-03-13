@@ -41,14 +41,14 @@ pandoc -f markdown -t html -s \
 # generate_post vbond-interface
 
 # ====  TCP/IP
-# generate_post arp
+generate_post arp
 # generate_post ip-routing
 # generate_post dhcp
 
 
 # ====  Protocols
 # generate_post pxe
-generate_post ldap
+# generate_post ldap
 
 
 # ====  Distributed Systems
@@ -71,6 +71,7 @@ generate_post ldap
 # generate_post gdb-program-started-by-script
 # generate_post gdb-program-started-by-systemd
 # generate_post gdb-ha-program
+generate_post gdb-find
 
 
 # ====  BASHDB
