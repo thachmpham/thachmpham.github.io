@@ -183,7 +183,7 @@ $18 = 0x7fffffffe269 "hi command line argument"
 
 ## 2.5. Heap
 Range of heap segment.
-``sh
+```sh
   
 0x555555559000     0x55555557a000    0x21000        0x0  rw-p   [heap]
   
