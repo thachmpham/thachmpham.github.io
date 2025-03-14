@@ -1,6 +1,6 @@
 ---
-title:  "Thach Pham's Notes"
-subtitle: "<br/>*Computer Networking - Distributed Systems - Software Debugging*"
+title:  "Thach Pham's Notebook"
+subtitle: "A Practical Blog for Software Engineer<br/>*Computer Networking - Distributed Systems - Software Debugging*"
 ---
 
 
