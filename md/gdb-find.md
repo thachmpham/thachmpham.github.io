@@ -5,7 +5,7 @@ title: Search Memory With GDB Find
 # 1. Introduction
 The find command in GDB is used to search for specific byte sequences in a process's memory. It helps locate values, strings, or addresses within a given memory range.  
   
-In Linux, when a program runs, it is loaded into memory and divided into different segments. Below are list of segments.  
+In Linux, when a program runs, it is loaded into memory and divided into different segments. In this note, we will search for memory in the segments of a process with gdb. 
 
 | **Segment**   | **Description**                 | **Growth**  |
 |:------------:|:--------------------------------:|:----------:|
@@ -19,7 +19,6 @@ In Linux, when a program runs, it is loaded into memory and divided into differe
 
 
 # 2. Lab
-In this lab, we will search for memory in the segments of a process with gdb find command.
 
 ## 2.1. Program
 Create file demo.c.

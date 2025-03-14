@@ -244,7 +244,8 @@
 in a process’s memory. It helps locate values, strings, or addresses
 within a given memory range.</p>
 <p>In Linux, when a program runs, it is loaded into memory and divided
-into different segments. Below are list of segments.</p>
+into different segments. In this note, we will search for memory in the
+segments of a process with gdb.</p>
 <table>
 <thead>
 <tr class="header">
@@ -293,8 +294,6 @@ variables</td>
 </tbody>
 </table>
 <h1 id="lab">2. Lab</h1>
-<p>In this lab, we will search for memory in the segments of a process
-with gdb find command.</p>
 <h2 id="program">2.1. Program</h2>
 <p>Create file demo.c.</p>
 <div class="sourceCode" id="cb1"><pre
