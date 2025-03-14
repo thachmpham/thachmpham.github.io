@@ -388,7 +388,7 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#c
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print</span> <span class="er">(</span><span class="ex">char*</span><span class="kw">)</span> <span class="ex">0x555555557004</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span><span class="ex">1</span> = 0x555555557004 <span class="st">&quot;hi text segment&quot;</span></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="data-segment">Data Segment</h1>
+<h2 id="data-segment">2.3. Data Segment</h2>
 <p>Range of data segment.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555558000</span>     0x555555559000     0x1000     0x3000  rw-p   /root/demo/demo</span>
@@ -402,7 +402,7 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#c
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print</span> <span class="er">(</span><span class="ex">char*</span><span class="kw">)</span> <span class="ex">0x555555558010</span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span><span class="ex">2</span> = 0x555555558010 <span class="op">&lt;</span>global_initialized<span class="op">&gt;</span> <span class="st">&quot;hi data segment&quot;</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="stack">Stack</h1>
+<h2 id="stack">2.4. Stack</h2>
 <p>Range of stack segment.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7ffffffde000</span>     0x7ffffffff000    0x21000        0x0  rw-p   <span class="pp">[</span><span class="ss">stack</span><span class="pp">]</span></span>
@@ -426,10 +426,9 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print</span> <span class="er">(</span><span class="ex">char*</span><span class="kw">)</span> <span class="ex">0x7fffffffe269</span></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span><span class="ex">8</span> = 0x7fffffffe269 <span class="st">&quot;hi command line argument&quot;</span></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="heap">Heap</h1>
+<h2 id="heap">2.5. Heap</h2>
 <p>Range of heap segment. ``sh</p>
-<p>0x555555559000 0x55555557a000 0x21000 0x0 rw-p <a
-href="#heap">heap</a></p>
+<p>0x555555559000 0x55555557a000 0x21000 0x0 rw-p [heap]</p>
 <pre><code>
 Find a string in heap segment.
 ```sh

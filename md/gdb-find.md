@@ -131,7 +131,7 @@ $11 = 0x555555557004 "hi text segment"
   
 ```
 
-# Data Segment
+## 2.3. Data Segment
 Range of data segment.
 ```sh
   
@@ -151,7 +151,7 @@ $12 = 0x555555558010 <global_initialized> "hi data segment"
   
 ```
 
-# Stack
+## 2.4. Stack
 Range of stack segment.
 ```sh
   
@@ -182,7 +182,7 @@ $18 = 0x7fffffffe269 "hi command line argument"
   
 ```
 
-# Heap
+## 2.5. Heap
 Range of heap segment.
 ``sh
   
