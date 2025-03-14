@@ -9,13 +9,13 @@ In Linux, when a program runs, it is loaded into memory and divided into differe
 
 | **Segment**   | **Description**                 | **Growth**  |
 |:------------:|:--------------------------------:|:----------:|
-| **Text** | Executable code, read-only, shared | Fixed      |
-| **Data** | Initialized global/static variables | Fixed      |
-| **BSS**  | Uninitialized global/static variables | Fixed      |
+| **Text** | Executable code | Fixed      |
+| **Data** | Initialized global, static variables | Fixed      |
+| **BSS**  | Uninitialized global, static variables | Fixed      |
 | **Heap**     | Dynamic memory | Upward     |
 | **Stack**    | Local variables, function calls | Downward   |
 | **Memory Map** | Shared libraries | Dynamic    |
-| **Kernel**   | System calls, process management | Fixed      |
+| **Kernel**   | System calls | Fixed      |
 
 
 # 2. Lab
