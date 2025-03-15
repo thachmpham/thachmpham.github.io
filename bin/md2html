@@ -71,7 +71,8 @@ generate_post arp
 # generate_post gdb-program-started-by-script
 # generate_post gdb-program-started-by-systemd
 # generate_post gdb-ha-program
-generate_post gdb-find
+# generate_post gdb-find
+generate_post gdb-call
 
 
 # ====  BASHDB
