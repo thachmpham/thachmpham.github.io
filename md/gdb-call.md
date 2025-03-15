@@ -62,7 +62,7 @@ void print_ref_int(int &a)
 ```
 
 
-## 2.3. Pass By Pointer
+## 2.4. Pass By Pointer
 ```c++
   
 void print_pointer_int(int *a)
