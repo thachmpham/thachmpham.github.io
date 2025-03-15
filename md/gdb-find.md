@@ -33,7 +33,7 @@ char global_initialized[] = "hi data segment";
 // bss segment
 int global_uninitialized;
 
-int main() {
+int main(int argc, char** argv) {
     printf("hi text segment");
 
     // stack
