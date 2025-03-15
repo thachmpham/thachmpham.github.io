@@ -6,7 +6,7 @@ title: Execute Functions With GDB Call
 The call command in GDB allows you to execute functions, modify variables, and evaluate expressions during debugging. It helps test functions, change program states, and interact with the program dynamically without restarting execution.
 
 # 2. Lab
-## 2.1. Function Without Arguments
+## 2.1. No Argument
 ```c++
   
 void print_hello()
