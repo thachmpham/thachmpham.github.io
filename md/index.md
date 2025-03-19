@@ -44,9 +44,9 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Networking - D
 - [Debug A Program Started By A Script](html/gdb-program-started-by-script.html)
 - [Debug A Program Started By A Systemd Service](html/gdb-program-started-by-systemd.html)
 - [Debug A High Availability Program](html/gdb-ha-program.html)
-- [Search Memory With GDB Find](html/gdb-find.html)
-- [Dump & Restore Memory With GDB](html/gdb-dump-restore.html)
-- [Execute Functions With GDB Call](html/gdb-call.html)
+- [Search Memory](html/gdb-find.html)
+- [Dump & Restore Memory](html/gdb-dump-restore.html)
+- [Execute Functions](html/gdb-call.html)
 
 
 ### BashDB
