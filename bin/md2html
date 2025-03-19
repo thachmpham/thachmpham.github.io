@@ -41,7 +41,7 @@ pandoc -f markdown -t html -s \
 # generate_post vbond-interface
 
 # ====  TCP/IP
-generate_post arp
+# generate_post arp
 # generate_post ip-routing
 # generate_post dhcp
 
@@ -72,7 +72,8 @@ generate_post arp
 # generate_post gdb-program-started-by-systemd
 # generate_post gdb-ha-program
 # generate_post gdb-find
-generate_post gdb-call
+# generate_post gdb-call
+generate_post gdb-dump-restore
 
 
 # ====  BASHDB
