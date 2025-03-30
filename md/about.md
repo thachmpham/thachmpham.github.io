@@ -1,7 +1,9 @@
 
 ---
-title:  'About Me'
+title:  'Thach Pham'
 ---
+
+![](img/avatar.jpg){style="display: block; margin: auto; border-radius: 50%; width: 200px; height: 200px;"}
 
 # Greetings
 *Hello and a warm welcome. Thank you for taking time to visit.*  
