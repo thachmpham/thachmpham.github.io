@@ -65,6 +65,3 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Networking - D
 - [Systemd](html/systemd.html)
 
 
-## About
-- [Writer](html/about.html)
-
