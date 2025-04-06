@@ -2,7 +2,7 @@
 title: BashDB Manual
 ---
 
-# 1. Start
+## 1. Start Program Under BashDB
 - Start a program.
 ```sh
   
@@ -20,6 +20,15 @@ term1$ tty
 ```sh
   
 term0$ bashdb /usr/bin/ldd > /dev/pts/1
+  
+```
+
+
+## 2. Hardcode Breakpoint At A Line
+```sh
+  
+source /opt/bashdb/share/bashdb/bashdb-trace -L /opt/bashdb/share/bashdb
+_Dbg_debugger
   
 ```
 

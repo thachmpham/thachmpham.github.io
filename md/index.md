@@ -54,14 +54,14 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Networking - D
 - [Manual](html/bashdb-manual.html)
 
 
-### Visualization
+### Diagrams
 - [PlantUML](html/plantuml.html)
 - [Graphviz](html/graphviz.html)
 
 
 ### Cheatsheets
-- [KVM](html/kvm.html)
-- [Disk](html/fdisk.html)
-- [Systemd](html/systemd.html)
+- [Kernel Virtual Machine](html/kvm.html)
+- [Disk Manipulation](html/fdisk.html)
+- [SystemD Management](html/systemd.html)
 
 

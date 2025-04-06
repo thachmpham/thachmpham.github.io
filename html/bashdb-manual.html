@@ -239,7 +239,7 @@
 <header id="title-block-header">
 <h1 class="title">BashDB Manual</h1>
 </header>
-<h1 id="start">1. Start</h1>
+<h2 id="start-program-under-bashdb">1. Start Program Under BashDB</h2>
 <ul>
 <li>Start a program.</li>
 </ul>
@@ -256,6 +256,12 @@
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">term0$</span> bashdb /usr/bin/ldd <span class="op">&gt;</span> /dev/pts/1</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="hardcode-breakpoint-at-a-line">2. Hardcode Breakpoint At A
+Line</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> /opt/bashdb/share/bashdb/bashdb-trace <span class="at">-L</span> /opt/bashdb/share/bashdb</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">_Dbg_debugger</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="references">References</h1>
 <ul>
 <li><a
@@ -265,7 +271,7 @@ href="https://bashdb.readthedocs.io">bashdb.readthedocs.io</a></li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">
-      <a href="../index.html">Home</a>
+      <a href="../index.html"><b>Home</b></a>
    </div>
  </footer>
 </body>
