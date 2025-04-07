@@ -1,32 +1,8 @@
 ---
-title:  'Disk Manipulation'
+title:  'Disk Manipulation With FDisk'
 ---
 
-
-## 1. LsBlk
-- List partitions.
-```sh
-  
-$ lsblk -l
-NAME    SIZE    TYPE    MOUNTPOINTS
-sda     50G     disk    
-sda1    9.6G    part    /
-sda2    1K      part
-sda3    1K      part
-sda5    3.5G    part    /var
-sda6    976M    part
-sda7    685M    part    /tmp
-sda8    20G     part    /home
-
-# free  = sda - sda1 - sda2 - sda3 - sda5 - sda6 - sda7 - sda8
-#       = 50  - 9.6                - 3.5  - 0.97 - 0.68 - 20
-#       = 15.25 (G)
-  
-```
-
-
-## 2. FDisk
-### 2.1. Create Partition
+# 1. Create Partition
 Create a 5G partition on /dev/sda9.
 
 - Create partition.
@@ -64,7 +40,7 @@ sda9    5G      part    /mnt/test
 ```
 
 
-### 2.2. Expand Partition
+# 2. Expand Partition
 Resize partition /dev/sda9 from 5G to 10G.
 
 - Unmount.
@@ -115,7 +91,7 @@ sda9    10G      part    /mnt/test
 ```
 
 
-### 2.2. Shrink Partition
+# 3. Shrink Partition
 Resize partition /dev/sda9 from 10G to 5G.
 
 - Unmount.
@@ -173,7 +149,34 @@ sda9    5G      part    /mnt/test
 ```
 
 
-### 2.3. Move /root To New Partition
+# 4. Mount Partition Permanently
+Mount partition /dev/sda9 to directory /mnt/test permanently.
+
+- Get filesystem of partition.
+```sh
+  
+$ lsblk -f
+NAME    FSTYPE
+sda9    ext4
+  
+```
+
+- Edit /etc/fstab.
+```sh
+  
+/dev/sda9   /mnt/test   ext4    defaults    0   0
+  
+```
+
+- Mount
+```sh
+  
+$ mount -a
+  
+```
+
+
+# 5. Mount /root To New Partition
 Move /root from /dev/sda4 to /dev/sda8.
 
 - Backup /root.
@@ -209,38 +212,6 @@ $ cp -r /root/* /mnt/root
 ```sh
   
 $ reboot -h now
-  
-```
-
-
-## 3. Mount
-### 3.1 Mount Permanently
-Mount partition /dev/sda9 to directory /mnt/test permanently.
-
-- Get filesystem of partition.
-```sh
-  
-$ lsblk -f
-NAME    FSTYPE
-sda9    ext4
-  
-```
-
-- Edit /etc/fstab.
-```sh
-  
-/dev/sda9   /mnt/test   ext4    defaults    0   0
-  
-```
-
-- Mount
-```sh
-  
-$ mount -a
-
-$ lsblk -l
-NAME    SIZE    MOUNTPOINTS
-sda9    10G     /mnt/test
   
 ```
 
