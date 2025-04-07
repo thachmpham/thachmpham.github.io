@@ -198,7 +198,7 @@ $ cp -r /root/* /mnt/root
   
 ```
 
-- Append below line to /etc/fstab. To mount the new partition to /root during startup.
+- Edit /etc/fstab.
 ```sh
   
 /dev/sda8   /root   ext3    defaults    0   0
