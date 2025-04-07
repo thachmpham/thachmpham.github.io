@@ -29,7 +29,9 @@ term0$ bashdb /usr/bin/ldd > /dev/pts/1
 ```
 
 
-## 2. Hardcode Breakpoint At A Line
+# 3. Set Breakpoint In Code
+Hardcode a breakpoint at a line of code.
+
 - Add the below code to the bash script.
 ```sh
   
