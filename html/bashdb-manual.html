@@ -239,25 +239,31 @@
 <header id="title-block-header">
 <h1 class="title">BashDB Manual</h1>
 </header>
-<h2 id="start-program-under-bashdb">1. Start Program Under BashDB</h2>
-<ul>
-<li>Start a program.</li>
-</ul>
+<h1 id="start">1. Start</h1>
+<p>Start a script under bashdb control.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> bashdb /usr/bin/ldd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="redirect-output">2. Redirect Output</h1>
+<p>Redirect output to another terminal.</p>
 <ul>
-<li>Start &amp; redirect output to another terminal.</li>
+<li>Get path of terminal 1.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">term1$</span> tty</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">/dev/pts/1</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>From terminal 0, redirect output to terminal 1.</li>
+</ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">term0$</span> bashdb /usr/bin/ldd <span class="op">&gt;</span> /dev/pts/1</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h2 id="hardcode-breakpoint-at-a-line">2. Hardcode Breakpoint At A
 Line</h2>
+<ul>
+<li>Add the below code to the bash script.</li>
+</ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> /opt/bashdb/share/bashdb/bashdb-trace <span class="at">-L</span> /opt/bashdb/share/bashdb</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">_Dbg_debugger</span></span>
