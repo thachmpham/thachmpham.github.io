@@ -2,7 +2,8 @@
 title:  'Disk Manipulation With FDisk'
 ---
 
-# 1. Create Partition
+# 1. Partition
+## 1.1 Create Partition
 Create a 5G partition on /dev/sda9.
 
 - Create partition.
@@ -40,7 +41,7 @@ sda9    5G      part    /mnt/test
 ```
 
 
-# 2. Expand Partition
+## 1.2. Expand Partition
 Resize partition /dev/sda9 from 5G to 10G.
 
 - Unmount.
@@ -91,7 +92,7 @@ sda9    10G      part    /mnt/test
 ```
 
 
-# 3. Shrink Partition
+## 1.3. Shrink Partition
 Resize partition /dev/sda9 from 10G to 5G.
 
 - Unmount.
@@ -148,8 +149,8 @@ sda9    5G      part    /mnt/test
   
 ```
 
-
-# 4. Mount Partition Permanently
+# 2. Mount
+## 2.1. Mount Permanently
 Mount partition /dev/sda9 to directory /mnt/test permanently.
 
 - Get filesystem of partition.
@@ -176,7 +177,7 @@ $ mount -a
 ```
 
 
-# 5. Mount /root To New Partition
+## 2.2 Mount /root To New Partition
 Move /root from /dev/sda4 to /dev/sda8.
 
 - Backup /root.

@@ -2,7 +2,8 @@
 title:  'Kernel-based Virtual Machine'
 ---
 
-## 1. Create VM
+# 1. VM Management
+## 1.1 Create VM
 ```sh
   
 # create Debian VM: net-installer, nographics.
@@ -19,7 +20,7 @@ $ virt-install --name node1 \
 - [linux.die.net/man/1/virt-install](https://linux.die.net/man/1/virt-install)
 
 
-## 2. Inspect VM
+## 1.2. Inspect VM
 ```sh
   
 # show IP of VM
@@ -30,7 +31,7 @@ $ virsh domifaddr node1
 - [www.libvirt.org/manpages/virsh.html](https://www.libvirt.org/manpages/virsh.html)
 
 
-## 3. Snapshot
+# 2. Snapshot
 ```sh
   
 $ virsh snapshot-create-as node1 --name snapshot1
@@ -42,7 +43,7 @@ $ virsh snapshot-delete node1 --snapshotname snapshot1
 ```
 
 
-## 4. Network
+# 3. Network
 ```sh
   
 $ virsh net-define mynetwork.xml
@@ -72,3 +73,16 @@ $ virsh net-dumpxml mynetwork
 ```
 
 - [libvirt.org/formatnetwork.html](https://libvirt.org/formatnetwork.html)
+
+
+# 4. Disk
+## 4.1. Expand /root Partition
+- Expand disk image.
+```sh
+  
+$ qemu-img resize disk.qcow2 +10G
+  
+```
+
+- If /root mount to the last partition, enter the mantainance mode to [expand the partition](/html/fdisk.html).
+- If /root mount to the last partition, [create a new partition and mount /root to the new partition](/html/fdisk.html).

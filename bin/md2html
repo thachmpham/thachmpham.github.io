@@ -86,7 +86,7 @@ pandoc -f markdown -t html -s \
 # generate_post graphviz
 
 # ====  Cheatsheets
-# generate_post kvm
+generate_post kvm
 generate_post fdisk
 # generate_post systemd
 

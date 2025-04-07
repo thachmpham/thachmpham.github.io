@@ -239,7 +239,8 @@
 <header id="title-block-header">
 <h1 class="title">Kernel-based Virtual Machine</h1>
 </header>
-<h2 id="create-vm">1. Create VM</h2>
+<h1 id="vm-management">1. VM Management</h1>
+<h2 id="create-vm">1.1 Create VM</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># create Debian VM: net-installer, nographics.</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> virt-install <span class="at">--name</span> node1 <span class="dt">\</span></span>
@@ -254,7 +255,7 @@
 <li><a
 href="https://linux.die.net/man/1/virt-install">linux.die.net/man/1/virt-install</a></li>
 </ul>
-<h2 id="inspect-vm">2. Inspect VM</h2>
+<h2 id="inspect-vm">1.2. Inspect VM</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># show IP of VM</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> virsh domifaddr node1</span>
@@ -263,7 +264,7 @@ href="https://linux.die.net/man/1/virt-install">linux.die.net/man/1/virt-install
 <li><a
 href="https://www.libvirt.org/manpages/virsh.html">www.libvirt.org/manpages/virsh.html</a></li>
 </ul>
-<h2 id="snapshot">3. Snapshot</h2>
+<h1 id="snapshot">2. Snapshot</h1>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> virsh snapshot-create-as node1 <span class="at">--name</span> snapshot1</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -271,7 +272,7 @@ href="https://www.libvirt.org/manpages/virsh.html">www.libvirt.org/manpages/virs
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> virsh snapshot-delete node1 <span class="at">--snapshotname</span> snapshot1</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="network">4. Network</h2>
+<h1 id="network">3. Network</h1>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> virsh net-define mynetwork.xml</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -299,9 +300,24 @@ class="sourceCode xml"><code class="sourceCode xml"><span id="cb5-1"><a href="#c
 <li><a
 href="https://libvirt.org/formatnetwork.html">libvirt.org/formatnetwork.html</a></li>
 </ul>
+<h1 id="disk">4. Disk</h1>
+<h2 id="expand-root-partition">4.1. Expand /root Partition</h2>
+<ul>
+<li>Expand disk image.</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> qemu-img resize disk.qcow2 +10G</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>If /root mount to the last partition, enter the mantainance mode to
+<a href="/html/fdisk.html">expand the partition</a>.</li>
+<li>If /root mount to the last partition, <a
+href="/html/fdisk.html">create a new partition and mount /root to the
+new partition</a>.</li>
+</ul>
 <footer class="footer text-muted">
    <div align="center">
-      <a href="../index.html">Home</a>
+      <a href="../index.html"><b>Home</b></a>
    </div>
  </footer>
 </body>
