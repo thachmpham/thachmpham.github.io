@@ -61,7 +61,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Networking - D
 
 ### Cheatsheets
 - [Kernel Virtual Machine](html/kvm.html)
-- [Disk Manipulation](html/fdisk.html)
+- [Disk Manipulation With FDisk](html/fdisk.html)
 - [SystemD Management](html/systemd.html)
 
 
