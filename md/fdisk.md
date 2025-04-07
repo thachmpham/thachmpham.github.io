@@ -3,8 +3,8 @@ title:  'Disk Manipulation'
 ---
 
 
-## 1. lsblk
-- Find unpartitioned disk space.
+## 1. LsBlk
+- List partitions.
 ```sh
   
 $ lsblk -l
@@ -25,7 +25,7 @@ sda8    20G     part    /home
 ```
 
 
-## 2. fdisk
+## 2. FDisk
 ### 2.1. Create Partition
 Create a 5G partition on /dev/sda9.
 
@@ -173,8 +173,48 @@ sda9    5G      part    /mnt/test
 ```
 
 
-## 3. mount
-### 3.1 Mount permanently
+### 2.3. Move /root To New Partition
+Move /root from /dev/sda4 to /dev/sda8.
+
+- Backup.
+```sh
+  
+$ cp -r /root /root_old
+  
+```
+
+- Mount new partition.
+```sh
+  
+$ mkdir /mnt/sda8
+$ mount /dev/sda8 /mnt/sda8
+  
+```
+
+- Copy /root to new partition.
+```sh
+  
+$ cp -r /root/* /mnt/sda8
+  
+```
+
+- Append below line to /etc/fstab.
+```sh
+  
+/dev/sda8   /root   ext3    defaults    0   0
+  
+```
+
+- Reboot.
+```sh
+  
+$ reboot -h now
+  
+```
+
+
+## 3. Mount
+### 3.1 Mount Permanently
 Mount partition /dev/sda9 to directory /mnt/test permanently.
 
 - Get filesystem of partition.
