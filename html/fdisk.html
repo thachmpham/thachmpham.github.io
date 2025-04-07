@@ -396,7 +396,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#
 Partition</h3>
 <p>Move /root from /dev/sda4 to /dev/sda8.</p>
 <ul>
-<li>Backup.</li>
+<li>Backup /root.</li>
 </ul>
 <div class="sourceCode" id="cb16"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -408,17 +408,18 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#
 <div class="sourceCode" id="cb17"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mkdir /mnt/sda8</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mount /dev/sda8 /mnt/sda8</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mount /dev/sda8 /mnt/root</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
 <li>Copy /root to new partition.</li>
 </ul>
 <div class="sourceCode" id="cb18"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cp <span class="at">-r</span> /root/<span class="pp">*</span> /mnt/sda8</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cp <span class="at">-r</span> /root/<span class="pp">*</span> /mnt/root</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>Append below line to /etc/fstab.</li>
+<li>Append below line to /etc/fstab. To mount the new partition to /root
+during startup.</li>
 </ul>
 <div class="sourceCode" id="cb19"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>  </span>
