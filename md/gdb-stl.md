@@ -50,5 +50,5 @@ global pretty-printers:
 
 
 # References
-- [https://stackoverflow.com/questions/11606048/how-to-pretty-print-stl-containers-in-gdb](How to pretty-print STL containers in GDB?)
-- [https://sourceware.org/gdb/wiki/STLSupport](STL Support Tools)
+- [How to pretty-print STL containers in GDB?](https://stackoverflow.com/questions/11606048/how-to-pretty-print-stl-containers-in-gdb)
+- [STL Support Tools](https://sourceware.org/gdb/wiki/STLSupport)
