@@ -74,6 +74,7 @@ pandoc -f markdown -t html -s \
 # generate_post gdb-find
 # generate_post gdb-call
 # generate_post gdb-dump-restore
+generate_post gdb-stl
 
 
 # ====  BASHDB
@@ -86,8 +87,8 @@ pandoc -f markdown -t html -s \
 # generate_post graphviz
 
 # ====  Cheatsheets
-generate_post kvm
-generate_post fdisk
+# generate_post kvm
+# generate_post fdisk
 # generate_post systemd
 
 
