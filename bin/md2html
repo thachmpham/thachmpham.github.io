@@ -25,7 +25,10 @@ generate_post() {
 }
 
 
-# ====  main()
+
+# ====  main()   ==== #
+
+
 # ====  generate home page
 pandoc -f markdown -t html -s \
     --include-after-body ${workspace}/bin/footer_for_home.html \
@@ -34,11 +37,12 @@ pandoc -f markdown -t html -s \
 
 
 # ====  generate posts
-# ====  Virtualization
+# ====  Virtual network interfaces
 # generate_post veth
 # generate_post vbridge
 # generate_post vdummy-interface
 # generate_post vbond-interface
+
 
 # ====  TCP/IP
 # generate_post arp
@@ -46,14 +50,18 @@ pandoc -f markdown -t html -s \
 # generate_post dhcp
 
 
-# ====  Protocols
+# ====  Linux
+# generate_post kvm
+# generate_post fdisk
+# generate_post systemd
+
+
+# ====  Infrastructure
 # generate_post pxe
 # generate_post ldap
-
-
-# ====  Distributed Systems
 # generate_post vip
 # generate_post drbd
+
 
 # ====  OpenSAF
 # generate_post opensaf-install
@@ -74,7 +82,7 @@ pandoc -f markdown -t html -s \
 # generate_post gdb-find
 # generate_post gdb-call
 # generate_post gdb-dump-restore
-generate_post gdb-stl
+# generate_post gdb-stl
 
 
 # ====  BASHDB
@@ -82,14 +90,9 @@ generate_post gdb-stl
 # generate_post bashdb-manual
 
 
-# ====  Visualization
+# ====  Tools
 # generate_post plantuml
 # generate_post graphviz
-
-# ====  Cheatsheets
-# generate_post kvm
-# generate_post fdisk
-# generate_post systemd
 
 
 # ====  About

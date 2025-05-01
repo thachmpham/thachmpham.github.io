@@ -1,32 +1,41 @@
 ---
 title:  "Thach Pham's Notebook"
-subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Networking - Distributed Systems - Software Debugging*"
+subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Distributed Systems - Software Debuggers*"
 ---
 
 
-## Table of Content
-### Virtualization
+## Computer Systems
+
+-----
+
+### Virtual Network Interfaces
 - [Virtual Ethernet Interface](html/veth.html)
 - [Virtual Bridge Interface](html/vbridge.html)
 - [Dummy Interface](html/vdummy-interface.html)
 - [Bond Interface](html/vbond-interface.html)
-
 
 ### TCP/IP
 - [ARP &nbsp;&nbsp; - &nbsp; Address Resolution Protocol](html/arp.html)
 - [IP Routing &nbsp;&nbsp; - &nbsp; Pathfinding](html/ip-routing.html)
 - [DHCP &nbsp;&nbsp; - &nbsp; Dynamic Host Configuration Protocol](html/dhcp.html)
 
-
-### Protocols
+### Infrastructure
 - [PXE &nbsp;&nbsp; - &nbsp; Preboot eXecution Environment](html/pxe.html)
 - [LDAP &nbsp;&nbsp; - &nbsp; Lightweight Directory Access Protocol](html/ldap.html)
-
-
-### Distributed Systems
 - [VIP &nbsp;&nbsp; - &nbsp; Virtual IP Address](html/vip.html)
 - [DRBD &nbsp;&nbsp; - &nbsp; Distributed Replicated Block Device](html/drbd.html)
 
+### Linux
+- [Kernel Virtual Machine](html/kvm.html)
+- [Disk Manipulation With FDisk](html/fdisk.html)
+- [SystemD Management](html/systemd.html)
+
+<br>
+
+
+## Distributed Systems
+
+-----
 
 ### OpenSAF
 - [Build & Install](html/opensaf-install.html)
@@ -39,6 +48,12 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Networking - D
 - [AMF &nbsp;&nbsp; - &nbsp; Build High Availability App with AMF API](html/opensaf-amf-sa-aware.html)
 - [AMF &nbsp;&nbsp; - &nbsp; Healthcheck](html/opensaf-healthcheck.html)
 
+<br>
+
+
+## Software Debuggers
+
+-----
 
 ### GDB
 - [Debug A Program Started By A Script](html/gdb-program-started-by-script.html)
@@ -54,15 +69,13 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Networking - D
 - [Build & Install](html/bashdb-build.html)
 - [Manual](html/bashdb-manual.html)
 
+<br>
 
-### Diagrams
+
+## Tools
+
+-----
+
+### Diagram
 - [PlantUML](html/plantuml.html)
 - [Graphviz](html/graphviz.html)
-
-
-### Cheatsheets
-- [Kernel Virtual Machine](html/kvm.html)
-- [Disk Manipulation With FDisk](html/fdisk.html)
-- [SystemD Management](html/systemd.html)
-
-
