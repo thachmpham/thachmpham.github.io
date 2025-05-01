@@ -55,7 +55,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 
 -----
 
-### GDB
+### Debug C/C++
 - [Debug A Program Started By A Script](html/gdb-program-started-by-script.html)
 - [Debug A Program Started By A Systemd Service](html/gdb-program-started-by-systemd.html)
 - [Debug A High Availability Program](html/gdb-ha-program.html)
@@ -63,9 +63,11 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 - [Dump & Restore Memory](html/gdb-dump-restore.html)
 - [Execute Functions](html/gdb-call.html)
 - [Print C++ STL Containers](html/gdb-stl.html)
+- [Build & Inspect C/C++ Code](html/cpp-build.html)
 
 
-### BashDB
+
+### Debug Bash
 - [Build & Install](html/bashdb-build.html)
 - [Manual](html/bashdb-manual.html)
 

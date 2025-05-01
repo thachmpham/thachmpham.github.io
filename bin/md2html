@@ -85,6 +85,10 @@ pandoc -f markdown -t html -s \
 # generate_post gdb-stl
 
 
+# ====  GCC
+generate_post cpp-build
+
+
 # ====  BASHDB
 # generate_post bashdb-build
 # generate_post bashdb-manual
