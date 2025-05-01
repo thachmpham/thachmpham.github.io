@@ -1,6 +1,6 @@
 ---
 title:  "Thach Pham's Notebook"
-subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Distributed Systems - Software Debuggers*"
+subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Distributed Systems - Software Debugging*"
 ---
 
 
@@ -51,7 +51,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 <br>
 
 
-## Software Debuggers
+## Software Debugging
 
 -----
 
