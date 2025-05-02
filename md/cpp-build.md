@@ -33,8 +33,6 @@ hello: ELF 64-bit LSB pie executable, x86-64, dynamically linked, interpreter /l
 ```sh
   
 $ objdump --section-headers hello
-hello:     file format elf64-x86-64
-
 Sections:
 Idx Name          Size      VMA               LMA               File off  Algn
                 CONTENTS, ALLOC, LOAD, READONLY, DATA
@@ -71,7 +69,7 @@ $ objdump --disassemble --section=.text hello
   
 $ objdump --syms hello
 SYMBOL TABLE:
-Starting Address                Length
+Start Address                   Length
 0000000000000000 l    df *ABS*  0000000000000000              hello.c
 0000000000000000       F *UND*  0000000000000000              puts@GLIBC_2.2.5
 0000000000001149 g     F .text  000000000000001e              main
@@ -96,6 +94,9 @@ $ objdump --disassemble=main hello
 - Disassemble by addresses.
 ```sh
   
+# Start address of main:    0x0000000000001149
+# Stop address of main:     0x0000000000001149 + 0x000000000000001e = 0x1167
+
 $ objdump --disassemble --start-address=0x0000000000001149 --stop-address=0x1167 hello
 0000000000001149 <main>:
     1149:       f3 0f 1e fa             endbr64

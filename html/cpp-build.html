@@ -268,20 +268,18 @@
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--section-headers</span> hello</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hello:</span>     file format elf64-x86-64</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Sections:</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Idx</span> Name          Size      VMA               LMA               File off  Algn</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                <span class="ex">CONTENTS,</span> ALLOC, LOAD, READONLY, DATA</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">15</span> .text        00000107  0000000000001060  0000000000001060  00001060  2<span class="pp">**</span>4</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                <span class="ex">CONTENTS,</span> ALLOC, LOAD, READONLY, CODE</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ex">17</span> .rodata      00000011  0000000000002000  0000000000002000  00002000  2<span class="pp">**</span>2</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                <span class="ex">CONTENTS,</span> ALLOC, LOAD, READONLY, DATA                  </span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="ex">24</span> .data        00000010  0000000000004000  0000000000004000  00003000  2<span class="pp">**</span>3</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                <span class="ex">CONTENTS,</span> ALLOC, LOAD, DATA</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="ex">25</span> .bss         00000008  0000000000004010  0000000000004010  00003010  2<span class="pp">**</span>0</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                <span class="ex">ALLOC</span>                                </span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Sections:</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Idx</span> Name          Size      VMA               LMA               File off  Algn</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                <span class="ex">CONTENTS,</span> ALLOC, LOAD, READONLY, DATA</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">15</span> .text        00000107  0000000000001060  0000000000001060  00001060  2<span class="pp">**</span>4</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                <span class="ex">CONTENTS,</span> ALLOC, LOAD, READONLY, CODE</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">17</span> .rodata      00000011  0000000000002000  0000000000002000  00002000  2<span class="pp">**</span>2</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                <span class="ex">CONTENTS,</span> ALLOC, LOAD, READONLY, DATA                  </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ex">24</span> .data        00000010  0000000000004000  0000000000004000  00003000  2<span class="pp">**</span>3</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                <span class="ex">CONTENTS,</span> ALLOC, LOAD, DATA</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="ex">25</span> .bss         00000008  0000000000004010  0000000000004010  00003010  2<span class="pp">**</span>0</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                <span class="ex">ALLOC</span>                                </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
 <li>Content of a section.</li>
 </ul>
@@ -303,7 +301,7 @@
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--syms</span> hello</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">SYMBOL</span> TABLE:</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Starting</span> Address                Length</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Start</span> Address                   Length</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000000000</span> l    df <span class="pp">*</span>ABS<span class="pp">*</span>  0000000000000000              hello.c</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000000000</span>       F <span class="pp">*</span>UND<span class="pp">*</span>  0000000000000000              puts@GLIBC_2.2.5</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001149</span> g     F .text  000000000000001e              main</span>
@@ -326,16 +324,19 @@
 <li>Disassemble by addresses.</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> <span class="at">--start-address</span><span class="op">=</span>0x0000000000001149 <span class="at">--stop-address</span><span class="op">=</span>0x1167 hello</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001149</span> <span class="op">&lt;</span>main<span class="op">&gt;</span>:</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1149:</span>       f3 0f 1e fa             endbr64</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">114d:</span>       48 83 ec 08             sub    <span class="va">$0</span>x8,%rsp</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1151:</span>       48 8d 3d ac 0e 00 00    lea    0xeac<span class="er">(</span><span class="ex">%rip</span><span class="kw">)</span><span class="ex">,%rdi</span>        <span class="co"># 2004 &lt;_IO_stdin_used+0x4&gt;</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1158:</span>       e8 f3 fe ff ff          call   1050 <span class="op">&lt;</span>puts@plt<span class="op">&gt;</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">115d:</span>       b8 00 00 00 00          mov    <span class="va">$0</span>x0,%eax</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1162:</span>       48 83 c4 08             add    <span class="va">$0</span>x8,%rsp</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1166:</span>       c3</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Start address of main:    0x0000000000001149</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Stop address of main:     0x0000000000001149 + 0x000000000000001e = 0x1167</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> <span class="at">--start-address</span><span class="op">=</span>0x0000000000001149 <span class="at">--stop-address</span><span class="op">=</span>0x1167 hello</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001149</span> <span class="op">&lt;</span>main<span class="op">&gt;</span>:</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1149:</span>       f3 0f 1e fa             endbr64</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">114d:</span>       48 83 ec 08             sub    <span class="va">$0</span>x8,%rsp</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1151:</span>       48 8d 3d ac 0e 00 00    lea    0xeac<span class="er">(</span><span class="ex">%rip</span><span class="kw">)</span><span class="ex">,%rdi</span>        <span class="co"># 2004 &lt;_IO_stdin_used+0x4&gt;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1158:</span>       e8 f3 fe ff ff          call   1050 <span class="op">&lt;</span>puts@plt<span class="op">&gt;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">115d:</span>       b8 00 00 00 00          mov    <span class="va">$0</span>x0,%eax</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1162:</span>       48 83 c4 08             add    <span class="va">$0</span>x8,%rsp</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1166:</span>       c3</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
 <li>References</li>
 </ul>
