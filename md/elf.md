@@ -1,6 +1,7 @@
 ---
-title: Build & Inspect C/C++ Code
+title: Inspect ELF Files
 ---
+
 
 # 1. Hello World
 - File hello.c.
@@ -109,7 +110,33 @@ $ objdump --disassemble --start-address=0x0000000000001149 --stop-address=0x1167
   
 ```
 
-- References
+# 2. 
+
+# 2. Static Library
+- File add.c
+```c
+  
+int add(int a, int b)
+{
+    return a + b;
+}
+  
+```
+
+- File sub.c
+```c
+  
+int sub(int a, int b)
+{
+    return a - b;
+}
+  
+```
+
+
+
+
+# References
 ```sh
   
 $ man elf
