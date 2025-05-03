@@ -3,116 +3,14 @@ title: Inspect ELF Files
 ---
 
 
-# 1. Hello World
-- File hello.c.
-```c
-  
-#include <stdio.h>
+The ELF (Executable and Linkable Format) is the standard file format for programs on Linux. It has three main types:
 
-int main() {
-    printf("hello, world\n");
-}
-  
-```
+- *Relocatable Object File:* Contains binary code and data that can be combined with other relocatable files at link time to create an executable.
+- *Executable Object File:* Contains binary code and data ready to be loaded into memory and run directly by the operating system.
+- *Shared Object File:* A special type of relocatable file that can be loaded and linked dynamically, either when the program starts or while it’s running.
 
-- Build.
-```sh
-  
-$ gcc -Og -o hello hello.c
-  
-```
 
-- File information.
-```sh
-  
-$ file hello
-hello: ELF 64-bit LSB pie executable, x86-64, dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, not stripped
-  
-```
-
-- List sections.
-```sh
-  
-$ objdump --section-headers hello
-Sections:
-Idx Name          Size      VMA               LMA               File off  Algn
-                CONTENTS, ALLOC, LOAD, READONLY, DATA
-15 .text        00000107  0000000000001060  0000000000001060  00001060  2**4
-                CONTENTS, ALLOC, LOAD, READONLY, CODE
-17 .rodata      00000011  0000000000002000  0000000000002000  00002000  2**2
-                CONTENTS, ALLOC, LOAD, READONLY, DATA                  
-24 .data        00000010  0000000000004000  0000000000004000  00003000  2**3
-                CONTENTS, ALLOC, LOAD, DATA
-25 .bss         00000008  0000000000004010  0000000000004010  00003010  2**0
-                ALLOC                                
-  
-```
-
-- Content of a section.
-```sh
-  
-$ objdump --full-contents --section=.rodata hello
-Contents of section .rodata:
- 2000 01000200 68656c6c 6f2c2077 6f726c64  ....hello, world
- 2010 00
-  
-```
-
-- Disassemble a section.
-```sh
-  
-$ objdump --disassemble --section=.text hello
-  
-```
-
-- Symbol table.
-```sh
-  
-$ objdump --syms hello
-SYMBOL TABLE:
-Start Address                   Length
-0000000000000000 l    df *ABS*  0000000000000000              hello.c
-0000000000000000       F *UND*  0000000000000000              puts@GLIBC_2.2.5
-0000000000001149 g     F .text  000000000000001e              main
-  
-```
-
-- Disassemble a function.
-```sh
-  
-$ objdump --disassemble=main hello
-0000000000001149 <main>:
-    1149:       f3 0f 1e fa             endbr64
-    114d:       48 83 ec 08             sub    $0x8,%rsp
-    1151:       48 8d 3d ac 0e 00 00    lea    0xeac(%rip),%rdi        # 2004 <_IO_stdin_used+0x4>
-    1158:       e8 f3 fe ff ff          call   1050 <puts@plt>
-    115d:       b8 00 00 00 00          mov    $0x0,%eax
-    1162:       48 83 c4 08             add    $0x8,%rsp
-    1166:       c3                      ret
-  
-```
-
-- Disassemble by addresses.
-```sh
-  
-# Start address of main:    0x0000000000001149
-# Stop address of main:     0x0000000000001149 + 0x000000000000001e = 0x1167
-
-$ objdump --disassemble --start-address=0x0000000000001149 --stop-address=0x1167 hello
-0000000000001149 <main>:
-    1149:       f3 0f 1e fa             endbr64
-    114d:       48 83 ec 08             sub    $0x8,%rsp
-    1151:       48 8d 3d ac 0e 00 00    lea    0xeac(%rip),%rdi        # 2004 <_IO_stdin_used+0x4>
-    1158:       e8 f3 fe ff ff          call   1050 <puts@plt>
-    115d:       b8 00 00 00 00          mov    $0x0,%eax
-    1162:       48 83 c4 08             add    $0x8,%rsp
-    1166:       c3
-  
-```
-
-# 2. 
-
-# 2. Static Library
+# 1. Relocatable Object File
 - File add.c
 ```c
   
@@ -123,7 +21,108 @@ int add(int a, int b)
   
 ```
 
-- File sub.c
+- Build.
+```sh
+  
+$ gcc -Og -c add.c
+  
+```
+
+- File info.
+```sh
+  
+$ file add.o
+add.o: ELF 64-bit LSB relocatable, x86-64
+  
+```
+
+- Symbol table.
+```sh
+  
+$ objdump --syms add.o
+SYMBOL TABLE:
+Start Address                   Length
+0000000000000000 g     F .text  0000000000000008 add
+  
+```
+
+- Disassemble.
+```sh
+  
+$ objdump --disassemble add.o
+0000000000000000 <add>:
+   0:   f3 0f 1e fa             endbr64
+   4:   8d 04 37                lea    (%rdi,%rsi,1),%eax
+   7:   c3                      ret
+  
+```
+
+
+# 2. Executable Object File
+- File main.c
+```c
+  
+int add(int a, int b);
+
+int main(int argc, char** agrv)
+{
+    add(1, 2);
+
+    return 0;
+}
+  
+```
+
+- Build
+```sh
+  
+$ gcc -Og -c add.c
+$ gcc -Og -c main.c
+$ gcc -Og -o prog main.o add.o
+  
+```
+
+- File info.
+```sh
+  
+$ file prog
+prog: ELF 64-bit LSB pie executable, x86-64, dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2
+  
+```
+
+- Symbol table.
+```sh
+  
+$ objdump --syms prog
+000000000000114a g     F .text  0000000000000008              add
+0000000000001129 g     F .text  0000000000000021              main
+  
+```
+
+- Disassemble.
+```sh
+  
+$ objdump --disassemble prog
+0000000000001129 <main>:
+    1129:       f3 0f 1e fa             endbr64
+    112d:       48 83 ec 08             sub    $0x8,%rsp
+    1131:       be 02 00 00 00          mov    $0x2,%esi
+    1136:       bf 01 00 00 00          mov    $0x1,%edi
+    113b:       e8 0a 00 00 00          call   114a <add>
+    1140:       b8 00 00 00 00          mov    $0x0,%eax
+    1145:       48 83 c4 08             add    $0x8,%rsp
+    1149:       c3                      ret
+
+000000000000114a <add>:
+    114a:       f3 0f 1e fa             endbr64
+    114e:       8d 04 37                lea    (%rdi,%rsi,1),%eax
+    1151:       c3                      ret
+  
+```
+
+
+# 3. Shared Object File
+- File sub.c.
 ```c
   
 int sub(int a, int b)
@@ -133,14 +132,130 @@ int sub(int a, int b)
   
 ```
 
+- File main.c.
+```c
 
+int sub(int a, int b);
+
+int main(int argc, char** agrv)
+{
+    sub(1, 2);
+
+    return 0;
+}
+
+```
+
+- Build shared object file.
+```sh
+  
+$ gcc -Og -fPIC -c sub.c
+$ gcc -shared -o libSub.so sub.o
+  
+```
+
+- Build executable object file.
+```sh
+  
+$ gcc -Og -c main.c
+$ gcc -Og -o prog main.o -L. -lSub
+  
+```
+
+- File info.
+```sh
+  
+$ file libSub.so
+libSub.so: ELF 64-bit LSB shared object, x86-64, dynamically linked
+  
+```
+
+- Symbol table.
+```sh
+  
+$ objdump --syms libSub.so
+00000000000010f9 g     F .text  0000000000000009 subtract
+
+$ objdump --syms prog
+0000000000001149 g     F .text  0000000000000021              main
+0000000000000000       F *UND*  0000000000000000              subtract
+  
+```
+
+- Disassemble.
+```sh
+  
+$ objdump --disassemble prog
+Disassembly of section .plt.sec:
+0000000000001050 <subtract@plt>:
+    1050:       f3 0f 1e fa             endbr64
+    1054:       ff 25 76 2f 00 00       jmp    *0x2f76(%rip)        # 3fd0 <subtract@Base>
+    105a:       66 0f 1f 44 00 00       nopw   0x0(%rax,%rax,1)
+
+Disassembly of section .text:
+0000000000001149 <main>:
+    1149:       f3 0f 1e fa             endbr64
+    114d:       48 83 ec 08             sub    $0x8,%rsp
+    1151:       be 02 00 00 00          mov    $0x2,%esi
+    1156:       bf 01 00 00 00          mov    $0x1,%edi
+    115b:       e8 f0 fe ff ff          call   1050 <subtract@plt>
+    1160:       b8 00 00 00 00          mov    $0x0,%eax
+    1165:       48 83 c4 08             add    $0x8,%rsp
+    1169:       c3                      ret
+  
+```
+
+`subtract@plt` is a function in the Procedure Linkage Table (PLT) that handles dynamic linking to the actual `subtract` function in a shared library. When the program first calls `subtract@plt`, it resolves and jumps to the real `subtract` function. After the first call, subsequent calls directly invoke `subtract`.
+
+
+- Run.
+```sh
+  
+$ export LD_LIBRARY_PATH=.
+
+$ gdb prog
+  
+```
+
+```sh
+  
+(gdb) start
+Temporary breakpoint 1, 0x0000555555555149 in main ()
+
+
+(gdb) info sharedlibrary
+From                To                  Syms Read   Shared Object Library
+0x00007ffff7fc6000  0x00007ffff7ff0195  Yes         /lib64/ld-linux-x86-64.so.2
+0x00007ffff7fb9040  0x00007ffff7fb9102  Yes (*)     ./libSub.so
+0x00007ffff7c28800  0x00007ffff7dafcb9  Yes         /lib/x86_64-linux-gnu/libc.so.6
+
+
+(gdb) info functions subtract
+Non-debugging symbols:
+0x0000555555555050  subtract@plt
+0x00007ffff7fb90f9  subtract
+
+
+(gdb) break subtract@plt
+Breakpoint 2 at 0x555555555050
+
+
+(gdb) break subtract
+Breakpoint 3 at 0x7ffff7fb90f9
+
+
+(gdb) c
+Continuing.
+Breakpoint 2, 0x0000555555555050 in subtract@plt ()
+
+
+(gdb) c
+Continuing.
+Breakpoint 3, 0x00007ffff7fb90f9 in subtract () from ./libSub.so
+  
+```
 
 
 # References
-```sh
-  
-$ man elf
-$ man ascii
-$ man objdump
-  
-```
+- [Computer Systems: A Programmer's Perspective, Randal E. Bryant, David R. O'Hallaron](https://csapp.cs.cmu.edu/)
+- [Executable and Linking Format](https://man7.org/linux/man-pages/man5/elf.5.html)

@@ -239,117 +239,121 @@
 <header id="title-block-header">
 <h1 class="title">Inspect ELF Files</h1>
 </header>
-<h1 id="hello-world">1. Hello World</h1>
+<p>The ELF (Executable and Linkable Format) is the standard file format
+for programs on Linux. It has three main types:</p>
 <ul>
-<li>File hello.c.</li>
+<li><em>Relocatable Object File:</em> Contains binary code and data that
+can be combined with other relocatable files at link time to create an
+executable.</li>
+<li><em>Executable Object File:</em> Contains binary code and data ready
+to be loaded into memory and run directly by the operating system.</li>
+<li><em>Shared Object File:</em> A special type of relocatable file that
+can be loaded and linked dynamically, either when the program starts or
+while it’s running.</li>
+</ul>
+<h1 id="relocatable-object-file">1. Relocatable Object File</h1>
+<ul>
+<li>File add.c</li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;hello, world</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> b<span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
 <li>Build.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-Og</span> <span class="at">-o</span> hello hello.c</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-Og</span> <span class="at">-c</span> add.c</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>File information.</li>
+<li>File info.</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> file hello</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hello:</span> ELF 64-bit LSB pie executable, x86-64, dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, not stripped</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> file add.o</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">add.o:</span> ELF 64-bit LSB relocatable, x86-64</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>List sections.</li>
-</ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--section-headers</span> hello</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Sections:</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Idx</span> Name          Size      VMA               LMA               File off  Algn</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                <span class="ex">CONTENTS,</span> ALLOC, LOAD, READONLY, DATA</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">15</span> .text        00000107  0000000000001060  0000000000001060  00001060  2<span class="pp">**</span>4</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                <span class="ex">CONTENTS,</span> ALLOC, LOAD, READONLY, CODE</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">17</span> .rodata      00000011  0000000000002000  0000000000002000  00002000  2<span class="pp">**</span>2</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                <span class="ex">CONTENTS,</span> ALLOC, LOAD, READONLY, DATA                  </span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ex">24</span> .data        00000010  0000000000004000  0000000000004000  00003000  2<span class="pp">**</span>3</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                <span class="ex">CONTENTS,</span> ALLOC, LOAD, DATA</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="ex">25</span> .bss         00000008  0000000000004010  0000000000004010  00003010  2<span class="pp">**</span>0</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                <span class="ex">ALLOC</span>                                </span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Content of a section.</li>
-</ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--full-contents</span> <span class="at">--section</span><span class="op">=</span>.rodata hello</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Contents</span> of section .rodata:</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a> <span class="ex">2000</span> 01000200 68656c6c 6f2c2077 6f726c64  ....hello, world</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a> <span class="ex">2010</span> 00</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>Disassemble a section.</li>
-</ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> <span class="at">--section</span><span class="op">=</span>.text hello</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
 <li>Symbol table.</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--syms</span> hello</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">SYMBOL</span> TABLE:</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Start</span> Address                   Length</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000000000</span> l    df <span class="pp">*</span>ABS<span class="pp">*</span>  0000000000000000              hello.c</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000000000</span>       F <span class="pp">*</span>UND<span class="pp">*</span>  0000000000000000              puts@GLIBC_2.2.5</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001149</span> g     F .text  000000000000001e              main</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--syms</span> add.o</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">SYMBOL</span> TABLE:</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Start</span> Address                   Length</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000000000</span> g     F .text  0000000000000008 add</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>Disassemble a function.</li>
+<li>Disassemble.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> add.o</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000000000</span> <span class="op">&lt;</span>add<span class="op">&gt;</span>:</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0:</span>   f3 0f 1e fa             endbr64</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>   <span class="ex">4:</span>   8d 04 37                lea    <span class="er">(</span><span class="ex">%rdi,%rsi,1</span><span class="kw">)</span><span class="ex">,%eax</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>   <span class="ex">7:</span>   c3                      ret</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="executable-object-file">2. Executable Object File</h1>
+<ul>
+<li>File main.c</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> agrv<span class="op">)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    add<span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Build</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-Og</span> <span class="at">-c</span> add.c</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-Og</span> <span class="at">-c</span> main.c</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-Og</span> <span class="at">-o</span> prog main.o add.o</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>File info.</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span><span class="op">=</span>main hello</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001149</span> <span class="op">&lt;</span>main<span class="op">&gt;</span>:</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1149:</span>       f3 0f 1e fa             endbr64</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">114d:</span>       48 83 ec 08             sub    <span class="va">$0</span>x8,%rsp</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1151:</span>       48 8d 3d ac 0e 00 00    lea    0xeac<span class="er">(</span><span class="ex">%rip</span><span class="kw">)</span><span class="ex">,%rdi</span>        <span class="co"># 2004 &lt;_IO_stdin_used+0x4&gt;</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1158:</span>       e8 f3 fe ff ff          call   1050 <span class="op">&lt;</span>puts@plt<span class="op">&gt;</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">115d:</span>       b8 00 00 00 00          mov    <span class="va">$0</span>x0,%eax</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1162:</span>       48 83 c4 08             add    <span class="va">$0</span>x8,%rsp</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1166:</span>       c3                      ret</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> file prog</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">prog:</span> ELF 64-bit LSB pie executable, x86-64, dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>Disassemble by addresses.</li>
+<li>Symbol table.</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Start address of main:    0x0000000000001149</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Stop address of main:     0x0000000000001149 + 0x000000000000001e = 0x1167</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> <span class="at">--start-address</span><span class="op">=</span>0x0000000000001149 <span class="at">--stop-address</span><span class="op">=</span>0x1167 hello</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001149</span> <span class="op">&lt;</span>main<span class="op">&gt;</span>:</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1149:</span>       f3 0f 1e fa             endbr64</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">114d:</span>       48 83 ec 08             sub    <span class="va">$0</span>x8,%rsp</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1151:</span>       48 8d 3d ac 0e 00 00    lea    0xeac<span class="er">(</span><span class="ex">%rip</span><span class="kw">)</span><span class="ex">,%rdi</span>        <span class="co"># 2004 &lt;_IO_stdin_used+0x4&gt;</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1158:</span>       e8 f3 fe ff ff          call   1050 <span class="op">&lt;</span>puts@plt<span class="op">&gt;</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">115d:</span>       b8 00 00 00 00          mov    <span class="va">$0</span>x0,%eax</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1162:</span>       48 83 c4 08             add    <span class="va">$0</span>x8,%rsp</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1166:</span>       c3</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="section">2.</h1>
-<h1 id="static-library">2. Static Library</h1>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--syms</span> prog</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">000000000000114a</span> g     F .text  0000000000000008              add</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001129</span> g     F .text  0000000000000021              main</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>File add.c</li>
+<li>Disassemble.</li>
 </ul>
-<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> b<span class="op">;</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> prog</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001129</span> <span class="op">&lt;</span>main<span class="op">&gt;</span>:</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1129:</span>       f3 0f 1e fa             endbr64</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">112d:</span>       48 83 ec 08             sub    <span class="va">$0</span>x8,%rsp</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1131:</span>       be 02 00 00 00          mov    <span class="va">$0</span>x2,%esi</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1136:</span>       bf 01 00 00 00          mov    <span class="va">$0</span>x1,%edi</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">113b:</span>       e8 0a 00 00 00          call   114a <span class="op">&lt;</span>add<span class="op">&gt;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1140:</span>       b8 00 00 00 00          mov    <span class="va">$0</span>x0,%eax</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1145:</span>       48 83 c4 08             add    <span class="va">$0</span>x8,%rsp</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1149:</span>       c3                      ret</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="ex">000000000000114a</span> <span class="op">&lt;</span>add<span class="op">&gt;</span>:</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="ex">114a:</span>       f3 0f 1e fa             endbr64</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="ex">114e:</span>       8d 04 37                lea    <span class="er">(</span><span class="ex">%rdi,%rsi,1</span><span class="kw">)</span><span class="ex">,%eax</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1151:</span>       c3                      ret</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="shared-object-file">3. Shared Object File</h1>
 <ul>
-<li>File sub.c</li>
+<li>File sub.c.</li>
 </ul>
 <div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sub<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span></span>
@@ -357,13 +361,136 @@
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">-</span> b<span class="op">;</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>File main.c.</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sub<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> agrv<span class="op">)</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    sub<span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<ul>
+<li>Build shared object file.</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-Og</span> <span class="at">-fPIC</span> <span class="at">-c</span> sub.c</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-shared</span> <span class="at">-o</span> libSub.so sub.o</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Build executable object file.</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-Og</span> <span class="at">-c</span> main.c</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-Og</span> <span class="at">-o</span> prog main.o <span class="at">-L.</span> <span class="at">-lSub</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>File info.</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> file libSub.so</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">libSub.so:</span> ELF 64-bit LSB shared object, x86-64, dynamically linked</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Symbol table.</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--syms</span> libSub.so</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">00000000000010f9</span> g     F .text  0000000000000009 subtract</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--syms</span> prog</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001149</span> g     F .text  0000000000000021              main</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000000000</span>       F <span class="pp">*</span>UND<span class="pp">*</span>  0000000000000000              subtract</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Disassemble.</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> prog</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Disassembly</span> of section .plt.sec:</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001050</span> <span class="op">&lt;</span>subtract@plt<span class="op">&gt;</span>:</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1050:</span>       f3 0f 1e fa             endbr64</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1054:</span>       ff 25 76 2f 00 00       jmp    <span class="pp">*</span>0x2f76<span class="er">(</span><span class="ex">%rip</span><span class="kw">)</span>        <span class="co"># 3fd0 &lt;subtract@Base&gt;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">105a:</span>       66 0f 1f 44 00 00       nopw   0x0<span class="er">(</span><span class="ex">%rax,%rax,1</span><span class="kw">)</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Disassembly</span> of section .text:</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001149</span> <span class="op">&lt;</span>main<span class="op">&gt;</span>:</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1149:</span>       f3 0f 1e fa             endbr64</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">114d:</span>       48 83 ec 08             sub    <span class="va">$0</span>x8,%rsp</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1151:</span>       be 02 00 00 00          mov    <span class="va">$0</span>x2,%esi</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1156:</span>       bf 01 00 00 00          mov    <span class="va">$0</span>x1,%edi</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="ex">115b:</span>       e8 f0 fe ff ff          call   1050 <span class="op">&lt;</span>subtract@plt<span class="op">&gt;</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1160:</span>       b8 00 00 00 00          mov    <span class="va">$0</span>x0,%eax</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1165:</span>       48 83 c4 08             add    <span class="va">$0</span>x8,%rsp</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1169:</span>       c3                      ret</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<p><code>subtract@plt</code> is a function in the Procedure Linkage
+Table (PLT) that handles dynamic linking to the actual
+<code>subtract</code> function in a shared library. When the program
+first calls <code>subtract@plt</code>, it resolves and jumps to the real
+<code>subtract</code> function. After the first call, subsequent calls
+directly invoke <code>subtract</code>.</p>
+<ul>
+<li>Run.</li>
+</ul>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> export LD_LIBRARY_PATH=.</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb prog</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">start</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Temporary</span> breakpoint 1, 0x0000555555555149 in main <span class="er">(</span><span class="kw">)</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> sharedlibrary</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="ex">From</span>                To                  Syms Read   Shared Object Library</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7fc6000</span>  0x00007ffff7ff0195  Yes         /lib64/ld-linux-x86-64.so.2</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7fb9040</span>  0x00007ffff7fb9102  Yes <span class="er">(</span><span class="ex">*</span><span class="kw">)</span>     <span class="ex">./libSub.so</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7c28800</span>  0x00007ffff7dafcb9  Yes         /lib/x86_64-linux-gnu/libc.so.6</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> functions subtract</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="ex">Non-debugging</span> symbols:</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="ex">0x0000555555555050</span>  subtract@plt</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7fb90f9</span>  subtract</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">subtract@plt</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 2 at 0x555555555050</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">subtract</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 3 at 0x7ffff7fb90f9</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">c</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 2, 0x0000555555555050 in subtract@plt <span class="er">(</span><span class="kw">)</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">c</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 3, 0x00007ffff7fb90f9 in subtract <span class="er">(</span><span class="kw">)</span> <span class="ex">from</span> ./libSub.so</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="references">References</h1>
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> man elf</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> man ascii</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> man objdump</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li><a href="https://csapp.cs.cmu.edu/">Computer Systems: A Programmer’s
+Perspective, Randal E. Bryant, David R. O’Hallaron</a></li>
+<li><a
+href="https://man7.org/linux/man-pages/man5/elf.5.html">Executable and
+Linking Format</a></li>
+</ul>
 <footer class="footer text-muted">
    <div align="center">
       <a href="../index.html"><b>Home</b></a>
