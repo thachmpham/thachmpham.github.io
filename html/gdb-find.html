@@ -243,57 +243,6 @@
 <p>The find command in GDB is used to search for specific byte sequences
 in a process’s memory. It helps locate values, strings, or addresses
 within a given memory range.</p>
-<p>In Linux, when a program runs, it is loaded into memory and divided
-into different segments. In this note, we will search for memory in the
-segments of a process with gdb.</p>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;"><strong>Segment</strong></th>
-<th style="text-align: center;"><strong>Description</strong></th>
-<th style="text-align: center;"><strong>Growth</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;"><strong>Text</strong></td>
-<td style="text-align: center;">Executable code</td>
-<td style="text-align: center;">Fixed</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"><strong>Data</strong></td>
-<td style="text-align: center;">Initialized global, static
-variables</td>
-<td style="text-align: center;">Fixed</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><strong>BSS</strong></td>
-<td style="text-align: center;">Uninitialized global, static
-variables</td>
-<td style="text-align: center;">Fixed</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"><strong>Heap</strong></td>
-<td style="text-align: center;">Dynamic memory</td>
-<td style="text-align: center;">Upward</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><strong>Stack</strong></td>
-<td style="text-align: center;">Local variables, function calls</td>
-<td style="text-align: center;">Downward</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"><strong>Memory Map</strong></td>
-<td style="text-align: center;">Shared libraries</td>
-<td style="text-align: center;">Dynamic</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><strong>Kernel</strong></td>
-<td style="text-align: center;">System calls</td>
-<td style="text-align: center;">Fixed</td>
-</tr>
-</tbody>
-</table>
 <h1 id="lab">2. Lab</h1>
 <h2 id="program">2.1. Program</h2>
 <p>Create file demo.c.</p>
@@ -453,7 +402,7 @@ Search Memory With GDB</a></li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">
-      <a href="../index.html">Home</a>
+      <a href="../index.html"><b>Home</b></a>
    </div>
  </footer>
 </body>
