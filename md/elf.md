@@ -125,7 +125,7 @@ $ objdump --disassemble prog
 - File sub.c.
 ```c
   
-int sub(int a, int b)
+int subtract(int a, int b)
 {
     return a - b;
 }
@@ -135,11 +135,11 @@ int sub(int a, int b)
 - File main.c.
 ```c
 
-int sub(int a, int b);
+int subtract(int a, int b);
 
 int main(int argc, char** agrv)
 {
-    sub(1, 2);
+    subtract(1, 2);
 
     return 0;
 }
