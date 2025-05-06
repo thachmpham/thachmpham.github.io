@@ -83,7 +83,8 @@ pandoc -f markdown -t html -s \
 # generate_post gdb-call
 # generate_post gdb-dump-restore
 # generate_post gdb-stl
-generate_post elf
+# generate_post elf
+generate_post cpp-shared-library
 
 
 # ====  BASHDB
