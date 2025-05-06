@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>C++ Shared Library</title>
+  <title>C/C++ Shared Library</title>
   <style>
     html {
       color: #1a1a1a;
@@ -237,7 +237,7 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">C++ Shared Library</h1>
+<h1 class="title">C/C++ Shared Library</h1>
 </header>
 <h1 id="build-shared-library">1. Build Shared Library</h1>
 <ul>
@@ -359,12 +359,14 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a h
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bn">0x00000000000010f9</span> <span class="op">-</span> <span class="bn">0x00001040</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="dv">185</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p><strong>Observation:</strong><br />
-The distance between the <code>multiple</code> function and the start of
-the <code>.text</code> section in <code>libmath.so</code> is equal to
-the distance between the <code>multiple</code> function’s address and
-the start address where <code>libmath.so</code> is loaded in memory at
-runtime. Both are 185 bytes.</p>
+<ul>
+<li><strong>Observation</strong> The distance between the
+<code>multiple</code> function and the start of the <code>.text</code>
+section in <code>libmath.so</code> is equal to the distance between the
+<code>multiple</code> function’s address and the start address where
+<code>libmath.so</code> is loaded in memory at runtime. Both are 185
+bytes.</li>
+</ul>
 <footer class="footer text-muted">
    <div align="center">
       <a href="../index.html"><b>Home</b></a>
