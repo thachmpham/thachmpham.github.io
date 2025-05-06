@@ -133,7 +133,6 @@ Start Address                   Length
   
 ```
 
-- **Observation**
-The distance between the `multiple` function and the start of the `.text` section in `libmath.so` is equal to the distance between the `multiple` function’s address and the start address where `libmath.so` is loaded in memory at runtime. Both are 185 bytes.
+- **Observation**: The distance between the `multiple` function and the start of the `.text` section in `libmath.so` is equal to the distance between the `multiple` function’s address and the start address where `libmath.so` is loaded in memory at runtime. Both are 185 bytes.
 
 
