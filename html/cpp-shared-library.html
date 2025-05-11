@@ -161,7 +161,6 @@
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
     pre > code.sourceCode > span { line-height: 1.25; }
@@ -296,7 +295,51 @@
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./prog</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="function-address">4. Function Address</h1>
+<h1 id="virtual-address-elf-offset">4. Virtual Address &amp; ELF
+Offset</h1>
+<p>In an ELF file, the offset from a instruction’s address to the start
+of the .text section is preserved when the shared library is loaded into
+memory. The distance between the function’s virtual address and the base
+address of the loaded library at runtime is identical to the offset of
+the instruction from the .text section in the ELF file.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mi>n</mi><mi>s</mi><mi>t</mi><mi>r</mi><mi>u</mi><mi>c</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi>_</mi><mi>v</mi><mi>a</mi><mo>−</mo><mi>b</mi><mi>a</mi><mi>s</mi><mi>e</mi><mi>_</mi><mi>v</mi><mi>a</mi><mo>=</mo><mi>i</mi><mi>n</mi><mi>s</mi><mi>t</mi><mi>r</mi><mi>u</mi><mi>c</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi>_</mi><mi>o</mi><mi>f</mi><mi>f</mi><mi>s</mi><mi>e</mi><mi>t</mi><mo>−</mo><mi>t</mi><mi>e</mi><mi>x</mi><mi>t</mi><mi>_</mi><mi>o</mi><mi>f</mi><mi>f</mi><mi>s</mi><mi>e</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">
+instruction\_va - base\_va = instruction\_offset - text\_offset
+</annotation></semantics></math></p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 74%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Term</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>instruction_va</code></td>
+<td>Virtual address of the instruction in memory.</td>
+</tr>
+<tr class="even">
+<td><code>base_va</code></td>
+<td>Base virtual address where the shared library is loaded in
+memory</td>
+</tr>
+<tr class="odd">
+<td><code>instruction_offset</code></td>
+<td>Offset of the instruction in the <code>.text</code> section in the
+ELF file.</td>
+</tr>
+<tr class="even">
+<td><code>text_offset</code></td>
+<td>Offset of the <code>.text</code> section in the ELF file.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="function-address">4.1. Function Address</h2>
+<p>Check the above formula with function <code>multiple</code> of
+library <code>libmath.so</code>.</p>
 <ul>
 <li>Start program under gdb.</li>
 </ul>
@@ -366,6 +409,125 @@ section in <code>libmath.so</code> is equal to the distance between the
 <code>multiple</code> function’s address and the start address where
 <code>libmath.so</code> is loaded in memory at runtime. Both are 185
 bytes.</li>
+</ul>
+<h2 id="instruction-address">4.2. Instruction Address</h2>
+<p>Translate the virtual address of an instruction in process memory to
+the offset in ELF file.</p>
+<ul>
+<li>File main_2.c.</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> multiple<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> divide<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> argv<span class="op">)</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    multiple<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">4</span><span class="op">);</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    divide<span class="op">(</span><span class="dv">4</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Build.</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-o</span> prog_2 main_2.c <span class="at">-L.</span> <span class="at">-lmath</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Run program under gdb.</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb prog_2</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Starting</span> program: /root/demo/prog_2</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Program</span> received signal SIGFPE, Arithmetic exception.</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7fb9122</span> in divide <span class="er">(</span><span class="kw">)</span> <span class="ex">from</span> libmath.so</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span> </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Dump</span> of assembler code for function divide:</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x00007ffff7fb9110</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x00007ffff7fb9114</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     push   %rbp</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x00007ffff7fb9115</span> <span class="op">&lt;</span>+5<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x00007ffff7fb9118</span> <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x00007ffff7fb911b</span> <span class="op">&lt;</span>+11<span class="op">&gt;</span>:    mov    %esi,-0x8<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x00007ffff7fb911e</span> <span class="op">&lt;</span>+14<span class="op">&gt;</span>:    mov    <span class="at">-0x4</span><span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span><span class="ex">,%eax</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x00007ffff7fb9121</span> <span class="op">&lt;</span>+17<span class="op">&gt;</span>:    cltd</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x00007ffff7fb9122 <span class="op">&lt;</span>+18<span class="op">&gt;</span>:    idivl  <span class="at">-0x8</span><span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x00007ffff7fb9125</span> <span class="op">&lt;</span>+21<span class="op">&gt;</span>:    pop    %rbp</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x00007ffff7fb9126</span> <span class="op">&lt;</span>+22<span class="op">&gt;</span>:    ret</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="ex">End</span> of assembler dump</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> sharedlibrary</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="ex">From</span>                To                  Syms Read   Shared Object Library</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7fc6000</span>  0x00007ffff7ff0195  Yes         /lib64/ld-linux-x86-64.so.2</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7fb9040</span>  0x00007ffff7fb9127  Yes <span class="er">(</span><span class="ex">*</span><span class="kw">)</span>     <span class="ex">libmath.so</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7c28800</span>  0x00007ffff7dafcb9  Yes         /lib/x86_64-linux-gnu/libc.so.6</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>The process crashed while executing the instruction at address
+<code>0x00007ffff7fb9122</code>. The distance from this instruction to
+base address of <code>libmath.so</code> in memory is 226 bytes.</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bn">0x00007ffff7fb9122</span> <span class="op">-</span> <span class="bn">0x00007ffff7fb9040</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="dv">226</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<p>Let’s find the instruction in the ELF file and compare it with the
+disassembled code in GDB to verify that we’ve identified the correct
+one.</p>
+<ul>
+<li>Find offset of <code>.text</code> section of the library.</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--section-headers</span> libmath.so</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Idx</span> Name          Size      VMA               LMA               File off  Algn</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">9</span> .text         000000e7  0000000000001040  0000000000001040  00001040  2<span class="pp">**</span>4</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">CONTENTS,</span> ALLOC, LOAD, READONLY, CODE</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Calculate offset of the instruction in elf file. It is located at
+<code>0x1122</code>.</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">hex</span>(<span class="dv">0000</span><span class="er">1040</span> <span class="op">+</span> <span class="dv">226</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;0x1122&#39;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Disassemble the library. The instruction at <code>0x1122</code> in
+the ELF file matches the instruction at <code>0x00007ffff7fb9122</code>
+in memory.</li>
+</ul>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> libmath.so</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001110</span> <span class="op">&lt;</span>divide<span class="op">&gt;</span>:</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1110:</span>       f3 0f 1e fa             endbr64</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1114:</span>       55                      push   %rbp</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1115:</span>       48 89 e5                mov    %rsp,%rbp</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1118:</span>       89 7d fc                mov    %edi,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">111b:</span>       89 75 f8                mov    %esi,-0x8<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">111e:</span>       8b 45 fc                mov    <span class="at">-0x4</span><span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span><span class="ex">,%eax</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1121:</span>       99                      cltd</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1122:</span>       f7 7d f8                idivl  <span class="at">-0x8</span><span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1125:</span>       5d                      pop    %rbp</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1126:</span>       c3                      ret</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="references">References</h1>
+<ul>
+<li><a
+href="https://man7.org/linux/man-pages/man5/elf.5.html">Executable and
+Linking Format Files</a></li>
+<li><a
+href="https://man7.org/linux/man-pages/man5/proc_pid_maps.5.html">Process
+Memory Map</a></li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">

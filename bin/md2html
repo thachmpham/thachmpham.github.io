@@ -14,6 +14,7 @@ convert_markdown_to_html() {
     --include-in-header ${workspace}/bin/header.html \
     --include-after-body ${workspace}/bin/footer.html \
     -F pandoc-plantuml \
+    --mathml \
     -o ${output_file} \
     ${input_file}
 }
