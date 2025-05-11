@@ -468,21 +468,21 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#
 <span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7fb9040</span>  0x00007ffff7fb9127  Yes <span class="er">(</span><span class="ex">*</span><span class="kw">)</span>     <span class="ex">libmath.so</span></span>
 <span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7c28800</span>  0x00007ffff7dafcb9  Yes         /lib/x86_64-linux-gnu/libc.so.6</span>
 <span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<p>The process crashed while executing the instruction at address
+<code>0x00007ffff7fb9122</code>. Let’s translate the address to offset
+in file <code>libmath.so</code>.</p>
 <ul>
-<li>The process crashed while executing the instruction at address
-<code>0x00007ffff7fb9122</code>. The distance from this instruction to
-base address of <code>libmath.so</code> in memory is 226 bytes.</li>
+<li>Calculate the distance from the instruction to base address of
+<code>libmath.so</code> in memory.</li>
 </ul>
 <div class="sourceCode" id="cb15"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bn">0x00007ffff7fb9122</span> <span class="op">-</span> <span class="bn">0x00007ffff7fb9040</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="dv">226</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Let’s find the instruction in the ELF file and compare it with the
-disassembled code in GDB to verify that we’ve identified the correct
-one.</p>
 <ul>
-<li>Find offset of <code>.text</code> section of the library.</li>
+<li>Find offset of <code>.text</code> section in
+<code>libmath.so</code>.</li>
 </ul>
 <div class="sourceCode" id="cb16"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -490,20 +490,23 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Idx</span> Name          Size      VMA               LMA               File off  Algn</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">9</span> .text         000000e7  0000000000001040  0000000000001040  00001040  2<span class="pp">**</span>4</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">CONTENTS,</span> ALLOC, LOAD, READONLY, CODE</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># The offset of text section is 0x00001040.</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>Calculate offset of the instruction in elf file. It is located at
-<code>0x1122</code>.</li>
+<li>Calculate offset of the instruction in elf file.</li>
 </ul>
 <div class="sourceCode" id="cb17"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">hex</span>(<span class="dv">0000</span><span class="er">1040</span> <span class="op">+</span> <span class="dv">226</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;0x1122&#39;</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   hex(text_section + distance)</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">hex</span>(<span class="bn">0x00001040</span> <span class="op">+</span> <span class="dv">226</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;0x1122&#39;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># The offset of the instruction is 0x1122.</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>Disassemble the library. The instruction at <code>0x1122</code> in
-the ELF file matches the instruction at <code>0x00007ffff7fb9122</code>
-in memory.</li>
+<li>Disassemble the ELF file to check the instruction at
+<code>0x1122</code>.</li>
 </ul>
 <div class="sourceCode" id="cb18"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -520,6 +523,12 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1125:</span>       5d                      pop    %rbp</span>
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1126:</span>       c3                      ret</span>
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li><strong>Observation</strong>: The assembly code of the instruction
+at <code>0x1122</code> in the ELF file matches the instruction at
+<code>0x00007ffff7fb9122</code> in process memory. The assembly code of
+both are <code>idivl  -0x8(%rbp)</code>.</li>
+</ul>
 <h1 id="references">References</h1>
 <ul>
 <li><a

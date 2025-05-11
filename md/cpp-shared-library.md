@@ -212,7 +212,9 @@ From                To                  Syms Read   Shared Object Library
   
 ```
 
-- The process crashed while executing the instruction at address `0x00007ffff7fb9122`. The distance from this instruction to base address of `libmath.so` in memory is 226 bytes.
+The process crashed while executing the instruction at address `0x00007ffff7fb9122`. Let's translate the address to offset in file `libmath.so`.
+
+- Calculate the distance from the instruction to base address of `libmath.so` in memory.
 ```python
   
 >>> 0x00007ffff7fb9122 - 0x00007ffff7fb9040
@@ -220,28 +222,32 @@ From                To                  Syms Read   Shared Object Library
   
 ```
 
-Let’s find the instruction in the ELF file and compare it with the disassembled code in GDB to verify that we’ve identified the correct one.
-
-
-- Find offset of `.text` section of the library.
+- Find offset of `.text` section in `libmath.so`.
 ```sh
   
 $ objdump --section-headers libmath.so
 Idx Name          Size      VMA               LMA               File off  Algn
   9 .text         000000e7  0000000000001040  0000000000001040  00001040  2**4
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
+
+# The offset of text section is 0x00001040.
   
 ```
 
-- Calculate offset of the instruction in elf file. It is located at `0x1122`.
+
+
+- Calculate offset of the instruction in elf file.
 ```python
   
->>> hex(00001040 + 226)
+#   hex(text_section + distance)
+>>> hex(0x00001040 + 226)
 '0x1122'
+
+# The offset of the instruction is 0x1122.
   
 ```
 
-- Disassemble the library. The instruction at `0x1122` in the ELF file matches the instruction at `0x00007ffff7fb9122` in memory.
+- Disassemble the ELF file to check the instruction at `0x1122`.
 ```sh
   
 $ objdump --disassemble libmath.so
@@ -258,6 +264,8 @@ $ objdump --disassemble libmath.so
     1126:       c3                      ret
   
 ```
+
+- **Observation**: The assembly code of the instruction at `0x1122` in the ELF file matches the instruction at `0x00007ffff7fb9122` in process memory. The assembly code of both are `idivl  -0x8(%rbp)`.
 
 
 # References
