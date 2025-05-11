@@ -62,7 +62,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 - [Search Memory](html/gdb-find.html)
 - [Dump & Restore Memory](html/gdb-dump-restore.html)
 - [Execute Functions](html/gdb-call.html)
-- [Print C++ STL Containers](html/gdb-stl.html)
+- [Print STL Containers](html/gdb-stl.html)
 - [Inspect ELF Files](html/elf.html)
 - [Shared Library](html/cpp-shared-library.html)
 
