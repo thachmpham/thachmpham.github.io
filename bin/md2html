@@ -88,8 +88,12 @@ pandoc -f markdown -t html -s \
 # generate_post cpp-shared-library
 
 
+# ====  C-Assembly
+generate_post c-callstack
+
+
 # ====  BASHDB
-generate_post bashdb
+# generate_post bashdbs
 
 
 # ====  Tools

@@ -5,79 +5,91 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 
 
 ## Computer Systems
-
------
-
 ### Virtual Network Interfaces
-- [Virtual Ethernet Interface](html/veth.html)
-- [Virtual Bridge Interface](html/vbridge.html)
-- [Dummy Interface](html/vdummy-interface.html)
-- [Bond Interface](html/vbond-interface.html)
+| |
+|:-----------------|----------------:|
+| [Virtual Ethernet Interface](html/veth.html) | (*ip link veth*) |
+| [Virtual Bridge Interface](html/vbridge.html) | *(ip link bridge)* |
+| [Dummy Interface](html/vdummy-interface.html) | *(ip link dummy)* |
+| [Bond Interface](html/vbond-interface.html) | *(ip link bond)* |
+
 
 ### TCP/IP
-- [ARP &nbsp;&nbsp; - &nbsp; Address Resolution Protocol](html/arp.html)
-- [IP Routing &nbsp;&nbsp; - &nbsp; Pathfinding](html/ip-routing.html)
-- [DHCP &nbsp;&nbsp; - &nbsp; Dynamic Host Configuration Protocol](html/dhcp.html)
+| |
+|:-----------------|----------------:|
+| [Address Resolution Protocol](html/arp.html) | *(arp, arping)* |
+| [IP Routing](html/ip-routing.html) | *(ip route, ping)* |
+| [Dynamic Host Configuration Protocol](html/dhcp.html) | *(kea-dhcp4, dhclient)* |
 
 ### Infrastructure
-- [PXE &nbsp;&nbsp; - &nbsp; Preboot eXecution Environment](html/pxe.html)
-- [LDAP &nbsp;&nbsp; - &nbsp; Lightweight Directory Access Protocol](html/ldap.html)
-- [VIP &nbsp;&nbsp; - &nbsp; Virtual IP Address](html/vip.html)
-- [DRBD &nbsp;&nbsp; - &nbsp; Distributed Replicated Block Device](html/drbd.html)
+| |
+|:-----------------|----------------:|
+| [Preboot eXecution Environment](html/pxe.html) | *(dnsmasq)* |
+| [Lightweight Directory Access Protocol](html/ldap.html) | *(openldap)* |
+| [Virtual IP Address](html/vip.html) | *(keepalived)* |
+| [Distributed Replicated Block Device](html/drbd.html) | *(drbd)* |
+
 
 ### Linux
-- [Kernel Virtual Machine](html/kvm.html)
-- [Disk Manipulation With FDisk](html/fdisk.html)
-- [SystemD Management](html/systemd.html)
+| |
+|:-----------------|----------------:|
+| [Kernel Virtual Machine](html/kvm.html)           | *(kvm, qemu)*  |
+| [Disk Manipulation](html/fdisk.html)   | *(fdisk)*  |
+| [SystemD Management](html/systemd.html)           | *(systemd)*  |
 
 <br>
 
 
 ## Distributed Systems
-
------
-
 ### OpenSAF
-- [Build & Install](html/opensaf-install.html)
-- [Setup Cluster &nbsp;&nbsp; - &nbsp; 1 SC](html/opensaf-1sc.html)
-- [Setup Cluster &nbsp;&nbsp; - &nbsp; 2 SCs](html/opensaf-2sc.html)
-- [IMM &nbsp;&nbsp; - &nbsp; Information Model Management](html/opensaf-imm.html)
-- [SMF &nbsp;&nbsp; - &nbsp; Software Management Framework](html/opensaf-smf.html)
-- [LOG &nbsp;&nbsp; - &nbsp; Log Service](html/opensaf-log.html)
-- [AMF &nbsp;&nbsp; - &nbsp; Convert A Linux Program To High Availability](html/opensaf-amf-non-sa-aware.html)
-- [AMF &nbsp;&nbsp; - &nbsp; Build High Availability App with AMF API](html/opensaf-amf-sa-aware.html)
-- [AMF &nbsp;&nbsp; - &nbsp; Healthcheck](html/opensaf-healthcheck.html)
+| |
+|:-----------------|----------------:|
+| [Build & Install](html/opensaf-install.html) | *(docker, make)* |
+| [Setup Cluster &nbsp;&nbsp; - &nbsp; 1 SC](html/opensaf-1sc.html) | *(docker, systemd)* |
+| [Setup Cluster &nbsp;&nbsp; - &nbsp; 2 SCs](html/opensaf-2sc.html) | *(docker, systemd)* |
+| [Information Model Management](html/opensaf-imm.html) | *(imm)* |
+| [Software Management Framework](html/opensaf-smf.html) | *(smf)* |
+| [Log Service](html/opensaf-log.html) | *(log)* |
+| [Convert Program to High Availability](html/opensaf-amf-non-sa-aware.html) | *(amf, systemd)* |
+| [Build High Availability Application](html/opensaf-amf-sa-aware.html) | *(amf, systemd)* |
+| [Healthcheck](html/opensaf-healthcheck.html) | *(amf)* |
 
 <br>
 
 
 ## Software Debugging
-
------
-
 ### Debug C/C++
-- [Debug A Program Started By A Script](html/gdb-program-started-by-script.html)
-- [Debug A Program Started By A Systemd Service](html/gdb-program-started-by-systemd.html)
-- [Debug A High Availability Program](html/gdb-ha-program.html)
-- [Search Memory](html/gdb-find.html)
-- [Dump & Restore Memory](html/gdb-dump-restore.html)
-- [Execute Functions](html/gdb-call.html)
-- [Print STL Containers](html/gdb-stl.html)
-- [Inspect ELF Files](html/elf.html)
-- [Shared Library](html/cpp-shared-library.html)
+| |
+|:-----------------|----------------:|
+| [Debug a Program Started by a Script](html/gdb-program-started-by-script.html)    | *(gdb catch)*     |
+| [Debug A Program Started by SystemD](html/gdb-program-started-by-systemd.html)    | *(gdb remote)*    |
+| [Debug a High Availability Program](html/gdb-ha-program.html) | *(gdb non-stop)* |
+| [Search Memory](html/gdb-find.html)                   | *(gdb find)*  |
+| [Dump & Restore Memory](html/gdb-dump-restore.html)   | *(gdb dump restore)*  |
+| [Execute Functions](html/gdb-call.html)               | *(gdb call)*  |
+| [Print STL Containers](html/gdb-stl.html)             | *(gdb info pretty-printer)*   |
+| [Inspect ELF Files](html/elf.html)                    | *(objdump section-headers syms)*  |
+| [Shared Library](html/cpp-shared-library.html)        | *(gdb info sharedlibrary)*   |
 
+
+### From C to x86 Assembly
+| |
+|:-----------------|----------------:|
+| [Call stack](html/c-callstack.html) | *(gdb tui layout asm regs)* |
 
 
 ### Debug Bash
-- [BashDB](html/bashdb.html)
+| |
+|:-----------------|----------------:|
+| [BashDB](html/bashdb.html) | *(bashdb, rpmbuild)* |
 
 <br>
 
 
 ## Tools
-
------
-
 ### Diagram
-- [PlantUML](html/plantuml.html)
-- [Graphviz](html/graphviz.html)
+| |
+|:-----------------|----------------:|
+| [PlantUML](html/plantuml.html) | *(uml)* |
+| [Graphviz](html/graphviz.html) | *(dot)* |
+

@@ -172,90 +172,257 @@ Notebook<br/><em>Computer Systems - Distributed Systems - Software
 Debugging</em></p>
 </header>
 <h2 id="computer-systems">Computer Systems</h2>
-<hr />
 <h3 id="virtual-network-interfaces">Virtual Network Interfaces</h3>
-<ul>
-<li><a href="html/veth.html">Virtual Ethernet Interface</a></li>
-<li><a href="html/vbridge.html">Virtual Bridge Interface</a></li>
-<li><a href="html/vdummy-interface.html">Dummy Interface</a></li>
-<li><a href="html/vbond-interface.html">Bond Interface</a></li>
-</ul>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/veth.html">Virtual Ethernet
+Interface</a></td>
+<td style="text-align: right;">(<em>ip link veth</em>)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/vbridge.html">Virtual Bridge
+Interface</a></td>
+<td style="text-align: right;"><em>(ip link bridge)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/vdummy-interface.html">Dummy
+Interface</a></td>
+<td style="text-align: right;"><em>(ip link dummy)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/vbond-interface.html">Bond
+Interface</a></td>
+<td style="text-align: right;"><em>(ip link bond)</em></td>
+</tr>
+</tbody>
+</table>
 <h3 id="tcpip">TCP/IP</h3>
-<ul>
-<li><a href="html/arp.html">ARP    -   Address Resolution
-Protocol</a></li>
-<li><a href="html/ip-routing.html">IP Routing    -  
-Pathfinding</a></li>
-<li><a href="html/dhcp.html">DHCP    -   Dynamic Host Configuration
-Protocol</a></li>
-</ul>
+<table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/arp.html">Address Resolution
+Protocol</a></td>
+<td style="text-align: right;"><em>(arp, arping)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/ip-routing.html">IP
+Routing</a></td>
+<td style="text-align: right;"><em>(ip route, ping)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/dhcp.html">Dynamic Host
+Configuration Protocol</a></td>
+<td style="text-align: right;"><em>(kea-dhcp4, dhclient)</em></td>
+</tr>
+</tbody>
+</table>
 <h3 id="infrastructure">Infrastructure</h3>
-<ul>
-<li><a href="html/pxe.html">PXE    -   Preboot eXecution
-Environment</a></li>
-<li><a href="html/ldap.html">LDAP    -   Lightweight Directory Access
-Protocol</a></li>
-<li><a href="html/vip.html">VIP    -   Virtual IP Address</a></li>
-<li><a href="html/drbd.html">DRBD    -   Distributed Replicated Block
-Device</a></li>
-</ul>
+<table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/pxe.html">Preboot eXecution
+Environment</a></td>
+<td style="text-align: right;"><em>(dnsmasq)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/ldap.html">Lightweight
+Directory Access Protocol</a></td>
+<td style="text-align: right;"><em>(openldap)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/vip.html">Virtual IP
+Address</a></td>
+<td style="text-align: right;"><em>(keepalived)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/drbd.html">Distributed
+Replicated Block Device</a></td>
+<td style="text-align: right;"><em>(drbd)</em></td>
+</tr>
+</tbody>
+</table>
 <h3 id="linux">Linux</h3>
-<ul>
-<li><a href="html/kvm.html">Kernel Virtual Machine</a></li>
-<li><a href="html/fdisk.html">Disk Manipulation With FDisk</a></li>
-<li><a href="html/systemd.html">SystemD Management</a></li>
-</ul>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/kvm.html">Kernel Virtual
+Machine</a></td>
+<td style="text-align: right;"><em>(kvm, qemu)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/fdisk.html">Disk
+Manipulation</a></td>
+<td style="text-align: right;"><em>(fdisk)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/systemd.html">SystemD
+Management</a></td>
+<td style="text-align: right;"><em>(systemd)</em></td>
+</tr>
+</tbody>
+</table>
 <p><br></p>
 <h2 id="distributed-systems">Distributed Systems</h2>
-<hr />
 <h3 id="opensaf">OpenSAF</h3>
-<ul>
-<li><a href="html/opensaf-install.html">Build &amp; Install</a></li>
-<li><a href="html/opensaf-1sc.html">Setup Cluster    -   1 SC</a></li>
-<li><a href="html/opensaf-2sc.html">Setup Cluster    -   2 SCs</a></li>
-<li><a href="html/opensaf-imm.html">IMM    -   Information Model
-Management</a></li>
-<li><a href="html/opensaf-smf.html">SMF    -   Software Management
-Framework</a></li>
-<li><a href="html/opensaf-log.html">LOG    -   Log Service</a></li>
-<li><a href="html/opensaf-amf-non-sa-aware.html">AMF    -   Convert A
-Linux Program To High Availability</a></li>
-<li><a href="html/opensaf-amf-sa-aware.html">AMF    -   Build High
-Availability App with AMF API</a></li>
-<li><a href="html/opensaf-healthcheck.html">AMF    -  
-Healthcheck</a></li>
-</ul>
+<table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/opensaf-install.html">Build
+&amp; Install</a></td>
+<td style="text-align: right;"><em>(docker, make)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/opensaf-1sc.html">Setup
+Cluster    -   1 SC</a></td>
+<td style="text-align: right;"><em>(docker, systemd)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/opensaf-2sc.html">Setup
+Cluster    -   2 SCs</a></td>
+<td style="text-align: right;"><em>(docker, systemd)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a
+href="html/opensaf-imm.html">Information Model Management</a></td>
+<td style="text-align: right;"><em>(imm)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/opensaf-smf.html">Software
+Management Framework</a></td>
+<td style="text-align: right;"><em>(smf)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/opensaf-log.html">Log
+Service</a></td>
+<td style="text-align: right;"><em>(log)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a
+href="html/opensaf-amf-non-sa-aware.html">Convert Program to High
+Availability</a></td>
+<td style="text-align: right;"><em>(amf, systemd)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a
+href="html/opensaf-amf-sa-aware.html">Build High Availability
+Application</a></td>
+<td style="text-align: right;"><em>(amf, systemd)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a
+href="html/opensaf-healthcheck.html">Healthcheck</a></td>
+<td style="text-align: right;"><em>(amf)</em></td>
+</tr>
+</tbody>
+</table>
 <p><br></p>
 <h2 id="software-debugging">Software Debugging</h2>
-<hr />
 <h3 id="debug-cc">Debug C/C++</h3>
-<ul>
-<li><a href="html/gdb-program-started-by-script.html">Debug A Program
-Started By A Script</a></li>
-<li><a href="html/gdb-program-started-by-systemd.html">Debug A Program
-Started By A Systemd Service</a></li>
-<li><a href="html/gdb-ha-program.html">Debug A High Availability
-Program</a></li>
-<li><a href="html/gdb-find.html">Search Memory</a></li>
-<li><a href="html/gdb-dump-restore.html">Dump &amp; Restore
-Memory</a></li>
-<li><a href="html/gdb-call.html">Execute Functions</a></li>
-<li><a href="html/gdb-stl.html">Print STL Containers</a></li>
-<li><a href="html/elf.html">Inspect ELF Files</a></li>
-<li><a href="html/cpp-shared-library.html">Shared Library</a></li>
-</ul>
+<table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a
+href="html/gdb-program-started-by-script.html">Debug a Program Started
+by a Script</a></td>
+<td style="text-align: right;"><em>(gdb catch)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a
+href="html/gdb-program-started-by-systemd.html">Debug A Program Started
+by SystemD</a></td>
+<td style="text-align: right;"><em>(gdb remote)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/gdb-ha-program.html">Debug a
+High Availability Program</a></td>
+<td style="text-align: right;"><em>(gdb non-stop)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/gdb-find.html">Search
+Memory</a></td>
+<td style="text-align: right;"><em>(gdb find)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/gdb-dump-restore.html">Dump
+&amp; Restore Memory</a></td>
+<td style="text-align: right;"><em>(gdb dump restore)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/gdb-call.html">Execute
+Functions</a></td>
+<td style="text-align: right;"><em>(gdb call)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/gdb-stl.html">Print STL
+Containers</a></td>
+<td style="text-align: right;"><em>(gdb info pretty-printer)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/elf.html">Inspect ELF
+Files</a></td>
+<td style="text-align: right;"><em>(objdump section-headers
+syms)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a
+href="html/cpp-shared-library.html">Shared Library</a></td>
+<td style="text-align: right;"><em>(gdb info sharedlibrary)</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="from-c-to-x86-assembly">From C to x86 Assembly</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/c-callstack.html">Call
+stack</a></td>
+<td style="text-align: right;"><em>(gdb tui layout asm regs)</em></td>
+</tr>
+</tbody>
+</table>
 <h3 id="debug-bash">Debug Bash</h3>
-<ul>
-<li><a href="html/bashdb.html">BashDB</a></li>
-</ul>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/bashdb.html">BashDB</a></td>
+<td style="text-align: right;"><em>(bashdb, rpmbuild)</em></td>
+</tr>
+</tbody>
+</table>
 <p><br></p>
 <h2 id="tools">Tools</h2>
-<hr />
 <h3 id="diagram">Diagram</h3>
-<ul>
-<li><a href="html/plantuml.html">PlantUML</a></li>
-<li><a href="html/graphviz.html">Graphviz</a></li>
-</ul>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a
+href="html/plantuml.html">PlantUML</a></td>
+<td style="text-align: right;"><em>(uml)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a
+href="html/graphviz.html">Graphviz</a></td>
+<td style="text-align: right;"><em>(dot)</em></td>
+</tr>
+</tbody>
+</table>
 <footer class="footer text-muted">
    <div align="center">
       <a href="html/about.html"><b>About</b></a>
