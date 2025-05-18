@@ -69,8 +69,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 
 
 ### Debug Bash
-- [Build & Install](html/bashdb-build.html)
-- [Manual](html/bashdb-manual.html)
+- [BashDB](html/bashdb.html)
 
 <br>
 

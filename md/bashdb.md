@@ -124,8 +124,49 @@ $ /opt/bashdb/bin/bashdb --help
   
 ```
 
-# 3. Issues
-### 3.1. Could not found /usr/bin/bash
+
+# 3. Manual
+## 3.1. Start
+Start a script under bashdb control.
+```sh
+  
+$ bashdb /usr/bin/ldd
+  
+```
+
+## 3.2. Redirect Output
+Redirect output to another terminal.
+
+- Get path of terminal 1.
+```sh
+  
+term1$ tty
+/dev/pts/1
+  
+```
+
+- From terminal 0, redirect output to terminal 1.
+```sh
+  
+term0$ bashdb /usr/bin/ldd > /dev/pts/1
+  
+```
+
+
+## 3.3. Set Breakpoint In Code
+Hardcode a breakpoint at a line of code.
+
+- Add the below code to the bash script.
+```sh
+  
+source /opt/bashdb/share/bashdb/bashdb-trace -L /opt/bashdb/share/bashdb
+_Dbg_debugger
+  
+```
+
+
+# 4. Issues
+### 4.1. Could not found /usr/bin/bash
 Problem.
 ```sh
   
@@ -140,7 +181,7 @@ $ ln -s /bin/bash /usr/bin/bash
   
 ```
 
-### 3.2. Argument $0 is bashdb, but the expected $0 is the target script.
+### 4.2. Argument $0 is bashdb, but the expected $0 is the target script.
 Solution: Invoke bashdb from the script.
 ```sh
   
