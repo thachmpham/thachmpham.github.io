@@ -24,9 +24,9 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 ### Infrastructure
 | |
 |:-----------------|----------------:|
-| [Preboot eXecution Environment](html/pxe.html) | *(dnsmasq)* |
+| [Preboot eXecution Environment](html/pxe.html) | *(dnsmasq, kvm)* |
 | [Lightweight Directory Access Protocol](html/ldap.html) | *(openldap)* |
-| [Virtual IP Address](html/vip.html) | *(keepalived)* |
+| [Virtual IP Address](html/vip.html) | *(keepalived, docker)* |
 | [Distributed Replicated Block Device](html/drbd.html) | *(drbd)* |
 
 
@@ -45,14 +45,14 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | |
 |:-----------------|----------------:|
 | [Build & Install](html/opensaf-install.html) | *(docker, make)* |
-| [Setup Cluster &nbsp;&nbsp; - &nbsp; 1 SC](html/opensaf-1sc.html) | *(docker, systemd)* |
-| [Setup Cluster &nbsp;&nbsp; - &nbsp; 2 SCs](html/opensaf-2sc.html) | *(docker, systemd)* |
-| [Information Model Management](html/opensaf-imm.html) | *(imm)* |
-| [Software Management Framework](html/opensaf-smf.html) | *(smf)* |
-| [Log Service](html/opensaf-log.html) | *(log)* |
-| [Convert Program to High Availability](html/opensaf-amf-non-sa-aware.html) | *(amf, systemd)* |
-| [Build High Availability Application](html/opensaf-amf-sa-aware.html) | *(amf, systemd)* |
-| [Healthcheck](html/opensaf-healthcheck.html) | *(amf)* |
+| [Setup Cluster &nbsp;&nbsp; - &nbsp; 1 SC](html/opensaf-1sc.html) | *(opensaf cluster)* |
+| [Setup Cluster &nbsp;&nbsp; - &nbsp; 2 SCs](html/opensaf-2sc.html) | *(opensaf cluster)* |
+| [Information Model Management](html/opensaf-imm.html) | *(opensaf imm)* |
+| [Software Management Framework](html/opensaf-smf.html) | *(opensaf smf)* |
+| [Log Service](html/opensaf-log.html) | *(opensaf log)* |
+| [Convert Program to High Availability](html/opensaf-amf-non-sa-aware.html) | *(opensaf amf)* |
+| [Build High Availability Application](html/opensaf-amf-sa-aware.html) | *(opensaf amf)* |
+| [Healthcheck](html/opensaf-healthcheck.html) | *(opensaf amf)* |
 
 <br>
 
