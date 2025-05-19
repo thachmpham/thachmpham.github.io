@@ -68,14 +68,14 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Dump & Restore Memory](html/gdb-dump-restore.html)   | *(gdb dump restore)*  |
 | [Execute Functions](html/gdb-call.html)               | *(gdb call)*  |
 | [Print STL Containers](html/gdb-stl.html)             | *(gdb info pretty-printer)*   |
-| [Inspect ELF Files](html/elf.html)                    | *(objdump section-headers syms)*  |
+| [Inspect ELF Files](html/elf.html)                    | *(objdump)*  |
 | [Shared Library](html/cpp-shared-library.html)        | *(gdb info sharedlibrary)*   |
 
 
 ### From C to x86 Assembly
 | |
 |:-----------------|----------------:|
-| [Call stack](html/c-callstack.html) | *(gdb tui layout asm regs)* |
+| [Inside the Call Stack](html/c-callstack.html) | *(gdb tui layout asm regs)* |
 
 
 ### Debug Bash
