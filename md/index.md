@@ -8,10 +8,10 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 ### Virtual Network Interfaces
 | |
 |:-----------------|----------------:|
-| [Virtual Ethernet Interface](html/veth.html) | (*ip link veth*) |
-| [Virtual Bridge Interface](html/vbridge.html) | *(ip link bridge)* |
-| [Dummy Interface](html/vdummy-interface.html) | *(ip link dummy)* |
-| [Bond Interface](html/vbond-interface.html) | *(ip link bond)* |
+| [Virtual Ethernet Interface](html/veth.html) | (*ip veth netns*) |
+| [Virtual Bridge Interface](html/vbridge.html) | *(ip bridge netns)* |
+| [Dummy Interface](html/vdummy-interface.html) | *(ip dummy netns)* |
+| [Bond Interface](html/vbond-interface.html) | *(ip bond netns)* |
 
 
 ### TCP/IP
@@ -67,21 +67,21 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Search Memory](html/gdb-find.html)                   | *(gdb find)*  |
 | [Dump & Restore Memory](html/gdb-dump-restore.html)   | *(gdb dump restore)*  |
 | [Execute Functions](html/gdb-call.html)               | *(gdb call)*  |
-| [Print STL Containers](html/gdb-stl.html)             | *(gdb info pretty-printer)*   |
+| [Print STL Containers](html/gdb-stl.html)             | *(gdb pretty-printer)*   |
 | [Inspect ELF Files](html/elf.html)                    | *(objdump)*  |
-| [Shared Library](html/cpp-shared-library.html)        | *(gdb info sharedlibrary)*   |
+| [Shared Library](html/cpp-shared-library.html)        | *(gdb sharedlibrary)*   |
 
 
 ### From C to x86 Assembly
 | |
 |:-----------------|----------------:|
-| [Inside the Call Stack](html/c-callstack.html) | *(gdb tui layout asm regs)* |
+| [Inside the Call Stack](html/c-callstack.html) | *(gdb layout asm)* |
 
 
 ### Debug Bash
 | |
 |:-----------------|----------------:|
-| [BashDB](html/bashdb.html) | *(bashdb, rpmbuild)* |
+| [BashDB](html/bashdb.html) | *(bashdb rpmbuild)* |
 
 <br>
 
