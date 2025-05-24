@@ -81,7 +81,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 ### Debug Bash
 | |
 |:-----------------|----------------:|
-| [BashDB](html/bashdb.html) | *(bashdb rpmbuild)* |
+| [Debug Bash Scripts Step by Step](html/bashdb.html) | *(bashdb rpmbuild)* |
 
 <br>
 
