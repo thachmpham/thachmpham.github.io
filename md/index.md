@@ -18,22 +18,22 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | |
 |:-----------------|----------------:|
 | [Address Resolution Protocol](html/arp.html) | *(arp, arping)* |
-| [IP Routing](html/ip-routing.html) | *(ip route, ping)* |
-| [Dynamic Host Configuration Protocol](html/dhcp.html) | *(kea-dhcp4, dhclient)* |
+| [IP Routing](html/ip-routing.html) | *(ip route)* |
+| [Dynamic Host Configuration Protocol](html/dhcp.html) | *(kea-dhcp4)* |
 
 ### Infrastructure
 | |
 |:-----------------|----------------:|
-| [Preboot eXecution Environment](html/pxe.html) | *(dnsmasq, kvm)* |
+| [Preboot eXecution Environment](html/pxe.html) | *(dnsmasq)* |
 | [Lightweight Directory Access Protocol](html/ldap.html) | *(openldap)* |
-| [Virtual IP Address](html/vip.html) | *(keepalived, docker)* |
+| [Virtual IP Address](html/vip.html) | *(keepalived)* |
 | [Distributed Replicated Block Device](html/drbd.html) | *(drbd)* |
 
 
 ### Linux
 | |
 |:-----------------|----------------:|
-| [Kernel Virtual Machine](html/kvm.html)           | *(kvm, qemu)*  |
+| [Kernel Virtual Machine](html/kvm.html)           | *(kvm)*  |
 | [Disk Manipulation](html/fdisk.html)   | *(fdisk)*  |
 | [SystemD Management](html/systemd.html)           | *(systemd)*  |
 
@@ -44,7 +44,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 ### OpenSAF
 | |
 |:-----------------|----------------:|
-| [Build & Install](html/opensaf-install.html) | *(docker, make)* |
+| [Build & Install](html/opensaf-install.html) | *(make)* |
 | [Setup Cluster &nbsp;&nbsp; - &nbsp; 1 SC](html/opensaf-1sc.html) | *(opensaf cluster)* |
 | [Setup Cluster &nbsp;&nbsp; - &nbsp; 2 SCs](html/opensaf-2sc.html) | *(opensaf cluster)* |
 | [Information Model Management](html/opensaf-imm.html) | *(opensaf imm)* |
@@ -68,14 +68,14 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Dump & Restore Memory](html/gdb-dump-restore.html)   | *(gdb dump restore)*  |
 | [Execute Functions](html/gdb-call.html)               | *(gdb call)*  |
 | [Print STL Containers](html/gdb-stl.html)             | *(gdb pretty-printer)*   |
-| [Inspect ELF Files](html/elf.html)                    | *(objdump)*  |
 | [Shared Library](html/cpp-shared-library.html)        | *(gdb sharedlibrary)*   |
 
 
 ### From C to x86 Assembly
 | |
 |:-----------------|----------------:|
-| [Inside the Call Stack](html/c-callstack.html) | *(gdb layout asm)* |
+| [Inside the Call Stack](html/asm-callstack.html) | *(gcc objdump)* |
+| [Inspect ELF Files](html/elf.html)                    | *(gcc objdump)*  |
 
 
 ### Debug Bash

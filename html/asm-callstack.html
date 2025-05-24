@@ -239,45 +239,55 @@
 <h1 class="title">Inside the Call Stack</h1>
 <p class="subtitle">Exploring C Function Calls via x86 Assembly</p>
 </header>
-<h1 id="empty-function">1. Empty Function</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> func_empty<span class="op">()</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> argv<span class="op">)</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    func_empty<span class="op">();</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-O0</span> <span class="at">-fno-branch-protection</span> <span class="at">-o</span> main main.c</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> <span class="at">--no-show-raw-insn</span> main</span>
+<h1 id="prolog-epilog">1. Prolog &amp; Epilog</h1>
+<p><strong>Prolog</strong> is a the code at the beginning of a function,
+which prepare the stack and registers for use within the function.</p>
+<p>Below is a typical example of a function prolog.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">push</span>   <span class="op">%</span><span class="kw">rbp</span>        <span class="co">; Save the old base pointer on the stack</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">mov</span>    <span class="op">%</span><span class="kw">rsp</span><span class="op">,</span> <span class="op">%</span><span class="kw">rbp</span>  <span class="co">; Set the new base pointer to the current stack pointer</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li><code>rbp</code>: <em>Base pointer, the base of the current stack
+frame. Provides a stable reference point for accessing function
+parameters and local variables.</em></li>
+</ul>
+<p><strong>Epilog</strong> is a the code at the end of the function,
+undo what the prolog did, which restores the stack and registers to the
+state they were in before the function was called.</p>
+<p>Below is a typical example of a function epilog.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">mov</span>    <span class="op">$</span><span class="bn">0</span>x1<span class="op">,</span> <span class="op">%</span><span class="kw">eax</span>   <span class="co">; Set return value to 1 (in %eax)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">pop</span>    <span class="op">%</span><span class="kw">rbp</span>         <span class="co">; Restore previous base pointer</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">ret</span>                 <span class="co">; Return to caller</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre
-class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>0000000000001129 &lt;func_empty<span class="op">&gt;:</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    1129:       <span class="kw">push</span>   <span class="op">%</span><span class="kw">rbp</span>             # save old base pointer</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    112a:       <span class="kw">mov</span>    <span class="op">%</span><span class="kw">rsp</span><span class="op">,%</span><span class="kw">rbp</span>        # set new base pointer</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    112d:       <span class="kw">nop</span>                     # no operation</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    112e:       <span class="kw">pop</span>    <span class="op">%</span><span class="kw">rbp</span>             # restore old base pointer</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    112f:       <span class="cf">ret</span>                     # return from function</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>0000000000001130 &lt;main<span class="op">&gt;:</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    1130:       <span class="kw">push</span>   <span class="op">%</span><span class="kw">rbp</span>             # save old base pointer</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    1131:       <span class="kw">mov</span>    <span class="op">%</span><span class="kw">rsp</span><span class="op">,%</span><span class="kw">rbp</span>        # set new base pointer</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    1134:       <span class="kw">sub</span>    <span class="op">$</span><span class="bn">0</span>x10<span class="op">,%</span><span class="kw">rsp</span>       # allocate <span class="dv">16</span> bytes on stack</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    1138:       <span class="kw">mov</span>    <span class="op">%</span><span class="kw">edi</span><span class="op">,-</span><span class="bn">0x4</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  # store argc <span class="op">(</span>int<span class="op">)</span> <span class="kw">at</span> <span class="kw">rbp</span><span class="op">-</span><span class="dv">4</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    113b:       <span class="kw">mov</span>    <span class="op">%</span><span class="kw">rsi</span><span class="op">,-</span><span class="bn">0x10</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span> # store argv <span class="op">(</span>char<span class="op">**)</span> <span class="kw">at</span> <span class="kw">rbp</span><span class="op">-</span><span class="dv">16</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    113f:       <span class="kw">mov</span>    <span class="op">$</span><span class="bn">0</span>x0<span class="op">,%</span><span class="kw">eax</span>        # set return value <span class="dv">0</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    1144:       <span class="cf">call</span>   <span class="dv">1129</span> <span class="op">&lt;</span>func_empty<span class="op">&gt;</span>    # call func_empty</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    1149:       <span class="kw">mov</span>    <span class="op">$</span><span class="bn">0</span>x0<span class="op">,%</span><span class="kw">eax</span>        # set return value <span class="dv">0</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    114e:       <span class="kw">leave</span>                   # restore stack frame</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    114f:       <span class="cf">ret</span>                     # return from main</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<p>In the <strong>demo</strong> below, we will compile a simple function
+with gcc and then disassemble it using objdump.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">// file: function.c</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> func_empty<span class="op">()</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-O0</span> <span class="at">-c</span> function.c</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> function.o</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>0000000000000000 &lt;func_empty<span class="op">&gt;:</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>   0:   f3 <span class="dv">0</span><span class="er">f</span> <span class="dv">1</span><span class="er">e</span> fa             endbr64</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>   4:   55                      <span class="kw">push</span>   <span class="op">%</span><span class="kw">rbp</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>   5:   48 89 e5                mov    <span class="op">%</span><span class="kw">rsp</span><span class="op">,%</span><span class="kw">rbp</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>   8:   b8 <span class="dv">01</span> <span class="dv">00</span> <span class="dv">00</span> <span class="dv">00</span>          mov    <span class="op">$</span><span class="bn">0</span>x1<span class="op">,%</span><span class="kw">eax</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">d:</span>   5d                      <span class="kw">pop</span>    <span class="op">%</span><span class="kw">rbp</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">e:</span>   c3                      ret</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="../index.html"><b>Home</b></a>

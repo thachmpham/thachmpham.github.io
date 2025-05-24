@@ -89,7 +89,7 @@ pandoc -f markdown -t html -s \
 
 
 # ====  C-Assembly
-generate_post c-callstack
+generate_post asm-callstack
 
 
 # ====  BASHDB
