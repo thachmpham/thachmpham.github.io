@@ -59,3 +59,123 @@ $ objdump --disassemble function.o
   
 ```
 
+
+# 2. Arguments & Local Variables
+**Local variables** live on the stack for each function call, and their addresses are based on negative offsets from the base pointer `rbp`.  
+
+:::::::::::::: {.columns}
+::: {.column}
+**C++**
+```c
+int a, b, c;
+a = 1;
+b = 2;
+c = 3;
+```
+:::
+::: {.column}
+**x86-64 Assembly**
+```nasm
+sub    $0x20,%rsp       ; Reserve 32 bytes on the stack
+movl   $0x1,-0xc(%rbp)  ; Variable a located at $rbp-0xc
+movl   $0x2,-0x8(%rbp)  ; Variable b located at $rbp-0x8
+movl   $0x3,-0x4(%rbp)  ; Variable c located at $rbp-0x4
+```
+:::
+::::::::::::::
+
+**Function arguments** are passed via registers first, specifically `rdi, rsi, rdx, rcx, r8, r9`. If there are more than 6 arguments, the extra ones are passed on the stack. their addresses are based on negative offsets from the base pointer `rbp`.
+
+:::::::::::::: {.columns}
+::: {.column}
+**C++**
+```c
+
+func(a, b);
+```
+:::
+::: {.column}
+**x86-64 Assembly**
+```nasm
+; Save data to registers before call function
+  mov    -0x8(%rbp),%esi  ; $esi = b
+  mov    -0xc(%rbp),%edi  ; $edi = a
+  call   55 <main+0x37>   ; call func()
+
+<func>:
+; Get data from register after enter function
+  mov    %edi,-0x14(%rbp) ; argv1 = $edi = a
+  mov    %esi,-0x18(%rbp) ; argv2 = $esi = b
+```
+:::
+::::::::::::::
+
+In the **demo** below, we will examine a simple program that calls sum function.
+```c
+  
+// file: main.c
+
+int sum(int argv1, int argv2)
+{
+    int s = argv1 + argv2;
+    return s;
+}
+
+int main(int argc, char** argv)
+{    
+    int a = 1;
+    int b = 2;
+    int c = 3;
+
+    sum(a, b);
+
+    return 0;
+}
+  
+```
+
+```sh
+  
+$ gcc -O0 -c main.c
+
+$ objdump --disassemble --no-show-raw-insn main.o
+  
+```
+
+```nasm
+  
+000000000000001e <main>:
+  1e:   endbr64
+  22:   push   %rbp             
+  23:   mov    %rsp,%rbp        
+  26:   sub    $0x20,%rsp       ; Revere 32 bytes for local variables
+  2a:   mov    %edi,-0x14(%rbp) ; Command-line argument: argc = $edi
+  2d:   mov    %rsi,-0x20(%rbp) ; Command-line argument: argv = $rsi
+  31:   movl   $0x1,-0xc(%rbp)  ; a = 1
+  38:   movl   $0x2,-0x8(%rbp)  ; b = 2
+  3f:   movl   $0x3,-0x4(%rbp)  ; c = 3
+  46:   mov    -0x8(%rbp),%edx  ; $edx = b = 2
+  49:   mov    -0xc(%rbp),%eax  ; $eax = a = 1
+  4c:   mov    %edx,%esi        ; $esi = $edx = b = 2
+  4e:   mov    %eax,%edi        ; $edi = $eax = a = 1
+  50:   call   55 <main+0x37>   ; call sum()
+  55:   mov    $0x0,%eax
+  5a:   leave
+  5b:   ret
+  
+
+0000000000000000 <sum>:
+   0:   endbr64
+   4:   push   %rbp             ; Prolog
+   5:   mov    %rsp,%rbp        ; Prolog
+   8:   mov    %edi,-0x14(%rbp) ; argv1 = $edi = a = 1
+   b:   mov    %esi,-0x18(%rbp) ; argv2 = $esi = b = 2
+   e:   mov    -0x14(%rbp),%edx ; $edx = argv1 = 1
+  11:   mov    -0x18(%rbp),%eax ; $eax = argv2 = 2
+  14:   add    %edx,%eax        ; $eax = $eax + $edx = 2 + 1 = 3
+  16:   mov    %eax,-0x4(%rbp)  ; c = $eax = 3
+  19:   mov    -0x4(%rbp),%eax  ; Epilog
+  1c:   pop    %rbp             ; Epilog
+  1d:   ret                     ; Epilog
+  
+```
