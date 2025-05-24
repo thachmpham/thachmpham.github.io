@@ -1,6 +1,6 @@
 ---
 title: "Inside the Call Stack"
-subtitle: "Exploring C Function Calls via x86 Assembly"
+subtitle: "**Examining C Function Calls at the x86 Assembly Level**"
 ---
 
 
