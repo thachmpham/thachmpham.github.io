@@ -136,9 +136,9 @@ int main(int argc, char** argv)
 
 ```sh
   
-$ gcc -O0 -c main.c
+$ gcc -O0 -o main main.c
 
-$ objdump --disassemble --no-show-raw-insn main.o
+$ objdump --disassemble --no-show-raw-insn main
   
 ```
 
@@ -179,3 +179,150 @@ $ objdump --disassemble --no-show-raw-insn main.o
   1d:   ret                     ; Epilog
   
 ```
+
+
+# 2. Examine Call Stack
+## 2.1. Arguments & Local Variables
+Examine the memory locations of function arguments and local variables by using the **rbp** register as a reference point.
+
+```sh
+  
+$ gdb main
+
+(gdb) break sum
+Breakpoint 1 at 0x1131
+
+(gdb) run
+Starting program: /root/demo/main 
+Breakpoint 1, 0x0000555555555131 in sum ()
+
+(gdb) disassemble
+Dump of assembler code for function sum:
+   0x0000555555555129 <+0>:     endbr64
+   0x000055555555512d <+4>:     push   %rbp
+   0x000055555555512e <+5>:     mov    %rsp,%rbp
+=> 0x0000555555555131 <+8>:     mov    %edi,-0x14(%rbp) ; argv1
+   0x0000555555555134 <+11>:    mov    %esi,-0x18(%rbp) ; argv2
+   0x0000555555555137 <+14>:    mov    -0x14(%rbp),%edx
+   0x000055555555513a <+17>:    mov    -0x18(%rbp),%eax
+   0x000055555555513d <+20>:    add    %edx,%eax
+   0x000055555555513f <+22>:    mov    %eax,-0x4(%rbp)  ; variable s
+   0x0000555555555142 <+25>:    mov    -0x4(%rbp),%eax
+   0x0000555555555145 <+28>:    pop    %rbp
+   0x0000555555555146 <+29>:    ret
+End of assembler dump.
+
+(gdb) break *(sum+28)
+Breakpoint 2 at 0x555555555145
+
+(gdb) continue
+Continuing.
+Breakpoint 2, 0x0000555555555145 in sum ()
+
+(gdb) x/24bx $rbp-24
+0x7fffffffde08: 0x02    0x00    0x00    0x00    0x01    0x00    0x00    0x00
+0x7fffffffde10: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+0x7fffffffde18: 0x00    0x00    0x00    0x00    0x03    0x00    0x00    0x00
+  
+```
+
+Due to little-endian order, 4-byte integers are stored in memory with the least significant byte first, which is the reverse of how we usually write numbers.
+
+- Function argument argv2 = 2 is stored as {0x02, 0x00, 0x00, 0x00}.
+- Function argument argv1 = 1 as {0x01, 0x00, 0x00, 0x00}
+- The local variable s = 3 as {0x03, 0x00, 0x00, 0x00}.
+
+<pre class="mermaid">
+block-beta  
+    columns 8
+    argv2["argv2"]:4 argv1["argv1"]:4
+    pad1["padding"]:8
+    pad2["padding"]:4 s["s"]:4
+</pre>
+
+
+## 2.1. Call chain
+Examine the call chain with by using the **rip** and **rsp** registers.
+```sh
+  
+// file: main.c
+
+void function_0();
+void function_1();
+void function_2();
+
+int main(int argc, char** argv)
+{    
+    function_0();
+    return 0;
+}
+
+void function_0()
+{
+    function_1();
+}
+
+void function_1()
+{
+    function_2();
+}
+
+void function_2()
+{
+    
+}
+  
+```
+
+```sh
+  
+$ gcc -O0 -o main main.c
+  
+```
+
+```sh
+  
+$ gdb main
+
+(gdb) break function_2
+Breakpoint 1 at 0x117f
+
+(gdb) run
+Starting program: /root/demo/main 
+Breakpoint 1, 0x000055555555517f in function_2 ()
+
+(gdb) bt
+#0  0x000055555555517f in function_2 ()
+#1  0x0000555555555174 in function_1 ()
+#2  0x000055555555515f in function_0 ()
+#3  0x0000555555555146 in main ()
+
+(gdb) x/a $rip
+0x55555555517f <function_2+8>:  0x1e0ff30000c35d90
+
+(gdb) x/16a $rsp
+0x7fffffffde10: 0x7fffffffde20  0x555555555174 <function_1+18>
+0x7fffffffde20: 0x7fffffffde30  0x55555555515f <function_0+18>
+0x7fffffffde30: 0x7fffffffde50  0x555555555146 <main+29>
+0x7fffffffde40: 0x7fffffffdf78  0x1ffffdf78
+0x7fffffffde50: 0x7fffffffdef0  0x7ffff7c2a1ca <__libc_start_call_main+122>
+0x7fffffffde60: 0x7fffffffdea0  0x7fffffffdf78
+0x7fffffffde70: 0x155554040     0x555555555129 <main>
+0x7fffffffde80: 0x7fffffffdf78  0x2072b297b1b20138
+  
+```
+
+<pre class="mermaid">
+flowchart RL
+   subgraph rsp
+        function_1+18
+        function_0+18              
+        main
+    end 
+
+    subgraph rip
+        function_2+8
+    end   
+
+    main --> function_0+18 --> function_1+18 --> function_2+8
+</pre>

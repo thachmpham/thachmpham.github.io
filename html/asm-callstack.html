@@ -358,9 +358,9 @@ that calls sum function.</p>
 <span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-O0</span> <span class="at">-c</span> main.c</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-O0</span> <span class="at">-o</span> main main.c</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> <span class="at">--no-show-raw-insn</span> main.o</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> <span class="at">--no-show-raw-insn</span> main</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre
 class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -398,6 +398,147 @@ class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb12-1"><a href=
 <span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>  1c:   <span class="kw">pop</span>    <span class="op">%</span><span class="kw">rbp</span>             <span class="co">; Epilog</span></span>
 <span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>  1d:   <span class="cf">ret</span>                     <span class="co">; Epilog</span></span>
 <span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="examine-call-stack">2. Examine Call Stack</h1>
+<h2 id="arguments-local-variables-1">2.1. Arguments &amp; Local
+Variables</h2>
+<p>Examine the memory locations of function arguments and local
+variables by using the <strong>rbp</strong> register as a reference
+point.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb main</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="fu">sum</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1 at 0x1131</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Starting</span> program: /root/demo/main </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1, 0x0000555555555131 in sum <span class="er">(</span><span class="kw">)</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Dump</span> of assembler code for function sum:</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512d</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     push   %rbp</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512e</span> <span class="op">&lt;</span>+5<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x0000555555555131 <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x14<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span> <span class="kw">;</span> <span class="ex">argv1</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555134</span> <span class="op">&lt;</span>+11<span class="op">&gt;</span>:    mov    %esi,-0x18<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span> <span class="kw">;</span> <span class="ex">argv2</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555137</span> <span class="op">&lt;</span>+14<span class="op">&gt;</span>:    mov    <span class="at">-0x14</span><span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span><span class="ex">,%edx</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513a</span> <span class="op">&lt;</span>+17<span class="op">&gt;</span>:    mov    <span class="at">-0x18</span><span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span><span class="ex">,%eax</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513d</span> <span class="op">&lt;</span>+20<span class="op">&gt;</span>:    add    %edx,%eax</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513f</span> <span class="op">&lt;</span>+22<span class="op">&gt;</span>:    mov    %eax,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span>  <span class="kw">;</span> <span class="ex">variable</span> s</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555142</span> <span class="op">&lt;</span>+25<span class="op">&gt;</span>:    mov    <span class="at">-0x4</span><span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span><span class="ex">,%eax</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555145</span> <span class="op">&lt;</span>+28<span class="op">&gt;</span>:    pop    %rbp</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555146</span> <span class="op">&lt;</span>+29<span class="op">&gt;</span>:    ret</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="ex">End</span> of assembler dump.</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">*</span><span class="er">(</span><span class="fu">sum</span>+28<span class="kw">)</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 2 at 0x555555555145</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">continue</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 2, 0x0000555555555145 in sum <span class="er">(</span><span class="kw">)</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/24bx</span> <span class="va">$rbp</span>-24</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde08:</span> 0x02    0x00    0x00    0x00    0x01    0x00    0x00    0x00</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde10:</span> 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde18:</span> 0x00    0x00    0x00    0x00    0x03    0x00    0x00    0x00</span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<p>Due to little-endian order, 4-byte integers are stored in memory with
+the least significant byte first, which is the reverse of how we usually
+write numbers.</p>
+<ul>
+<li>Function argument argv2 = 2 is stored as {0x02, 0x00, 0x00,
+0x00}.</li>
+<li>Function argument argv1 = 1 as {0x01, 0x00, 0x00, 0x00}</li>
+<li>The local variable s = 3 as {0x03, 0x00, 0x00, 0x00}.</li>
+</ul>
+<pre class="mermaid">
+block-beta  
+    columns 8
+    argv2["argv2"]:4 argv1["argv1"]:4
+    pad1["padding"]:8
+    pad2["padding"]:4 s["s"]:4
+</pre>
+<h2 id="call-chain">2.1. Call chain</h2>
+<p>Examine the call chain with by using the <strong>rip</strong> and
+<strong>rsp</strong> registers.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">//</span> file: main.c</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_0<span class="er">(</span><span class="kw">);</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_1<span class="er">(</span><span class="kw">);</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_2<span class="er">(</span><span class="kw">);</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="ex">int</span> main<span class="er">(</span><span class="ex">int</span> argc, char<span class="pp">**</span> argv<span class="kw">)</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span>    </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">function_0()</span><span class="kw">;</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="kw">;</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_0<span class="er">(</span><span class="kw">)</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">function_1()</span><span class="kw">;</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_1<span class="er">(</span><span class="kw">)</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">function_2()</span><span class="kw">;</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_2<span class="er">(</span><span class="kw">)</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-O0</span> <span class="at">-o</span> main main.c</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb main</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">function_2</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1 at 0x117f</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Starting</span> program: /root/demo/main </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1, 0x000055555555517f in function_2 <span class="er">(</span><span class="kw">)</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">bt</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#0  0x000055555555517f in function_2 ()</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#1  0x0000555555555174 in function_1 ()</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#2  0x000055555555515f in function_0 ()</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#3  0x0000555555555146 in main ()</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/a</span> <span class="va">$rip</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="ex">0x55555555517f</span> <span class="op">&lt;</span>function_2+8<span class="op">&gt;</span>:  0x1e0ff30000c35d90</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/16a</span> <span class="va">$rsp</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde10:</span> 0x7fffffffde20  0x555555555174 <span class="op">&lt;</span>function_1+18<span class="op">&gt;</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde20:</span> 0x7fffffffde30  0x55555555515f <span class="op">&lt;</span>function_0+18<span class="op">&gt;</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde30:</span> 0x7fffffffde50  0x555555555146 <span class="op">&lt;</span>main+29<span class="op">&gt;</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde40:</span> 0x7fffffffdf78  0x1ffffdf78</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde50:</span> 0x7fffffffdef0  0x7ffff7c2a1ca <span class="op">&lt;</span>__libc_start_call_main+122<span class="op">&gt;</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde60:</span> 0x7fffffffdea0  0x7fffffffdf78</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde70:</span> 0x155554040     0x555555555129 <span class="op">&lt;</span>main<span class="op">&gt;</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde80:</span> 0x7fffffffdf78  0x2072b297b1b20138</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<pre class="mermaid">
+flowchart RL
+   subgraph rsp
+        function_1+18
+        function_0+18              
+        main
+    end 
+
+    subgraph rip
+        function_2+8
+    end   
+
+    main --> function_0+18 --> function_1+18 --> function_2+8
+</pre>
 <footer class="footer text-muted">
    <div align="center">
       <a href="../index.html"><b>Home</b></a>
