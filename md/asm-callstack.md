@@ -300,29 +300,27 @@ Breakpoint 1, 0x000055555555517f in function_2 ()
 (gdb) x/a $rip
 0x55555555517f <function_2+8>:  0x1e0ff30000c35d90
 
-(gdb) x/16a $rsp
+(gdb) x/10a $rsp
 0x7fffffffde10: 0x7fffffffde20  0x555555555174 <function_1+18>
 0x7fffffffde20: 0x7fffffffde30  0x55555555515f <function_0+18>
 0x7fffffffde30: 0x7fffffffde50  0x555555555146 <main+29>
 0x7fffffffde40: 0x7fffffffdf78  0x1ffffdf78
 0x7fffffffde50: 0x7fffffffdef0  0x7ffff7c2a1ca <__libc_start_call_main+122>
-0x7fffffffde60: 0x7fffffffdea0  0x7fffffffdf78
-0x7fffffffde70: 0x155554040     0x555555555129 <main>
-0x7fffffffde80: 0x7fffffffdf78  0x2072b297b1b20138
   
 ```
 
 <pre class="mermaid">
-flowchart RL
-   subgraph rsp
-        function_1+18
-        function_0+18              
-        main
-    end 
-
+flowchart BT
     subgraph rip
         function_2+8
     end   
 
-    main --> function_0+18 --> function_1+18 --> function_2+8
+   subgraph rsp
+        function_1+18
+        function_0+18              
+        main+29
+        __libc_start_call_main+122
+    end 
+
+    __libc_start_call_main+122 --> main+29 --> function_0+18 --> function_1+18 --> function_2+8
 </pre>

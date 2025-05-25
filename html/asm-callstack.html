@@ -515,29 +515,27 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#
 <span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/a</span> <span class="va">$rip</span></span>
 <span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="ex">0x55555555517f</span> <span class="op">&lt;</span>function_2+8<span class="op">&gt;</span>:  0x1e0ff30000c35d90</span>
 <span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/16a</span> <span class="va">$rsp</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/10a</span> <span class="va">$rsp</span></span>
 <span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde10:</span> 0x7fffffffde20  0x555555555174 <span class="op">&lt;</span>function_1+18<span class="op">&gt;</span></span>
 <span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde20:</span> 0x7fffffffde30  0x55555555515f <span class="op">&lt;</span>function_0+18<span class="op">&gt;</span></span>
 <span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde30:</span> 0x7fffffffde50  0x555555555146 <span class="op">&lt;</span>main+29<span class="op">&gt;</span></span>
 <span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde40:</span> 0x7fffffffdf78  0x1ffffdf78</span>
 <span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde50:</span> 0x7fffffffdef0  0x7ffff7c2a1ca <span class="op">&lt;</span>__libc_start_call_main+122<span class="op">&gt;</span></span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde60:</span> 0x7fffffffdea0  0x7fffffffdf78</span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde70:</span> 0x155554040     0x555555555129 <span class="op">&lt;</span>main<span class="op">&gt;</span></span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde80:</span> 0x7fffffffdf78  0x2072b297b1b20138</span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <pre class="mermaid">
-flowchart RL
-   subgraph rsp
-        function_1+18
-        function_0+18              
-        main
-    end 
-
+flowchart BT
     subgraph rip
         function_2+8
     end   
 
-    main --> function_0+18 --> function_1+18 --> function_2+8
+   subgraph rsp
+        function_1+18
+        function_0+18              
+        main+29
+        __libc_start_call_main+122
+    end 
+
+    __libc_start_call_main+122 --> main+29 --> function_0+18 --> function_1+18 --> function_2+8
 </pre>
 <footer class="footer text-muted">
    <div align="center">
