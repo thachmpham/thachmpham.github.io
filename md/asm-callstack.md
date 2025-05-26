@@ -310,7 +310,7 @@ Breakpoint 1, 0x000055555555517f in function_2 ()
 ```
 
 <pre class="mermaid">
-flowchart BT
+flowchart RL
     subgraph rip
         function_2+8
     end   
