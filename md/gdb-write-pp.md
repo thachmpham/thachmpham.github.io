@@ -106,3 +106,4 @@ $3 = IP address: 192.168.1.1.
 - [Extending GDB using Python](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Python.html#Python)
 - [GDB Python modules](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Python-modules.html#Python-modules)
 - [GDB.Python Testsuite](https://github.com/bminor/binutils-gdb/tree/master/gdb/testsuite/gdb.python)
+- `/usr/share/gdb/python/`
