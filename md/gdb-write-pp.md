@@ -6,7 +6,7 @@ subtitle: "*Print Complex Data in GDB with Python Pretty Printer*"
 GDB Python pretty printers let you display complex C/C++ data structures in a readable format, making debugging easier and clearer. In this post, we will write a simple plugin to pretty-print an IP address **struct in_addr**.
 
 
-# 1. Implement Printer
+# 1. Printer
 - Create file in_addr_printer.py.
 ```python
   
@@ -35,7 +35,7 @@ gdb.printing.register_pretty_printer(
 ```
 
 
-# 2. Implement Program
+# 2. Program
 - Create file main.c
 ```c
   
@@ -61,7 +61,7 @@ $ gcc -g -o main main.c
 ```
 
 
-# 3. Run
+# 3. Use Printer
 - Run program under gdb.
 ```sh
   
