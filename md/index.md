@@ -4,8 +4,8 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 ---
 
 
-## Computer Systems
-### Virtual Network Interfaces
+## 1. Computer Systems
+### 1.1. Virtual Network Interfaces
 | |
 |:-----------------|----------------:|
 | [Virtual Ethernet Interface](html/veth.html) | (*ip veth netns*) |
@@ -14,14 +14,14 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Bond Interface](html/vbond-interface.html) | *(ip bond netns)* |
 
 
-### TCP/IP
+### 1.2. TCP/IP
 | |
 |:-----------------|----------------:|
 | [Address Resolution Protocol](html/arp.html) | *(arp, arping)* |
 | [IP Routing](html/ip-routing.html) | *(ip route)* |
 | [Dynamic Host Configuration Protocol](html/dhcp.html) | *(kea-dhcp4)* |
 
-### Infrastructure
+### 1.3. Infrastructure
 | |
 |:-----------------|----------------:|
 | [Preboot eXecution Environment](html/pxe.html) | *(dnsmasq)* |
@@ -30,7 +30,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Distributed Replicated Block Device](html/drbd.html) | *(drbd)* |
 
 
-### Linux
+### 1.4. Linux
 | |
 |:-----------------|----------------:|
 | [Kernel Virtual Machine](html/kvm.html)           | *(kvm)*  |
@@ -40,8 +40,8 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 <br>
 
 
-## Distributed Systems
-### OpenSAF
+## 2. Distributed Systems
+### 2.1. OpenSAF
 | |
 |:-----------------|----------------:|
 | [Build & Install](html/opensaf-install.html) | *(make)* |
@@ -57,8 +57,8 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 <br>
 
 
-## Software Debugging
-### Debug C/C++
+## 3. Software Debugging
+### 3.1 Debug C/C++ with GDB
 | |
 |:-----------------|----------------:|
 | [Debug a Program Started by a Script](html/gdb-program-started-by-script.html)    | *(gdb catch)*     |
@@ -67,18 +67,23 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Search Memory](html/gdb-find.html)                   | *(gdb find)*  |
 | [Dump & Restore Memory](html/gdb-dump-restore.html)   | *(gdb dump restore)*  |
 | [Execute Functions](html/gdb-call.html)               | *(gdb call)*  |
-| [Print STL Containers](html/gdb-stl.html)             | *(gdb pretty-printer)*   |
 | [Shared Library](html/cpp-shared-library.html)        | *(gdb sharedlibrary)*   |
 | [Inspect ELF Files](html/elf.html)                    | *(gcc objdump)*  |
 
+### 3.2. Extend GDB with Python
+| |
+|:-----------------|----------------:|
+| [Print STL Containers](html/gdb-stl.html)             | *(gdb pretty-printer)*   |
+| [Print Complex Data](html/gdb-write-pp.html)             | *(gdb pretty-printer)*   |
 
-### From C to x86 Assembly
+
+### 3.3. C/C++ to Assembly
 | |
 |:-----------------|----------------:|
 | [Inside the Call Stack](html/asm-callstack.html) | *(gcc objdump)* |
 
 
-### Debug Bash
+### 3.4. Debug Bash Scripts
 | |
 |:-----------------|----------------:|
 | [Step Through Bash Script](html/bashdb.html) | *(bashdb rpmbuild)* |
@@ -86,8 +91,8 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 <br>
 
 
-## Tools
-### Diagram
+## 5. Tools
+### 5.1. Diagram
 | |
 |:-----------------|----------------:|
 | [PlantUML](html/plantuml.html) | *(uml)* |

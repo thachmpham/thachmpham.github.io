@@ -88,8 +88,11 @@ pandoc -f markdown -t html -s \
 # generate_post cpp-shared-library
 
 
+# ====  Extend GDB with Python
+generate_post gdb-write-pp
+
 # ====  C-Assembly
-generate_post asm-callstack
+# generate_post asm-callstack
 
 
 # ====  BASHDB
