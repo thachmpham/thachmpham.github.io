@@ -69,7 +69,7 @@ gdb.printing.register_pretty_printer(
 ```
 
 
-## 1.3. Use Printer
+## 1.3. Run
 - Run program under gdb.
 ```sh
   
@@ -186,7 +186,7 @@ gdb.printing.register_pretty_printer(
 ```
 
 
-## 2.3. Use Printer
+## 2.3. Run
 - Run program under gdb.
 ```sh
   
