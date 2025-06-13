@@ -45,23 +45,24 @@ pandoc -f markdown -t html -s \
 # generate_post vbond-interface
 
 
-# ====  TCP/IP
+# ====  Networking
 # generate_post arp
 # generate_post ip-routing
 # generate_post dhcp
+generate_post tipc
+# generate_post vip
+
+# ====  Infrastructure
+# generate_post pxe
+# generate_post ldap
+
+# generate_post drbd
 
 
 # ====  Linux
 # generate_post kvm
 # generate_post fdisk
 # generate_post systemd
-
-
-# ====  Infrastructure
-# generate_post pxe
-# generate_post ldap
-# generate_post vip
-# generate_post drbd
 
 
 # ====  OpenSAF
@@ -85,11 +86,11 @@ pandoc -f markdown -t html -s \
 # generate_post gdb-dump-restore
 # generate_post gdb-stl
 # generate_post elf
-# generate_post cpp-shared-library
+generate_post virtual-addr-elf-offset
 
 
 # ====  Extend GDB with Python
-generate_post gdb-write-pp
+# generate_post gdb-write-pp
 
 # ====  C-Assembly
 # generate_post asm-callstack

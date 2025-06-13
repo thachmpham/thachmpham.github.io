@@ -1,9 +1,23 @@
 ---
-title: C/C++ Shared Library
+title: Virtual Address & ELF Offset
 ---
 
 
-# 1. Build Shared Library
+In an ELF file, the offset from a instruction's address to the start of the .text section is preserved when the shared library is loaded into memory. The distance between the function’s virtual address and the base address of the loaded library at runtime is identical to the offset of the instruction from the .text section in the ELF file.
+
+$$
+instruction\_va - base\_va = instruction\_offset - text\_offset
+$$
+
+| Term               | Description                                              |
+|--------------------|----------------------------------------------------------|
+| `instruction_va`   | Virtual address of the instruction in memory.            |
+| `base_va`          | Base virtual address where the shared library is loaded in memory |
+| `instruction_offset` | Offset of the instruction in the `.text` section in the ELF file. |
+| `text_offset`      | Offset of the `.text` section in the ELF file.           |
+
+
+# 1. Demo Program
 - File math.c.
 ```c
   
@@ -28,8 +42,6 @@ $ gcc -shared -o libmath.so math.o
   
 ```
 
-
-# 2. Link
 - File main.c.
 ```c
   
@@ -53,7 +65,7 @@ $ gcc -o prog main.o -L. -lmath
   
 ```
 
-# 3. Run
+- Run
 ```sh
   
 $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
@@ -69,23 +81,8 @@ $ ./prog
 ```
 
 
-# 4. Virtual Address & ELF Offset
-In an ELF file, the offset from a instruction's address to the start of the .text section is preserved when the shared library is loaded into memory. The distance between the function’s virtual address and the base address of the loaded library at runtime is identical to the offset of the instruction from the .text section in the ELF file.
-
-$$
-instruction\_va - base\_va = instruction\_offset - text\_offset
-$$
-
-| Term               | Description                                              |
-|--------------------|----------------------------------------------------------|
-| `instruction_va`   | Virtual address of the instruction in memory.            |
-| `base_va`          | Base virtual address where the shared library is loaded in memory |
-| `instruction_offset` | Offset of the instruction in the `.text` section in the ELF file. |
-| `text_offset`      | Offset of the `.text` section in the ELF file.           |
-
-
-## 4.1. Function Address
-Check the above formula with function `multiple` of library `libmath.so`.
+# 2. Function Address
+Check the formula with function `multiple` of library `libmath.so`.
 
 - Start program under gdb.
 ```sh
@@ -153,7 +150,7 @@ Start Address                   Length
 - **Observation**: The distance between the `multiple` function and the start of the `.text` section in `libmath.so` is equal to the distance between the `multiple` function’s address and the start address where `libmath.so` is loaded in memory at runtime. Both are 185 bytes.
 
 
-## 4.2. Instruction Address
+# 3. Instruction Address
 Translate the virtual address of an instruction in process memory to the offset in ELF file.
 
 - File main_2.c.

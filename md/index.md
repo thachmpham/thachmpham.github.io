@@ -14,19 +14,21 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Bond Interface](html/vbond-interface.html) | *(ip bond netns)* |
 
 
-### 1.2. TCP/IP
+### 1.2. Networking
 | |
 |:-----------------|----------------:|
 | [Address Resolution Protocol](html/arp.html) | *(arp, arping)* |
 | [IP Routing](html/ip-routing.html) | *(ip route)* |
 | [Dynamic Host Configuration Protocol](html/dhcp.html) | *(kea-dhcp4)* |
+| [TIPC Protocol](html/tipc.html) | *(tipc)* |
+| [Virtual IP Address](html/vip.html) | *(keepalived)* |
+
 
 ### 1.3. Infrastructure
 | |
 |:-----------------|----------------:|
 | [Preboot eXecution Environment](html/pxe.html) | *(dnsmasq)* |
 | [Lightweight Directory Access Protocol](html/ldap.html) | *(openldap)* |
-| [Virtual IP Address](html/vip.html) | *(keepalived)* |
 | [Distributed Replicated Block Device](html/drbd.html) | *(drbd)* |
 
 
@@ -67,8 +69,8 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Search Memory](html/gdb-find.html)                   | *(gdb find)*  |
 | [Dump & Restore Memory](html/gdb-dump-restore.html)   | *(gdb dump restore)*  |
 | [Execute Functions](html/gdb-call.html)               | *(gdb call)*  |
-| [Shared Library](html/cpp-shared-library.html)        | *(gdb sharedlibrary)*   |
-| [Inspect ELF Files](html/elf.html)                    | *(gcc objdump)*  |
+| [Inspect ELF](html/elf.html)                    | *(gdb objdump)*  |
+| [Virtual Address & EFL Offset](html/virtual-addr-elf-offset.html)        | *(gdb sharedlibrary)*   |
 
 ### 3.2. Extend GDB with Python
 | |
@@ -77,7 +79,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Print Complex Data](html/gdb-write-pp.html)             | *(gdb pretty-printer)*   |
 
 
-### 3.3. C/C++ to Assembly
+### 3.3. Binary Analysis
 | |
 |:-----------------|----------------:|
 | [Inside the Call Stack](html/asm-callstack.html) | *(gcc objdump)* |
