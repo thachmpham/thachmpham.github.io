@@ -60,7 +60,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 
 
 ## 3. Software Debugging
-### 3.1 Debug C/C++ with GDB
+### 3.1 GDB
 | |
 |:-----------------|----------------:|
 | [Debug a Program Started by a Script](html/gdb-program-started-by-script.html)    | *(gdb catch)*     |
@@ -71,21 +71,12 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Execute Functions](html/gdb-call.html)               | *(gdb call)*  |
 | [Inspect ELF](html/elf.html)                    | *(gdb objdump)*  |
 | [Virtual Address & EFL Offset](html/virtual-addr-elf-offset.html)        | *(gdb sharedlibrary)*   |
-
-### 3.2. Extend GDB with Python
-| |
-|:-----------------|----------------:|
+| [Inside the Call Stack](html/asm-callstack.html) | *(gdb asm reg)* |
 | [Print STL Containers](html/gdb-stl.html)             | *(gdb pretty-printer)*   |
 | [Print Complex Data](html/gdb-write-pp.html)             | *(gdb pretty-printer)*   |
 
 
-### 3.3. Binary Analysis
-| |
-|:-----------------|----------------:|
-| [Inside the Call Stack](html/asm-callstack.html) | *(gcc objdump)* |
-
-
-### 3.4. Debug Bash Scripts
+### 3.2. BashDB
 | |
 |:-----------------|----------------:|
 | [Step Through Bash Script](html/bashdb.html) | *(bashdb rpmbuild)* |
