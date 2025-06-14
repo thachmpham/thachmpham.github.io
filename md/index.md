@@ -52,8 +52,8 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Information Model Management](html/opensaf-imm.html) | *(opensaf imm)* |
 | [Software Management Framework](html/opensaf-smf.html) | *(opensaf smf)* |
 | [Log Service](html/opensaf-log.html) | *(opensaf log)* |
-| [Convert Program to High Availability](html/opensaf-amf-non-sa-aware.html) | *(opensaf amf)* |
-| [Build High Availability Application](html/opensaf-amf-sa-aware.html) | *(opensaf amf)* |
+| [Convert Program to High Availability](html/opensaf-amf-non-sa-aware.html) | *(amf non sa-aware)* |
+| [Build High Availability Application](html/opensaf-amf-sa-aware.html) | *(amf sa-aware)* |
 | [Healthcheck](html/opensaf-healthcheck.html) | *(opensaf amf)* |
 
 <br>

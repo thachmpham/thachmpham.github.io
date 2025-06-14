@@ -49,13 +49,13 @@ pandoc -f markdown -t html -s \
 # generate_post arp
 # generate_post ip-routing
 # generate_post dhcp
-generate_post tipc
+# generate_post tipc
 # generate_post vip
+
 
 # ====  Infrastructure
 # generate_post pxe
 # generate_post ldap
-
 # generate_post drbd
 
 
@@ -87,14 +87,9 @@ generate_post tipc
 # generate_post gdb-stl
 # generate_post elf
 # generate_post virtual-addr-elf-offset
-
-
-# ====  Extend GDB with Python
 # generate_post gdb-write-pp
-
-# ====  C-Assembly
 # generate_post asm-callstack
-
+generate_post ld_preload
 
 # ====  BASHDB
 # generate_post bashdbs
