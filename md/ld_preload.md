@@ -64,13 +64,13 @@ void* malloc(size_t size)
 
         if (NULL == real_malloc)
         {
-            fprintf(stdout, "dlsym malloc failed: %s\n", dlerror());
+            fprintf(stderr, "dlsym failed: %s\n", dlerror());
         }
     }
 
-    fprintf(stdout, "malloc(%ld) = ", size);
+    fprintf(stderr, "malloc(%ld) = ", size);
     void *p = real_malloc(size);
-    fprintf(stdout, "%p\n", p);
+    fprintf(stderr, "%p\n", p);
     return p;
 }
   
