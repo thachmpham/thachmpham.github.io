@@ -74,7 +74,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Inspect C Stack with Assembly](html/asm-callstack.html) | *(gdb asm reg)* |
 | [Print Contents of STL Containers](html/gdb-stl.html)             | *(gdb pretty-printer)*   |
 | [Method for Printing Complex Data](html/gdb-write-pp.html)             | *(gdb pretty-printer)*   |
-| [Change Shared Library Behavior](html/ld_preload.html) | *(ld_preload)* |
+| [Override Shared Library Functions](html/ld_preload.html) | *(ld_preload)* |
 
 
 
