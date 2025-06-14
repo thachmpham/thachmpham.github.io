@@ -60,26 +60,28 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 
 
 ## 3. Software Debugging
-### 3.1 GDB
+### 3.1. Debug C/C++
 | |
 |:-----------------|----------------:|
 | [Debug a Program Started by a Script](html/gdb-program-started-by-script.html)    | *(gdb catch)*     |
 | [Debug A Program Started by SystemD](html/gdb-program-started-by-systemd.html)    | *(gdb remote)*    |
 | [Debug a High Availability Program](html/gdb-ha-program.html) | *(gdb non-stop)* |
-| [Search Memory](html/gdb-find.html)                   | *(gdb find)*  |
-| [Dump & Restore Memory](html/gdb-dump-restore.html)   | *(gdb dump restore)*  |
-| [Execute Functions](html/gdb-call.html)               | *(gdb call)*  |
-| [Inspect ELF](html/elf.html)                    | *(gdb objdump)*  |
+| [Find Memory Inside Running Process](html/gdb-find.html)                   | *(gdb find)*  |
+| [Dump & Restore Process Memory](html/gdb-dump-restore.html)   | *(gdb dump restore)*  |
+| [Execute Functions on the Fly](html/gdb-call.html)               | *(gdb call)*  |
+| [Examine Contents of ELF File](html/elf.html)                    | *(gdb objdump)*  |
 | [Virtual Address & EFL Offset](html/virtual-addr-elf-offset.html)        | *(gdb sharedlibrary)*   |
-| [Inside the Call Stack](html/asm-callstack.html) | *(gdb asm reg)* |
-| [Print STL Containers](html/gdb-stl.html)             | *(gdb pretty-printer)*   |
-| [Print Complex Data](html/gdb-write-pp.html)             | *(gdb pretty-printer)*   |
+| [Inspect C Stack with Assembly](html/asm-callstack.html) | *(gdb asm reg)* |
+| [Print Contents of STL Containers](html/gdb-stl.html)             | *(gdb pretty-printer)*   |
+| [Method for Printing Complex Data](html/gdb-write-pp.html)             | *(gdb pretty-printer)*   |
+| [Change Shared Library Behavior](html/ld_preload.html) | *(ld_preload)* |
 
 
-### 3.2. BashDB
+
+### 3.2. Debug Bash
 | |
 |:-----------------|----------------:|
-| [Step Through Bash Script](html/bashdb.html) | *(bashdb rpmbuild)* |
+| [Walkthrough of Bash Script Execution](html/bashdb.html) | *(bashdb)* |
 
 <br>
 

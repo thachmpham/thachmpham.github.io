@@ -86,7 +86,7 @@ generate_post tipc
 # generate_post gdb-dump-restore
 # generate_post gdb-stl
 # generate_post elf
-generate_post virtual-addr-elf-offset
+# generate_post virtual-addr-elf-offset
 
 
 # ====  Extend GDB with Python
