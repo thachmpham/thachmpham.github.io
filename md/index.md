@@ -85,7 +85,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 <br>
 
 
-## 4. Reproduce Issue 
+## 4. Reproduce Issues
 | |
 |:-----------------|----------------:|
 | [Modify Return Values of Libc Functions](html/ld_preload.html) | *(ld_preload dlsym)* |

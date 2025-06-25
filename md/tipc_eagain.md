@@ -29,8 +29,7 @@ In the following test, we will reproduce the EAGAIN error using a TIPC socket wi
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
- 
- 
+
 int main(int argc, char** argv)
 {
     struct sockaddr_tipc server_addr = {
@@ -91,8 +90,7 @@ int main(int argc, char** argv)
 #include <errno.h>
 #include <netinet/in.h>
 #include <linux/tipc.h>
- 
- 
+
 int main(int argc, char** argv)
 {
     struct sockaddr_tipc server_addr = {
@@ -171,6 +169,8 @@ $ ./client
 - After the socket send buffer reaches 88064 bytes, it becomes full, and the client pauses at send().
 ```sh
   
+# client
+
 sending...
 send return: 2048
 total sent: 2048
@@ -190,7 +190,7 @@ sending...
 
 - On the server terminal, press a key to call recv and read data from the socket buffer. After some time, once space becomes available in the buffer, the client will be able to continue sending messages.
 ```sh
-
+  
 # server  
 
 press a key to call recv()
@@ -227,3 +227,6 @@ send return: 2048
 total sent: 94208
   
 ```
+
+
+# 2. Non-blocking Mode
