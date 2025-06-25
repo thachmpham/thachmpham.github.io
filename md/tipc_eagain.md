@@ -1,5 +1,6 @@
 ---
 title: "Reproduce TIPC Socket EAGAIN Error"
+subtitle: "*Fully fill the socket send buffer*"
 ---
 
 When we send data with the send or sendmsg functions, it first goes into a buffer before being sent over the network. The buffer has a fixed-size.
