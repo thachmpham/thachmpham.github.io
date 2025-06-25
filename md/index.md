@@ -74,13 +74,22 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Inspect C Stack with Assembly](html/asm-callstack.html) | *(gdb asm reg)* |
 | [Print Contents of STL Containers](html/gdb-stl.html)             | *(gdb pretty-printer)*   |
 | [Method for Printing Complex Data](html/gdb-write-pp.html)             | *(gdb pretty-printer)*   |
-| [Override Shared Library Functions](html/ld_preload.html) | *(ld_preload dlsym)* |
+
 
 
 ### 3.2. Debug Bash
 | |
 |:-----------------|----------------:|
 | [Walkthrough of Bash Script Execution](html/bashdb.html) | *(bashdb)* |
+
+<br>
+
+
+## 4. Reproduce Issue 
+| |
+|:-----------------|----------------:|
+| [Modify Return Values of Libc Functions](html/ld_preload.html) | *(ld_preload dlsym)* |
+| [Reproduce TIPC Socket EAGAIN Error](html/tipc_eagain.html) | *(tipc non-blocking socket)* |
 
 <br>
 
