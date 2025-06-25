@@ -139,8 +139,8 @@ int main(int argc, char** argv)
 - Build.
 ```sh
   
-gcc -O0 -g -Wno-incompatible-pointer-types client.c -o client
-gcc -O0 -g -Wno-incompatible-pointer-types server.c -o server
+$ gcc -O0 -g -Wno-incompatible-pointer-types client.c -o client
+$ gcc -O0 -g -Wno-incompatible-pointer-types server.c -o server
   
 ```
 
@@ -152,21 +152,15 @@ $ lsmod | grep tipc
   
 ```
 
-- Run server.
+- Run
 ```sh
   
 $ ./server
-  
-```
-
-- Run client.
-```sh
-  
 $ ./client
   
 ```
 
-- After the socket send buffer reaches 88064 bytes, it becomes full, and the client pauses at send().
+- After send buffer of socket reaches 88064 bytes, it becomes full, and the client pauses at send().
 ```sh
   
 # client
@@ -188,7 +182,7 @@ sending...
   
 ```
 
-- On the server terminal, press a key to call recv and read data from the socket buffer. After some time, once space becomes available in the buffer, the client will be able to continue sending messages.
+- On the server terminal, press a key to call recv and consume data from the socket buffer. After some time, once space becomes available in the buffer, the client will be able to continue sending messages.
 ```sh
   
 # server  
@@ -209,7 +203,7 @@ press a key to call recv()
 
 
 ```sh
-
+  
 # client
 
 sending...
@@ -230,3 +224,143 @@ total sent: 94208
 
 
 # 2. Non-blocking Mode
+- client_nonblocking.c
+```c
+  
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/epoll.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <netinet/in.h>
+#include <linux/tipc.h>
+
+int main(int argc, char** argv)
+{
+    struct sockaddr_tipc server_addr = {
+        .family = AF_TIPC,
+        .addrtype = TIPC_ADDR_NAME,
+        .addr.name = {
+            .name = {
+                .type = 18888,
+                .instance = 17
+            },
+            .domain = 0
+        }
+    };
+
+    int sockfd = socket(AF_TIPC, SOCK_STREAM, 0);
+
+    // enable non-blocking
+    int flags = fcntl(sockfd, F_GETFL, 0);
+    fcntl(sockfd, F_SETFL, flags|O_NONBLOCK);
+
+    connect(sockfd, &server_addr, sizeof(server_addr));
+
+    char buf[2048];
+    memset(buf, 'A', 2048);
+
+    int total_sent = 0;
+
+    while (1)
+    {
+        printf("sending...\n");
+        int n = send(sockfd, buf, 2048, 0);
+        printf("send return: %d\n", n);
+
+        if (n > 0)
+        {
+            total_sent += n;
+            printf("total sent: %d\n", total_sent);
+            sleep(1);
+        }
+        else
+        {
+            printf("send got errno: %d\n", errno);
+            sleep(5);
+        }
+    }
+}
+  
+```
+
+- Build
+```sh
+  
+$ gcc -O0 -g -Wno-incompatible-pointer-types client_nonblocking.c -o client_nonblocking
+  
+```
+
+- Run
+```sh
+  
+$ ./server
+$ ./client
+  
+```
+
+- After send buffer of socket reaches 88064 bytes, it becomes full, and the send() function returns EAGAIN error.
+```sh
+  
+# client
+
+sending...
+send return: 2048
+total sent: 83968
+sending...
+send return: 2048
+total sent: 86016
+sending...
+send return: 2048
+total sent: 88064
+sending...
+send return: -1
+send got errno: 11
+sending...
+send return: -1
+send got errno: 11
+sending...
+send return: -1
+send got errno: 11
+  
+```
+
+- On the server terminal, press a key to call recv and consume data from the socket buffer. After some time, once space becomes available in the buffer, the client will be able to continue sending messages.
+```sh
+  
+# server
+recv returns: 2048
+total received: 22528
+press a key to call recv()
+
+recv returns: 2048
+total received: 24576
+press a key to call recv()
+
+recv returns: 2048
+total received: 26624
+press a key to call recv()
+  
+```
+
+```sh
+  
+# client
+sending...
+send return: -1
+send got errno: 11
+sending...
+send return: 2048
+total sent: 90112
+sending...
+send return: 2048
+total sent: 92160
+sending...
+send return: 2048
+total sent: 94208
+  
+```
