@@ -59,7 +59,7 @@ pandoc -f markdown -t html -s \
 # generate_post drbd
 
 
-# ====  Linux
+# ====  Administration
 # generate_post kvm
 # generate_post fdisk
 # generate_post systemd
@@ -94,8 +94,12 @@ pandoc -f markdown -t html -s \
 # ====  BASHDB
 # generate_post bashdbs
 
-# ====  Reproduce Issues
-generate_post tipc_eagain
+# ====  Linux Kernel
+generate_post kernel_build
+
+
+# ====  Hack
+# generate_post tipc_eagain
 
 # ====  Tools
 # generate_post plantuml

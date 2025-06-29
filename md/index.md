@@ -32,7 +32,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Distributed Replicated Block Device](html/drbd.html) | *(drbd)* |
 
 
-### 1.4. Linux
+### 1.4. Administration
 | |
 |:-----------------|----------------:|
 | [Kernel Virtual Machine](html/kvm.html)           | *(kvm)*  |
@@ -59,8 +59,8 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 <br>
 
 
-## 3. Software Debugging
-### 3.1. Debug C/C++
+## 3. Debug
+### 3.1. C/C++
 | |
 |:-----------------|----------------:|
 | [Debug a Program Started by a Script](html/gdb-program-started-by-script.html)    | *(gdb catch)*     |
@@ -75,21 +75,26 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Print Contents of STL Containers](html/gdb-stl.html)             | *(gdb pretty-printer)*   |
 | [Method for Printing Complex Data](html/gdb-write-pp.html)             | *(gdb pretty-printer)*   |
 
-
-
-### 3.2. Debug Bash
+### 3.2. Bash
 | |
 |:-----------------|----------------:|
 | [Walkthrough of Bash Script Execution](html/bashdb.html) | *(bashdb)* |
 
+
+### 3.3. Linux Kernel
+| |
+|:-----------------|----------------:|
+| [Build & Run Linux Kernel](html/kernel_build.html) | *(kernel buildroot qemu)* |
+
+
 <br>
 
 
-## 4. Reproduce Issues
+## 4. Hack
 | |
 |:-----------------|----------------:|
 | [Modify Return Values of Libc Functions](html/ld_preload.html) | *(ld_preload dlsym)* |
-| [Reproduce TIPC Socket EAGAIN Error](html/tipc_eagain.html) | *(tipc non-blocking socket)* |
+| [Reproduce EAGAIN TIPC Socket Error](html/tipc_eagain.html) | *(tipc overload socket buffer)* |
 
 <br>
 
