@@ -101,9 +101,9 @@ $ make -j `nproc`
   
 $ qemu-system-x86_64 -boot c -m 2048M \
     -kernel /root/kernel/linux-5.15.186/arch/x86/boot/bzImage \
-    -hda /root/kernel/buildroot/output/images/rootfs.ext4 \
+    -hda /root/kernel/buildroot-2025.05/output/images/rootfs.ext4 \
     -append "root=/dev/sda rw console=ttyS0,115200 nokaslr" \
-    -serial stdio -display none    
+    -serial stdio -display none
   
 ```
 

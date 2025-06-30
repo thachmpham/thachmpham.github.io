@@ -85,6 +85,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | |
 |:-----------------|----------------:|
 | [Build & Run Linux Kernel](html/kernel_build.html) | *(kernel buildroot qemu)* |
+| [Debug Linux Kernel](html/kernel_debug.html) | *(kernel qemu gdb)* |
 
 
 <br>
