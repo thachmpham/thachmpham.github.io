@@ -78,14 +78,15 @@ $ make defconfig
 ```sh
   
 $ make menuconfig
-
-# Target options -> Target Architecture -> x86_64
-# Toolchain -> C library -> glibc
-# Filesystem images -> cpio the root filesystem
-# Target Packages -> Hardware Handling -> pciutils
-# System Configuration -> Run a getty (login prompt) after boot -> TTY port -> ttyS0
   
 ```
+
+- In the menu config, select below options:
+    - Target options -> Target Architecture -> x86_64
+    - Toolchain -> C library -> glibc
+    - Filesystem images -> ext4 root filesystem
+    - Target Packages -> Hardware Handling -> pciutils
+    - System Configuration -> Run a getty (login prompt) after boot -> TTY port -> ttyS0
 
 ```sh
   
@@ -100,10 +101,11 @@ $ make -j `nproc`
   
 $ qemu-system-x86_64 -boot c -m 2048M \
     -kernel /root/kernel/linux-5.15.186/arch/x86/boot/bzImage \
-    -hda /root/kernel/buildroot/images/rootfs.ext4 \
+    -hda /root/kernel/buildroot/output/images/rootfs.ext4 \
     -append "root=/dev/sda rw console=ttyS0,115200 nokaslr" \
     -serial stdio -display none    
   
 ```
 
-- To exit QEMU terminal, press "Ctrl + C".
+- To exit QEMU, press "Ctrl + A", "X".
+- To exit buildroot, press "Ctrl + C".

@@ -290,13 +290,18 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb1-
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make menuconfig</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Target options -&gt; Target Architecture -&gt; x86_64</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Toolchain -&gt; C library -&gt; glibc</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Filesystem images -&gt; cpio the root filesystem</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Target Packages -&gt; Hardware Handling -&gt; pciutils</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># System Configuration -&gt; Run a getty (login prompt) after boot -&gt; TTY port -&gt; ttyS0</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>In the menu config, select below options:
+<ul>
+<li>Target options -&gt; Target Architecture -&gt; x86_64</li>
+<li>Toolchain -&gt; C library -&gt; glibc</li>
+<li>Filesystem images -&gt; ext4 root filesystem</li>
+<li>Target Packages -&gt; Hardware Handling -&gt; pciutils</li>
+<li>System Configuration -&gt; Run a getty (login prompt) after boot
+-&gt; TTY port -&gt; ttyS0</li>
+</ul></li>
+</ul>
 <div class="sourceCode" id="cb10"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> export FORCE_UNSAFE_CONFIGURE=1</span>
@@ -307,12 +312,13 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> qemu-system-x86_64 <span class="at">-boot</span> c <span class="at">-m</span> 2048M <span class="dt">\</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-kernel</span> /root/kernel/linux-5.15.186/arch/x86/boot/bzImage <span class="dt">\</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">-hda</span> /root/kernel/buildroot/images/rootfs.ext4 <span class="dt">\</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">-hda</span> /root/kernel/buildroot/output/images/rootfs.ext4 <span class="dt">\</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">-append</span> <span class="st">&quot;root=/dev/sda rw console=ttyS0,115200 nokaslr&quot;</span> <span class="dt">\</span></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">-serial</span> stdio <span class="at">-display</span> none    </span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>To exit QEMU terminal, press “Ctrl + C”.</li>
+<li>To exit QEMU, press “Ctrl + A”, “X”.</li>
+<li>To exit buildroot, press “Ctrl + C”.</li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">
