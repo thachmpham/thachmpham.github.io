@@ -96,13 +96,13 @@ pandoc -f markdown -t html -s \
 
 
 # ====  Linux Kernel
-# generate_post kernel_build
+generate_post kernel_build
 # generate_post kernel_debug_gdb
 
 
 # ====  Hack
 # generate_post ld_preload
-generate_post tipc_eagain
+# generate_post tipc_eagain
 
 
 # ====  Tools

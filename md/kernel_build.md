@@ -120,3 +120,57 @@ $ qemu-system-x86_64 -boot order=c -m 2048M \
 ```
 
 - To exit QEMU: Ctrl + A, X.
+
+
+# 5. Hello World Program
+Build the program on the host, then copy it to the QEMU VM and run it there.
+
+File: hello.c
+```c
+  
+#include <stdio.h>
+
+int main() {
+    printf("Hello, Linux kernel on QEMU!\n");
+    return 0;
+}
+  
+```
+
+The Linux kernel does not provide the C standard library (libc.so.6) or the dynamic linker (ld-linux.so), as they belong to user space.
+To run program in a minimal kernel setup without these components, static linking is used to bundle all dependencies into a single self-contained binary.
+
+```sh
+  
+$ gcc -static -o hello hello.c
+  
+```
+
+On the host, copy the program into the filesystem that the QEMU VM boots from.
+```sh
+  
+$ mkdir /mnt/rootfs
+$ mount /root/kernel/buildroot-2025.05/output/images/rootfs.ext2 /mnt/rootfs/
+
+$ cp hello /mnt/rootfs/opt
+  
+```
+
+Restart QEMU VM.
+```sh
+  
+$ qemu-system-x86_64 -boot order=c -m 2048M \
+    -kernel /root/kernel/linux-5.15.186/arch/x86/boot/bzImage \
+    -hda /root/kernel/buildroot-2025.05/output/images/rootfs.ext2 \
+    -append "root=/dev/sda rw console=ttyS0,115200 nokaslr" \
+    -nographic
+  
+```
+
+Run the program on QEMU VM.
+```sh
+  
+$ /opt/demo
+Hello, Linux kernel on QEMU!
+  
+```
