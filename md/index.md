@@ -75,6 +75,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Print Contents of STL Containers](html/gdb-stl.html)             | *(gdb pretty-printer)*   |
 | [Method for Printing Complex Data](html/gdb-write-pp.html)             | *(gdb pretty-printer)*   |
 
+
 ### 3.2. Bash
 | |
 |:-----------------|----------------:|
@@ -85,7 +86,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | |
 |:-----------------|----------------:|
 | [Build & Run Linux Kernel](html/kernel_build.html) | *(kernel buildroot qemu)* |
-| [Debug Linux Kernel](html/kernel_debug.html) | *(kernel qemu gdb)* |
+| [Debug Linux Kernel with GDB](html/kernel_debug_gdb.html) | *(kernel qemu gdb)* |
 
 
 <br>
