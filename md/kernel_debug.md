@@ -1,26 +1,22 @@
 ---
-title:  "Debug Linux Kernel"
+title:  "Debug Linux Kernel with GDB"
 ---
 
 
-# 1. GDB
-## 1.1. Enable GDB Support
+# 1. Enable GDB Support
+Enable GDB support with the config menu.
 ```sh
   
 $ make menuconfig
   
 ```
 
-- Enable GDB Support.
-```sh
-  
-Kernel hacking  ->  Kernel debugging
-
-Kernel hacking  ->  Compile-time checks and compiler options
-                    ->  Compile the kernel with debug info
-                    ->  Provide GDB scripts for kernel debugging
-  
-```
+- Kernel hacking
+    - Kernel debugging
+- Kernel hacking
+    - Compile-time checks and compiler options
+        - Compile the kernel with debug info
+        - Provide GDB scripts for kernel debugging
 
 ```sh
   
@@ -28,18 +24,26 @@ $ make -j `nproc`
   
 ```
 
-## 1.2. Run Kernel
+
+# 2. Run Kernel
+Run the kernel with QEMU. 
 ```sh
   
-$ qemu-system-x86_64 -boot c -m 2048M \
+$ qemu-system-x86_64 -boot order=c -m 2048M \
     -kernel /root/kernel/linux-5.15.186/arch/x86/boot/bzImage \
-    -hda /root/kernel/buildroot-2025.05/output/images/rootfs.ext4 \
+    -hda /root/kernel/buildroot-2025.05/output/images/rootfs.ext2 \
     -append "root=/dev/sda rw console=ttyS0,115200 nokaslr" \
-    -serial stdio -display none -s -S
+    -nographic \
+    -s -S
   
 ```
 
-## 1.3. Run GDB
+The -s -S options start QEMU with a GDB server on port 1234.
+
+
+# 3. Attach GDB
+To debug the Linux kernel remotely, launch GDB on the host and connect it to the QEMU GDB server.
+
 ```sh
   
 $ gdb /root/kernel/linux-5.15.186/vmlinux
@@ -49,25 +53,28 @@ $ gdb /root/kernel/linux-5.15.186/vmlinux
   
 ```
 
-## 1.4. Break Point
+
+# 4. Breakpoint
+Set a breakpoint at the `do_exit` function
 ```sh
   
 (gdb) break do_exit
 Breakpoint 60 at 0xffffffff810710a0: file kernel/exit.c, line 777.
+
+(gdb) continue
   
 ```
 
+In the QEMU VM, run the ls command.
 ```sh
   
 $ ls
   
 ```
 
+In GDB, verify that the breakpoint at do_exit is hit.
 ```sh
   
-(gdb) continue
-Continuing.
-
 Breakpoint 60, do_exit (code=code@entry=0) at kernel/exit.c:777
 777     {
 (gdb) bt

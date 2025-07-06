@@ -2,9 +2,16 @@
 title:  "Build & Run Linux Kernel"
 ---
 
+Contents:
 
-# 1. Build Kernel
-## 1.1. Docker Container
+- Build kernel with docker.
+- Build a filesystem image with buildroot.
+- Run kernel with qemu.
+
+
+# 1. Docker
+Set up a docker container as a build machine with essential packages installed.
+
 ```Dockerfile
   
 FROM ubuntu:22.04
@@ -18,6 +25,10 @@ CMD ["/bin/bash"]
   
 ```
 
+
+# 2. Build Kernel
+Build the Linux kernel using the docker container.
+
 ```sh
   
 $ docker build --tag kernel_builder .
@@ -27,11 +38,10 @@ $ docker build --tag kernel_builder .
 ```sh
   
 $ mkdir /root/kernel
-$ docker run --interactive --tty --volume /root/kernel:/root/kernel --name kbuilder kernel_builder
+$ docker run -it -v /root/kernel:/root/kernel --name kbuilder kernel_builder
   
 ```
 
-## 1.2. Build Kernel
 ```sh
   
 $ cd /root/kernel
@@ -59,7 +69,8 @@ Kernel: arch/x86/boot/bzImage is ready  (#1)
 ```
 
 
-# 2. Buildroot
+# 3. Build Filesystem Image
+Build an EXT filesystem image using **buildroot** and the docker container.
 ```sh
   
 $ cd /root/kernel
@@ -96,16 +107,16 @@ $ make -j `nproc`
 ```
 
 
-# 3. Run Kernel
+# 4. Run
+Run the kernel with QEMU.
 ```sh
   
-$ qemu-system-x86_64 -boot c -m 2048M \
+$ qemu-system-x86_64 -boot order=c -m 2048M \
     -kernel /root/kernel/linux-5.15.186/arch/x86/boot/bzImage \
-    -hda /root/kernel/buildroot-2025.05/output/images/rootfs.ext4 \
+    -hda /root/kernel/buildroot-2025.05/output/images/rootfs.ext2 \
     -append "root=/dev/sda rw console=ttyS0,115200 nokaslr" \
-    -serial stdio -display none
+    -nographic
   
 ```
 
-- To exit QEMU, press "Ctrl + A", "X".
-- To exit buildroot, press "Ctrl + C".
+- To exit QEMU: Ctrl + A, X.

@@ -238,8 +238,15 @@
 <header id="title-block-header">
 <h1 class="title">Build &amp; Run Linux Kernel</h1>
 </header>
-<h1 id="build-kernel">1. Build Kernel</h1>
-<h2 id="docker-container">1.1. Docker Container</h2>
+<p>Contents:</p>
+<ul>
+<li>Build kernel with docker.</li>
+<li>Build a filesystem image with buildroot.</li>
+<li>Run kernel with qemu.</li>
+</ul>
+<h1 id="docker">1. Docker</h1>
+<p>Set up a docker container as a build machine with essential packages
+installed.</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ubuntu:22.04</span>
@@ -251,14 +258,15 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb1-
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;/bin/bash&quot;</span>]</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="build-kernel">2. Build Kernel</h1>
+<p>Build the Linux kernel using the docker container.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker build <span class="at">--tag</span> kernel_builder .</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mkdir /root/kernel</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker run <span class="at">--interactive</span> <span class="at">--tty</span> <span class="at">--volume</span> /root/kernel:/root/kernel <span class="at">--name</span> kbuilder kernel_builder</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker run <span class="at">-it</span> <span class="at">-v</span> /root/kernel:/root/kernel <span class="at">--name</span> kbuilder kernel_builder</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="build-kernel-1">1.2. Build Kernel</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd /root/kernel</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.15.186.tar.xz</span>
@@ -278,7 +286,9 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb1-
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">BUILD</span>   arch/x86/boot/bzImage</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Kernel:</span> arch/x86/boot/bzImage is ready  <span class="er">(</span><span class="co">#1)</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="buildroot">2. Buildroot</h1>
+<h1 id="build-filesystem-image">3. Build Filesystem Image</h1>
+<p>Build an EXT filesystem image using <strong>buildroot</strong> and
+the docker container.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd /root/kernel</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> wget https://buildroot.org/downloads/buildroot-2025.05.tar.gz</span>
@@ -307,18 +317,18 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> export FORCE_UNSAFE_CONFIGURE=1</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make <span class="at">-j</span> <span class="kw">`</span><span class="fu">nproc</span><span class="kw">`</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="run-kernel">3. Run Kernel</h1>
+<h1 id="run">4. Run</h1>
+<p>Run the kernel with QEMU.</p>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> qemu-system-x86_64 <span class="at">-boot</span> c <span class="at">-m</span> 2048M <span class="dt">\</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> qemu-system-x86_64 <span class="at">-boot</span> order=c <span class="at">-m</span> 2048M <span class="dt">\</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-kernel</span> /root/kernel/linux-5.15.186/arch/x86/boot/bzImage <span class="dt">\</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">-hda</span> /root/kernel/buildroot-2025.05/output/images/rootfs.ext4 <span class="dt">\</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">-hda</span> /root/kernel/buildroot-2025.05/output/images/rootfs.ext2 <span class="dt">\</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">-append</span> <span class="st">&quot;root=/dev/sda rw console=ttyS0,115200 nokaslr&quot;</span> <span class="dt">\</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">-serial</span> stdio <span class="at">-display</span> none</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">-nographic</span></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
-<li>To exit QEMU, press “Ctrl + A”, “X”.</li>
-<li>To exit buildroot, press “Ctrl + C”.</li>
+<li>To exit QEMU: Ctrl + A, X.</li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">
