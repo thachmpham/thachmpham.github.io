@@ -87,7 +87,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 |:-----------------|----------------:|
 | [Build & Run Linux Kernel](html/kernel_build.html) | *(kernel buildroot qemu)* |
 | [Debug Linux Kernel with GDB](html/kernel_debug_gdb.html) | *(kernel qemu gdb)* |
-
+| [From User Space to Kernel Space](html/kernel_user_to_kernel.html) | *(user kernel space gdb)* |
 
 <br>
 

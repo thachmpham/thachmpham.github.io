@@ -96,8 +96,9 @@ pandoc -f markdown -t html -s \
 
 
 # ====  Linux Kernel
-generate_post kernel_build
+# generate_post kernel_build
 # generate_post kernel_debug_gdb
+generate_post kernel_user_to_kernel
 
 
 # ====  Hack
