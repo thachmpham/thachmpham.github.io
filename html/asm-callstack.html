@@ -240,15 +240,220 @@
 <p class="subtitle"><strong>Examining C Function Calls at the x86
 Assembly Level</strong></p>
 </header>
-<h1 id="prolog-epilog">1. Prolog &amp; Epilog</h1>
+<h1 id="call-ret">1. Call &amp; Ret</h1>
+<p>In x86-64 assembly, function calls are handled using two simple
+instructions:</p>
+<ul>
+<li><code>call</code>:
+<ul>
+<li>Push the return address onto the stack.</li>
+<li>Jump to the target function.</li>
+</ul></li>
+<li><code>ret</code>:
+<ul>
+<li>Pops the return address from the stack.</li>
+<li>Jumps to the return address.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// file: demo.c</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> func_empty<span class="op">()</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bn">0xcafebabe</span><span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> argv<span class="op">)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    func_empty<span class="op">();</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-g</span> <span class="at">-O0</span> <span class="at">-fcf-protection</span><span class="op">=</span>none <span class="at">-o</span> demo demo.c</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb demo</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span> main</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001134</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     push   %rbp</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001135</span> <span class="op">&lt;</span>+1<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001138</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     sub    <span class="va">$0</span>x10,%rsp</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000000000000113c</span> <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000000000000113f</span> <span class="op">&lt;</span>+11<span class="op">&gt;</span>:    mov    %rsi,-0x10<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001143</span> <span class="op">&lt;</span>+15<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x0,%eax</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001148</span> <span class="op">&lt;</span>+20<span class="op">&gt;</span>:    call   0x1129 <span class="op">&lt;</span>func_empty<span class="op">&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000000000000114d</span> <span class="op">&lt;</span>+25<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x1,%eax</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001152</span> <span class="op">&lt;</span>+30<span class="op">&gt;</span>:    leave</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001153</span> <span class="op">&lt;</span>+31<span class="op">&gt;</span>:    ret</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span> func_empty</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     push   %rbp</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000000000000112a</span> <span class="op">&lt;</span>+1<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000000000000112d</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     mov    <span class="va">$0</span>xcafebabe,%eax</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001132</span> <span class="op">&lt;</span>+9<span class="op">&gt;</span>:     pop    %rbp</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001133</span> <span class="op">&lt;</span>+10<span class="op">&gt;</span>:    ret</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Set breakpoints.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># set breakpoint before call</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">*main+20</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1 at 0x1148: file demo.c, line 8.</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># set breakpoint after call</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">*func_empty+0</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 2 at 0x1129: file demo.c, line 2.</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># set breakpoint before ret</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">*func_empty+10</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 3 at 0x1133: file demo.c, line 4.</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># set breakpoint before ret</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">*main+25</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 4 at 0x114d: file demo.c, line 9.</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Stack before call.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1, 0x0000555555555148 in main <span class="er">(</span><span class="va">argc</span><span class="op">=</span>1, <span class="va">argv</span><span class="op">=</span>0x7fffffffe508<span class="kw">)</span> <span class="ex">at</span> demo.c:8</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">8</span>           func_empty<span class="er">(</span><span class="kw">);</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001134</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     push   %rbp</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001135</span> <span class="op">&lt;</span>+1<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001138</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     sub    <span class="va">$0</span>x10,%rsp</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000000000000113c</span> <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000000000000113f</span> <span class="op">&lt;</span>+11<span class="op">&gt;</span>:    mov    %rsi,-0x10<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001143</span> <span class="op">&lt;</span>+15<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x0,%eax</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x0000000000001148 <span class="op">&lt;</span>+20<span class="op">&gt;</span>:    call   0x1129 <span class="op">&lt;</span>func_empty<span class="op">&gt;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000000000000114d</span> <span class="op">&lt;</span>+25<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x1,%eax</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001152</span> <span class="op">&lt;</span>+30<span class="op">&gt;</span>:    leave</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001153</span> <span class="op">&lt;</span>+31<span class="op">&gt;</span>:    ret</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/16gx</span> <span class="va">$rsp</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe3d0:</span> 0x00007fffffffe508      0x00000001ffffe508</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe3e0:</span> 0x00007fffffffe480      0x00007ffff7c2a1ca</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe3f0:</span> 0x00007fffffffe430      0x00007fffffffe508</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe400:</span> 0x0000000155554040      0x0000555555555134</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe410:</span> 0x00007fffffffe508      0xe3cd96d5ab71e4f9</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe420:</span> 0x0000000000000001      0x0000000000000000</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe430:</span> 0x0000555555557df8      0x00007ffff7ffd000</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe440:</span> 0xe3cd96d5a591e4f9      0xe3cd86af2173e4f9</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Stack after call.</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">continue</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 2, func_empty <span class="er">(</span><span class="kw">)</span> <span class="ex">at</span> demo.c:2</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">2</span>       {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x0000555555555129 <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     push   %rbp</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512a</span> <span class="op">&lt;</span>+1<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512d</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     mov    <span class="va">$0</span>xcafebabe,%eax</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555132</span> <span class="op">&lt;</span>+9<span class="op">&gt;</span>:     pop    %rbp</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555133</span> <span class="op">&lt;</span>+10<span class="op">&gt;</span>:    ret</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/16gx</span> <span class="va">$rsp</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe3c8:</span> 0x000055555555514d      0x00007fffffffe508</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe3d8:</span> 0x00000001ffffe508      0x00007fffffffe480</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe3e8:</span> 0x00007ffff7c2a1ca      0x00007fffffffe430</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe3f8:</span> 0x00007fffffffe508      0x0000000155554040</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe408:</span> 0x0000555555555134      0x00007fffffffe508</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe418:</span> 0xe3cd96d5ab71e4f9      0x0000000000000001</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe428:</span> 0x0000000000000000      0x0000555555557df8</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe438:</span> 0x00007ffff7ffd000      0xe3cd96d5a591e4f9</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># after call</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#   - the address of next instruction is saved to stack: 0x000055555555514d</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co">#   - 0x000055555555514d is main+25, the address to jump back after finish func_empty</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span> main</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="ex">Dump</span> of assembler code for function main:</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555134</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     push   %rbp</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555135</span> <span class="op">&lt;</span>+1<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555138</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     sub    <span class="va">$0</span>x10,%rsp</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513c</span> <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513f</span> <span class="op">&lt;</span>+11<span class="op">&gt;</span>:    mov    %rsi,-0x10<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555143</span> <span class="op">&lt;</span>+15<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x0,%eax</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555148</span> <span class="op">&lt;</span>+20<span class="op">&gt;</span>:    call   0x555555555129 <span class="op">&lt;</span>func_empty<span class="op">&gt;</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555514d</span> <span class="op">&lt;</span>+25<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x1,%eax</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555152</span> <span class="op">&lt;</span>+30<span class="op">&gt;</span>:    leave</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555153</span> <span class="op">&lt;</span>+31<span class="op">&gt;</span>:    ret</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Stack before ret.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">continue</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 3, 0x0000555555555133 in func_empty <span class="er">(</span><span class="kw">)</span> <span class="ex">at</span> demo.c:4</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">4</span>       }</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Dump</span> of assembler code for function func_empty:</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     push   %rbp</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512a</span> <span class="op">&lt;</span>+1<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512d</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     mov    <span class="va">$0</span>xcafebabe,%eax</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555132</span> <span class="op">&lt;</span>+9<span class="op">&gt;</span>:     pop    %rbp</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x0000555555555133 <span class="op">&lt;</span>+10<span class="op">&gt;</span>:    ret</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/16gx</span> <span class="va">$rsp</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe3c8:</span> 0x000055555555514d      0x00007fffffffe508</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe3d8:</span> 0x00000001ffffe508      0x00007fffffffe480</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe3e8:</span> 0x00007ffff7c2a1ca      0x00007fffffffe430</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe3f8:</span> 0x00007fffffffe508      0x0000000155554040</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe408:</span> 0x0000555555555134      0x00007fffffffe508</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe418:</span> 0xe3cd96d5ab71e4f9      0x0000000000000001</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe428:</span> 0x0000000000000000      0x0000555555557df8</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe438:</span> 0x00007ffff7ffd000      0xe3cd96d5a591e4f9</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Stack after ret.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">continue</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 4, main <span class="er">(</span><span class="va">argc</span><span class="op">=</span>1, <span class="va">argv</span><span class="op">=</span>0x7fffffffe508<span class="kw">)</span> <span class="ex">at</span> demo.c:9</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">9</span>           return 1<span class="kw">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span> </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Dump</span> of assembler code for function main:</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555134</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     push   %rbp</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555135</span> <span class="op">&lt;</span>+1<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555138</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     sub    <span class="va">$0</span>x10,%rsp</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513c</span> <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513f</span> <span class="op">&lt;</span>+11<span class="op">&gt;</span>:    mov    %rsi,-0x10<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555143</span> <span class="op">&lt;</span>+15<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x0,%eax</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555148</span> <span class="op">&lt;</span>+20<span class="op">&gt;</span>:    call   0x555555555129 <span class="op">&lt;</span>func_empty<span class="op">&gt;</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x000055555555514d <span class="op">&lt;</span>+25<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x1,%eax</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555152</span> <span class="op">&lt;</span>+30<span class="op">&gt;</span>:    leave</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555153</span> <span class="op">&lt;</span>+31<span class="op">&gt;</span>:    ret</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/16gx</span> <span class="va">$rsp</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe3d0:</span> 0x00007fffffffe508      0x00000001ffffe508</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe3e0:</span> 0x00007fffffffe480      0x00007ffff7c2a1ca</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe3f0:</span> 0x00007fffffffe430      0x00007fffffffe508</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe400:</span> 0x0000000155554040      0x0000555555555134</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe410:</span> 0x00007fffffffe508      0xe3cd96d5ab71e4f9</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe420:</span> 0x0000000000000001      0x0000000000000000</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe430:</span> 0x0000555555557df8      0x00007ffff7ffd000</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe440:</span> 0xe3cd96d5a591e4f9      0xe3cd86af2173e4f9</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="co"># after ret</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co">#   - 0x000055555555514d is pop from stack.</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="co">#   - then, current instruction jumps to 0x000055555555514d.</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="prolog-epilog">2. Prolog &amp; Epilog</h1>
 <p><strong>Prolog</strong> is a the code at the beginning of a function,
 which prepare the stack and registers for use within the function.</p>
 <p>Below is a typical example of a function prolog.</p>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">push</span>   <span class="op">%</span><span class="kw">rbp</span>        <span class="co">; Save the old base pointer on the stack</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">mov</span>    <span class="op">%</span><span class="kw">rsp</span><span class="op">,</span> <span class="op">%</span><span class="kw">rbp</span>  <span class="co">; Set the new base pointer to the current stack pointer</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">push</span>   <span class="op">%</span><span class="kw">rbp</span>        <span class="co">; Save the old base pointer on the stack</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">mov</span>    <span class="op">%</span><span class="kw">rsp</span><span class="op">,</span> <span class="op">%</span><span class="kw">rbp</span>  <span class="co">; Set the new base pointer to the current stack pointer</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <ul>
 <li><code>rbp</code>: <em>Base pointer, the base of the current stack
 frame. Provides a stable reference point for accessing function
@@ -258,38 +463,39 @@ parameters and local variables.</em></li>
 undo what the prolog did, which restores the stack and registers to the
 state they were in before the function was called.</p>
 <p>Below is a typical example of a function epilog.</p>
-<div class="sourceCode" id="cb2"><pre
-class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">mov</span>    <span class="op">$</span><span class="bn">0</span>x1<span class="op">,</span> <span class="op">%</span><span class="kw">eax</span>   <span class="co">; Set return value to 1 (in %eax)</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">pop</span>    <span class="op">%</span><span class="kw">rbp</span>         <span class="co">; Restore previous base pointer</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">ret</span>                 <span class="co">; Return to caller</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">mov</span>    <span class="op">$</span><span class="bn">0</span>x1<span class="op">,</span> <span class="op">%</span><span class="kw">eax</span>   <span class="co">; Set return value to 1 (in %eax)</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">pop</span>    <span class="op">%</span><span class="kw">rbp</span>         <span class="co">; Restore previous base pointer</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">ret</span>                 <span class="co">; Return to caller</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p>In the <strong>demo</strong> below, we will compile a simple function
 with gcc and then disassemble it using objdump.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">// file: function.c</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> func_empty<span class="op">()</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-O0</span> <span class="at">-c</span> function.c</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> function.o</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>0000000000000000 &lt;func_empty<span class="op">&gt;:</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>   0:   f3 <span class="dv">0</span><span class="er">f</span> <span class="dv">1</span><span class="er">e</span> fa             endbr64</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>   4:   55                      <span class="kw">push</span>   <span class="op">%</span><span class="kw">rbp</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>   5:   48 89 e5                mov    <span class="op">%</span><span class="kw">rsp</span><span class="op">,%</span><span class="kw">rbp</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>   8:   b8 <span class="dv">01</span> <span class="dv">00</span> <span class="dv">00</span> <span class="dv">00</span>          mov    <span class="op">$</span><span class="bn">0</span>x1<span class="op">,%</span><span class="kw">eax</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">d:</span>   5d                      <span class="kw">pop</span>    <span class="op">%</span><span class="kw">rbp</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">e:</span>   c3                      ret</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="arguments-local-variables">2. Arguments &amp; Local
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">// file: function.c</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> func_empty<span class="op">()</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-O0</span> <span class="at">-c</span> function.c</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> function.o</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>0000000000000000 &lt;func_empty<span class="op">&gt;:</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>   0:   f3 <span class="dv">0</span><span class="er">f</span> <span class="dv">1</span><span class="er">e</span> fa             endbr64</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>   4:   55                      <span class="kw">push</span>   <span class="op">%</span><span class="kw">rbp</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>   5:   48 89 e5                mov    <span class="op">%</span><span class="kw">rsp</span><span class="op">,%</span><span class="kw">rbp</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>   8:   b8 <span class="dv">01</span> <span class="dv">00</span> <span class="dv">00</span> <span class="dv">00</span>          mov    <span class="op">$</span><span class="bn">0</span>x1<span class="op">,%</span><span class="kw">eax</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">d:</span>   5d                      <span class="kw">pop</span>    <span class="op">%</span><span class="kw">rbp</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">e:</span>   c3                      ret</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="arguments-local-variables">3. Arguments &amp; Local
 Variables</h1>
 <p><strong>Local variables</strong> live on the stack for each function
 call, and their addresses are based on negative offsets from the base
@@ -297,17 +503,17 @@ pointer <code>rbp</code>.</p>
 <div class="columns">
 <div class="column">
 <p><strong>C++</strong></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">,</span> b<span class="op">,</span> c<span class="op">;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">,</span> b<span class="op">,</span> c<span class="op">;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span></code></pre></div>
 </div><div class="column">
 <p><strong>x86-64 Assembly</strong></p>
-<div class="sourceCode" id="cb7"><pre
-class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">sub</span>    <span class="op">$</span><span class="bn">0</span>x20<span class="op">,%</span><span class="kw">rsp</span>       <span class="co">; Reserve 32 bytes on the stack</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>movl   <span class="op">$</span><span class="bn">0</span>x1<span class="op">,-</span><span class="bn">0xc</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  <span class="co">; Variable a located at $rbp-0xc</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>movl   <span class="op">$</span><span class="bn">0</span>x2<span class="op">,-</span><span class="bn">0x8</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  <span class="co">; Variable b located at $rbp-0x8</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>movl   <span class="op">$</span><span class="bn">0</span>x3<span class="op">,-</span><span class="bn">0x4</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  <span class="co">; Variable c located at $rbp-0x4</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">sub</span>    <span class="op">$</span><span class="bn">0</span>x20<span class="op">,%</span><span class="kw">rsp</span>       <span class="co">; Reserve 32 bytes on the stack</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>movl   <span class="op">$</span><span class="bn">0</span>x1<span class="op">,-</span><span class="bn">0xc</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  <span class="co">; Variable a located at $rbp-0xc</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>movl   <span class="op">$</span><span class="bn">0</span>x2<span class="op">,-</span><span class="bn">0x8</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  <span class="co">; Variable b located at $rbp-0x8</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>movl   <span class="op">$</span><span class="bn">0</span>x3<span class="op">,-</span><span class="bn">0x4</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  <span class="co">; Variable c located at $rbp-0x4</span></span></code></pre></div>
 </div>
 </div>
 <p><strong>Function arguments</strong> are passed via registers first,
@@ -318,131 +524,131 @@ addresses are based on negative offsets from the base pointer
 <div class="columns">
 <div class="column">
 <p><strong>C++</strong></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>func<span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>func<span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span></span></code></pre></div>
 </div><div class="column">
 <p><strong>x86-64 Assembly</strong></p>
-<div class="sourceCode" id="cb9"><pre
-class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">; Save data to registers before call function</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">mov</span>    <span class="op">-</span><span class="bn">0x8</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">),%</span><span class="kw">esi</span>  <span class="co">; $esi = b</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">mov</span>    <span class="op">-</span><span class="bn">0xc</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">),%</span><span class="kw">edi</span>  <span class="co">; $edi = a</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">call</span>   <span class="dv">55</span> <span class="op">&lt;</span>main<span class="op">+</span><span class="bn">0x37</span><span class="op">&gt;</span>   <span class="co">; call func()</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>&lt;func<span class="op">&gt;:</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">; Get data from register after enter function</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">mov</span>    <span class="op">%</span><span class="kw">edi</span><span class="op">,-</span><span class="bn">0x14</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span> <span class="co">; argv1 = $edi = a</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">mov</span>    <span class="op">%</span><span class="kw">esi</span><span class="op">,-</span><span class="bn">0x18</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span> <span class="co">; argv2 = $esi = b</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">; Save data to registers before call function</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">mov</span>    <span class="op">-</span><span class="bn">0x8</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">),%</span><span class="kw">esi</span>  <span class="co">; $esi = b</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">mov</span>    <span class="op">-</span><span class="bn">0xc</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">),%</span><span class="kw">edi</span>  <span class="co">; $edi = a</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">call</span>   <span class="dv">55</span> <span class="op">&lt;</span>main<span class="op">+</span><span class="bn">0x37</span><span class="op">&gt;</span>   <span class="co">; call func()</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>&lt;func<span class="op">&gt;:</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">; Get data from register after enter function</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">mov</span>    <span class="op">%</span><span class="kw">edi</span><span class="op">,-</span><span class="bn">0x14</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span> <span class="co">; argv1 = $edi = a</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">mov</span>    <span class="op">%</span><span class="kw">esi</span><span class="op">,-</span><span class="bn">0x18</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span> <span class="co">; argv2 = $esi = b</span></span></code></pre></div>
 </div>
 </div>
 <p>In the <strong>demo</strong> below, we will examine a simple program
 that calls sum function.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">// file: main.c</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> argv1<span class="op">,</span> <span class="dt">int</span> argv2<span class="op">)</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> s <span class="op">=</span> argv1 <span class="op">+</span> argv2<span class="op">;</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> s<span class="op">;</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> argv<span class="op">)</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="op">{</span>    </span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> b <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> c <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    sum<span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-O0</span> <span class="at">-o</span> main main.c</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> <span class="at">--no-show-raw-insn</span> main</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>000000000000001e &lt;main<span class="op">&gt;:</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  1e:   <span class="kw">endbr64</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  22:   <span class="kw">push</span>   <span class="op">%</span><span class="kw">rbp</span>             </span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  23:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">rsp</span><span class="op">,%</span><span class="kw">rbp</span>        </span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  26:   <span class="kw">sub</span>    <span class="op">$</span><span class="bn">0</span>x20<span class="op">,%</span><span class="kw">rsp</span>       <span class="co">; Revere 32 bytes for local variables</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  2a:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">edi</span><span class="op">,-</span><span class="bn">0x14</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span> <span class="co">; Command-line argument: argc = $edi</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  2d:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">rsi</span><span class="op">,-</span><span class="bn">0x20</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span> <span class="co">; Command-line argument: argv = $rsi</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  31:   movl   <span class="op">$</span><span class="bn">0</span>x1<span class="op">,-</span><span class="bn">0xc</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  <span class="co">; a = 1</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  38:   movl   <span class="op">$</span><span class="bn">0</span>x2<span class="op">,-</span><span class="bn">0x8</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  <span class="co">; b = 2</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  3f:   movl   <span class="op">$</span><span class="bn">0</span>x3<span class="op">,-</span><span class="bn">0x4</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  <span class="co">; c = 3</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  46:   <span class="kw">mov</span>    <span class="op">-</span><span class="bn">0x8</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">),%</span><span class="kw">edx</span>  <span class="co">; $edx = b = 2</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  49:   <span class="kw">mov</span>    <span class="op">-</span><span class="bn">0xc</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">),%</span><span class="kw">eax</span>  <span class="co">; $eax = a = 1</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  4c:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">edx</span><span class="op">,%</span><span class="kw">esi</span>        <span class="co">; $esi = $edx = b = 2</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  4e:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">eax</span><span class="op">,%</span><span class="kw">edi</span>        <span class="co">; $edi = $eax = a = 1</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  50:   <span class="cf">call</span>   <span class="dv">55</span> <span class="op">&lt;</span>main<span class="op">+</span><span class="bn">0x37</span><span class="op">&gt;</span>   <span class="co">; call sum()</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  55:   <span class="kw">mov</span>    <span class="op">$</span><span class="bn">0</span>x0<span class="op">,%</span><span class="kw">eax</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  5a:   <span class="kw">leave</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  5b:   <span class="cf">ret</span></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>0000000000000000 &lt;sum<span class="op">&gt;:</span></span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>   0:   <span class="kw">endbr64</span></span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>   4:   <span class="kw">push</span>   <span class="op">%</span><span class="kw">rbp</span>             <span class="co">; Prolog</span></span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>   5:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">rsp</span><span class="op">,%</span><span class="kw">rbp</span>        <span class="co">; Prolog</span></span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>   8:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">edi</span><span class="op">,-</span><span class="bn">0x14</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span> <span class="co">; argv1 = $edi = a = 1</span></span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>   <span class="fu">b:</span>   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">esi</span><span class="op">,-</span><span class="bn">0x18</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span> <span class="co">; argv2 = $esi = b = 2</span></span>
-<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>   <span class="fu">e:</span>   <span class="kw">mov</span>    <span class="op">-</span><span class="bn">0x14</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">),%</span><span class="kw">edx</span> <span class="co">; $edx = argv1 = 1</span></span>
-<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>  11:   <span class="kw">mov</span>    <span class="op">-</span><span class="bn">0x18</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">),%</span><span class="kw">eax</span> <span class="co">; $eax = argv2 = 2</span></span>
-<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>  14:   <span class="kw">add</span>    <span class="op">%</span><span class="kw">edx</span><span class="op">,%</span><span class="kw">eax</span>        <span class="co">; $eax = $eax + $edx = 2 + 1 = 3</span></span>
-<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>  16:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">eax</span><span class="op">,-</span><span class="bn">0x4</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  <span class="co">; c = $eax = 3</span></span>
-<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>  19:   <span class="kw">mov</span>    <span class="op">-</span><span class="bn">0x4</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">),%</span><span class="kw">eax</span>  <span class="co">; Epilog</span></span>
-<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>  1c:   <span class="kw">pop</span>    <span class="op">%</span><span class="kw">rbp</span>             <span class="co">; Epilog</span></span>
-<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>  1d:   <span class="cf">ret</span>                     <span class="co">; Epilog</span></span>
-<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="examine-call-stack">2. Examine Call Stack</h1>
-<h2 id="arguments-local-variables-1">2.1. Arguments &amp; Local
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">// file: main.c</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> argv1<span class="op">,</span> <span class="dt">int</span> argv2<span class="op">)</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> s <span class="op">=</span> argv1 <span class="op">+</span> argv2<span class="op">;</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> s<span class="op">;</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> argv<span class="op">)</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="op">{</span>    </span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> b <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> c <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    sum<span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-O0</span> <span class="at">-o</span> main main.c</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> <span class="at">--no-show-raw-insn</span> main</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>000000000000001e &lt;main<span class="op">&gt;:</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  1e:   <span class="kw">endbr64</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  22:   <span class="kw">push</span>   <span class="op">%</span><span class="kw">rbp</span>             </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  23:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">rsp</span><span class="op">,%</span><span class="kw">rbp</span>        </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  26:   <span class="kw">sub</span>    <span class="op">$</span><span class="bn">0</span>x20<span class="op">,%</span><span class="kw">rsp</span>       <span class="co">; Revere 32 bytes for local variables</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  2a:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">edi</span><span class="op">,-</span><span class="bn">0x14</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span> <span class="co">; Command-line argument: argc = $edi</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  2d:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">rsi</span><span class="op">,-</span><span class="bn">0x20</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span> <span class="co">; Command-line argument: argv = $rsi</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  31:   movl   <span class="op">$</span><span class="bn">0</span>x1<span class="op">,-</span><span class="bn">0xc</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  <span class="co">; a = 1</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  38:   movl   <span class="op">$</span><span class="bn">0</span>x2<span class="op">,-</span><span class="bn">0x8</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  <span class="co">; b = 2</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  3f:   movl   <span class="op">$</span><span class="bn">0</span>x3<span class="op">,-</span><span class="bn">0x4</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  <span class="co">; c = 3</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  46:   <span class="kw">mov</span>    <span class="op">-</span><span class="bn">0x8</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">),%</span><span class="kw">edx</span>  <span class="co">; $edx = b = 2</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  49:   <span class="kw">mov</span>    <span class="op">-</span><span class="bn">0xc</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">),%</span><span class="kw">eax</span>  <span class="co">; $eax = a = 1</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  4c:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">edx</span><span class="op">,%</span><span class="kw">esi</span>        <span class="co">; $esi = $edx = b = 2</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  4e:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">eax</span><span class="op">,%</span><span class="kw">edi</span>        <span class="co">; $edi = $eax = a = 1</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  50:   <span class="cf">call</span>   <span class="dv">55</span> <span class="op">&lt;</span>main<span class="op">+</span><span class="bn">0x37</span><span class="op">&gt;</span>   <span class="co">; call sum()</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>  55:   <span class="kw">mov</span>    <span class="op">$</span><span class="bn">0</span>x0<span class="op">,%</span><span class="kw">eax</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  5a:   <span class="kw">leave</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>  5b:   <span class="cf">ret</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>0000000000000000 &lt;sum<span class="op">&gt;:</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>   0:   <span class="kw">endbr64</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>   4:   <span class="kw">push</span>   <span class="op">%</span><span class="kw">rbp</span>             <span class="co">; Prolog</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>   5:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">rsp</span><span class="op">,%</span><span class="kw">rbp</span>        <span class="co">; Prolog</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>   8:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">edi</span><span class="op">,-</span><span class="bn">0x14</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span> <span class="co">; argv1 = $edi = a = 1</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>   <span class="fu">b:</span>   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">esi</span><span class="op">,-</span><span class="bn">0x18</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span> <span class="co">; argv2 = $esi = b = 2</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>   <span class="fu">e:</span>   <span class="kw">mov</span>    <span class="op">-</span><span class="bn">0x14</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">),%</span><span class="kw">edx</span> <span class="co">; $edx = argv1 = 1</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>  11:   <span class="kw">mov</span>    <span class="op">-</span><span class="bn">0x18</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">),%</span><span class="kw">eax</span> <span class="co">; $eax = argv2 = 2</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>  14:   <span class="kw">add</span>    <span class="op">%</span><span class="kw">edx</span><span class="op">,%</span><span class="kw">eax</span>        <span class="co">; $eax = $eax + $edx = 2 + 1 = 3</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>  16:   <span class="kw">mov</span>    <span class="op">%</span><span class="kw">eax</span><span class="op">,-</span><span class="bn">0x4</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>  <span class="co">; c = $eax = 3</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>  19:   <span class="kw">mov</span>    <span class="op">-</span><span class="bn">0x4</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">),%</span><span class="kw">eax</span>  <span class="co">; Epilog</span></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>  1c:   <span class="kw">pop</span>    <span class="op">%</span><span class="kw">rbp</span>             <span class="co">; Epilog</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>  1d:   <span class="cf">ret</span>                     <span class="co">; Epilog</span></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="examine-call-stack">4. Examine Call Stack</h1>
+<h2 id="arguments-local-variables-1">4.1. Arguments &amp; Local
 Variables</h2>
 <p>Examine the memory locations of function arguments and local
 variables by using the <strong>rbp</strong> register as a reference
 point.</p>
-<div class="sourceCode" id="cb13"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb main</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="fu">sum</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1 at 0x1131</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Starting</span> program: /root/demo/main </span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1, 0x0000555555555131 in sum <span class="er">(</span><span class="kw">)</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Dump</span> of assembler code for function sum:</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512d</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     push   %rbp</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512e</span> <span class="op">&lt;</span>+5<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x0000555555555131 <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x14<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span> <span class="kw">;</span> <span class="ex">argv1</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555134</span> <span class="op">&lt;</span>+11<span class="op">&gt;</span>:    mov    %esi,-0x18<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span> <span class="kw">;</span> <span class="ex">argv2</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555137</span> <span class="op">&lt;</span>+14<span class="op">&gt;</span>:    mov    <span class="at">-0x14</span><span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span><span class="ex">,%edx</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513a</span> <span class="op">&lt;</span>+17<span class="op">&gt;</span>:    mov    <span class="at">-0x18</span><span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span><span class="ex">,%eax</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513d</span> <span class="op">&lt;</span>+20<span class="op">&gt;</span>:    add    %edx,%eax</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513f</span> <span class="op">&lt;</span>+22<span class="op">&gt;</span>:    mov    %eax,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span>  <span class="kw">;</span> <span class="ex">variable</span> s</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555142</span> <span class="op">&lt;</span>+25<span class="op">&gt;</span>:    mov    <span class="at">-0x4</span><span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span><span class="ex">,%eax</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555145</span> <span class="op">&lt;</span>+28<span class="op">&gt;</span>:    pop    %rbp</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555146</span> <span class="op">&lt;</span>+29<span class="op">&gt;</span>:    ret</span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="ex">End</span> of assembler dump.</span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">*</span><span class="er">(</span><span class="fu">sum</span>+28<span class="kw">)</span></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 2 at 0x555555555145</span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">continue</span></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 2, 0x0000555555555145 in sum <span class="er">(</span><span class="kw">)</span></span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/24bx</span> <span class="va">$rbp</span>-24</span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde08:</span> 0x02    0x00    0x00    0x00    0x01    0x00    0x00    0x00</span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde10:</span> 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde18:</span> 0x00    0x00    0x00    0x00    0x03    0x00    0x00    0x00</span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb main</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="fu">sum</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1 at 0x1131</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Starting</span> program: /root/demo/main </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1, 0x0000555555555131 in sum <span class="er">(</span><span class="kw">)</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Dump</span> of assembler code for function sum:</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512d</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     push   %rbp</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512e</span> <span class="op">&lt;</span>+5<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x0000555555555131 <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x14<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span> <span class="kw">;</span> <span class="ex">argv1</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555134</span> <span class="op">&lt;</span>+11<span class="op">&gt;</span>:    mov    %esi,-0x18<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span> <span class="kw">;</span> <span class="ex">argv2</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555137</span> <span class="op">&lt;</span>+14<span class="op">&gt;</span>:    mov    <span class="at">-0x14</span><span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span><span class="ex">,%edx</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513a</span> <span class="op">&lt;</span>+17<span class="op">&gt;</span>:    mov    <span class="at">-0x18</span><span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span><span class="ex">,%eax</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513d</span> <span class="op">&lt;</span>+20<span class="op">&gt;</span>:    add    %edx,%eax</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513f</span> <span class="op">&lt;</span>+22<span class="op">&gt;</span>:    mov    %eax,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span>  <span class="kw">;</span> <span class="ex">variable</span> s</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555142</span> <span class="op">&lt;</span>+25<span class="op">&gt;</span>:    mov    <span class="at">-0x4</span><span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span><span class="ex">,%eax</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555145</span> <span class="op">&lt;</span>+28<span class="op">&gt;</span>:    pop    %rbp</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555146</span> <span class="op">&lt;</span>+29<span class="op">&gt;</span>:    ret</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="ex">End</span> of assembler dump.</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">*</span><span class="er">(</span><span class="fu">sum</span>+28<span class="kw">)</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 2 at 0x555555555145</span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">continue</span></span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 2, 0x0000555555555145 in sum <span class="er">(</span><span class="kw">)</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/24bx</span> <span class="va">$rbp</span>-24</span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde08:</span> 0x02    0x00    0x00    0x00    0x01    0x00    0x00    0x00</span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde10:</span> 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde18:</span> 0x00    0x00    0x00    0x00    0x03    0x00    0x00    0x00</span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p>Due to little-endian order, 4-byte integers are stored in memory with
 the least significant byte first, which is the reverse of how we usually
 write numbers.</p>
@@ -459,69 +665,69 @@ block-beta
     pad1["padding"]:8
     pad2["padding"]:4 s["s"]:4
 </pre>
-<h2 id="call-chain">2.1. Call chain</h2>
+<h2 id="call-chain">4.2. Call chain</h2>
 <p>Examine the call chain with by using the <strong>rip</strong> and
 <strong>rsp</strong> registers.</p>
-<div class="sourceCode" id="cb14"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">//</span> file: main.c</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_0<span class="er">(</span><span class="kw">);</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_1<span class="er">(</span><span class="kw">);</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_2<span class="er">(</span><span class="kw">);</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="ex">int</span> main<span class="er">(</span><span class="ex">int</span> argc, char<span class="pp">**</span> argv<span class="kw">)</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span>    </span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">function_0()</span><span class="kw">;</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="kw">;</span></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_0<span class="er">(</span><span class="kw">)</span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">function_1()</span><span class="kw">;</span></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_1<span class="er">(</span><span class="kw">)</span></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">function_2()</span><span class="kw">;</span></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_2<span class="er">(</span><span class="kw">)</span></span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
-<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-O0</span> <span class="at">-o</span> main main.c</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb main</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">function_2</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1 at 0x117f</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Starting</span> program: /root/demo/main </span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1, 0x000055555555517f in function_2 <span class="er">(</span><span class="kw">)</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">bt</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#0  0x000055555555517f in function_2 ()</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#1  0x0000555555555174 in function_1 ()</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#2  0x000055555555515f in function_0 ()</span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#3  0x0000555555555146 in main ()</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/a</span> <span class="va">$rip</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="ex">0x55555555517f</span> <span class="op">&lt;</span>function_2+8<span class="op">&gt;</span>:  0x1e0ff30000c35d90</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/10a</span> <span class="va">$rsp</span></span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde10:</span> 0x7fffffffde20  0x555555555174 <span class="op">&lt;</span>function_1+18<span class="op">&gt;</span></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde20:</span> 0x7fffffffde30  0x55555555515f <span class="op">&lt;</span>function_0+18<span class="op">&gt;</span></span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde30:</span> 0x7fffffffde50  0x555555555146 <span class="op">&lt;</span>main+29<span class="op">&gt;</span></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde40:</span> 0x7fffffffdf78  0x1ffffdf78</span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde50:</span> 0x7fffffffdef0  0x7ffff7c2a1ca <span class="op">&lt;</span>__libc_start_call_main+122<span class="op">&gt;</span></span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">//</span> file: main.c</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_0<span class="er">(</span><span class="kw">);</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_1<span class="er">(</span><span class="kw">);</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_2<span class="er">(</span><span class="kw">);</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="ex">int</span> main<span class="er">(</span><span class="ex">int</span> argc, char<span class="pp">**</span> argv<span class="kw">)</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span>    </span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">function_0()</span><span class="kw">;</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="kw">;</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_0<span class="er">(</span><span class="kw">)</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">function_1()</span><span class="kw">;</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_1<span class="er">(</span><span class="kw">)</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">function_2()</span><span class="kw">;</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="ex">void</span> function_2<span class="er">(</span><span class="kw">)</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-O0</span> <span class="at">-o</span> main main.c</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb main</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">function_2</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1 at 0x117f</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Starting</span> program: /root/demo/main </span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1, 0x000055555555517f in function_2 <span class="er">(</span><span class="kw">)</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">bt</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="co">#0  0x000055555555517f in function_2 ()</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co">#1  0x0000555555555174 in function_1 ()</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co">#2  0x000055555555515f in function_0 ()</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="co">#3  0x0000555555555146 in main ()</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/a</span> <span class="va">$rip</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="ex">0x55555555517f</span> <span class="op">&lt;</span>function_2+8<span class="op">&gt;</span>:  0x1e0ff30000c35d90</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/10a</span> <span class="va">$rsp</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde10:</span> 0x7fffffffde20  0x555555555174 <span class="op">&lt;</span>function_1+18<span class="op">&gt;</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde20:</span> 0x7fffffffde30  0x55555555515f <span class="op">&lt;</span>function_0+18<span class="op">&gt;</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde30:</span> 0x7fffffffde50  0x555555555146 <span class="op">&lt;</span>main+29<span class="op">&gt;</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde40:</span> 0x7fffffffdf78  0x1ffffdf78</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffde50:</span> 0x7fffffffdef0  0x7ffff7c2a1ca <span class="op">&lt;</span>__libc_start_call_main+122<span class="op">&gt;</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <pre class="mermaid">
 flowchart RL
     subgraph rip

@@ -4,7 +4,221 @@ subtitle: "**Examining C Function Calls at the x86 Assembly Level**"
 ---
 
 
-# 1. Prolog & Epilog
+# 1. Call & Ret
+In x86-64 assembly, function calls are handled using two simple instructions:
+
+- `call`:
+    - Push the return address onto the stack.
+    - Jump to the target function.
+- `ret`:
+    - Pops the return address from the stack.
+    - Jumps to the return address.
+
+```c
+// file: demo.c
+
+int func_empty()
+{
+    return 0xcafebabe;
+}
+
+int main(int argc, char** argv)
+{
+    func_empty();
+    return 1;
+}
+  
+```
+
+```sh
+  
+$ gcc -g -O0 -fcf-protection=none -o demo demo.c
+$ gdb demo
+  
+```
+
+```sh
+  
+(gdb) disassemble main
+   0x0000000000001134 <+0>:     push   %rbp
+   0x0000000000001135 <+1>:     mov    %rsp,%rbp
+   0x0000000000001138 <+4>:     sub    $0x10,%rsp
+   0x000000000000113c <+8>:     mov    %edi,-0x4(%rbp)
+   0x000000000000113f <+11>:    mov    %rsi,-0x10(%rbp)
+   0x0000000000001143 <+15>:    mov    $0x0,%eax
+   0x0000000000001148 <+20>:    call   0x1129 <func_empty>
+   0x000000000000114d <+25>:    mov    $0x1,%eax
+   0x0000000000001152 <+30>:    leave
+   0x0000000000001153 <+31>:    ret
+
+(gdb) disassemble func_empty
+   0x0000000000001129 <+0>:     push   %rbp
+   0x000000000000112a <+1>:     mov    %rsp,%rbp
+   0x000000000000112d <+4>:     mov    $0xcafebabe,%eax
+   0x0000000000001132 <+9>:     pop    %rbp
+   0x0000000000001133 <+10>:    ret
+  
+```
+
+- Set breakpoints.
+```sh
+  
+# set breakpoint before call
+(gdb) break *main+20
+Breakpoint 1 at 0x1148: file demo.c, line 8.
+
+# set breakpoint after call
+(gdb) break *func_empty+0
+Breakpoint 2 at 0x1129: file demo.c, line 2.
+
+# set breakpoint before ret
+(gdb) break *func_empty+10
+Breakpoint 3 at 0x1133: file demo.c, line 4.
+
+# set breakpoint before ret
+(gdb) break *main+25
+Breakpoint 4 at 0x114d: file demo.c, line 9.
+  
+```
+
+- Stack before call.
+```sh
+  
+(gdb) run
+Breakpoint 1, 0x0000555555555148 in main (argc=1, argv=0x7fffffffe508) at demo.c:8
+8           func_empty();
+
+(gdb) disassemble
+   0x0000000000001134 <+0>:     push   %rbp
+   0x0000000000001135 <+1>:     mov    %rsp,%rbp
+   0x0000000000001138 <+4>:     sub    $0x10,%rsp
+   0x000000000000113c <+8>:     mov    %edi,-0x4(%rbp)
+   0x000000000000113f <+11>:    mov    %rsi,-0x10(%rbp)
+   0x0000000000001143 <+15>:    mov    $0x0,%eax
+=> 0x0000000000001148 <+20>:    call   0x1129 <func_empty>
+   0x000000000000114d <+25>:    mov    $0x1,%eax
+   0x0000000000001152 <+30>:    leave
+   0x0000000000001153 <+31>:    ret
+
+(gdb) x/16gx $rsp
+0x7fffffffe3d0: 0x00007fffffffe508      0x00000001ffffe508
+0x7fffffffe3e0: 0x00007fffffffe480      0x00007ffff7c2a1ca
+0x7fffffffe3f0: 0x00007fffffffe430      0x00007fffffffe508
+0x7fffffffe400: 0x0000000155554040      0x0000555555555134
+0x7fffffffe410: 0x00007fffffffe508      0xe3cd96d5ab71e4f9
+0x7fffffffe420: 0x0000000000000001      0x0000000000000000
+0x7fffffffe430: 0x0000555555557df8      0x00007ffff7ffd000
+0x7fffffffe440: 0xe3cd96d5a591e4f9      0xe3cd86af2173e4f9
+  
+```
+
+- Stack after call.
+```sh
+  
+(gdb) continue
+Breakpoint 2, func_empty () at demo.c:2
+2       {
+
+(gdb) disassemble 
+=> 0x0000555555555129 <+0>:     push   %rbp
+   0x000055555555512a <+1>:     mov    %rsp,%rbp
+   0x000055555555512d <+4>:     mov    $0xcafebabe,%eax
+   0x0000555555555132 <+9>:     pop    %rbp
+   0x0000555555555133 <+10>:    ret
+
+(gdb) x/16gx $rsp
+0x7fffffffe3c8: 0x000055555555514d      0x00007fffffffe508
+0x7fffffffe3d8: 0x00000001ffffe508      0x00007fffffffe480
+0x7fffffffe3e8: 0x00007ffff7c2a1ca      0x00007fffffffe430
+0x7fffffffe3f8: 0x00007fffffffe508      0x0000000155554040
+0x7fffffffe408: 0x0000555555555134      0x00007fffffffe508
+0x7fffffffe418: 0xe3cd96d5ab71e4f9      0x0000000000000001
+0x7fffffffe428: 0x0000000000000000      0x0000555555557df8
+0x7fffffffe438: 0x00007ffff7ffd000      0xe3cd96d5a591e4f9
+
+# after call
+#   - the address of next instruction is saved to stack: 0x000055555555514d
+#   - 0x000055555555514d is main+25, the address to jump back after finish func_empty
+
+(gdb) disassemble main
+Dump of assembler code for function main:
+   0x0000555555555134 <+0>:     push   %rbp
+   0x0000555555555135 <+1>:     mov    %rsp,%rbp
+   0x0000555555555138 <+4>:     sub    $0x10,%rsp
+   0x000055555555513c <+8>:     mov    %edi,-0x4(%rbp)
+   0x000055555555513f <+11>:    mov    %rsi,-0x10(%rbp)
+   0x0000555555555143 <+15>:    mov    $0x0,%eax
+   0x0000555555555148 <+20>:    call   0x555555555129 <func_empty>
+   0x000055555555514d <+25>:    mov    $0x1,%eax
+   0x0000555555555152 <+30>:    leave
+   0x0000555555555153 <+31>:    ret
+  
+```
+
+- Stack before ret.
+```sh
+  
+(gdb) continue
+Breakpoint 3, 0x0000555555555133 in func_empty () at demo.c:4
+4       }
+
+(gdb) disassemble
+Dump of assembler code for function func_empty:
+   0x0000555555555129 <+0>:     push   %rbp
+   0x000055555555512a <+1>:     mov    %rsp,%rbp
+   0x000055555555512d <+4>:     mov    $0xcafebabe,%eax
+   0x0000555555555132 <+9>:     pop    %rbp
+=> 0x0000555555555133 <+10>:    ret
+
+(gdb) x/16gx $rsp
+0x7fffffffe3c8: 0x000055555555514d      0x00007fffffffe508
+0x7fffffffe3d8: 0x00000001ffffe508      0x00007fffffffe480
+0x7fffffffe3e8: 0x00007ffff7c2a1ca      0x00007fffffffe430
+0x7fffffffe3f8: 0x00007fffffffe508      0x0000000155554040
+0x7fffffffe408: 0x0000555555555134      0x00007fffffffe508
+0x7fffffffe418: 0xe3cd96d5ab71e4f9      0x0000000000000001
+0x7fffffffe428: 0x0000000000000000      0x0000555555557df8
+0x7fffffffe438: 0x00007ffff7ffd000      0xe3cd96d5a591e4f9
+  
+```
+
+- Stack after ret.
+```sh
+  
+(gdb) continue
+Breakpoint 4, main (argc=1, argv=0x7fffffffe508) at demo.c:9
+9           return 1;
+
+(gdb) disassemble 
+Dump of assembler code for function main:
+   0x0000555555555134 <+0>:     push   %rbp
+   0x0000555555555135 <+1>:     mov    %rsp,%rbp
+   0x0000555555555138 <+4>:     sub    $0x10,%rsp
+   0x000055555555513c <+8>:     mov    %edi,-0x4(%rbp)
+   0x000055555555513f <+11>:    mov    %rsi,-0x10(%rbp)
+   0x0000555555555143 <+15>:    mov    $0x0,%eax
+   0x0000555555555148 <+20>:    call   0x555555555129 <func_empty>
+=> 0x000055555555514d <+25>:    mov    $0x1,%eax
+   0x0000555555555152 <+30>:    leave
+   0x0000555555555153 <+31>:    ret
+
+(gdb) x/16gx $rsp
+0x7fffffffe3d0: 0x00007fffffffe508      0x00000001ffffe508
+0x7fffffffe3e0: 0x00007fffffffe480      0x00007ffff7c2a1ca
+0x7fffffffe3f0: 0x00007fffffffe430      0x00007fffffffe508
+0x7fffffffe400: 0x0000000155554040      0x0000555555555134
+0x7fffffffe410: 0x00007fffffffe508      0xe3cd96d5ab71e4f9
+0x7fffffffe420: 0x0000000000000001      0x0000000000000000
+0x7fffffffe430: 0x0000555555557df8      0x00007ffff7ffd000
+0x7fffffffe440: 0xe3cd96d5a591e4f9      0xe3cd86af2173e4f9
+
+# after ret
+#   - 0x000055555555514d is pop from stack.
+#   - then, current instruction jumps to 0x000055555555514d.
+  
+```
+
+# 2. Prolog & Epilog
 **Prolog** is a the code at the beginning of a function, which prepare the stack and registers for use within the function.  
 
 Below is a typical example of a function prolog.
@@ -60,7 +274,7 @@ $ objdump --disassemble function.o
 ```
 
 
-# 2. Arguments & Local Variables
+# 3. Arguments & Local Variables
 **Local variables** live on the stack for each function call, and their addresses are based on negative offsets from the base pointer `rbp`.  
 
 :::::::::::::: {.columns}
@@ -181,8 +395,8 @@ $ objdump --disassemble --no-show-raw-insn main
 ```
 
 
-# 2. Examine Call Stack
-## 2.1. Arguments & Local Variables
+# 4. Examine Call Stack
+## 4.1. Arguments & Local Variables
 Examine the memory locations of function arguments and local variables by using the **rbp** register as a reference point.
 
 ```sh
@@ -241,7 +455,7 @@ block-beta
 </pre>
 
 
-## 2.1. Call chain
+## 4.2. Call chain
 Examine the call chain with by using the **rip** and **rsp** registers.
 ```sh
   
