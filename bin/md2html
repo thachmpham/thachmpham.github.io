@@ -88,7 +88,7 @@ pandoc -f markdown -t html -s \
 # generate_post elf
 # generate_post virtual-addr-elf-offset
 # generate_post gdb-write-pp
-generate_post asm-callstack
+# generate_post asm-callstack
 
 
 # ====  BASHDB
@@ -96,7 +96,7 @@ generate_post asm-callstack
 
 
 # ====  Linux Kernel
-# generate_post kernel_build
+generate_post kernel_build
 # generate_post kernel_debug_gdb
 # generate_post kernel_user_to_kernel
 

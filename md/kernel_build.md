@@ -2,15 +2,10 @@
 title:  "Build & Run Linux Kernel"
 ---
 
-Contents:
+# 1. Build Kernel
+Set up a docker container with essential packages installed.
 
-- Build kernel with docker.
-- Build a filesystem image with buildroot.
-- Run kernel with qemu.
-
-
-# 1. Docker
-Set up a docker container as a build machine with essential packages installed.
+- Dockerfile.
 
 ```Dockerfile
   
@@ -25,16 +20,14 @@ CMD ["/bin/bash"]
   
 ```
 
-
-# 2. Build Kernel
-Build the Linux kernel using the docker container.
-
+- Build docker image.
 ```sh
   
 $ docker build --tag kernel_builder .
   
 ```
 
+- Run docker container.
 ```sh
   
 $ mkdir /root/kernel
@@ -42,6 +35,7 @@ $ docker run -it -v /root/kernel:/root/kernel --name kbuilder kernel_builder
   
 ```
 
+- Download linux kernel source code.
 ```sh
   
 $ cd /root/kernel
@@ -50,9 +44,10 @@ $ tar xf linux-5.15.186.tar.xz
   
 ```
 
+- Build linux kernel.
 ```sh
   
-$ docker exec --interactive --tty kbuilder bash
+$ docker exec -it kbuilder bash
 
 $ cd /root/kernel/linux-5.15.186
 $ make defconfig
@@ -68,9 +63,19 @@ Kernel: arch/x86/boot/bzImage is ready  (#1)
   
 ```
 
+- Run linux kernel with QEMU.
+```sh
+  
+$ qemu-system-x86_64 -boot order=c -m 2048M \
+    -kernel /root/kernel/linux-5.15.186/arch/x86/boot/bzImage \    
+    -append "root=/dev/sda rw console=ttyS0,115200 nokaslr" \
+    -nographic
+  
+```
 
-# 3. Build Filesystem Image
-Build an EXT filesystem image using **buildroot** and the docker container.
+
+# 2. Build Filesystem Image
+- Download buildroot.
 ```sh
   
 $ cd /root/kernel
@@ -79,6 +84,7 @@ $ tar xf buildroot-2025.05.tar.gz
   
 ```
 
+- Build buildroot in the docker container.
 ```sh
   
 $ cd buildroot-2025.05
@@ -106,9 +112,7 @@ $ make -j `nproc`
   
 ```
 
-
-# 4. Run
-Run the kernel with QEMU.
+- Run the kernel on QEMU, with the filesystem image.
 ```sh
   
 $ qemu-system-x86_64 -boot order=c -m 2048M \
@@ -122,7 +126,7 @@ $ qemu-system-x86_64 -boot order=c -m 2048M \
 - To exit QEMU: Ctrl + A, X.
 
 
-# 5. Hello World Program
+# 3. Hello World Program
 Build the program on the host, then copy it to the QEMU VM and run it there.
 
 File: hello.c
