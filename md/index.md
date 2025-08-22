@@ -101,10 +101,15 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 <br>
 
 
-## 5. Tools
+## 5. Tips
 ### 5.1. Diagram
 | |
 |:-----------------|----------------:|
 | [PlantUML](html/plantuml.html) | *(uml)* |
 | [Graphviz](html/graphviz.html) | *(dot)* |
+
+
+### 5.2. Docker
+| [Docker Container with SSH Access](html/docker-ssh.html) | *(docker ssh)* |
+
 
