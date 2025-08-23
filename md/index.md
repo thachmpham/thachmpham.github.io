@@ -51,7 +51,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 <br>
 
 
-## 3. Debug
+## 3. Software Debugging
 ### 3.1. C/C++
 | |
 |:-----------------|----------------:|
@@ -68,14 +68,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Method for Printing Complex Data](html/gdb-write-pp.html)             | *(gdb pretty-printer)*   |
 | [Modify Return Values of Libc Functions](html/ld_preload.html) | *(ld_preload dlsym)* |
 
-
-### 3.2. Bash
-| |
-|:-----------------|----------------:|
-| [Walkthrough of Bash Script Execution](html/bashdb.html) | *(bashdb)* |
-
-
-### 3.3. Linux
+### 3.2. Linux
 | |
 |:-----------------|----------------:|
 | [Build & Run Linux Kernel](html/kernel_build.html) | *(kernel buildroot qemu)* |
@@ -83,10 +76,15 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [From User Space to Kernel Space](html/kernel_user_to_kernel.html) | *(user kernel space gdb)* |
 | [Reproduce EAGAIN TIPC Socket Error](html/tipc_eagain.html) | *(tipc overload socket buffer)* |
 
+### 3.3. Bash
+| |
+|:-----------------|----------------:|
+| [Walkthrough of Bash Script](html/bashdb.html) | *(bashdb)* |
+
 <br>
 
 
-## 5. Cheatsheets
+## 4. Cheatsheets
 | |
 |:-----------------|----------------:|
 | [PlantUML](html/plantuml.html) | *(uml)* |
