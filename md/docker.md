@@ -1,10 +1,11 @@
 ---
-title:  'Docker Container with SSH Access'
+title:  'Docker'
 ---
 
-Setup a docker container accessible via SSH from other hosts.
+# 1. Manual
 
-# 1. Docker Image
+# 2. Tasks
+## 2.1. Setup a docker container accessible via SSH from other hosts.
 - Dockerfile.
 ```Dockerfile
   
@@ -32,17 +33,21 @@ CMD ["/usr/sbin/sshd", "-D"]
   
 ```
 
+- Build docker image
+```sh
+  
+$ docker build -t ubuntu20.04 .
+  
+```
 
-# 2. Docker Container
-- Run docker container with port forwarding, port 2222 on host binds to port 22 on container.
+- Build 
 ```sh
   
 $ docker run -d -p 2222:22 -v /root/repo:/root/repo --name pc --hostname pc ubuntu20.04
   
 ```
 
-
-# 3. SSH
+- SSH.
 ```sh
   
 $ ssh root@<host_ip> -p 2222

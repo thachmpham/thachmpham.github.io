@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Docker Container with SSH Access</title>
+  <title>Docker</title>
   <style>
     html {
       color: #1a1a1a;
@@ -240,10 +240,13 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Docker Container with SSH Access</h1>
+<h1 class="title">Docker</h1>
 </header>
-<p>Setup a docker container accessible via SSH from other hosts.</p>
-<h1 id="docker-image">1. Docker Image</h1>
+<h1 id="manual">1. Manual</h1>
+<h1 id="tasks">2. Tasks</h1>
+<h2
+id="setup-a-docker-container-accessible-via-ssh-from-other-hosts.">2.1.
+Setup a docker container accessible via SSH from other hosts.</h2>
 <ul>
 <li>Dockerfile.</li>
 </ul>
@@ -271,18 +274,24 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb1-
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Start SSH service</span></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;/usr/sbin/sshd&quot;</span>, <span class="st">&quot;-D&quot;</span>]</span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="docker-container">2. Docker Container</h1>
 <ul>
-<li>Run docker container with port forwarding, port 2222 on host binds
-to port 22 on container.</li>
+<li>Build docker image</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker run <span class="at">-d</span> <span class="at">-p</span> 2222:22 <span class="at">-v</span> /root/repo:/root/repo <span class="at">--name</span> pc <span class="at">--hostname</span> pc ubuntu20.04</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker build <span class="at">-t</span> ubuntu20.04 .</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="ssh">3. SSH</h1>
+<ul>
+<li>Build</li>
+</ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ssh root@<span class="op">&lt;</span>host_ip<span class="op">&gt;</span> -p 2222</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker run <span class="at">-d</span> <span class="at">-p</span> 2222:22 <span class="at">-v</span> /root/repo:/root/repo <span class="at">--name</span> pc <span class="at">--hostname</span> pc ubuntu20.04</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>SSH.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ssh root@<span class="op">&lt;</span>host_ip<span class="op">&gt;</span> -p 2222</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="../index.html"><b>Home</b></a>
