@@ -31,14 +31,6 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Lightweight Directory Access Protocol](html/ldap.html) | *(openldap)* |
 | [Distributed Replicated Block Device](html/drbd.html) | *(drbd)* |
 
-
-### 1.4. Administration
-| |
-|:-----------------|----------------:|
-| [Kernel Virtual Machine](html/kvm.html)           | *(kvm)*  |
-| [Disk Manipulation](html/fdisk.html)   | *(fdisk)*  |
-| [SystemD Management](html/systemd.html)           | *(systemd)*  |
-
 <br>
 
 
@@ -101,4 +93,6 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Graphviz](html/graphviz.html) | *(dot)* |
 | [Docker](html/docker.html) | *(docker)* |
 | [Firewall](html/firewall.html) | *(firewall-cmd)* |
-
+| [KVM](html/kvm.html)           | *(kvm)*  |
+| [Disk](html/fdisk.html)   | *(fdisk)*  |
+| [Systemd](html/systemd.html)           | *(systemd)*  |
