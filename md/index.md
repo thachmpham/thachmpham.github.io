@@ -71,26 +71,55 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 ### 3.2. Linux
 | |
 |:-----------------|----------------:|
-| [Build & Run Linux Kernel](html/kernel_build.html) | *(kernel buildroot qemu)* |
+| [Build & Run Linux Kernel](html/kernel_build.html) | *(buildroot qemu)* |
 | [Debug Linux Kernel with GDB](html/kernel_debug_gdb.html) | *(kernel qemu gdb)* |
-| [From User Space to Kernel Space](html/kernel_user_to_kernel.html) | *(user kernel space gdb)* |
-| [Reproduce EAGAIN TIPC Socket Error](html/tipc_eagain.html) | *(tipc overload socket buffer)* |
-
-### 3.3. Bash
-| |
-|:-----------------|----------------:|
-| [Walkthrough of Bash Script](html/bashdb.html) | *(bashdb)* |
+| [From User Space to Kernel Space](html/kernel_user_to_kernel.html) | *(kernel qemu gdb)* |
+| [Reproduce Eagain Socket Error](html/tipc_eagain.html) | *(tipc socket buffer)* |
 
 <br>
 
 
 ## 4. Cheatsheets
+:::::::::::::: {.columns}
+
+::: {.column}
 | |
-|:-----------------|----------------:|
-| [PlantUML](html/plantuml.html) | *(uml)* |
-| [Graphviz](html/graphviz.html) | *(dot)* |
-| [Docker](html/docker.html) | *(docker)* |
-| [Firewall](html/firewall.html) | *(firewall-cmd)* |
-| [KVM](html/kvm.html)           | *(kvm)*  |
-| [Disk](html/fdisk.html)   | *(fdisk)*  |
-| [Systemd](html/systemd.html)           | *(systemd)*  |
+|-----------------|
+|[BashDB](html/bashdb.html) |
+:::
+
+
+::: {.column}
+| |
+|-----------------|
+|[PlantUML](html/plantuml.html)|
+|[Graphviz](html/graphviz.html)|
+:::
+
+
+::: {.column}
+| |
+|-----------------|
+|[Docker](html/docker.html)|
+|[KVM](html/kvm.html)|
+:::
+
+
+::: {.column}
+| |
+|-----------------|
+|[Disk](html/fdisk.html)|
+|[Systemd](html/systemd.html)|
+:::
+
+
+::: {.column}
+| |
+|-----------------|
+|[Firewall](html/firewall.html) |
+:::
+
+
+::::::::::::::
+
+
