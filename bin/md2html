@@ -109,7 +109,8 @@ pandoc -f markdown -t html -s \
 # ====  Tips
 # generate_post plantuml
 # generate_post graphviz
-generate_post docker-ssh
+# generate_post docker-ssh
+generate_post firewall
 
 
 

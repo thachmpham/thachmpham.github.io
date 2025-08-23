@@ -109,7 +109,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Graphviz](html/graphviz.html) | *(dot)* |
 
 
-### 5.2. Docker
+### 5.2. Setup Lab
 | [Docker Container with SSH Access](html/docker-ssh.html) | *(docker ssh)* |
-
+| [Firewall Management](html/firewall.html) | *(firewall-cmd)* |
 
