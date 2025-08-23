@@ -95,7 +95,6 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 
 
 ## 5. Cheatsheets
-### 5.1. Diagram
 | |
 |:-----------------|----------------:|
 | [PlantUML](html/plantuml.html) | *(uml)* |
