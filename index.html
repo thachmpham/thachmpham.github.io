@@ -5,78 +5,256 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Thach Pham’s Notebook</title>
-  <style type="text/css">
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
 </head>
 <body>
 <header id="title-block-header">
 <h1 class="title">Thach Pham’s Notebook</h1>
-<p class="subtitle">A Software Engineer’s Practical Notebook<br/><em>Computer Systems - Distributed Systems - Software Debugging</em></p>
+<p class="subtitle">A Software Engineer’s Practical
+Notebook<br/><em>Computer Systems - Distributed Systems - Software
+Debugging</em></p>
 </header>
 <h2 id="computer-systems">1. Computer Systems</h2>
 <h3 id="virtual-network-interfaces">1.1. Virtual Network Interfaces</h3>
 <table>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/veth.html">Virtual Ethernet Interface</a></td>
+<td style="text-align: left;"><a href="html/veth.html">Virtual Ethernet
+Interface</a></td>
 <td style="text-align: right;">(<em>ip veth netns</em>)</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/vbridge.html">Virtual Bridge Interface</a></td>
+<td style="text-align: left;"><a href="html/vbridge.html">Virtual Bridge
+Interface</a></td>
 <td style="text-align: right;"><em>(ip bridge netns)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/vdummy-interface.html">Dummy Interface</a></td>
+<td style="text-align: left;"><a href="html/vdummy-interface.html">Dummy
+Interface</a></td>
 <td style="text-align: right;"><em>(ip dummy netns)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/vbond-interface.html">Bond Interface</a></td>
+<td style="text-align: left;"><a href="html/vbond-interface.html">Bond
+Interface</a></td>
 <td style="text-align: right;"><em>(ip bond netns)</em></td>
 </tr>
 </tbody>
 </table>
 <h3 id="networking">1.2. Networking</h3>
 <table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/arp.html">Address Resolution Protocol</a></td>
+<td style="text-align: left;"><a href="html/arp.html">Address Resolution
+Protocol</a></td>
 <td style="text-align: right;"><em>(arp, arping)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/ip-routing.html">IP Routing</a></td>
+<td style="text-align: left;"><a href="html/ip-routing.html">IP
+Routing</a></td>
 <td style="text-align: right;"><em>(ip route)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/dhcp.html">Dynamic Host Configuration Protocol</a></td>
+<td style="text-align: left;"><a href="html/dhcp.html">Dynamic Host
+Configuration Protocol</a></td>
 <td style="text-align: right;"><em>(kea-dhcp4)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/tipc.html">TIPC Protocol</a></td>
+<td style="text-align: left;"><a href="html/tipc.html">TIPC
+Protocol</a></td>
 <td style="text-align: right;"><em>(tipc)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/vip.html">Virtual IP Address</a></td>
+<td style="text-align: left;"><a href="html/vip.html">Virtual IP
+Address</a></td>
 <td style="text-align: right;"><em>(keepalived)</em></td>
 </tr>
 </tbody>
 </table>
 <h3 id="infrastructure">1.3. Infrastructure</h3>
 <table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/pxe.html">Preboot eXecution Environment</a></td>
+<td style="text-align: left;"><a href="html/pxe.html">Preboot eXecution
+Environment</a></td>
 <td style="text-align: right;"><em>(dnsmasq)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/ldap.html">Lightweight Directory Access Protocol</a></td>
+<td style="text-align: left;"><a href="html/ldap.html">Lightweight
+Directory Access Protocol</a></td>
 <td style="text-align: right;"><em>(openldap)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/drbd.html">Distributed Replicated Block Device</a></td>
+<td style="text-align: left;"><a href="html/drbd.html">Distributed
+Replicated Block Device</a></td>
 <td style="text-align: right;"><em>(drbd)</em></td>
 </tr>
 </tbody>
@@ -85,15 +263,18 @@
 <table>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/kvm.html">Kernel Virtual Machine</a></td>
+<td style="text-align: left;"><a href="html/kvm.html">Kernel Virtual
+Machine</a></td>
 <td style="text-align: right;"><em>(kvm)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/fdisk.html">Disk Manipulation</a></td>
+<td style="text-align: left;"><a href="html/fdisk.html">Disk
+Manipulation</a></td>
 <td style="text-align: right;"><em>(fdisk)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/systemd.html">SystemD Management</a></td>
+<td style="text-align: left;"><a href="html/systemd.html">SystemD
+Management</a></td>
 <td style="text-align: right;"><em>(systemd)</em></td>
 </tr>
 </tbody>
@@ -102,41 +283,56 @@
 <h2 id="distributed-systems">2. Distributed Systems</h2>
 <h3 id="opensaf">2.1. OpenSAF</h3>
 <table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/opensaf-install.html">Build &amp; Install</a></td>
+<td style="text-align: left;"><a href="html/opensaf-install.html">Build
+&amp; Install</a></td>
 <td style="text-align: right;"><em>(make)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/opensaf-1sc.html">Setup Cluster    -   1 SC</a></td>
+<td style="text-align: left;"><a href="html/opensaf-1sc.html">Setup
+Cluster    -   1 SC</a></td>
 <td style="text-align: right;"><em>(opensaf cluster)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/opensaf-2sc.html">Setup Cluster    -   2 SCs</a></td>
+<td style="text-align: left;"><a href="html/opensaf-2sc.html">Setup
+Cluster    -   2 SCs</a></td>
 <td style="text-align: right;"><em>(opensaf cluster)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/opensaf-imm.html">Information Model Management</a></td>
+<td style="text-align: left;"><a
+href="html/opensaf-imm.html">Information Model Management</a></td>
 <td style="text-align: right;"><em>(opensaf imm)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/opensaf-smf.html">Software Management Framework</a></td>
+<td style="text-align: left;"><a href="html/opensaf-smf.html">Software
+Management Framework</a></td>
 <td style="text-align: right;"><em>(opensaf smf)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/opensaf-log.html">Log Service</a></td>
+<td style="text-align: left;"><a href="html/opensaf-log.html">Log
+Service</a></td>
 <td style="text-align: right;"><em>(opensaf log)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/opensaf-amf-non-sa-aware.html">Convert Program to High Availability</a></td>
+<td style="text-align: left;"><a
+href="html/opensaf-amf-non-sa-aware.html">Convert Program to High
+Availability</a></td>
 <td style="text-align: right;"><em>(amf non sa-aware)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/opensaf-amf-sa-aware.html">Build High Availability Application</a></td>
+<td style="text-align: left;"><a
+href="html/opensaf-amf-sa-aware.html">Build High Availability
+Application</a></td>
 <td style="text-align: right;"><em>(amf sa-aware)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/opensaf-healthcheck.html">Healthcheck</a></td>
+<td style="text-align: left;"><a
+href="html/opensaf-healthcheck.html">Healthcheck</a></td>
 <td style="text-align: right;"><em>(opensaf amf)</em></td>
 </tr>
 </tbody>
@@ -145,75 +341,106 @@
 <h2 id="debug">3. Debug</h2>
 <h3 id="cc">3.1. C/C++</h3>
 <table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/gdb-program-started-by-script.html">Debug a Program Started by a Script</a></td>
+<td style="text-align: left;"><a
+href="html/gdb-program-started-by-script.html">Debug a Program Started
+by a Script</a></td>
 <td style="text-align: right;"><em>(gdb catch)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/gdb-program-started-by-systemd.html">Debug A Program Started by SystemD</a></td>
+<td style="text-align: left;"><a
+href="html/gdb-program-started-by-systemd.html">Debug A Program Started
+by SystemD</a></td>
 <td style="text-align: right;"><em>(gdb remote)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/gdb-ha-program.html">Debug a High Availability Program</a></td>
+<td style="text-align: left;"><a href="html/gdb-ha-program.html">Debug a
+High Availability Program</a></td>
 <td style="text-align: right;"><em>(gdb non-stop)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/gdb-find.html">Find Memory Inside Running Process</a></td>
+<td style="text-align: left;"><a href="html/gdb-find.html">Find Memory
+Inside Running Process</a></td>
 <td style="text-align: right;"><em>(gdb find)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/gdb-dump-restore.html">Dump &amp; Restore Process Memory</a></td>
+<td style="text-align: left;"><a href="html/gdb-dump-restore.html">Dump
+&amp; Restore Process Memory</a></td>
 <td style="text-align: right;"><em>(gdb dump restore)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/gdb-call.html">Execute Functions on the Fly</a></td>
+<td style="text-align: left;"><a href="html/gdb-call.html">Execute
+Functions on the Fly</a></td>
 <td style="text-align: right;"><em>(gdb call)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/elf.html">Examine Contents of ELF File</a></td>
+<td style="text-align: left;"><a href="html/elf.html">Examine Contents
+of ELF File</a></td>
 <td style="text-align: right;"><em>(gdb objdump)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/virtual-addr-elf-offset.html">Virtual Address &amp; EFL Offset</a></td>
+<td style="text-align: left;"><a
+href="html/virtual-addr-elf-offset.html">Virtual Address &amp; EFL
+Offset</a></td>
 <td style="text-align: right;"><em>(gdb sharedlibrary)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/asm-callstack.html">Inspect C Stack with Assembly</a></td>
+<td style="text-align: left;"><a href="html/asm-callstack.html">Inspect
+C Stack with Assembly</a></td>
 <td style="text-align: right;"><em>(gdb asm reg)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/gdb-stl.html">Print Contents of STL Containers</a></td>
+<td style="text-align: left;"><a href="html/gdb-stl.html">Print Contents
+of STL Containers</a></td>
 <td style="text-align: right;"><em>(gdb pretty-printer)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/gdb-write-pp.html">Method for Printing Complex Data</a></td>
+<td style="text-align: left;"><a href="html/gdb-write-pp.html">Method
+for Printing Complex Data</a></td>
 <td style="text-align: right;"><em>(gdb pretty-printer)</em></td>
 </tr>
 </tbody>
 </table>
 <h3 id="bash">3.2. Bash</h3>
 <table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/bashdb.html">Walkthrough of Bash Script Execution</a></td>
+<td style="text-align: left;"><a href="html/bashdb.html">Walkthrough of
+Bash Script Execution</a></td>
 <td style="text-align: right;"><em>(bashdb)</em></td>
 </tr>
 </tbody>
 </table>
 <h3 id="linux-kernel">3.3. Linux Kernel</h3>
 <table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/kernel_build.html">Build &amp; Run Linux Kernel</a></td>
+<td style="text-align: left;"><a href="html/kernel_build.html">Build
+&amp; Run Linux Kernel</a></td>
 <td style="text-align: right;"><em>(kernel buildroot qemu)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/kernel_debug_gdb.html">Debug Linux Kernel with GDB</a></td>
+<td style="text-align: left;"><a href="html/kernel_debug_gdb.html">Debug
+Linux Kernel with GDB</a></td>
 <td style="text-align: right;"><em>(kernel qemu gdb)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/kernel_user_to_kernel.html">From User Space to Kernel Space</a></td>
+<td style="text-align: left;"><a
+href="html/kernel_user_to_kernel.html">From User Space to Kernel
+Space</a></td>
 <td style="text-align: right;"><em>(user kernel space gdb)</em></td>
 </tr>
 </tbody>
@@ -221,14 +448,21 @@
 <p><br></p>
 <h2 id="hack">4. Hack</h2>
 <table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/ld_preload.html">Modify Return Values of Libc Functions</a></td>
+<td style="text-align: left;"><a href="html/ld_preload.html">Modify
+Return Values of Libc Functions</a></td>
 <td style="text-align: right;"><em>(ld_preload dlsym)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/tipc_eagain.html">Reproduce EAGAIN TIPC Socket Error</a></td>
-<td style="text-align: right;"><em>(tipc overload socket buffer)</em></td>
+<td style="text-align: left;"><a href="html/tipc_eagain.html">Reproduce
+EAGAIN TIPC Socket Error</a></td>
+<td style="text-align: right;"><em>(tipc overload socket
+buffer)</em></td>
 </tr>
 </tbody>
 </table>
@@ -238,17 +472,20 @@
 <table>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/plantuml.html">PlantUML</a></td>
+<td style="text-align: left;"><a
+href="html/plantuml.html">PlantUML</a></td>
 <td style="text-align: right;"><em>(uml)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/graphviz.html">Graphviz</a></td>
+<td style="text-align: left;"><a
+href="html/graphviz.html">Graphviz</a></td>
 <td style="text-align: right;"><em>(dot)</em></td>
 </tr>
 </tbody>
 </table>
 <h3 id="docker">5.2. Docker</h3>
-<div class="line-block"><a href="html/docker-ssh.html">Docker Container with SSH Access</a> | <em>(docker ssh)</em> |</div>
+<div class="line-block"><a href="html/docker-ssh.html">Docker Container
+with SSH Access</a> | <em>(docker ssh)</em> |</div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="html/about.html"><b>About</b></a>
