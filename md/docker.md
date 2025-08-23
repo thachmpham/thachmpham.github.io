@@ -2,10 +2,10 @@
 title:  'Docker'
 ---
 
-# 1. Manual
+## 1. Manual
 
-# 2. Tasks
-## 2.1. Setup a docker container accessible via SSH from other hosts.
+## 2. Tasks
+### 2.1. Setup a docker container accessible via SSH from other hosts.
 - Dockerfile.
 ```Dockerfile
   

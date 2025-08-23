@@ -74,6 +74,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Inspect C Stack with Assembly](html/asm-callstack.html) | *(gdb asm reg)* |
 | [Print Contents of STL Containers](html/gdb-stl.html)             | *(gdb pretty-printer)*   |
 | [Method for Printing Complex Data](html/gdb-write-pp.html)             | *(gdb pretty-printer)*   |
+| [Modify Return Values of Libc Functions](html/ld_preload.html) | *(ld_preload dlsym)* |
 
 
 ### 3.2. Bash
@@ -82,34 +83,23 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Walkthrough of Bash Script Execution](html/bashdb.html) | *(bashdb)* |
 
 
-### 3.3. Linux Kernel
+### 3.3. Linux
 | |
 |:-----------------|----------------:|
 | [Build & Run Linux Kernel](html/kernel_build.html) | *(kernel buildroot qemu)* |
 | [Debug Linux Kernel with GDB](html/kernel_debug_gdb.html) | *(kernel qemu gdb)* |
 | [From User Space to Kernel Space](html/kernel_user_to_kernel.html) | *(user kernel space gdb)* |
-
-<br>
-
-
-## 4. Hack
-| |
-|:-----------------|----------------:|
-| [Modify Return Values of Libc Functions](html/ld_preload.html) | *(ld_preload dlsym)* |
 | [Reproduce EAGAIN TIPC Socket Error](html/tipc_eagain.html) | *(tipc overload socket buffer)* |
 
 <br>
 
 
-## 5. Tips
+## 5. Cheatsheets
 ### 5.1. Diagram
 | |
 |:-----------------|----------------:|
 | [PlantUML](html/plantuml.html) | *(uml)* |
 | [Graphviz](html/graphviz.html) | *(dot)* |
-
-
-### 5.2. Setup Lab
-| [Docker Container with SSH Access](html/docker-ssh.html) | *(docker ssh)* |
-| [Firewall Management](html/firewall.html) | *(firewall-cmd)* |
+| [Docker](html/docker.html) | *(docker)* |
+| [Firewall](html/firewall.html) | *(firewall-cmd)* |
 
