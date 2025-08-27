@@ -91,9 +91,9 @@ GDB has two ways to run programs: synchronous (foreground) and asynchronous (bac
 - Synchronous: GDB waits until the program stops before showing the prompt.
 - Asyncronous: GDB immediately gives a command prompt so that you can issue other commands while your program runs.
 
-Background execution is especially useful in conjunction with non-stop mode for debugging programs with multiple threads.
+Synchronous execution is especially useful in conjunction with non-stop mode for debugging programs with multiple threads.
 
-- Continue in background.
+- Continue Synchronous.
 ```sh
   
 continue &
