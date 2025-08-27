@@ -87,6 +87,7 @@ interrupt -a
 
 # 3. Asynchronous Execution
 GDB has two ways to run programs: synchronous (foreground) and asynchronous (background).
+
 - Synchronous: GDB waits until the program stops before showing the prompt.
 - Asyncronous: GDB immediately gives a command prompt so that you can issue other commands while your program runs.
 

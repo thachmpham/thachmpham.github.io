@@ -325,10 +325,13 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h1 id="asynchronous-execution">3. Asynchronous Execution</h1>
 <p>GDB has two ways to run programs: synchronous (foreground) and
-asynchronous (background). - Synchronous: GDB waits until the program
-stops before showing the prompt. - Asyncronous: GDB immediately gives a
-command prompt so that you can issue other commands while your program
-runs.</p>
+asynchronous (background).</p>
+<ul>
+<li>Synchronous: GDB waits until the program stops before showing the
+prompt.</li>
+<li>Asyncronous: GDB immediately gives a command prompt so that you can
+issue other commands while your program runs.</li>
+</ul>
 <p>Background execution is especially useful in conjunction with
 non-stop mode for debugging programs with multiple threads.</p>
 <ul>
