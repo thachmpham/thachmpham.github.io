@@ -87,6 +87,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 ::: {.column}
 | |
 |-----------------|
+|[GDB](html/gdb.html) |
 |[BashDB](html/bashdb.html) |
 :::
 

@@ -15,6 +15,7 @@ convert_markdown_to_html() {
     --include-after-body ${workspace}/bin/footer.html \
     -F pandoc-plantuml \
     --mathml \
+    --table-of-contents=true \
     -o ${output_file} \
     ${input_file}
 }
@@ -89,7 +90,7 @@ pandoc -f markdown -t html -s \
 # generate_post virtual-addr-elf-offset
 # generate_post gdb-write-pp
 # generate_post asm-callstack
-generate_post gdb-multithread
+# generate_post gdb-multithread
 
 
 # ====  BASHDB
@@ -107,12 +108,12 @@ generate_post gdb-multithread
 # generate_post tipc_eagain
 
 
-# ====  Tips
+# ====  Cheatsheets
 # generate_post plantuml
 # generate_post graphviz
 # generate_post docker
 # generate_post firewall
-
+generate_post gdb
 
 
 # ====  About
