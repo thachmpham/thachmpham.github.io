@@ -15,7 +15,21 @@ convert_markdown_to_html() {
     --include-after-body ${workspace}/bin/footer.html \
     -F pandoc-plantuml \
     --mathml \
-    --table-of-contents=true \
+    -o ${output_file} \
+    ${input_file}
+}
+
+convert_markdown_to_html_with_toc() {
+    local input_file=$1
+    local output_file=$2
+
+    pandoc -f markdown -t html \
+    -s --highlight-style tango \
+    --include-in-header ${workspace}/bin/header.html \
+    --include-after-body ${workspace}/bin/footer.html \
+    -F pandoc-plantuml \
+    --mathml \
+    --table-of-contents=true --toc-depth=1\
     -o ${output_file} \
     ${input_file}
 }
@@ -26,7 +40,11 @@ generate_post() {
                                 ${workspace}/html/${post_name}.html
 }
 
-
+generate_post_with_toc() {
+    local post_name=$1
+    convert_markdown_to_html_with_toc    ${workspace}/md/${post_name}.md \
+                                ${workspace}/html/${post_name}.html
+}
 
 # ====  main()   ==== #
 
@@ -113,7 +131,7 @@ pandoc -f markdown -t html -s \
 # generate_post graphviz
 # generate_post docker
 # generate_post firewall
-generate_post gdb
+generate_post_with_toc gdb
 
 
 # ====  About
