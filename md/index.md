@@ -47,7 +47,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Convert Program to High Availability](html/opensaf-amf-non-sa-aware.html) | *(amf non sa-aware)* |
 | [Build High Availability Application](html/opensaf-amf-sa-aware.html) | *(amf sa-aware)* |
 | [Healthcheck](html/opensaf-healthcheck.html) | *(amf)* |
-| [Error Detection](html/opensaf-amf-error-detection.html) | *(amf)* |
+| [Error Detection & Recovery](html/opensaf-amf-error-detection.html) | *(amf component)* |
 
 <br>
 
