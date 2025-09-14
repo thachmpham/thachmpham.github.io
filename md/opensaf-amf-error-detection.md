@@ -4,8 +4,8 @@ title: Error Detection in OpenSAF AMF
 
 # 1. Component Monitoring
 - **Passive Monitoring**
-    - AMF monitors the death of processes that are part of the component.
-    - `saAmfPmStart_3()`: requests AMF to start passive monitoring on a process and to its descendents. If a process termination occurs, AMF will automatically report an error on the related component.
+    - AMF monitors the death of processes that are part of the component. If processes terminated, AMF will automatically report an error on the related component.
+    - `saAmfPmStart_3()`: requests AMF to start passive monitoring on a process and to its descendents.
     - `saAmfPmStop()`: requests AMF to stop passive monitoring.
 
 - **External Active Monitoring**

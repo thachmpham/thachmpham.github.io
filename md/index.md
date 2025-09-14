@@ -39,14 +39,15 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | |
 |:-----------------|----------------:|
 | [Build & Install](html/opensaf-install.html) | *(make)* |
-| [Setup Cluster &nbsp;&nbsp; - &nbsp; 1 SC](html/opensaf-1sc.html) | *(opensaf cluster)* |
-| [Setup Cluster &nbsp;&nbsp; - &nbsp; 2 SCs](html/opensaf-2sc.html) | *(opensaf cluster)* |
-| [Information Model Management](html/opensaf-imm.html) | *(opensaf imm)* |
-| [Software Management Framework](html/opensaf-smf.html) | *(opensaf smf)* |
-| [Log Service](html/opensaf-log.html) | *(opensaf log)* |
+| [Setup Cluster &nbsp;&nbsp; - &nbsp; 1 SC](html/opensaf-1sc.html) | *(opensaf docker)* |
+| [Setup Cluster &nbsp;&nbsp; - &nbsp; 2 SCs](html/opensaf-2sc.html) | *(opensaf docker)* |
+| [Information Model Management](html/opensaf-imm.html) | *(imm)* |
+| [Software Management Framework](html/opensaf-smf.html) | *(smf)* |
+| [Log Service](html/opensaf-log.html) | *(log)* |
 | [Convert Program to High Availability](html/opensaf-amf-non-sa-aware.html) | *(amf non sa-aware)* |
 | [Build High Availability Application](html/opensaf-amf-sa-aware.html) | *(amf sa-aware)* |
-| [Healthcheck](html/opensaf-healthcheck.html) | *(opensaf amf)* |
+| [Healthcheck](html/opensaf-healthcheck.html) | *(amf)* |
+| [Error Detection](html/opensaf-amf-error-detection.html) | *(amf)* |
 
 <br>
 

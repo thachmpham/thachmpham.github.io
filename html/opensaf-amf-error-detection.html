@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Error Detection in OpenSAF AMF</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <!-- <script src="../3pp/d3.v7.js"></script> -->
+  <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+          look: 'handDrawn',
+          theme: 'neutral',
+      });
+  </script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Error Detection in OpenSAF AMF</h1>
+</header>
+<h1 id="component-monitoring">1. Component Monitoring</h1>
+<ul>
+<li><strong>Passive Monitoring</strong>
+<ul>
+<li>AMF monitors the death of processes that are part of the component.
+If processes terminated, AMF will automatically report an error on the
+related component.</li>
+<li><code>saAmfPmStart_3()</code>: requests AMF to start passive
+monitoring on a process and to its descendents.</li>
+<li><code>saAmfPmStop()</code>: requests AMF to stop passive
+monitoring.</li>
+</ul></li>
+<li><strong>External Active Monitoring</strong>
+<ul>
+<li>AMF monitors the health of the component by submitting some service
+requests to the component and checking that the service is provide in a
+timely fashion.</li>
+<li><code>AM_START</code>: start a monitoring process for a
+component.</li>
+<li><code>AM_STOP</code>: stop a monitoring process for a
+component.</li>
+</ul></li>
+<li><strong>Internal Active Monitoring</strong>
+<ul>
+<li>The component includes code to monitor its own health and to
+discover latent faults. Each of these health checks is triggered either
+by the component itself or by AMF.</li>
+<li><code>saAmfHealthcheckStart()</code>: Request to start healthcheck
+on a process.</li>
+<li><code>saAmfHealthcheckStop()</code>: Request to stop healthcheck on
+a process.</li>
+<li><code>saAmfHealthcheckCallback()</code>: This callback will be
+periodically called by AMF.</li>
+<li><code>saAmfResponse_4()</code>: Process to reply its status to
+AMF.</li>
+<li><code>safHealthcheckKey</code>: Healthcheck key.</li>
+<li><code>saAmfHealthcheckPeriod</code>, <code>saAmfHctDefPeriod</code>:
+the period healthcheck should be initiated.</li>
+<li><code>saAmfHealthcheckMaxDuration</code>,
+<code>saAmfHtcDefMaxDuration</code>: time-limit after which AMF will
+report an error on the component if no response for the
+healthcheck.</li>
+</ul></li>
+</ul>
+<h1 id="references">References</h1>
+<ul>
+<li><a
+href="https://opensaf.sourceforge.io/SAI-AIS-AMF-B.04.01.AL.pdf">SAI AIS
+AMF, 3.10, Component Monitoring</a></li>
+<li><a
+href="https://opensaf.sourceforge.io/SAI-AIS-AMF-B.04.01.AL.pdf">SAI AIS
+AMF, 7.7.1, saAmfPmStart_3</a></li>
+<li><a
+href="https://opensaf.sourceforge.io/SAI-AIS-AMF-B.04.01.AL.pdf">SAI AIS
+AMF, 4.9, AM_START</a></li>
+<li><a
+href="https://opensaf.sourceforge.io/SAI-AIS-AMF-B.04.01.AL.pdf">SAI AIS
+AMF, 7.1.2, Component Healthcheck Monitoring</a></li>
+</ul>
+<footer class="footer text-muted">
+   <div align="center">
+      <a href="../index.html"><b>Home</b></a>
+   </div>
+ </footer>
+</body>
+</html>
