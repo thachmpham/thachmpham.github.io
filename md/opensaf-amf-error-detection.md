@@ -34,6 +34,7 @@ The component includes code to monitor its own health and to discover latent fau
 
 IMM:
 
+- Classes: `SaAmfHealthcheckType`, `SaAmfHealthcheck`.
 - `safHealthcheckKey`: Healthcheck key.
 - `saAmfHealthcheckPeriod`, `saAmfHctDefPeriod`: The period healthcheck should be initiated.
 - `saAmfHealthcheckMaxDuration`, `saAmfHtcDefMaxDuration`: Time-limit after which AMF will report an error on the component if no response for the healthcheck.
@@ -51,12 +52,13 @@ Recovery is an automatic action taken by AMF after an error occurred.
 
 IMM:
 
-- `saAmfCompRecoveryOnError`: Recovery action.
+- Classes: `SaAmfComp`, `SaAmfCompType`.
+- `saAmfCompRecoveryOnError`, `saAmfCtDefRecoveryOnError`: Recovery action.
 
 API:
 ```c
   
-// File: opensaf/src/ais/include/saAmf.h
+// opensaf/src/ais/include/saAmf.h
 
 typedef enum {
     SA_AMF_NO_RECOMMENDATION = 1,

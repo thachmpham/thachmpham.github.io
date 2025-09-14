@@ -278,6 +278,8 @@ latent faults. Each of these health checks is triggered either by the
 component itself or by AMF.</p>
 <p>IMM:</p>
 <ul>
+<li>Classes: <code>SaAmfHealthcheckType</code>,
+<code>SaAmfHealthcheck</code>.</li>
 <li><code>safHealthcheckKey</code>: Healthcheck key.</li>
 <li><code>saAmfHealthcheckPeriod</code>, <code>saAmfHctDefPeriod</code>:
 The period healthcheck should be initiated.</li>
@@ -302,11 +304,13 @@ AMF.</li>
 occurred.</p>
 <p>IMM:</p>
 <ul>
-<li><code>saAmfCompRecoveryOnError</code>: Recovery action.</li>
+<li>Classes: <code>SaAmfComp</code>, <code>SaAmfCompType</code>.</li>
+<li><code>saAmfCompRecoveryOnError</code>,
+<code>saAmfCtDefRecoveryOnError</code>: Recovery action.</li>
 </ul>
 <p>API:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">// File: opensaf/src/ais/include/saAmf.h</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">// opensaf/src/ais/include/saAmf.h</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span> <span class="op">{</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    SA_AMF_NO_RECOMMENDATION <span class="op">=</span> <span class="dv">1</span><span class="op">,</span></span>
