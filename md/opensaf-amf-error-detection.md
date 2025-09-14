@@ -48,6 +48,7 @@ APIs:
 
 
 # 2. Recovery
+## 2.1. Recover Action
 Recovery is an automatic action taken by AMF after an error occurred.
 
 IMM:
@@ -83,6 +84,28 @@ typedef enum {
 - `SA_AMF_CLUSTER_RESET`:         Reboot all nodes in the cluster.
 - `SA_AMF_APPLICATION_RESTART`:   Teminate and restart all service units of the application.
 - `SA_AMF_CONTAINER_RESTART`:     
+
+
+## 2.2. Recover Escalation
+
+IMM:
+
+- `saAmfSGCompRestartProb` (time value):        The probation duration for component to restart.
+- `saAmfSGCompRestartMax` (maximum count):      The maximum count for component to restart
+- `saAmfSGSuRestartProb` (time value):          The probation duration for service unit to restart.
+- `saAmfSGSuRestartMax` (maximum count):        The maximum count for service unit to restart.
+- `saAmfNodeSuFailOverProb` (time value):       The probation duration for service unit to fail over on a node.
+- `saAmfNodeSuFailoverMax` (maximum count):     The maximum count for service unit to fail over on a node.
+
+### 2.2.1. From Component Restart to Service Unit Restart
+If some components of the same service unit fail and restarted too many times within the probation period, AMF escalates the recovery to a restart of the entire service unit. In other words, if the number of restarts reaches `saAmfSGCompRestartMax` before the end of `saAmfSGCompRestartProb`, AMF restarts the entire service unit.
+
+
+### 2.2.2. From Service Unit Restart to Component Failover
+If the service unit is restarted too many times in the probation time, AMF performs the component failover. In other words, if the number of restarts reaches `saAmfSGSuRestartMax` before the end of `saAmfSGSuRestartProb`, AMF performs the `SA_AMF_COMPONENT_FAILOVER` recovery action.
+
+### 2.2.3. From Component Failover to Node Failover
+If number of `SA_AMF_COMPONENT_FAILOVER` recovery actions reachs `saAmfNodeSuFailoverMax` before the end of `saAmfNodeSuFailOverProb`, AMF fails over the entire node `SA_AMF_NODE_FAILOVER`.
 
 
 # References

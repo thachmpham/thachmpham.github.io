@@ -300,6 +300,7 @@ periodically called by AMF to check if process is healthy.</li>
 AMF.</li>
 </ul>
 <h1 id="recovery">2. Recovery</h1>
+<h2 id="recover-action">2.1. Recover Action</h2>
 <p>Recovery is an automatic action taken by AMF after an error
 occurred.</p>
 <p>IMM:</p>
@@ -344,6 +345,43 @@ cluster.</li>
 service units of the application.</li>
 <li><code>SA_AMF_CONTAINER_RESTART</code>:</li>
 </ul>
+<h2 id="recover-escalation">2.2. Recover Escalation</h2>
+<p>IMM:</p>
+<ul>
+<li><code>saAmfSGCompRestartProb</code> (time value): The probation
+duration for component to restart.</li>
+<li><code>saAmfSGCompRestartMax</code> (maximum count): The maximum
+count for component to restart</li>
+<li><code>saAmfSGSuRestartProb</code> (time value): The probation
+duration for service unit to restart.</li>
+<li><code>saAmfSGSuRestartMax</code> (maximum count): The maximum count
+for service unit to restart.</li>
+<li><code>saAmfNodeSuFailOverProb</code> (time value): The probation
+duration for service unit to fail over on a node.</li>
+<li><code>saAmfNodeSuFailoverMax</code> (maximum count): The maximum
+count for service unit to fail over on a node.</li>
+</ul>
+<h3 id="from-component-restart-to-service-unit-restart">2.2.1. From
+Component Restart to Service Unit Restart</h3>
+<p>If some components of the same service unit fail and restarted too
+many times within the probation period, AMF escalates the recovery to a
+restart of the entire service unit. In other words, if the number of
+restarts reaches <code>saAmfSGCompRestartMax</code> before the end of
+<code>saAmfSGCompRestartProb</code>, AMF restarts the entire service
+unit.</p>
+<h3 id="from-service-unit-restart-to-component-failover">2.2.2. From
+Service Unit Restart to Component Failover</h3>
+<p>If the service unit is restarted too many times in the probation
+time, AMF performs the component failover. In other words, if the number
+of restarts reaches <code>saAmfSGSuRestartMax</code> before the end of
+<code>saAmfSGSuRestartProb</code>, AMF performs the
+<code>SA_AMF_COMPONENT_FAILOVER</code> recovery action.</p>
+<h3 id="from-component-failover-to-node-failover">2.2.3. From Component
+Failover to Node Failover</h3>
+<p>If number of <code>SA_AMF_COMPONENT_FAILOVER</code> recovery actions
+reachs <code>saAmfNodeSuFailoverMax</code> before the end of
+<code>saAmfNodeSuFailOverProb</code>, AMF fails over the entire node
+<code>SA_AMF_NODE_FAILOVER</code>.</p>
 <h1 id="references">References</h1>
 <ul>
 <li><a
