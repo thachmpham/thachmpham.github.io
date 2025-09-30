@@ -20,7 +20,6 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Address Resolution Protocol](html/arp.html) | *(arp, arping)* |
 | [IP Routing](html/ip-routing.html) | *(ip route)* |
 | [Dynamic Host Configuration Protocol](html/dhcp.html) | *(kea-dhcp4)* |
-| [TIPC Protocol](html/tipc.html) | *(tipc)* |
 | [Virtual IP Address](html/vip.html) | *(keepalived)* |
 
 
