@@ -87,39 +87,40 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 ::: {.column}
 | |
 |-----------------|
-|[GDB](html/gdb.html) |
-|[BashDB](html/bashdb.html) |
+|[gdb](html/gdb.html) |
+|[bashdb](html/bashdb.html) |
+|[tcpdump](html/tcpdump.html) |
 :::
 
 
 ::: {.column}
 | |
 |-----------------|
-|[PlantUML](html/plantuml.html)|
-|[Graphviz](html/graphviz.html)|
+|[plantuml](html/plantuml.html)|
+|[graphviz](html/graphviz.html)|
 :::
 
 
 ::: {.column}
 | |
 |-----------------|
-|[Docker](html/docker.html)|
-|[KVM](html/kvm.html)|
+|[docker](html/docker.html)|
+|[kvm](html/kvm.html)|
 :::
 
 
 ::: {.column}
 | |
 |-----------------|
-|[Disk](html/fdisk.html)|
-|[Systemd](html/systemd.html)|
+|[disk](html/fdisk.html)|
+|[systemd](html/systemd.html)|
 :::
 
 
 ::: {.column}
 | |
 |-----------------|
-|[Firewall](html/firewall.html) |
+|[firewall](html/firewall.html) |
 :::
 
 

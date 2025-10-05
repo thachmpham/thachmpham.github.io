@@ -94,7 +94,7 @@ pandoc -f markdown -t html -s \
 # generate_post opensaf-amf-non-sa-aware
 # generate_post opensaf-amf-sa-aware
 # generate_post opensaf-healthcheck
-generate_post opensaf-amf-error-detection
+# generate_post opensaf-amf-error-detection
 
 
 # ====  GDB
@@ -132,7 +132,10 @@ generate_post opensaf-amf-error-detection
 # generate_post graphviz
 # generate_post docker
 # generate_post firewall
-# generate_post_with_toc gdb
+# generate_post gdb
+generate_post tcpdump
+generate_post awk
+generate_post grep
 
 
 # ====  About
