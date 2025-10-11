@@ -2,12 +2,15 @@
 title:  'Kernel-based Virtual Machine'
 ---
 
-# 1. VM Management
-## 1.1 Create VM
+
+## Usages
+
+-----
+
+### VM
 ```sh
   
-# create Debian VM: net-installer, nographics.
-$ virt-install --name node1 \
+virt-install --name node1 \
     --memory 4096 \
     --vcpus 2 \
     --disk path=/root/vm/node1.qcow2,size=50,format=qcow2 \
@@ -17,44 +20,32 @@ $ virt-install --name node1 \
   
 ```
 
-- [linux.die.net/man/1/virt-install](https://linux.die.net/man/1/virt-install)
-
-
-## 1.2. Inspect VM
 ```sh
   
 # show IP of VM
-$ virsh domifaddr node1
-  
-```
-
-- [www.libvirt.org/manpages/virsh.html](https://www.libvirt.org/manpages/virsh.html)
-
-
-# 2. Snapshot
-```sh
-  
-$ virsh snapshot-create-as node1 --name snapshot1
-
-$ virsh snapshot-list node1
-
-$ virsh snapshot-delete node1 --snapshotname snapshot1
+virsh domifaddr node1
   
 ```
 
 
-# 3. Network
+### Snapshot
 ```sh
   
-$ virsh net-define mynetwork.xml
+virsh snapshot-create-as node1 --name snapshot1
+virsh snapshot-list node1
+virsh snapshot-delete node1 --snapshotname snapshot1
+  
+```
 
-$ virsh net-start mynetwork
 
-$ virsh net-autostart mynetwork
-
-$ virsh net-list --all
-
-$ virsh net-dumpxml mynetwork
+### Network
+```sh
+  
+virsh net-define mynetwork.xml
+virsh net-start mynetwork
+virsh net-autostart mynetwork
+virsh net-list --all
+virsh net-dumpxml mynetwork
   
 ```
 
@@ -72,17 +63,18 @@ $ virsh net-dumpxml mynetwork
   
 ```
 
-- [libvirt.org/formatnetwork.html](https://libvirt.org/formatnetwork.html)
+<br>
 
 
-# 4. Disk
-## 4.1. Expand /root Partition
-- Expand disk image.
+## Procedures
+
+-----
+
+### Expand /root
 ```sh
   
-$ qemu-img resize disk.qcow2 +10G
+qemu-img resize disk.qcow2 +10G
   
 ```
-
-- If /root mount to the last partition, enter the mantainance mode to [expand the partition](/html/fdisk.html).
-- If /root mount to the last partition, [create a new partition and mount /root to the new partition](/html/fdisk.html).
+If /root mount to the last partition, enter the mantainance mode to [expand the partition](/html/fdisk.html).  
+If /root not mount to the last partition, [create a new partition and mount /root to the new partition](/html/fdisk.html).

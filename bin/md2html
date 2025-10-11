@@ -78,12 +78,6 @@ pandoc -f markdown -t html -s \
 # generate_post drbd
 
 
-# ====  Administration
-# generate_post kvm
-# generate_post fdisk
-# generate_post systemd
-
-
 # ====  OpenSAF
 # generate_post opensaf-install
 # generate_post opensaf-1sc
@@ -130,13 +124,15 @@ pandoc -f markdown -t html -s \
 # ====  Cheatsheets
 # generate_post plantuml
 # generate_post graphviz
-# generate_post docker
-# generate_post firewall
-# generate_post gdb
+generate_post docker
+generate_post firewall
+generate_post gdb
 generate_post tcpdump
 generate_post awk
 generate_post grep
-
+generate_post kvm
+generate_post fdisk
+generate_post systemd
 
 # ====  About
 # generate_post about

@@ -3,79 +3,51 @@ title: GDB Cheatsheet
 ---
 
 
-# Configuration
-## Startup Setup
-- File: `~/.gdbearlyinit`
+### Configuration
 ```sh
   
+# .gdbearlyinit
 set startup-quitely on
   
 ```
 
-- File: `~/.gdbinit`
 ```sh
   
+# .gdbinit  
 set pagination off
 set confirm off
   
 ```
 
-## Environment Variables
+
+### Environment Variables
 ```sh
   
-set environment VAR=value
-unset environment VAR
-
-show environment VAR
+set environment myvar=val
+unset environment myvar
+show environment myvar
   
 ```
 
 
-# Launch
-## Command-line Arguments
-```sh
-
-$ gdb --args program arg1 arg2...
-
-```
-
+### Command-line Arguments
 ```sh
   
-$ gdb program
+gdb --args program arg1 arg2...
 (gdb) run arg1 arg2...
-  
-```
-
-```sh
-  
-$ gdb program
 (gdb) set args arg1 arg2...
-(gdb) run
   
 ```
 
 
-# Attach
-- Normal attach.
+### Attach
 ```sh
   
-$ gdb --pid=<pid>
-$ gdb -p <pid>
-$ gdb -ex "attach <pid>"
-  
-```
+gdb -p pid
+gdb -p pid -x script -batch
 
-- Attach with non-stop mode. Useful for multi-thread debug.
-```sh
-  
-$ gdb -ex "set non-stop on" -ex "attach <pid>"
+gdb -ex "attach pid"
+gdb -ex "attach pid" -ex "set non-stop on"
   
 ```
-
-- Attach in batch mode. Useful for quick query.
-```sh
   
-$ gdb -batch -p <pid>
-$ gdb -batch -p <pid> -x <gdb script>
-  
-```
