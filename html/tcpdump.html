@@ -284,7 +284,7 @@
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">--number</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">-#</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="redirect-output">Redirect Output</h2>
+<h3 id="redirect-output">Redirect Output</h3>
 <ul>
 <li>Redirect to stdout.</li>
 </ul>
@@ -299,9 +299,9 @@
 <li>grep &amp; awk.</li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">tcpdump</span> <span class="at">-i</span> interface <span class="kw">|</span> <span class="fu">grep</span> <span class="at">--line-buffered</span> expr</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">tcpdump</span> <span class="at">-i</span> interface <span class="kw">|</span> <span class="fu">grep</span> <span class="at">--line-buffered</span> expr <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $3}&#39;</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">tcpdump</span> <span class="at">-i</span> interface <span class="kw">|</span> <span class="fu">grep</span> <span class="at">--line-buffered</span> expr <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $3; fflush()}&#39;</span> <span class="kw">|</span> <span class="ex">python3</span> decode.py</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">tcpdump</span> <span class="at">-i</span> interface <span class="at">-l</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">--line-buffered</span> expr</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">tcpdump</span> <span class="at">-i</span> interface <span class="at">-l</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">--line-buffered</span> expr <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $3}&#39;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">tcpdump</span> <span class="at">-i</span> interface <span class="at">-l</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">--line-buffered</span> expr <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $3; fflush()}&#39;</span> <span class="kw">|</span> <span class="ex">python3</span> decode.py</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <h3 id="filter-expression">Filter Expression</h3>
 <ul>

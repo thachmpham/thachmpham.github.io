@@ -51,7 +51,7 @@ tcpdump -r infile -c N
   
 ```
 
-## Redirect Output
+### Redirect Output
 - Redirect to stdout.
 ```sh
   
@@ -66,9 +66,9 @@ tcpdump -r infile -c N
 - grep & awk.
 ```sh
   
-tcpdump -i interface | grep --line-buffered expr
-tcpdump -i interface | grep --line-buffered expr | awk '{print $3}'
-tcpdump -i interface | grep --line-buffered expr | awk '{print $3; fflush()}' | python3 decode.py
+tcpdump -i interface -l | grep --line-buffered expr
+tcpdump -i interface -l | grep --line-buffered expr | awk '{print $3}'
+tcpdump -i interface -l | grep --line-buffered expr | awk '{print $3; fflush()}' | python3 decode.py
   
 ```
 
