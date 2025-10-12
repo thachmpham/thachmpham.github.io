@@ -1,11 +1,11 @@
 ---
 title:  "Thach Pham's Notebook"
-subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Distributed Systems - Software Debugging*"
+subtitle: "A Software Engineer's Notebook<br/>*Computer Systems - Distributed Systems - Software Debugging*"
 ---
 
 
-## 1. Computer Systems
-### 1.1. Virtual Network Interfaces
+## 1. Networking
+### 1.1. Interfaces
 | |
 |:-----------------|----------------:|
 | [Virtual Ethernet Interface](html/veth.html) | (*ip veth netns*) |
@@ -14,21 +14,17 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | [Bond Interface](html/vbond-interface.html) | *(ip bond netns)* |
 
 
-### 1.2. Networking
+### 1.2. Protocols
 | |
 |:-----------------|----------------:|
 | [Address Resolution Protocol](html/arp.html) | *(arp, arping)* |
 | [IP Routing](html/ip-routing.html) | *(ip route)* |
 | [Dynamic Host Configuration Protocol](html/dhcp.html) | *(kea-dhcp4)* |
 | [Virtual IP Address](html/vip.html) | *(keepalived)* |
-
-
-### 1.3. Infrastructure
-| |
-|:-----------------|----------------:|
 | [Preboot eXecution Environment](html/pxe.html) | *(dnsmasq)* |
 | [Lightweight Directory Access Protocol](html/ldap.html) | *(openldap)* |
 | [Distributed Replicated Block Device](html/drbd.html) | *(drbd)* |
+| [Transparent Inter-Process Communication](html/tipc.html) | *(tipc)* |
 
 <br>
 
@@ -111,13 +107,14 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 | |
 |-----------------|
 |[kvm](html/kvm.html)|
-|[disk](html/fdisk.html)|
-|[systemd](html/systemd.html)|
+|[docker](html/docker.html)|
 :::
 
 ::: {.column}
 | |
 |-----------------|
+|[disk](html/fdisk.html)|
+|[systemd](html/systemd.html)|
 |[firewall](html/firewall.html) |
 :::
 

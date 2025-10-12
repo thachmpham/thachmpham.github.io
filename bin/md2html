@@ -68,7 +68,7 @@ pandoc -f markdown -t html -s \
 # generate_post arp
 # generate_post ip-routing
 # generate_post dhcp
-# generate_post tipc
+generate_post tipc
 # generate_post vip
 
 
@@ -129,7 +129,7 @@ pandoc -f markdown -t html -s \
 # generate_post gdb
 # generate_post tcpdump
 # generate_post awk
-generate_post grep
+# generate_post grep
 # generate_post kvm
 # generate_post fdisk
 # generate_post systemd
