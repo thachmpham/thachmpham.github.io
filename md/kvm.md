@@ -76,5 +76,6 @@ virsh net-dumpxml mynetwork
 qemu-img resize disk.qcow2 +10G
   
 ```
+
 If /root mount to the last partition, enter the mantainance mode to [expand the partition](/html/fdisk.html).  
 If /root not mount to the last partition, [create a new partition and mount /root to the new partition](/html/fdisk.html).

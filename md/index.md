@@ -98,6 +98,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 |-----------------|
 |[plantuml](html/plantuml.html)|
 |[graphviz](html/graphviz.html)|
+|[awk](html/awk.html)|
 :::
 
 
