@@ -92,15 +92,14 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 |[tcpdump](html/tcpdump.html) |
 :::
 
-
 ::: {.column}
 | |
 |-----------------|
+|[awk](html/awk.html)|
+|[grep](html/grep.html)|
 |[plantuml](html/plantuml.html)|
 |[graphviz](html/graphviz.html)|
-|[awk](html/awk.html)|
 :::
-
 
 ::: {.column}
 | |
@@ -109,7 +108,6 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 |[kvm](html/kvm.html)|
 :::
 
-
 ::: {.column}
 | |
 |-----------------|
@@ -117,13 +115,11 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 |[systemd](html/systemd.html)|
 :::
 
-
 ::: {.column}
 | |
 |-----------------|
 |[firewall](html/firewall.html) |
 :::
-
 
 ::::::::::::::
 

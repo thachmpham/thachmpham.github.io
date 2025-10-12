@@ -128,8 +128,8 @@ pandoc -f markdown -t html -s \
 # generate_post firewall
 # generate_post gdb
 # generate_post tcpdump
-generate_post awk
-# generate_post grep
+# generate_post awk
+generate_post grep
 # generate_post kvm
 # generate_post fdisk
 # generate_post systemd
