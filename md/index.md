@@ -97,6 +97,12 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 |-----------------|
 |[awk](html/awk.html)|
 |[grep](html/grep.html)|
+
+:::
+
+::: {.column}
+| |
+|-----------------|
 |[plantuml](html/plantuml.html)|
 |[graphviz](html/graphviz.html)|
 :::
@@ -104,13 +110,7 @@ subtitle: "A Software Engineer's Practical Notebook<br/>*Computer Systems - Dist
 ::: {.column}
 | |
 |-----------------|
-|[docker](html/docker.html)|
 |[kvm](html/kvm.html)|
-:::
-
-::: {.column}
-| |
-|-----------------|
 |[disk](html/fdisk.html)|
 |[systemd](html/systemd.html)|
 :::
