@@ -2,7 +2,7 @@
 title: "AWK"
 ---
 
-### Fields
+### Field
 ```sh
   
 # $0: entire line.
@@ -78,7 +78,7 @@ $ echo 'Bob 20' | awk '/Bob/ {print $0}'
 ```
 
 
-# Functions
+### Functions
 - sub(regex, replace, [from ])
 ```sh
   
@@ -86,6 +86,3 @@ $ echo 'Bob 20' | awk '/Bob/ {print $0}'
 $ echo 'Bob: 20' | awk 'sub(":", "") {print}'
   
 ```
-
-- tolower(s)
-- toupper(s)
