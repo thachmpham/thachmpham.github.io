@@ -4,34 +4,45 @@ title: tcpdump
 
 
 ### IO
+:::::::::::::: {.columns}
+
+::: {.column}
 - List interfaces.
 ```sh
   
-tcpdump --list-interfaces
-tcpdump -D
+-D
   
 ```
 
 - Capture.
 ```sh
   
-tcpdump -i interface
-tcpdump -i interface -w outfile
+-i interface
+-i interface -w outfile
   
 ```
+:::
 
+
+::: {.column}
 - Read from file.
 ```sh
   
-tcpdump -r infile
+-r infile
 
 # read only N packets
-tcpdump -r infile -c N 
+-r infile -c N 
   
 ```
 
+:::
+
+::::::::::::::
 
 ### Output Format
+:::::::::::::: {.columns}
+
+::: {.column}
 - Hex and ascii.
 ```sh
   
@@ -43,13 +54,38 @@ tcpdump -r infile -c N
   
 ```
 
-- Frame number
+- Frame number.
 ```sh
   
 --number
 -#
   
 ```
+
+:::
+
+
+::: {.column}
+- Link-level header.
+```sh
+  
+-e
+  
+```
+
+
+- Time.
+```sh
+  
+-ttt    # delta between frames
+-tttt   # date
+-ttttt  # delta since frame 1     
+  
+```
+
+:::
+
+::::::::::::::
 
 ### Redirect Output
 - Redirect to stdout.
@@ -89,12 +125,27 @@ tcpdump -r infile -F expr_file
   
 ```
 
-- Filter packets containing specific bytes at a given offset.
+:::::::::::::: {.columns}
+
+::: {.column}
+- Offset.
 ```sh
   
 'ether[0x30] == 0x63'
 'ether[0x30:2] == 0x6368'
   
 ```
+:::
 
 
+::: {.column}
+- Length.
+```sh
+  
+'len == 58'
+'len != 58'
+  
+```
+:::
+
+::::::::::::::

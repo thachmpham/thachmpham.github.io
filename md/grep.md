@@ -65,6 +65,11 @@ grep --perl-regexp
 
 ::::::::::::::
 
+| | Look ahead | |
+|-------------|-------------|-------------|
+| Positive | `(?=hello)` | Next is hello |
+| Negative | `(?!hello)` | Next is not hello |
+
 
 ### Commands
 :::::::::::::: {.columns}
