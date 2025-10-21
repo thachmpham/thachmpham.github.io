@@ -81,6 +81,7 @@ grep --perl-regexp
 | `-w` | Whole word |
 | `-l` | List files |
 | `-h` | No file name |
+| `-o` | Only matched parts |
 | `-A N` | N lines after |
 | `-B N` | N lines before |
 | `-C N` | N lines before, after |
