@@ -6,7 +6,6 @@ title: GREP
 ```sh
   
 grep -P
-grep --perl-regexp
   
 ```
 
@@ -75,29 +74,37 @@ grep --perl-regexp
 :::::::::::::: {.columns}
 
 ::: {.column}
-| | Control |
+
+| | Matching Control |
 |-------------|-------------|
 | `-i` | Ignore case|
 | `-w` | Whole word |
+| `-o` | Print only matched parts |
+| `-m` | Max count |
+| `-a` | Treat binary as text |
+:::
+
+::: {.column}
+| | Output Control |
+|-------------|-------------|
 | `-l` | List files |
 | `-h` | No file name |
-| `-o` | Only matched parts |
+| `-o` | Print only matched parts |
 | `-A N` | N lines after |
 | `-B N` | N lines before |
 | `-C N` | N lines before, after |
-| `--line-buffered` | |
+| `--line-buffered` | Line buffering on output |
 :::
 
+::::::::::::::
 
-::: {.column}
+
 | File Selection |
 |-------------|
 | `--include="*.hpp" --include="*.cpp"`|
 | `--exclude="*.log" --exclude="*.md"`|
 | `--exclude-dir="src"` |
-:::
 
-::::::::::::::
 
 ### References
 - [Perl Quick Reference](https://perldoc.perl.org/perlrequick)
