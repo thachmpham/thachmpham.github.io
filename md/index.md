@@ -81,15 +81,14 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Systems - Distributed Sy
 :::::::::::::: {.columns}
 
 ::: {.column}
-| |
+| Debug |
 |-----------------|
 |[gdb](html/gdb.html) |
 |[bashdb](html/bashdb.html) |
-|[tcpdump](html/tcpdump.html) |
 :::
 
 ::: {.column}
-| |
+| Text |
 |-----------------|
 |[awk](html/awk.html)|
 |[grep](html/grep.html)|
@@ -97,21 +96,21 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Systems - Distributed Sy
 :::
 
 ::: {.column}
-| |
+| Diagram |
 |-----------------|
 |[plantuml](html/plantuml.html)|
 |[graphviz](html/graphviz.html)|
 :::
 
 ::: {.column}
-| |
+| Virtualization |
 |-----------------|
 |[kvm](html/kvm.html)|
 |[docker](html/docker.html)|
 :::
 
 ::: {.column}
-| |
+| Linux |
 |-----------------|
 |[disk](html/fdisk.html)|
 |[systemd](html/systemd.html)|
@@ -120,4 +119,14 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Systems - Distributed Sy
 
 ::::::::::::::
 
+
+:::::::::::::: {.columns}
+
+::: {.column}
+| Network |
+|-----------------|
+|[tcpdump](html/tcpdump.html) |
+:::
+
+::::::::::::::
 
