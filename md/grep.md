@@ -105,7 +105,3 @@ grep -P
 | `--exclude="*.log" --exclude="*.md"`|
 | `--exclude-dir="src"` |
 
-
-### References
-- [Perl Quick Reference](https://perldoc.perl.org/perlrequick)
-- [Perl Reference](https://perldoc.perl.org/perlre)
