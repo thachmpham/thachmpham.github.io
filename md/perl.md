@@ -2,10 +2,74 @@
 title: PERL
 ---
 
+
+### Split
+:::::::::::::: {.columns}
+::: {.column}
+
+| Pattern | |
+|-------------|-------------|
+| `-F<regex>` | Split on regex |
+| `-F:` | Split on `:` |
+| `-F'[:,]'` | Split on `:` or `,` |
+
+:::
+::: {.column}
+
+| Fields |  |
+|-------------|-------------|
+| `$F[0] $F[1]` | Fields 0, 1 |
+| `@F` | All fields |
+
+:::
+::::::::::::::
+
+| | |
+|-------------|-------------|
+| `-F: -e 'print "$F[0] $F[1]\n"'` | Split on `:`. Print fields 0, 1. |
+| `-F: -e 'print "@F\n"'` | Split on `:`. Print all fields. |
+
+<br>
+
+### Subtitude 
+| Matching | |
+|-------------|-------------|
+| `-pe 's/foo/bar/'` | Replace first `foo` by `bar` |
+| `-pe 's/foo/bar/g'` | Replace all `foo` by `bar` |
+| `-pe 's/foo/bar/i'` | Ignore case insensitive |
+
+| Capture Groups | |
+|-------------|-------------|
+| `-pe 's/(foo) (bar)/$2 $1/'` | Capure groups. Swap `foo`, `bar` |
+
+<br>
+
+### Options
+:::::::::::::: {.columns}
+::: {.column}
+
+| | Input Control |
+|-------------|-------------|
+| `-e` | Execute command |
+| `-E` | Execute with features |
+
+:::
+::: {.column}
+
+| | Output Control |
+|-------------|-------------|
+| `-p` | Print all lines |
+| `-n` | Not print automatically |
+
+:::
+::::::::::::::
+
+<br>
+
 ### Regex
 :::::::::::::: {.columns}
-
 ::: {.column}
+
 | | Class |
 |-------------|-------------|
 | `.` | Any |
@@ -28,9 +92,8 @@ title: PERL
 | `(a|b)c` | Match ab, ac |
 
 :::
-
-
 ::: {.column}
+
 | | Quantity |
 |-------------|-------------|
 | `*` | 0-N |
@@ -55,7 +118,6 @@ title: PERL
 | `\Bhello\B` | `\whello\w` |
 
 :::
-
 ::::::::::::::
 
 | | Look ahead | |
@@ -63,52 +125,3 @@ title: PERL
 | Positive | `(?=hello)` | Next is hello |
 | Negative | `(?!hello)` | Next is not hello |
 
-
-### Options
-:::::::::::::: {.columns}
-
-::: {.column}
-
-| | |
-|-------------|-------------|
-| `-e` | Execute command |
-| `-E` | Execute with features |
-
-:::
-
-::: {.column}
-| | |
-|-------------|-------------|
-| `-p` | Print all lines |
-| `-n` | Not print automatically |
-
-:::
-
-::::::::::::::
-
-
-### Split
-| | |
-|-------------|-------------|
-| `-F<pattern>` | Split on regex pattern |
-| `-F:` | Split on `:` |
-| `-F'[:,]'` | Split on `:` or `,` |
-| `$F[0] $F[1]` | Fields 0, 1 |
-| `@F` | All fields |
-| | |
-| `-F: -e 'print "$F[0] $F[1]\n"'` | Split on `:`. Print fields 0, 1. |
-| `-F: -e 'print "@F\n"'` | Split on `:`. Print all fields. |
-
-
-### Subtitude 
-| | |
-|-------------|-------------|
-| `-pe 's/foo/bar/'` | Replace first `foo` by `bar` |
-| `-pe 's/foo/bar/g'` | Replace all `foo` by `bar` |
-| `-pe 's/foo/bar/i'` | Ignore case insensitive |
-| `-pe 's/(foo) (bar)/$2 $1/'` | Capure groups. Swap `foo`, `bar` |
-
-
-### References
-- [Perl Quick Reference](https://perldoc.perl.org/perlrequick)
-- [Perl Reference](https://perldoc.perl.org/perlre)

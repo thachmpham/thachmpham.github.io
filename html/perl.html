@@ -179,6 +179,146 @@
 <header id="title-block-header">
 <h1 class="title">PERL</h1>
 </header>
+<h3 id="split">Split</h3>
+<div class="columns">
+<div class="column">
+<table>
+<thead>
+<tr class="header">
+<th>Pattern</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-F&lt;regex&gt;</code></td>
+<td>Split on regex</td>
+</tr>
+<tr class="even">
+<td><code>-F:</code></td>
+<td>Split on <code>:</code></td>
+</tr>
+<tr class="odd">
+<td><code>-F'[:,]'</code></td>
+<td>Split on <code>:</code> or <code>,</code></td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th>Fields</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>$F[0] $F[1]</code></td>
+<td>Fields 0, 1</td>
+</tr>
+<tr class="even">
+<td><code>@F</code></td>
+<td>All fields</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>-F: -e 'print "$F[0] $F[1]\n"'</code></td>
+<td>Split on <code>:</code>. Print fields 0, 1.</td>
+</tr>
+<tr class="even">
+<td><code>-F: -e 'print "@F\n"'</code></td>
+<td>Split on <code>:</code>. Print all fields.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<h3 id="subtitude">Subtitude</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Matching</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-pe 's/foo/bar/'</code></td>
+<td>Replace first <code>foo</code> by <code>bar</code></td>
+</tr>
+<tr class="even">
+<td><code>-pe 's/foo/bar/g'</code></td>
+<td>Replace all <code>foo</code> by <code>bar</code></td>
+</tr>
+<tr class="odd">
+<td><code>-pe 's/foo/bar/i'</code></td>
+<td>Ignore case insensitive</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>Capture Groups</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-pe 's/(foo) (bar)/$2 $1/'</code></td>
+<td>Capure groups. Swap <code>foo</code>, <code>bar</code></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<h3 id="options">Options</h3>
+<div class="columns">
+<div class="column">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Input Control</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-e</code></td>
+<td>Execute command</td>
+</tr>
+<tr class="even">
+<td><code>-E</code></td>
+<td>Execute with features</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Output Control</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-p</code></td>
+<td>Print all lines</td>
+</tr>
+<tr class="even">
+<td><code>-n</code></td>
+<td>Not print automatically</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br></p>
 <h3 id="regex">Regex</h3>
 <div class="columns">
 <div class="column">
@@ -351,100 +491,6 @@
 </tr>
 </tbody>
 </table>
-<h3 id="options">Options</h3>
-<div class="columns">
-<div class="column">
-<table>
-<tbody>
-<tr class="odd">
-<td><code>-e</code></td>
-<td>Execute command</td>
-</tr>
-<tr class="even">
-<td><code>-E</code></td>
-<td>Execute with features</td>
-</tr>
-</tbody>
-</table>
-</div><div class="column">
-<table>
-<tbody>
-<tr class="odd">
-<td><code>-p</code></td>
-<td>Print all lines</td>
-</tr>
-<tr class="even">
-<td><code>-n</code></td>
-<td>Not print automatically</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<h3 id="split">Split</h3>
-<table>
-<tbody>
-<tr class="odd">
-<td><code>-F&lt;pattern&gt;</code></td>
-<td>Split on regex pattern</td>
-</tr>
-<tr class="even">
-<td><code>-F:</code></td>
-<td>Split on <code>:</code></td>
-</tr>
-<tr class="odd">
-<td><code>-F'[:,]'</code></td>
-<td>Split on <code>:</code> or <code>,</code></td>
-</tr>
-<tr class="even">
-<td><code>$F[0] $F[1]</code></td>
-<td>Fields 0, 1</td>
-</tr>
-<tr class="odd">
-<td><code>@F</code></td>
-<td>All fields</td>
-</tr>
-<tr class="even">
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td><code>-F: -e 'print "$F[0] $F[1]\n"'</code></td>
-<td>Split on <code>:</code>. Print fields 0, 1.</td>
-</tr>
-<tr class="even">
-<td><code>-F: -e 'print "@F\n"'</code></td>
-<td>Split on <code>:</code>. Print all fields.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="subtitude">Subtitude</h3>
-<table>
-<tbody>
-<tr class="odd">
-<td><code>-pe 's/foo/bar/'</code></td>
-<td>Replace first <code>foo</code> by <code>bar</code></td>
-</tr>
-<tr class="even">
-<td><code>-pe 's/foo/bar/g'</code></td>
-<td>Replace all <code>foo</code> by <code>bar</code></td>
-</tr>
-<tr class="odd">
-<td><code>-pe 's/foo/bar/i'</code></td>
-<td>Ignore case insensitive</td>
-</tr>
-<tr class="even">
-<td><code>-pe 's/(foo) (bar)/$2 $1/'</code></td>
-<td>Capure groups. Swap <code>foo</code>, <code>bar</code></td>
-</tr>
-</tbody>
-</table>
-<h3 id="references">References</h3>
-<ul>
-<li><a href="https://perldoc.perl.org/perlrequick">Perl Quick
-Reference</a></li>
-<li><a href="https://perldoc.perl.org/perlre">Perl Reference</a></li>
-</ul>
 <footer class="footer text-muted">
    <div align="center">
       <a href="../index.html"><b>Home</b></a>
