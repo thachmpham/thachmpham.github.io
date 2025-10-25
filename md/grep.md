@@ -102,8 +102,13 @@ grep -P
 
 ::::::::::::::
 
-| | Look ahead | | |
+| | | Lookahead | |
 |-------------|-------------|-------------|-------------|
-| Positive | `(?=hello)` | Any + `hello` | `myhello` |
-| Negative | `(?!hello)` | Any + something, not `hello` | `myhouse` |
-| Negative | `grep -P '\w+/(?!nologin)$' /etc/passwd` |
+| Positive | `car (?=run)` | Match `car` only if followed by `run` | `car run` |
+| Negative | `car (?!run)` | Match `car` only if not followed by `run` | `car stop` |
+
+
+| | | Lookbehind | |
+|-------------|-------------|-------------|-------------|
+| Positive | `(?<=red) car` | Match `car` only if preceded by `red` | `red car` |
+| Negative | `(?<!red) car` | Match `cat` only if not preceded by `red` | `blue car` |

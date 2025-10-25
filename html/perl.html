@@ -238,11 +238,31 @@
 </tbody>
 </table>
 <p><br></p>
+<h3 id="capuring-groups">Capuring Groups</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Extract Matches</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-ne 'print "$1\n" if /name=(\w+)/'</code></td>
+<td>Extract 1st match</td>
+</tr>
+<tr class="even">
+<td><code>'print "$1 $2\n" if /name=(\w+) age=(\d+)/'</code></td>
+<td>Extract 1st, 2nd</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
 <h3 id="subtitude">Subtitude</h3>
 <table>
 <thead>
 <tr class="header">
-<th>Matching</th>
+<th>Match &amp; Replace</th>
 <th></th>
 </tr>
 </thead>
@@ -259,24 +279,14 @@
 <td><code>-pe 's/foo/bar/i'</code></td>
 <td>Ignore case insensitive</td>
 </tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th>Capture Groups</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
+<tr class="even">
 <td><code>-pe 's/(foo) (bar)/$2 $1/'</code></td>
 <td>Capure groups. Swap <code>foo</code>, <code>bar</code></td>
 </tr>
 </tbody>
 </table>
 <p><br></p>
-<h3 id="options">Options</h3>
+<h3 id="commands">Commands</h3>
 <div class="columns">
 <div class="column">
 <table>
@@ -471,23 +481,62 @@
 </div>
 </div>
 <table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th></th>
-<th>Look ahead</th>
+<th></th>
+<th>Lookahead</th>
 <th></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Positive</td>
-<td><code>(?=hello)</code></td>
-<td>Next is hello</td>
+<td><code>car (?=run)</code></td>
+<td>Match <code>car</code> only if followed by <code>run</code></td>
+<td><code>car run</code></td>
 </tr>
 <tr class="even">
 <td>Negative</td>
-<td><code>(?!hello)</code></td>
-<td>Next is not hello</td>
+<td><code>car (?!run)</code></td>
+<td>Match <code>car</code> only if not followed by <code>run</code></td>
+<td><code>car stop</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th>Lookbehind</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Positive</td>
+<td><code>(?&lt;=red) car</code></td>
+<td>Match <code>car</code> only if preceded by <code>red</code></td>
+<td><code>red car</code></td>
+</tr>
+<tr class="even">
+<td>Negative</td>
+<td><code>(?&lt;!red) car</code></td>
+<td>Match <code>cat</code> only if not preceded by <code>red</code></td>
+<td><code>blue car</code></td>
 </tr>
 </tbody>
 </table>

@@ -125,8 +125,13 @@ title: PERL
 :::
 ::::::::::::::
 
-| | Lookahead | |
-|-------------|-------------|-------------|
-| Positive | `(?=hello)` | Next is hello |
-| Negative | `(?!hello)` | Next is not hello |
+| | | Lookahead | |
+|-------------|-------------|-------------|-------------|
+| Positive | `car (?=run)` | Match `car` only if followed by `run` | `car run` |
+| Negative | `car (?!run)` | Match `car` only if not followed by `run` | `car stop` |
+
+| | | Lookbehind | |
+|-------------|-------------|-------------|-------------|
+| Positive | `(?<=red) car` | Match `car` only if preceded by `red` | `red car` |
+| Negative | `(?<!red) car` | Match `cat` only if not preceded by `red` | `blue car` |
 

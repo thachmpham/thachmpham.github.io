@@ -242,6 +242,99 @@
 <header id="title-block-header">
 <h1 class="title">GREP</h1>
 </header>
+<h3 id="commands">Commands</h3>
+<div class="columns">
+<div class="column">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Matching Control</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-i</code></td>
+<td>Ignore case</td>
+</tr>
+<tr class="even">
+<td><code>-w</code></td>
+<td>Whole word</td>
+</tr>
+<tr class="odd">
+<td><code>-o</code></td>
+<td>Print only matched parts</td>
+</tr>
+<tr class="even">
+<td><code>-m</code></td>
+<td>Max count</td>
+</tr>
+<tr class="odd">
+<td><code>-a</code></td>
+<td>Treat binary as text</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Output Control</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-l</code></td>
+<td>List files</td>
+</tr>
+<tr class="even">
+<td><code>-h</code></td>
+<td>No file name</td>
+</tr>
+<tr class="odd">
+<td><code>-o</code></td>
+<td>Print only matched parts</td>
+</tr>
+<tr class="even">
+<td><code>-A N</code></td>
+<td>N lines after</td>
+</tr>
+<tr class="odd">
+<td><code>-B N</code></td>
+<td>N lines before</td>
+</tr>
+<tr class="even">
+<td><code>-C N</code></td>
+<td>N lines before, after</td>
+</tr>
+<tr class="odd">
+<td><code>--line-buffered</code></td>
+<td>Line buffering on output</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th>File Selection</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>--include="*.hpp" --include="*.cpp"</code></td>
+</tr>
+<tr class="even">
+<td><code>--exclude="*.log" --exclude="*.md"</code></td>
+</tr>
+<tr class="odd">
+<td><code>--exclude-dir="src"</code></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
 <h3 id="perl-regex">Perl Regex</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-P</span></span>
@@ -397,115 +490,62 @@
 </div>
 </div>
 <table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th></th>
-<th>Look ahead</th>
+<th></th>
+<th>Lookahead</th>
 <th></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Positive</td>
-<td><code>(?=hello)</code></td>
-<td>Next is hello</td>
+<td><code>car (?=run)</code></td>
+<td>Match <code>car</code> only if followed by <code>run</code></td>
+<td><code>car run</code></td>
 </tr>
 <tr class="even">
 <td>Negative</td>
-<td><code>(?!hello)</code></td>
-<td>Next is not hello</td>
+<td><code>car (?!run)</code></td>
+<td>Match <code>car</code> only if not followed by <code>run</code></td>
+<td><code>car stop</code></td>
 </tr>
 </tbody>
 </table>
-<h3 id="commands">Commands</h3>
-<div class="columns">
-<div class="column">
 <table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th></th>
-<th>Matching Control</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>-i</code></td>
-<td>Ignore case</td>
-</tr>
-<tr class="even">
-<td><code>-w</code></td>
-<td>Whole word</td>
-</tr>
-<tr class="odd">
-<td><code>-o</code></td>
-<td>Print only matched parts</td>
-</tr>
-<tr class="even">
-<td><code>-m</code></td>
-<td>Max count</td>
-</tr>
-<tr class="odd">
-<td><code>-a</code></td>
-<td>Treat binary as text</td>
-</tr>
-</tbody>
-</table>
-</div><div class="column">
-<table>
-<thead>
-<tr class="header">
 <th></th>
-<th>Output Control</th>
+<th>Lookbehind</th>
+<th></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>-l</code></td>
-<td>List files</td>
+<td>Positive</td>
+<td><code>(?&lt;=red) car</code></td>
+<td>Match <code>car</code> only if preceded by <code>red</code></td>
+<td><code>red car</code></td>
 </tr>
 <tr class="even">
-<td><code>-h</code></td>
-<td>No file name</td>
-</tr>
-<tr class="odd">
-<td><code>-o</code></td>
-<td>Print only matched parts</td>
-</tr>
-<tr class="even">
-<td><code>-A N</code></td>
-<td>N lines after</td>
-</tr>
-<tr class="odd">
-<td><code>-B N</code></td>
-<td>N lines before</td>
-</tr>
-<tr class="even">
-<td><code>-C N</code></td>
-<td>N lines before, after</td>
-</tr>
-<tr class="odd">
-<td><code>--line-buffered</code></td>
-<td>Line buffering on output</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<table>
-<thead>
-<tr class="header">
-<th>File Selection</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>--include="*.hpp" --include="*.cpp"</code></td>
-</tr>
-<tr class="even">
-<td><code>--exclude="*.log" --exclude="*.md"</code></td>
-</tr>
-<tr class="odd">
-<td><code>--exclude-dir="src"</code></td>
+<td>Negative</td>
+<td><code>(?&lt;!red) car</code></td>
+<td>Match <code>cat</code> only if not preceded by <code>red</code></td>
+<td><code>blue car</code></td>
 </tr>
 </tbody>
 </table>
