@@ -31,20 +31,25 @@ title: PERL
 
 <br>
 
+### Capuring Groups 
+| Extract Matches | |
+|-------------|-------------|
+| `-ne 'print "$1\n" if /name=(\w+)/'` | Extract 1st match |
+| `'print "$1 $2\n" if /name=(\w+) age=(\d+)/'` | Extract 1st, 2nd |
+
+<br>
+
 ### Subtitude 
-| Matching | |
+| Match & Replace | |
 |-------------|-------------|
 | `-pe 's/foo/bar/'` | Replace first `foo` by `bar` |
 | `-pe 's/foo/bar/g'` | Replace all `foo` by `bar` |
 | `-pe 's/foo/bar/i'` | Ignore case insensitive |
-
-| Capture Groups | |
-|-------------|-------------|
 | `-pe 's/(foo) (bar)/$2 $1/'` | Capure groups. Swap `foo`, `bar` |
 
 <br>
 
-### Options
+### Commands
 :::::::::::::: {.columns}
 ::: {.column}
 
@@ -120,7 +125,7 @@ title: PERL
 :::
 ::::::::::::::
 
-| | Look ahead | |
+| | Lookahead | |
 |-------------|-------------|-------------|
 | Positive | `(?=hello)` | Next is hello |
 | Negative | `(?!hello)` | Next is not hello |

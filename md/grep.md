@@ -2,6 +2,44 @@
 title: GREP
 ---
 
+
+### Commands
+:::::::::::::: {.columns}
+
+::: {.column}
+
+| | Matching Control |
+|-------------|-------------|
+| `-i` | Ignore case|
+| `-w` | Whole word |
+| `-o` | Print only matched parts |
+| `-m` | Max count |
+| `-a` | Treat binary as text |
+:::
+
+::: {.column}
+| | Output Control |
+|-------------|-------------|
+| `-l` | List files |
+| `-h` | No file name |
+| `-o` | Print only matched parts |
+| `-A N` | N lines after |
+| `-B N` | N lines before |
+| `-C N` | N lines before, after |
+| `--line-buffered` | Line buffering on output |
+:::
+
+::::::::::::::
+
+
+| File Selection |
+|-------------|
+| `--include="*.hpp" --include="*.cpp"`|
+| `--exclude="*.log" --exclude="*.md"`|
+| `--exclude-dir="src"` |
+
+<br>
+
 ### Perl Regex
 ```sh
   
@@ -64,44 +102,8 @@ grep -P
 
 ::::::::::::::
 
-| | Look ahead | |
-|-------------|-------------|-------------|
-| Positive | `(?=hello)` | Next is hello |
-| Negative | `(?!hello)` | Next is not hello |
-
-
-### Commands
-:::::::::::::: {.columns}
-
-::: {.column}
-
-| | Matching Control |
-|-------------|-------------|
-| `-i` | Ignore case|
-| `-w` | Whole word |
-| `-o` | Print only matched parts |
-| `-m` | Max count |
-| `-a` | Treat binary as text |
-:::
-
-::: {.column}
-| | Output Control |
-|-------------|-------------|
-| `-l` | List files |
-| `-h` | No file name |
-| `-o` | Print only matched parts |
-| `-A N` | N lines after |
-| `-B N` | N lines before |
-| `-C N` | N lines before, after |
-| `--line-buffered` | Line buffering on output |
-:::
-
-::::::::::::::
-
-
-| File Selection |
-|-------------|
-| `--include="*.hpp" --include="*.cpp"`|
-| `--exclude="*.log" --exclude="*.md"`|
-| `--exclude-dir="src"` |
-
+| | Look ahead | | |
+|-------------|-------------|-------------|-------------|
+| Positive | `(?=hello)` | Any + `hello` | `myhello` |
+| Negative | `(?!hello)` | Any + something, not `hello` | `myhouse` |
+| Negative | `grep -P '\w+/(?!nologin)$' /etc/passwd` |
