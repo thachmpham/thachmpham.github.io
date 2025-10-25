@@ -90,8 +90,9 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Systems - Distributed Sy
 ::: {.column}
 | Text |
 |-----------------|
-|[awk](html/awk.html)|
 |[grep](html/grep.html)|
+|[perl](html/perl.html)|
+|[awk](html/awk.html)|
 
 :::
 

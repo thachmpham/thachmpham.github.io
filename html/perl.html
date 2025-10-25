@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>PERL</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <!-- <script src="../3pp/d3.v7.js"></script> -->
+  <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+          look: 'handDrawn',
+          theme: 'neutral',
+      });
+  </script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">PERL</h1>
+</header>
+<h3 id="regex">Regex</h3>
+<div class="columns">
+<div class="column">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>.</code></td>
+<td>Any</td>
+</tr>
+<tr class="even">
+<td><code>\d</code></td>
+<td>Digit</td>
+</tr>
+<tr class="odd">
+<td><code>\D</code></td>
+<td>Negated of digit</td>
+</tr>
+<tr class="even">
+<td><code>\w</code></td>
+<td>Word <code>[0-9a-zA-Z_]</code></td>
+</tr>
+<tr class="odd">
+<td><code>\W</code></td>
+<td>Negated of word</td>
+</tr>
+<tr class="even">
+<td><code>\s</code></td>
+<td>Whitespace</td>
+</tr>
+<tr class="odd">
+<td><code>\s</code></td>
+<td>Negated of whitespace</td>
+</tr>
+<tr class="even">
+<td><code>[abc]</code></td>
+<td>Character class [a,b,c]</td>
+</tr>
+<tr class="odd">
+<td><code>^[abc]</code></td>
+<td>Negated of [a,b,c]</td>
+</tr>
+<tr class="even">
+<td><code>^</code></td>
+<td>Begin of line</td>
+</tr>
+<tr class="odd">
+<td><code>$</code></td>
+<td>End of line</td>
+</tr>
+<tr class="even">
+<td><code>\</code></td>
+<td>Escape next character</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Group</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>(a|b)c</code></td>
+<td>Match ab, ac</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Quantity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>*</code></td>
+<td>0-N</td>
+</tr>
+<tr class="even">
+<td><code>?</code></td>
+<td>0-1</td>
+</tr>
+<tr class="odd">
+<td><code>+</code></td>
+<td>1-N</td>
+</tr>
+<tr class="even">
+<td><code>a{2}</code></td>
+<td>aa</td>
+</tr>
+<tr class="odd">
+<td><code>a{2,4}</code></td>
+<td>aa - aaaa</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Greedy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>a*b</code></td>
+<td>Longest a*b</td>
+</tr>
+<tr class="even">
+<td><code>a*?b</code></td>
+<td>Shortest a*b</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>hello</code></td>
+<td><code>.*hello.*</code></td>
+</tr>
+<tr class="even">
+<td><code>\bhello\b</code></td>
+<td><code>hello</code></td>
+</tr>
+<tr class="odd">
+<td><code>\Bhello\B</code></td>
+<td><code>\whello\w</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Look ahead</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Positive</td>
+<td><code>(?=hello)</code></td>
+<td>Next is hello</td>
+</tr>
+<tr class="even">
+<td>Negative</td>
+<td><code>(?!hello)</code></td>
+<td>Next is not hello</td>
+</tr>
+</tbody>
+</table>
+<h3 id="options">Options</h3>
+<div class="columns">
+<div class="column">
+<table>
+<tbody>
+<tr class="odd">
+<td><code>-e</code></td>
+<td>Execute command</td>
+</tr>
+<tr class="even">
+<td><code>-E</code></td>
+<td>Execute with features</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<tbody>
+<tr class="odd">
+<td><code>-p</code></td>
+<td>Print all lines</td>
+</tr>
+<tr class="even">
+<td><code>-n</code></td>
+<td>Not print automatically</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<h3 id="split">Split</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>-F&lt;pattern&gt;</code></td>
+<td>Split on regex pattern</td>
+</tr>
+<tr class="even">
+<td><code>-F:</code></td>
+<td>Split on <code>:</code></td>
+</tr>
+<tr class="odd">
+<td><code>-F'[:,]'</code></td>
+<td>Split on <code>:</code> or <code>,</code></td>
+</tr>
+<tr class="even">
+<td><code>$F[0] $F[1]</code></td>
+<td>Fields 0, 1</td>
+</tr>
+<tr class="odd">
+<td><code>@F</code></td>
+<td>All fields</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>-F: -e 'print "$F[0] $F[1]\n"'</code></td>
+<td>Split on <code>:</code>. Print fields 0, 1.</td>
+</tr>
+<tr class="even">
+<td><code>-F: -e 'print "@F\n"'</code></td>
+<td>Split on <code>:</code>. Print all fields.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="subtitude">Subtitude</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>-pe 's/foo/bar/'</code></td>
+<td>Replace first <code>foo</code> by <code>bar</code></td>
+</tr>
+<tr class="even">
+<td><code>-pe 's/foo/bar/g'</code></td>
+<td>Replace all <code>foo</code> by <code>bar</code></td>
+</tr>
+<tr class="odd">
+<td><code>-pe 's/foo/bar/i'</code></td>
+<td>Ignore case insensitive</td>
+</tr>
+<tr class="even">
+<td><code>-pe 's/(foo) (bar)/$2 $1/'</code></td>
+<td>Capure groups. Swap <code>foo</code>, <code>bar</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="references">References</h3>
+<ul>
+<li><a href="https://perldoc.perl.org/perlrequick">Perl Quick
+Reference</a></li>
+<li><a href="https://perldoc.perl.org/perlre">Perl Reference</a></li>
+</ul>
+<footer class="footer text-muted">
+   <div align="center">
+      <a href="../index.html"><b>Home</b></a>
+   </div>
+ </footer>
+</body>
+</html>
