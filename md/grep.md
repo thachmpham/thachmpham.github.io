@@ -5,7 +5,6 @@ title: GREP
 
 ### Commands
 :::::::::::::: {.columns}
-
 ::: {.column}
 
 | | Matching Control |
@@ -15,9 +14,10 @@ title: GREP
 | `-o` | Print only matched parts |
 | `-m` | Max count |
 | `-a` | Treat binary as text |
-:::
 
+:::
 ::: {.column}
+
 | | Output Control |
 |-------------|-------------|
 | `-l` | List files |
@@ -27,8 +27,8 @@ title: GREP
 | `-B N` | N lines before |
 | `-C N` | N lines before, after |
 | `--line-buffered` | Line buffering on output |
-:::
 
+:::
 ::::::::::::::
 
 

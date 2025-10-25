@@ -183,65 +183,139 @@
 <table>
 <thead>
 <tr class="header">
-<th style="text-align: center;">Offset</th>
-<th>Header Field</th>
-<th style="text-align: left;">Size</th>
+<th style="text-align: left;">Offset</th>
+<th style="text-align: left;">Header Field</th>
+<th style="text-align: center;">Size</th>
+<th style="text-align: left;">Filter</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">0x0000</td>
-<td>Destination MAC</td>
-<td style="text-align: left;">6 bytes</td>
+<td style="text-align: left;">0x00</td>
+<td style="text-align: left;">Destination MAC</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;"><code>ether dst</code></td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">0x0006</td>
-<td>Source MAC</td>
-<td style="text-align: left;">6 bytes</td>
+<td style="text-align: left;">0x06</td>
+<td style="text-align: left;">Source MAC</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;"><code>ether src</code></td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">0x000C</td>
-<td>EtherType</td>
-<td style="text-align: left;">2 bytes</td>
+<td style="text-align: left;">0x0C</td>
+<td style="text-align: left;">EtherType</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;"><code>ether proto</code></td>
 </tr>
 <tr class="even">
-<td style="text-align: center;"></td>
-<td><strong>Header size</strong></td>
-<td style="text-align: left;"><strong>14 bytes</strong></td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th>Filter</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>ether src MAC</code></td>
-<td>Filter by source address</td>
-</tr>
-<tr class="even">
-<td><code>ether dst MAC</code></td>
-<td>Filter by destination address</td>
-</tr>
-<tr class="odd">
-<td><code>ether host MAC</code></td>
-<td>Ether source or destination matches</td>
-</tr>
-<tr class="even">
-<td><code>ether proto arp</code></td>
-<td>Filter proto ARP</td>
-</tr>
-<tr class="odd">
-<td><code>ether proto 0x88ca</code></td>
-<td>Filter proto TIPC (0x88ca)</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><strong>Header Size</strong></td>
+<td style="text-align: center;"><strong>14</strong></td>
+<td style="text-align: left;"></td>
 </tr>
 </tbody>
 </table>
 <p><br></p>
+<h3 id="ip">IP</h3>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Offset</th>
+<th style="text-align: left;">Header Field</th>
+<th style="text-align: left;">Size</th>
+<th style="text-align: left;">Filter</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0x00</td>
+<td style="text-align: left;">Version (<em>4b</em>)</td>
+<td style="text-align: left;"></td>
+<td
+style="text-align: left;"><code>ip[0x00] &gt;&gt; 4 &amp; 0x0f</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">IHL (<em>4b</em>)</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;"><code>ip[0x00] &amp; 0x0f</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0x01</td>
+<td style="text-align: left;">Type of Service</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;"><code>ip[0x01]</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0x02</td>
+<td style="text-align: left;">Total Length</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"><code>ip[0x02:2]</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0x04</td>
+<td style="text-align: left;">Identification</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"><code>ip[0x04:2]</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0x06</td>
+<td style="text-align: left;">Flags (<em>3b</em>)</td>
+<td style="text-align: left;"></td>
+<td
+style="text-align: left;"><code>ip[0x06] &gt;&gt; 5 &amp; 0x0f</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">FragOffset (<em>13b</em>)</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"><code>ip[0x06:2] &amp; 0x1fff</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0x08</td>
+<td style="text-align: left;">Time To Live</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;"><code>ip[0x08]</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0x09</td>
+<td style="text-align: left;">Protocol</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;"><code>ip proto</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0x0A</td>
+<td style="text-align: left;">Header Checksum</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"><code>ip[0x0a:2]</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0x0C</td>
+<td style="text-align: left;">Source IP</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"><code>ip src</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0x10</td>
+<td style="text-align: left;">Destination IP</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"><code>ip dst</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0x14</td>
+<td style="text-align: left;">Options (if IHL &gt; 5)</td>
+<td style="text-align: left;">*</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><strong>Header Size</strong></td>
+<td style="text-align: left;"><strong>4*IHL</strong></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
 <footer class="footer text-muted">
    <div align="center">
       <a href="../index.html"><b>Home</b></a>
