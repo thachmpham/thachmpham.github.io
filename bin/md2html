@@ -128,9 +128,10 @@ generate_post tipc
 # generate_post firewall
 # generate_post gdb
 # generate_post tcpdump
+generate_post pcap-filter
 # generate_post awk
-generate_post grep
-generate_post perl
+# generate_post grep
+# generate_post perl
 # generate_post kvm
 # generate_post fdisk
 # generate_post systemd
