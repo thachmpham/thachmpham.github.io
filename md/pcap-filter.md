@@ -23,7 +23,7 @@ title: Pcap Filter
 | 0x02 | Total Length       | 2   | `ip[0x02:2]` |
 | 0x04 | Identification     | 2   | `ip[0x04:2]` |
 | 0x06 | Flags (*3b*)       |     | `ip[0x06] >> 5 & 0x0f` |
-|      | FragOffset (*13b*) | 2   | `ip[0x06:2] & 0x1fff` |
+|      | Frag Offset (*13b*)| 2   | `ip[0x06:2] & 0x1fff` |
 | 0x08 | Time To Live       | 1   | `ip[0x08]` |
 | 0x09 | Protocol           | 1   | `ip proto` |
 | 0x0A | Header Checksum    | 2   | `ip[0x0a:2]` |
@@ -53,3 +53,60 @@ title: Pcap Filter
 | 0x14   | Options              | *    | *if Data Offset > 5* |
 |        |                      |             |        |
 |        | **Header Size**      | **20 - 60** |  **4 * DataOffset** |
+
+<br>
+
+### UDP
+
+| Offset | Field        | Size | Pcap Filter |
+|--------|--------------|------|-------------|
+| 0x00   | Source Port  | 2    | `udp src port` |
+| 0x02   | Destination Port | 2| `udp dst port` |
+| 0x04   | Length       | 2    | `udp[4:2]`   |
+| 0x06   | Checksum     | 2    | `udp[6:2]`   |
+|        |              |          |     |
+|        | **Header Size** | **8** |     |
+
+<br>
+
+### TIPC
+```go
+  
+    3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0
+    1 0 9 8 7 6 5 4|3 2 1 0 9 8 7 6|5 4 3 2 1 0 9 8|7 6 5 4 3 2 1 0
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+w0:| Ver | User  | Hsize |N|D|S|R|          Message Size           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+w1:|Mtype| Error |Reroute|Lsc| RES |     Broadcast Acknowledge     |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+w2:|        Link Acknowledge       |        Link Sequence          |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+w3:|                         Previous Node                         |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+w4:|                        Originating Port                       |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+w5:|              Destination Port / Destination Network           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+w6:|                        Originating Node                       |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+w7:|                        Destination Node                       |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+w8:|                            Name Type                          |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+w9:|                 Name Instance / Name Sequence Lower           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+wA:|                      Name Sequence Upper                      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   \                                                               \
+   /                                                               /
+   \                             Data                              \
+   /                                                               /
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+        w0-w5: Required. w6-wA: Conditional. Data: Optional
+  
+```
+
+| Field | Size | Ether  | UDP  |
+|-------|------|--------|------|
+|       |   |   |   |
