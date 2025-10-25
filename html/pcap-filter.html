@@ -210,6 +210,12 @@
 </tr>
 <tr class="even">
 <td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
 <td style="text-align: left;"><strong>Header Size</strong></td>
 <td style="text-align: center;"><strong>14</strong></td>
 <td style="text-align: left;"></td>
@@ -223,7 +229,7 @@
 <tr class="header">
 <th style="text-align: left;">Offset</th>
 <th style="text-align: left;">Header Field</th>
-<th style="text-align: left;">Size</th>
+<th style="text-align: center;">Size</th>
 <th style="text-align: left;">Filter</th>
 </tr>
 </thead>
@@ -231,88 +237,191 @@
 <tr class="odd">
 <td style="text-align: left;">0x00</td>
 <td style="text-align: left;">Version (<em>4b</em>)</td>
-<td style="text-align: left;"></td>
-<td
-style="text-align: left;"><code>ip[0x00] &gt;&gt; 4 &amp; 0x0f</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;"><code>ip[0x00] &gt;&gt; 4</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: left;">IHL (<em>4b</em>)</td>
-<td style="text-align: left;">1</td>
+<td style="text-align: center;">1</td>
 <td style="text-align: left;"><code>ip[0x00] &amp; 0x0f</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">0x01</td>
 <td style="text-align: left;">Type of Service</td>
-<td style="text-align: left;">1</td>
+<td style="text-align: center;">1</td>
 <td style="text-align: left;"><code>ip[0x01]</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">0x02</td>
 <td style="text-align: left;">Total Length</td>
-<td style="text-align: left;">2</td>
+<td style="text-align: center;">2</td>
 <td style="text-align: left;"><code>ip[0x02:2]</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">0x04</td>
 <td style="text-align: left;">Identification</td>
-<td style="text-align: left;">2</td>
+<td style="text-align: center;">2</td>
 <td style="text-align: left;"><code>ip[0x04:2]</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">0x06</td>
 <td style="text-align: left;">Flags (<em>3b</em>)</td>
-<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
 <td
 style="text-align: left;"><code>ip[0x06] &gt;&gt; 5 &amp; 0x0f</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"></td>
 <td style="text-align: left;">FragOffset (<em>13b</em>)</td>
-<td style="text-align: left;">2</td>
+<td style="text-align: center;">2</td>
 <td style="text-align: left;"><code>ip[0x06:2] &amp; 0x1fff</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">0x08</td>
 <td style="text-align: left;">Time To Live</td>
-<td style="text-align: left;">1</td>
+<td style="text-align: center;">1</td>
 <td style="text-align: left;"><code>ip[0x08]</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">0x09</td>
 <td style="text-align: left;">Protocol</td>
-<td style="text-align: left;">1</td>
+<td style="text-align: center;">1</td>
 <td style="text-align: left;"><code>ip proto</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">0x0A</td>
 <td style="text-align: left;">Header Checksum</td>
-<td style="text-align: left;">2</td>
+<td style="text-align: center;">2</td>
 <td style="text-align: left;"><code>ip[0x0a:2]</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">0x0C</td>
 <td style="text-align: left;">Source IP</td>
-<td style="text-align: left;">4</td>
+<td style="text-align: center;">4</td>
 <td style="text-align: left;"><code>ip src</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">0x10</td>
 <td style="text-align: left;">Destination IP</td>
-<td style="text-align: left;">4</td>
+<td style="text-align: center;">4</td>
 <td style="text-align: left;"><code>ip dst</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">0x14</td>
-<td style="text-align: left;">Options (if IHL &gt; 5)</td>
-<td style="text-align: left;">*</td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">Options</td>
+<td style="text-align: center;">*</td>
+<td style="text-align: left;"><em>if IHL &gt; 5</em></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"></td>
-<td style="text-align: left;"><strong>Header Size</strong></td>
-<td style="text-align: left;"><strong>4*IHL</strong></td>
 <td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><strong>Header Size</strong></td>
+<td style="text-align: center;"><strong>20 - 60</strong></td>
+<td style="text-align: left;"><strong>4 * IHL</strong></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<h3 id="tcp">TCP</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Offset</th>
+<th>Field</th>
+<th style="text-align: center;">Size</th>
+<th>Filter</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0x00</td>
+<td>Source Port</td>
+<td style="text-align: center;">2</td>
+<td><code>tcp src port</code></td>
+</tr>
+<tr class="even">
+<td>0x02</td>
+<td>Destination Port</td>
+<td style="text-align: center;">2</td>
+<td><code>tcp dst port</code></td>
+</tr>
+<tr class="odd">
+<td>0x04</td>
+<td>Sequence Number</td>
+<td style="text-align: center;">4</td>
+<td><code>tcp[0x04:4]</code></td>
+</tr>
+<tr class="even">
+<td>0x08</td>
+<td>Acknowledgment Number</td>
+<td style="text-align: center;">4</td>
+<td><code>tcp[0x08:4]</code></td>
+</tr>
+<tr class="odd">
+<td>0x0C</td>
+<td>Data Offset (<em>4b</em>)</td>
+<td style="text-align: center;"></td>
+<td><code>tcp[0x0c] &gt;&gt; 4</code></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Reserved (<em>3b</em>)</td>
+<td style="text-align: center;"></td>
+<td><code>tcp[0x0c] &gt;&gt; 1 &amp; 0x07</code></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>NS flag (<em>1b</em>)</td>
+<td style="text-align: center;">1</td>
+<td><code>tcp[0x0c] &amp; 0x01</code></td>
+</tr>
+<tr class="even">
+<td>0x0D</td>
+<td>Flags</td>
+<td style="text-align: center;">1</td>
+<td><code>tcp[0x0d]</code></td>
+</tr>
+<tr class="odd">
+<td>0x0E</td>
+<td>Window Size</td>
+<td style="text-align: center;">2</td>
+<td><code>tcp[0x0e:2]</code></td>
+</tr>
+<tr class="even">
+<td>0x10</td>
+<td>Checksum</td>
+<td style="text-align: center;">2</td>
+<td><code>tcp[0x10:2]</code></td>
+</tr>
+<tr class="odd">
+<td>0x12</td>
+<td>Urgent Pointer</td>
+<td style="text-align: center;">2</td>
+<td><code>tcp[0x12:2]</code></td>
+</tr>
+<tr class="even">
+<td>0x14</td>
+<td>Options</td>
+<td style="text-align: center;">*</td>
+<td><em>if Data Offset &gt; 5</em></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td style="text-align: center;"></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>Header Size</strong></td>
+<td style="text-align: center;"><strong>20 - 60</strong></td>
+<td><strong>4 * DataOffset</strong></td>
 </tr>
 </tbody>
 </table>
