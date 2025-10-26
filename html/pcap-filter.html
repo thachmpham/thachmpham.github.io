@@ -301,50 +301,50 @@
 <td style="text-align: left;">0x00</td>
 <td style="text-align: left;">Version (<em>4b</em>)</td>
 <td style="text-align: center;"></td>
-<td style="text-align: left;"><code>ip[0x00] &gt;&gt; 4</code></td>
+<td style="text-align: left;"><code>ip[0x0] &gt;&gt; 4</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: left;">IHL (<em>4b</em>)</td>
 <td style="text-align: center;">1</td>
-<td style="text-align: left;"><code>ip[0x00] &amp; 0x0f</code></td>
+<td style="text-align: left;"><code>ip[0x0] &amp; 0xf</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">0x01</td>
 <td style="text-align: left;">Type of Service</td>
 <td style="text-align: center;">1</td>
-<td style="text-align: left;"><code>ip[0x01]</code></td>
+<td style="text-align: left;"><code>ip[0x1]</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">0x02</td>
 <td style="text-align: left;">Total Length</td>
 <td style="text-align: center;">2</td>
-<td style="text-align: left;"><code>ip[0x02:2]</code></td>
+<td style="text-align: left;"><code>ip[0x2:2]</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">0x04</td>
 <td style="text-align: left;">Identification</td>
 <td style="text-align: center;">2</td>
-<td style="text-align: left;"><code>ip[0x04:2]</code></td>
+<td style="text-align: left;"><code>ip[0x4:2]</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">0x06</td>
 <td style="text-align: left;">Flags (<em>3b</em>)</td>
 <td style="text-align: center;"></td>
 <td
-style="text-align: left;"><code>ip[0x06] &gt;&gt; 5 &amp; 0x0f</code></td>
+style="text-align: left;"><code>ip[0x6] &gt;&gt; 5 &amp; 0xf</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Frag Offset (<em>13b</em>)</td>
 <td style="text-align: center;">2</td>
-<td style="text-align: left;"><code>ip[0x06:2] &amp; 0x1fff</code></td>
+<td style="text-align: left;"><code>ip[0x6:2] &amp; 0x1fff</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">0x08</td>
 <td style="text-align: left;">Time To Live</td>
 <td style="text-align: center;">1</td>
-<td style="text-align: left;"><code>ip[0x08]</code></td>
+<td style="text-align: left;"><code>ip[0x8]</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">0x09</td>
@@ -418,43 +418,43 @@ style="text-align: left;"><code>ip[0x06] &gt;&gt; 5 &amp; 0x0f</code></td>
 <td>0x04</td>
 <td>Sequence Number</td>
 <td style="text-align: center;">4</td>
-<td><code>tcp[0x04:4]</code></td>
+<td><code>tcp[0x4:4]</code></td>
 </tr>
 <tr class="even">
 <td>0x08</td>
 <td>Acknowledgment Number</td>
 <td style="text-align: center;">4</td>
-<td><code>tcp[0x08:4]</code></td>
+<td><code>tcp[0x8:4]</code></td>
 </tr>
 <tr class="odd">
 <td>0x0C</td>
 <td>Data Offset (<em>4b</em>)</td>
 <td style="text-align: center;"></td>
-<td><code>tcp[0x0c] &gt;&gt; 4</code></td>
+<td><code>tcp[0xc] &gt;&gt; 4</code></td>
 </tr>
 <tr class="even">
 <td></td>
 <td>Reserved (<em>3b</em>)</td>
 <td style="text-align: center;"></td>
-<td><code>tcp[0x0c] &gt;&gt; 1 &amp; 0x07</code></td>
+<td><code>tcp[0xc] &gt;&gt; 1 &amp; 0x7</code></td>
 </tr>
 <tr class="odd">
 <td></td>
 <td>NS flag (<em>1b</em>)</td>
 <td style="text-align: center;">1</td>
-<td><code>tcp[0x0c] &amp; 0x01</code></td>
+<td><code>tcp[0xc] &amp; 0x1</code></td>
 </tr>
 <tr class="even">
 <td>0x0D</td>
 <td>Flags</td>
 <td style="text-align: center;">1</td>
-<td><code>tcp[0x0d]</code></td>
+<td><code>tcp[0xd]</code></td>
 </tr>
 <tr class="odd">
 <td>0x0E</td>
 <td>Window Size</td>
 <td style="text-align: center;">2</td>
-<td><code>tcp[0x0e:2]</code></td>
+<td><code>tcp[0xe:2]</code></td>
 </tr>
 <tr class="even">
 <td>0x10</td>
@@ -495,7 +495,7 @@ style="text-align: left;"><code>ip[0x06] &gt;&gt; 5 &amp; 0x0f</code></td>
 <tr class="header">
 <th>Offset</th>
 <th>Field</th>
-<th>Size</th>
+<th style="text-align: center;">Size</th>
 <th>Pcap Filter</th>
 </tr>
 </thead>
@@ -503,37 +503,37 @@ style="text-align: left;"><code>ip[0x06] &gt;&gt; 5 &amp; 0x0f</code></td>
 <tr class="odd">
 <td>0x00</td>
 <td>Source Port</td>
-<td>2</td>
+<td style="text-align: center;">2</td>
 <td><code>udp src port</code></td>
 </tr>
 <tr class="even">
 <td>0x02</td>
 <td>Destination Port</td>
-<td>2</td>
+<td style="text-align: center;">2</td>
 <td><code>udp dst port</code></td>
 </tr>
 <tr class="odd">
 <td>0x04</td>
 <td>Length</td>
-<td>2</td>
+<td style="text-align: center;">2</td>
 <td><code>udp[4:2]</code></td>
 </tr>
 <tr class="even">
 <td>0x06</td>
 <td>Checksum</td>
-<td>2</td>
+<td style="text-align: center;">2</td>
 <td><code>udp[6:2]</code></td>
 </tr>
 <tr class="odd">
 <td></td>
 <td></td>
-<td></td>
+<td style="text-align: center;"></td>
 <td></td>
 </tr>
 <tr class="even">
 <td></td>
 <td><strong>Header Size</strong></td>
-<td><strong>8</strong></td>
+<td style="text-align: center;"><strong>8</strong></td>
 <td></td>
 </tr>
 </tbody>
@@ -543,178 +543,336 @@ style="text-align: left;"><code>ip[0x06] &gt;&gt; 5 &amp; 0x0f</code></td>
 <table>
 <thead>
 <tr class="header">
-<th>Offset</th>
 <th>Field</th>
-<th>Size</th>
+<th style="text-align: center;">Size</th>
 <th>Ether</th>
 <th>UDP</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>0x00</td>
 <td>Version</td>
-<td></td>
-<td></td>
+<td style="text-align: center;">3b</td>
+<td><code>ether[0xe] &gt;&gt; 5</code></td>
 <td></td>
 </tr>
 <tr class="even">
-<td></td>
 <td>User</td>
-<td></td>
-<td></td>
+<td style="text-align: center;">4b</td>
+<td><code>ether[0xe] &gt;&gt; 1 &amp; 0xf</code></td>
 <td></td>
 </tr>
 <tr class="odd">
-<td></td>
 <td>Hsize</td>
-<td></td>
-<td></td>
+<td style="text-align: center;">4b</td>
+<td><code>ether[0xe:2] &gt;&gt; 5 &amp; 0xf</code></td>
 <td></td>
 </tr>
 <tr class="even">
-<td></td>
 <td>NDSR</td>
-<td></td>
+<td style="text-align: center;">4b</td>
 <td></td>
 <td></td>
 </tr>
 <tr class="odd">
-<td></td>
 <td>Msize</td>
-<td></td>
+<td style="text-align: center;">13b</td>
 <td></td>
 <td></td>
 </tr>
 <tr class="even">
-<td></td>
 <td>Mtype</td>
+<td style="text-align: center;">3b</td>
+<td><code>ether[0x10] &gt;&gt; 5</code></td>
 <td></td>
-<td></td>
-<td></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 28%" />
+<col style="width: 46%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">User</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Purpose</th>
+<th style="text-align: center;">Class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: left;">LOW_IMPORTANCE</td>
+<td style="text-align: left;">Low Importance Data</td>
+<td style="text-align: center;">Payload</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">MEDIUM_IMPORTANCE</td>
+<td style="text-align: left;">Medium Importance Data</td>
+<td style="text-align: center;">Payload</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">HIGH_IMPORTANCE</td>
+<td style="text-align: left;">High Importance Data</td>
+<td style="text-align: center;">Payload</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">CRITICAL_IMPORTANCE</td>
+<td style="text-align: left;">Critical Importance Data</td>
+<td style="text-align: center;">Payload</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">USER_TYPE_4</td>
+<td style="text-align: left;">Reserved for future use</td>
+<td style="text-align: center;">N/A</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">BCAST_PROTOCOL</td>
+<td style="text-align: left;">Broadcast Link Protocol</td>
+<td style="text-align: center;">Internal</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">MSG_BUNDLER</td>
+<td style="text-align: left;">Message Bundler Protocol</td>
+<td style="text-align: center;">Internal</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">7</td>
+<td style="text-align: left;">LINK_PROTOCOL</td>
+<td style="text-align: left;">Link State Protocol</td>
+<td style="text-align: center;">Internal</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">8</td>
+<td style="text-align: left;">CONN_MANAGER</td>
+<td style="text-align: left;">Connection Manager</td>
+<td style="text-align: center;">Internal</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">9</td>
+<td style="text-align: left;">USER_TYPE_9</td>
+<td style="text-align: left;">Reserved for future use</td>
+<td style="text-align: center;">N/A</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">10</td>
+<td style="text-align: left;">CHANGEOVER_PROTOCOL</td>
+<td style="text-align: left;">Link Changeover Protocol</td>
+<td style="text-align: center;">Internal</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">11</td>
+<td style="text-align: left;">NAME_DISTRIBUTOR</td>
+<td style="text-align: left;">Name Table Update Protocol</td>
+<td style="text-align: center;">Internal</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">12</td>
+<td style="text-align: left;">MSG_FRAGMENTER</td>
+<td style="text-align: left;">Msg Fragmentation Protocol</td>
+<td style="text-align: center;">Internal</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">13</td>
+<td style="text-align: left;">LINK_DISCOVER</td>
+<td style="text-align: left;">Neighbor Detection Protocol</td>
+<td style="text-align: center;">Internal</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">14</td>
+<td style="text-align: left;">USER_TYPE_14</td>
+<td style="text-align: left;">Reserved for future use</td>
+<td style="text-align: center;">N/A</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">15</td>
+<td style="text-align: left;">USER_TYPE_15</td>
+<td style="text-align: left;">Reserved for future use</td>
+<td style="text-align: center;">N/A</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">User/Class</th>
+<th style="text-align: center;">Mtype</th>
+<th style="text-align: left;">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">Payload</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: left;">CONN_MSG</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Payload</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">MCAST_MSG</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Payload</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">NAMED_MSG</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Payload</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">DIRECT_MSG</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">NAME_DISTRIBUTOR</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: left;">Name publication</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">NAME_DISTRIBUTOR</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">Name withdrawl</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">LINK_DISCOVER</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: left;">Link request</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">LINK_DISCOVER</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">Link response</td>
 </tr>
 </tbody>
 </table>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                        TIPC Payload Message</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">3</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">8</span> <span class="dv">9</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">8</span> <span class="dv">9</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">8</span> <span class="dv">9</span> <span class="dv">0</span> <span class="dv">1</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>w0<span class="op">:|</span> Ver <span class="op">|</span> User  <span class="op">|</span> Hsize <span class="op">|</span>N<span class="op">|</span>D<span class="op">|</span>S<span class="op">|</span>R<span class="op">|</span>          Message Size           <span class="op">|</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>w1<span class="op">:|</span>Mtype<span class="op">|</span> Error <span class="op">|</span>Reroute<span class="op">|</span>Lsc<span class="op">|</span> RES <span class="op">|</span>     Broadcast Acknowledge     <span class="op">|</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>w2<span class="op">:|</span>        Link Acknowledge       <span class="op">|</span>        Link Sequence          <span class="op">|</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>w3<span class="op">:|</span>                         Previous Node                         <span class="op">|</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>w4<span class="op">:|</span>                        Originating Port                       <span class="op">|</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>w5<span class="op">:|</span>              Destination Port <span class="op">/</span> Destination Network           <span class="op">|</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>w6<span class="op">:|</span>                        Originating Node                       <span class="op">|</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>w7<span class="op">:|</span>                        Destination Node                       <span class="op">|</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>w8<span class="op">:|</span>                            Name Type                          <span class="op">|</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>w9<span class="op">:|</span>                 Name Instance <span class="op">/</span> Name Sequence Lower           <span class="op">|</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>wA<span class="op">:|</span>                      Name Sequence Upper                      <span class="op">|</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>   <span class="op">|</span>                             Data                              <span class="op">|</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>            w0<span class="op">-</span>w5<span class="op">:</span> Required<span class="op">.</span> w6<span class="op">-</span>wA<span class="op">:</span> Conditional<span class="op">.</span> Data<span class="op">:</span> Optional</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bn">0x00</span>  <span class="op">|</span> Ver <span class="op">|</span> User  <span class="op">|</span> Hsize <span class="op">|</span>N<span class="op">|</span>D<span class="op">|</span>S<span class="op">|</span>R<span class="op">|</span>          Message Size           <span class="op">|</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bn">0x04</span>  <span class="op">|</span>Mtype<span class="op">|</span> Error <span class="op">|</span>Reroute<span class="op">|</span>Lsc<span class="op">|</span> RES <span class="op">|</span>     Broadcast Acknowledge     <span class="op">|</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bn">0x08</span>  <span class="op">|</span>        Link Acknowledge       <span class="op">|</span>        Link Sequence          <span class="op">|</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="bn">0x0C</span>  <span class="op">|</span>                         Previous Node                         <span class="op">|</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="bn">0x10</span>  <span class="op">|</span>                        Originating Port                       <span class="op">|</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="bn">0x14</span>  <span class="op">|</span>              Destination Port <span class="op">/</span> Destination Network           <span class="op">|</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="bn">0x18</span>  <span class="op">|</span>                        Originating Node                       <span class="op">|</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="bn">0x1C</span>  <span class="op">|</span>                        Destination Node                       <span class="op">|</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="bn">0x20</span>  <span class="op">|</span>                            Name Type                          <span class="op">|</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="bn">0x24</span>  <span class="op">|</span>                 Name Instance <span class="op">/</span> Name Sequence Lower           <span class="op">|</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="bn">0x28</span>  <span class="op">|</span>                      Name Sequence Upper                      <span class="op">|</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="bn">0x2C</span>  <span class="op">|</span>                             Data                              <span class="op">|</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>                  Version <span class="op">-</span> Destination Port<span class="op">/</span>Network<span class="op">:</span> Required<span class="op">.</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>            Originating Node <span class="op">-</span> Name Sequence Upper<span class="op">:</span> Conditional<span class="op">.</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>                              Data<span class="op">:</span> Optional<span class="op">.</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                  TIPC Name Table Distributor Message  </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">3</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">8</span> <span class="dv">9</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">8</span> <span class="dv">9</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">8</span> <span class="dv">9</span> <span class="dv">0</span> <span class="dv">1</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>w0<span class="op">:|</span> Ver <span class="op">|</span> User  <span class="op">|</span> Hsize <span class="op">|</span>N<span class="op">|</span>R<span class="op">|</span>R<span class="op">|</span>R<span class="op">|</span>          Message Size           <span class="op">|</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>w1<span class="op">:|</span>Mtype<span class="op">|</span>     RESERVED            <span class="op">|</span>     Broadcast Acknowledge     <span class="op">|</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>w2<span class="op">:|</span>        Link Acknowledge       <span class="op">|</span>        Link Sequence          <span class="op">|</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>w3<span class="op">:|</span>                         Previous Node                         <span class="op">|</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>w4<span class="op">:|</span>                        Originating Port                       <span class="op">|</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>w5<span class="op">:|</span>              Destination Port <span class="op">/</span> Destination Network           <span class="op">|</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>w6<span class="op">:|</span>                        Originating Node                       <span class="op">|</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>w7<span class="op">:|</span>                        Destination Node                       <span class="op">|</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>w8<span class="op">:|</span>                            RESERVED                           <span class="op">|</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>w9<span class="op">:|</span>   Item Size   <span class="op">|</span>M<span class="op">|</span>           RESERVED                          <span class="op">|</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>   <span class="op">|</span>                             Data                              <span class="op">|</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bn">0x00</span>  <span class="op">|</span> Ver <span class="op">|</span> User  <span class="op">|</span> Hsize <span class="op">|</span>N<span class="op">|</span>R<span class="op">|</span>R<span class="op">|</span>R<span class="op">|</span>          Message Size           <span class="op">|</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bn">0x04</span>  <span class="op">|</span>Mtype<span class="op">|</span>     RESERVED            <span class="op">|</span>     Broadcast Acknowledge     <span class="op">|</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bn">0x08</span>  <span class="op">|</span>        Link Acknowledge       <span class="op">|</span>        Link Sequence          <span class="op">|</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="bn">0x0C</span>  <span class="op">|</span>                         Previous Node                         <span class="op">|</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="bn">0x10</span>  <span class="op">|</span>                        Originating Port                       <span class="op">|</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="bn">0x14</span>  <span class="op">|</span>              Destination Port <span class="op">/</span> Destination Network           <span class="op">|</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="bn">0x18</span>  <span class="op">|</span>                        Originating Node                       <span class="op">|</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="bn">0x1C</span>  <span class="op">|</span>                       Destination Node                       <span class="op">|</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="bn">0x20</span>  <span class="op">|</span>                            RESERVED                           <span class="op">|</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="bn">0x24</span>  <span class="op">|</span>   Item Size   <span class="op">|</span>M<span class="op">|</span>           RESERVED                          <span class="op">|</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="bn">0x28</span>  <span class="op">|</span>                             Data                              <span class="op">|</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                     TIPC Link Internal Message</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">3</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">8</span> <span class="dv">9</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">8</span> <span class="dv">9</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">8</span> <span class="dv">9</span> <span class="dv">0</span> <span class="dv">1</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>w0<span class="op">:|</span>vers <span class="op">|</span>msg usr<span class="op">|</span>hdr sz <span class="op">|</span>n<span class="op">|</span>resrv<span class="op">|</span>            packet size          <span class="op">|</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>w1<span class="op">:|</span>m typ<span class="op">|</span>   sequence gap          <span class="op">|</span>       broadcast ack no        <span class="op">|</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>w2<span class="op">:|</span>link level ack no<span class="op">/</span>bc gap after <span class="op">|</span> link level<span class="op">/</span>bc seqno<span class="op">/</span>bc gap to <span class="op">|</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>w3<span class="op">:|</span>                       previous node                           <span class="op">|</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>w4<span class="op">:|</span>  last sent broadcast<span class="op">/</span>fragm no <span class="op">|</span> next sent pkt<span class="op">/</span> fragm msg no   <span class="op">|</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>w5<span class="op">:|</span>          session no           <span class="op">|</span> res <span class="op">|</span>r<span class="op">|</span>berid<span class="op">|</span>link prio<span class="op">|</span>netpl<span class="op">|</span>p<span class="op">|</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>w6<span class="op">:|</span>                      originating node                         <span class="op">|</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>w7<span class="op">:|</span>                      destination node                         <span class="op">|</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>w8<span class="op">:|</span>                  transport sequence number                    <span class="op">|</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>w9<span class="op">:|</span>   msg count<span class="op">/</span>max packet        <span class="op">|</span>       link tolerance          <span class="op">|</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>   <span class="op">|</span>                             Data                              <span class="op">|</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>   <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bn">0x00</span>  <span class="op">|</span>vers <span class="op">|</span>msg usr<span class="op">|</span>hdr sz <span class="op">|</span>n<span class="op">|</span>resrv<span class="op">|</span>            packet size          <span class="op">|</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bn">0x04</span>  <span class="op">|</span>m typ<span class="op">|</span>   sequence gap          <span class="op">|</span>       broadcast ack no        <span class="op">|</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bn">0x08</span>  <span class="op">|</span>link level ack no<span class="op">/</span>bc gap after <span class="op">|</span> link level<span class="op">/</span>bc seqno<span class="op">/</span>bc gap to <span class="op">|</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bn">0x0C</span>  <span class="op">|</span>                       previous node                           <span class="op">|</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="bn">0x10</span>  <span class="op">|</span>  last sent broadcast<span class="op">/</span>fragm no <span class="op">|</span> next sent pkt<span class="op">/</span> fragm msg no   <span class="op">|</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="bn">0x14</span>  <span class="op">|</span>          session no           <span class="op">|</span> res <span class="op">|</span>r<span class="op">|</span>berid<span class="op">|</span>link prio<span class="op">|</span>netpl<span class="op">|</span>p<span class="op">|</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="bn">0x18</span>  <span class="op">|</span>                      originating node                         <span class="op">|</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="bn">0x1C</span>  <span class="op">|</span>                      destination node                         <span class="op">|</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="bn">0x20</span>  <span class="op">|</span>                  transport sequence number                    <span class="op">|</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="bn">0x24</span>  <span class="op">|</span>   msg count<span class="op">/</span>max packet        <span class="op">|</span>       link tolerance          <span class="op">|</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="bn">0x28</span>  <span class="op">|</span>                             Data                              <span class="op">|</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                     TIPC Neighbor Discovery Message</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>     <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">3</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>     <span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">8</span> <span class="dv">9</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">8</span> <span class="dv">9</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">8</span> <span class="dv">9</span> <span class="dv">0</span> <span class="dv">1</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>w0<span class="op">:</span> <span class="op">|</span> Ver <span class="op">|</span> User  <span class="op">|</span> Hsize <span class="op">|</span>N<span class="op">|</span>R<span class="op">|</span>R<span class="op">|</span>R<span class="op">|</span>           Message Size          <span class="op">|</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>w1<span class="op">:</span> <span class="op">|</span>Mtype<span class="op">|</span>        Capabilities       <span class="op">|</span>      Node Signature         <span class="op">|</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>w2<span class="op">:</span> <span class="op">|</span>                      Destination Domain                       <span class="op">|</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>w3<span class="op">:</span> <span class="op">|</span>                         Previous Node                         <span class="op">|</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>w4<span class="op">:</span> <span class="op">|</span>                          Network Id                           <span class="op">|</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>w5<span class="op">:</span> <span class="op">|</span>                                                               <span class="op">|</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">+-+-+-+-+-+-+-</span>                                    <span class="op">+-+-+-+-+-+-+-+</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>wX<span class="op">:</span> <span class="op">|</span>                         Media Address                         <span class="op">|</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">+-+-+-+-+-+-+-</span>                                    <span class="op">+-+-+-+-+-+-+-+</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>w12<span class="op">:|</span>                                                               <span class="op">|</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>w13<span class="op">:|</span>                           Reserved                            <span class="op">|</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>w14<span class="op">:|</span>                           Reserved                            <span class="op">|</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>w15<span class="op">:|</span>                           Reserved                            <span class="op">|</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span><span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span><span class="op">|</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bn">0x00</span>  <span class="op">|</span> Ver <span class="op">|</span> User  <span class="op">|</span> Hsize <span class="op">|</span>N<span class="op">|</span>R<span class="op">|</span>R<span class="op">|</span>R<span class="op">|</span>           Message Size          <span class="op">|</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bn">0x04</span>  <span class="op">|</span>Mtype<span class="op">|</span>        Capabilities       <span class="op">|</span>      Node Signature         <span class="op">|</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="bn">0x08</span>  <span class="op">|</span>                      Destination Domain                       <span class="op">|</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="bn">0x0C</span>  <span class="op">|</span>                         Previous Node                         <span class="op">|</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="bn">0x10</span>  <span class="op">|</span>                          Network Id                           <span class="op">|</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="bn">0x14</span>  <span class="op">|</span>                                                               <span class="op">|</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-</span>                                    <span class="op">+-+-+-+-+-+-+-+</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="bn">0x18</span>  <span class="op">|</span>                         Media Address                         <span class="op">|</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-</span>                                    <span class="op">+-+-+-+-+-+-+-+</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="bn">0x1C</span>  <span class="op">|</span>                                                               <span class="op">|</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="bn">0x20</span>  <span class="op">|</span>                           Reserved                            <span class="op">|</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="bn">0x24</span>  <span class="op">|</span>                           Reserved                            <span class="op">|</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="bn">0x28</span>  <span class="op">|</span>                           Reserved                            <span class="op">|</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>      <span class="op">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="../index.html"><b>Home</b></a>

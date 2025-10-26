@@ -127,7 +127,7 @@ generate_post tipc
 # generate_post docker
 # generate_post firewall
 # generate_post gdb
-# generate_post tcpdump
+generate_post tcpdump
 generate_post pcap-filter
 # generate_post awk
 # generate_post grep
