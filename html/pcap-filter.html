@@ -301,50 +301,50 @@
 <td style="text-align: left;">0x00</td>
 <td style="text-align: left;">Version (<em>4b</em>)</td>
 <td style="text-align: center;"></td>
-<td style="text-align: left;"><code>ip[0x0] &gt;&gt; 4</code></td>
+<td style="text-align: left;"><code>ip[0x00] &gt;&gt; 4</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: left;">IHL (<em>4b</em>)</td>
 <td style="text-align: center;">1</td>
-<td style="text-align: left;"><code>ip[0x0] &amp; 0xf</code></td>
+<td style="text-align: left;"><code>ip[0x00] &amp; 0x0f</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">0x01</td>
 <td style="text-align: left;">Type of Service</td>
 <td style="text-align: center;">1</td>
-<td style="text-align: left;"><code>ip[0x1]</code></td>
+<td style="text-align: left;"><code>ip[0x01]</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">0x02</td>
 <td style="text-align: left;">Total Length</td>
 <td style="text-align: center;">2</td>
-<td style="text-align: left;"><code>ip[0x2:2]</code></td>
+<td style="text-align: left;"><code>ip[0x02:2]</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">0x04</td>
 <td style="text-align: left;">Identification</td>
 <td style="text-align: center;">2</td>
-<td style="text-align: left;"><code>ip[0x4:2]</code></td>
+<td style="text-align: left;"><code>ip[0x04:2]</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">0x06</td>
 <td style="text-align: left;">Flags (<em>3b</em>)</td>
 <td style="text-align: center;"></td>
 <td
-style="text-align: left;"><code>ip[0x6] &gt;&gt; 5 &amp; 0xf</code></td>
+style="text-align: left;"><code>ip[0x06] &gt;&gt; 5 &amp; 0x0f</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"></td>
 <td style="text-align: left;">Frag Offset (<em>13b</em>)</td>
 <td style="text-align: center;">2</td>
-<td style="text-align: left;"><code>ip[0x6:2] &amp; 0x1fff</code></td>
+<td style="text-align: left;"><code>ip[0x06:2] &amp; 0x1fff</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">0x08</td>
 <td style="text-align: left;">Time To Live</td>
 <td style="text-align: center;">1</td>
-<td style="text-align: left;"><code>ip[0x8]</code></td>
+<td style="text-align: left;"><code>ip[0x08]</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">0x09</td>
@@ -418,43 +418,43 @@ style="text-align: left;"><code>ip[0x6] &gt;&gt; 5 &amp; 0xf</code></td>
 <td>0x04</td>
 <td>Sequence Number</td>
 <td style="text-align: center;">4</td>
-<td><code>tcp[0x4:4]</code></td>
+<td><code>tcp[0x04:4]</code></td>
 </tr>
 <tr class="even">
 <td>0x08</td>
 <td>Acknowledgment Number</td>
 <td style="text-align: center;">4</td>
-<td><code>tcp[0x8:4]</code></td>
+<td><code>tcp[0x08:4]</code></td>
 </tr>
 <tr class="odd">
 <td>0x0C</td>
 <td>Data Offset (<em>4b</em>)</td>
 <td style="text-align: center;"></td>
-<td><code>tcp[0xc] &gt;&gt; 4</code></td>
+<td><code>tcp[0x0c] &gt;&gt; 4</code></td>
 </tr>
 <tr class="even">
 <td></td>
 <td>Reserved (<em>3b</em>)</td>
 <td style="text-align: center;"></td>
-<td><code>tcp[0xc] &gt;&gt; 1 &amp; 0x7</code></td>
+<td><code>tcp[0x0c] &gt;&gt; 1 &amp; 0x07</code></td>
 </tr>
 <tr class="odd">
 <td></td>
 <td>NS flag (<em>1b</em>)</td>
 <td style="text-align: center;">1</td>
-<td><code>tcp[0xc] &amp; 0x1</code></td>
+<td><code>tcp[0x0c] &amp; 0x01</code></td>
 </tr>
 <tr class="even">
 <td>0x0D</td>
 <td>Flags</td>
 <td style="text-align: center;">1</td>
-<td><code>tcp[0xd]</code></td>
+<td><code>tcp[0x0d]</code></td>
 </tr>
 <tr class="odd">
 <td>0x0E</td>
 <td>Window Size</td>
 <td style="text-align: center;">2</td>
-<td><code>tcp[0xe:2]</code></td>
+<td><code>tcp[0x0e:2]</code></td>
 </tr>
 <tr class="even">
 <td>0x10</td>
@@ -553,19 +553,19 @@ style="text-align: left;"><code>ip[0x6] &gt;&gt; 5 &amp; 0xf</code></td>
 <tr class="odd">
 <td>Version</td>
 <td style="text-align: center;">3b</td>
-<td><code>ether[0xe] &gt;&gt; 5</code></td>
+<td><code>ether[0x0e] &gt;&gt; 5</code></td>
 <td></td>
 </tr>
 <tr class="even">
 <td>User</td>
 <td style="text-align: center;">4b</td>
-<td><code>ether[0xe] &gt;&gt; 1 &amp; 0xf</code></td>
+<td><code>ether[0x0e] &gt;&gt; 1 &amp; 0x0f</code></td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>Hsize</td>
 <td style="text-align: center;">4b</td>
-<td><code>ether[0xe:2] &gt;&gt; 5 &amp; 0xf</code></td>
+<td><code>ether[0x0e:2] &gt;&gt; 5 &amp; 0x0f</code></td>
 <td></td>
 </tr>
 <tr class="even">
