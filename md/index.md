@@ -1,30 +1,36 @@
 ---
-title:  "Thach Pham's Notebook"
-subtitle: "A Software Engineer's Notebook<br/>*Computer Systems - Distributed Systems - Software Debugging*"
+title:  "thachmpham.github.io"
+subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed Systems - Software Debugging*"
 ---
 
 
 ## 1. Networking
-### 1.1. Interfaces
-| |
+:::::::::::::: {.columns}
+::: {.column}
+
+| Protocols | |
 |:-----------------|----------------:|
-| [Virtual Ethernet Interface](html/veth.html) | (*ip veth netns*) |
-| [Virtual Bridge Interface](html/vbridge.html) | *(ip bridge netns)* |
+| [ARP](html/arp.html) | *(arping)* |
+| [IP Route](html/ip-routing.html) | *(iproute2)* |
+| [DHCP](html/dhcp.html) | *(kea-dhcp4)* |
+| [Virtual IP](html/vip.html) | *(keepalived)* |
+| [PXE](html/pxe.html) | *(dnsmasq)* |
+| [LDAP](html/ldap.html) | *(openldap)* |
+| [DRBD](html/drbd.html) | *(drbd-utils)* |
+| [TIPC](html/tipc.html) | *(tipcutils)* |
+
+:::
+::: {.column}
+
+| Virtual Interfaces | |
+|:-----------------|----------------:|
+| [Virtual Ethernet](html/veth.html) | (*ip veth netns*) |
+| [Virtual Bridge](html/vbridge.html) | *(ip bridge netns)* |
 | [Dummy Interface](html/vdummy-interface.html) | *(ip dummy netns)* |
 | [Bond Interface](html/vbond-interface.html) | *(ip bond netns)* |
 
-
-### 1.2. Protocols
-| |
-|:-----------------|----------------:|
-| [Address Resolution Protocol](html/arp.html) | *(arp, arping)* |
-| [IP Routing](html/ip-routing.html) | *(ip route)* |
-| [Dynamic Host Configuration Protocol](html/dhcp.html) | *(kea-dhcp4)* |
-| [Virtual IP Address](html/vip.html) | *(keepalived)* |
-| [Preboot eXecution Environment](html/pxe.html) | *(dnsmasq)* |
-| [Lightweight Directory Access Protocol](html/ldap.html) | *(openldap)* |
-| [Distributed Replicated Block Device](html/drbd.html) | *(drbd)* |
-| [Transparent Inter-Process Communication](html/tipc.html) | *(tipc)* |
+:::
+::::::::::::::
 
 <br>
 

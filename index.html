@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Thach Pham’s Notebook</title>
+  <title>thachmpham.github.io</title>
   <style>
     html {
       color: #1a1a1a;
@@ -170,22 +170,74 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Thach Pham’s Notebook</h1>
+<h1 class="title">thachmpham.github.io</h1>
 <p class="subtitle">A Software Engineer’s Notebook<br/><em>Computer
-Systems - Distributed Systems - Software Debugging</em></p>
+Networking - Distributed Systems - Software Debugging</em></p>
 </header>
 <h2 id="networking">1. Networking</h2>
-<h3 id="interfaces">1.1. Interfaces</h3>
+<div class="columns">
+<div class="column">
 <table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Protocols</th>
+<th style="text-align: right;"></th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/veth.html">Virtual Ethernet
-Interface</a></td>
+<td style="text-align: left;"><a href="html/arp.html">ARP</a></td>
+<td style="text-align: right;"><em>(arping)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/ip-routing.html">IP
+Route</a></td>
+<td style="text-align: right;"><em>(iproute2)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/dhcp.html">DHCP</a></td>
+<td style="text-align: right;"><em>(kea-dhcp4)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/vip.html">Virtual
+IP</a></td>
+<td style="text-align: right;"><em>(keepalived)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/pxe.html">PXE</a></td>
+<td style="text-align: right;"><em>(dnsmasq)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/ldap.html">LDAP</a></td>
+<td style="text-align: right;"><em>(openldap)</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/drbd.html">DRBD</a></td>
+<td style="text-align: right;"><em>(drbd-utils)</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="html/tipc.html">TIPC</a></td>
+<td style="text-align: right;"><em>(tipcutils)</em></td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Virtual Interfaces</th>
+<th style="text-align: right;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="html/veth.html">Virtual
+Ethernet</a></td>
 <td style="text-align: right;">(<em>ip veth netns</em>)</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/vbridge.html">Virtual Bridge
-Interface</a></td>
+<td style="text-align: left;"><a href="html/vbridge.html">Virtual
+Bridge</a></td>
 <td style="text-align: right;"><em>(ip bridge netns)</em></td>
 </tr>
 <tr class="odd">
@@ -200,55 +252,8 @@ Interface</a></td>
 </tr>
 </tbody>
 </table>
-<h3 id="protocols">1.2. Protocols</h3>
-<table>
-<colgroup>
-<col style="width: 51%" />
-<col style="width: 48%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><a href="html/arp.html">Address Resolution
-Protocol</a></td>
-<td style="text-align: right;"><em>(arp, arping)</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a href="html/ip-routing.html">IP
-Routing</a></td>
-<td style="text-align: right;"><em>(ip route)</em></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><a href="html/dhcp.html">Dynamic Host
-Configuration Protocol</a></td>
-<td style="text-align: right;"><em>(kea-dhcp4)</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a href="html/vip.html">Virtual IP
-Address</a></td>
-<td style="text-align: right;"><em>(keepalived)</em></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><a href="html/pxe.html">Preboot eXecution
-Environment</a></td>
-<td style="text-align: right;"><em>(dnsmasq)</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a href="html/ldap.html">Lightweight
-Directory Access Protocol</a></td>
-<td style="text-align: right;"><em>(openldap)</em></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><a href="html/drbd.html">Distributed
-Replicated Block Device</a></td>
-<td style="text-align: right;"><em>(drbd)</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a href="html/tipc.html">Transparent
-Inter-Process Communication</a></td>
-<td style="text-align: right;"><em>(tipc)</em></td>
-</tr>
-</tbody>
-</table>
+</div>
+</div>
 <p><br></p>
 <h2 id="distributed-systems">2. Distributed Systems</h2>
 <h3 id="opensaf">2.1. OpenSAF</h3>

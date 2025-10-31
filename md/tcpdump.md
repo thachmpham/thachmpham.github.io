@@ -5,8 +5,8 @@ title: tcpdump
 
 ### IO
 :::::::::::::: {.columns}
-
 ::: {.column}
+
 - List interfaces.
 ```sh
   
@@ -21,10 +21,10 @@ title: tcpdump
 -i interface -w outfile
   
 ```
+
 :::
-
-
 ::: {.column}
+
 - Read from file.
 ```sh
   
@@ -36,13 +36,12 @@ title: tcpdump
 ```
 
 :::
-
 ::::::::::::::
 
 ### Output Format
 :::::::::::::: {.columns}
-
 ::: {.column}
+
 - Hex and ascii.
 ```sh
   
@@ -63,9 +62,8 @@ title: tcpdump
 ```
 
 :::
-
-
 ::: {.column}
+
 - Link-level header.
 ```sh
   
@@ -84,7 +82,6 @@ title: tcpdump
 ```
 
 :::
-
 ::::::::::::::
 
 ### Redirect Output
