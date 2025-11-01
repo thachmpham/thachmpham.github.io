@@ -32,7 +32,6 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 :::
 ::::::::::::::
 
-<br>
 
 ## Distributed Systems
 ### OpenSAF
@@ -57,7 +56,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 :::
 ::: {.column}
 
-| Programing |
+| Development |
 |-----------------|
 | [Convert Program to High Availability](html/opensaf-amf-non-sa-aware.html) |
 | [Build High Availability Program](html/opensaf-amf-sa-aware.html) |
@@ -66,6 +65,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 
 :::
 ::::::::::::::
+
 
 ## Software Debugging
 ### GDB
@@ -83,31 +83,45 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 :::
 ::: {.column}
 
-| Debug |
+| Best Practice |
 |-----------------|
-| [Script Progrm](html/gdb-program-started-by-script.html) |
+| [Script Program](html/gdb-program-started-by-script.html) |
 | [Systemd Program](html/gdb-program-started-by-systemd.html) |
 | [OpenSAF Program](html/gdb-ha-program.html) |
-| [Examine ELF File](html/elf.html) |
-| [Virtual Address & EFL Offset](html/virtual-addr-elf-offset.html) |
-| [C Stack under Assembly](html/asm-callstack.html) |
-| [Override Libc Functions](html/ld_preload.html) |
 | [Multiple Threads](html/gdb-multithread.html) |
-| [Reproduce Eagain Socket Error](html/tipc_eagain.html) |
 
 :::
 ::::::::::::::
 
-<br>
 
-| Linux Kernel | |
-|-----------------|----------------:|
-| [Build & Run](html/kernel_build.html) | *(buildroot qemu)* |
-| [Debug Kernel with GDB](html/kernel_debug_gdb.html) | *(kernel qemu gdb)* |
-| [User Space to Kernel Space](html/kernel_user_to_kernel.html) | *(kernel qemu gdb)* |
+### Linux
+:::::::::::::: {.columns}
+::: {.column}
 
-<br>
+| Kernel |
+|-----------------|
+| [Build & Run](html/kernel_build.html) |
+| [Debug Kernel with GDB](html/kernel_debug_gdb.html) |
+| [User Space to Kernel Space](html/kernel_user_to_kernel.html) |
 
+:::
+::: {.column}
+
+| Binary Analysis |
+|-----------------|
+| [Examine ELF File](html/elf.html) |
+| [Virtual Address & EFL Offset](html/virtual-addr-elf-offset.html) |
+| [C to Assembly](html/asm-callstack.html) |
+| [LD_PRELOAD](html/ld_preload.html) |
+
+:::
+::::::::::::::
+
+| Reproduce |
+|-----------------|
+| [Socket EAGAIN](html/tipc_eagain.html) |
+
+* * * * *
 
 ## Cheatsheets
 :::::::::::::: {.columns}
