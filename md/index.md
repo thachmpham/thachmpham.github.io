@@ -60,7 +60,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 | Programing |
 |-----------------|
 | [Convert Program to High Availability](html/opensaf-amf-non-sa-aware.html) |
-| [Build High Availability Application](html/opensaf-amf-sa-aware.html) |
+| [Build High Availability Program](html/opensaf-amf-sa-aware.html) |
 | [Healthcheck](html/opensaf-healthcheck.html) |
 | [Error Detection & Recovery](html/opensaf-amf-error-detection.html) |
 
@@ -75,7 +75,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 | Usage |
 |-----------------|
 | [Find Memory](html/gdb-find.html) |
-| [Dump, Restore Memory](html/gdb-dump-restore.html) |
+| [Dump Restore Memory](html/gdb-dump-restore.html) |
 | [Call Functions](html/gdb-call.html) |
 | [Pretty Printer](html/gdb-write-pp.html) |
 | [STL Containers](html/gdb-stl.html) |

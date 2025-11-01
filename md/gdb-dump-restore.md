@@ -1,14 +1,11 @@
 ---
-title: Dumy & Restore Memory With GDB
+title: GDB Dump & Restore
 ---
 
 
-# 1. Introduction
 GDB allows you to dump memory to a file and restore it later. This is useful for debugging, reverse engineering, or preserving the state of a program.
 
-
-# 2. Lab
-## 2.1. Program
+## 1. Program
 ```c++
   
 #include <stdio.h>
@@ -30,7 +27,6 @@ $ gdb demo
   
 ```
 
-Start
 ```sh
   
 (gdb) start
@@ -40,6 +36,7 @@ Temporary breakpoint 1, main (argc=1, argv=0x7fffffffdfa8) at demo.cpp:7
   
 ```
 
+## 2. Memory Map
 Show memory map.
 ```sh
   
@@ -81,7 +78,7 @@ Range of data segment.
 ```
 
 
-## 2.2. Dump Memory To File
+## 3. Dump Memory
 Dump data segment to file.
 ```sh
   
@@ -98,7 +95,7 @@ $ hexdump -C mem.hex
   
 ```
 
-## 2.3. Restore Memory From File
+## 4. Restore Memory
 ```sh
   
 (gdb) restore mem.hex binary 0x555555558000

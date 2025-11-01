@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Dumy &amp; Restore Memory With GDB</title>
+  <title>GDB Dump &amp; Restore</title>
   <style>
     html {
       color: #1a1a1a;
@@ -58,6 +58,10 @@
       color: #1a1a1a;
     }
     img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
       max-width: 100%;
     }
     h1, h2, h3, h4, h5, h6 {
@@ -161,7 +165,6 @@
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
     pre > code.sourceCode > span { line-height: 1.25; }
@@ -175,7 +178,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -237,14 +240,12 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Dumy &amp; Restore Memory With GDB</h1>
+<h1 class="title">GDB Dump &amp; Restore</h1>
 </header>
-<h1 id="introduction">1. Introduction</h1>
 <p>GDB allows you to dump memory to a file and restore it later. This is
 useful for debugging, reverse engineering, or preserving the state of a
 program.</p>
-<h1 id="lab">2. Lab</h1>
-<h2 id="program">2.1. Program</h2>
+<h2 id="program">1. Program</h2>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
@@ -261,13 +262,13 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#c
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> g++ <span class="at">-g</span> <span class="at">-o</span> demo demo.cpp</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb demo</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Start</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">start</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Temporary</span> breakpoint 1, main <span class="er">(</span><span class="va">argc</span><span class="op">=</span>1, <span class="va">argv</span><span class="op">=</span>0x7fffffffdfa8<span class="kw">)</span> <span class="ex">at</span> demo.cpp:7</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">7</span>           printf<span class="er">(</span><span class="st">&quot;%s\n&quot;</span><span class="ex">,</span> str<span class="kw">);</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="memory-map">2. Memory Map</h2>
 <p>Show memory map.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> proc mappings </span>
@@ -302,7 +303,7 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#c
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555558000</span>     0x555555559000     0x1000     0x3000  rw-p   /root/demo/demo</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="dump-memory-to-file">2.2. Dump Memory To File</h2>
+<h2 id="dump-memory">3. Dump Memory</h2>
 <p>Dump data segment to file.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">dump</span> memory mem.hex 0x555555558000 0x555555559000</span>
@@ -313,7 +314,7 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#c
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">00000010</span>  68 65 6c 6c 6f 20 77 6f  72 6c 64 00 00 00 00 00  <span class="kw">|</span><span class="ex">hello</span> world.....<span class="kw">|</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">00000020</span>  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  <span class="kw">|</span><span class="ex">................</span><span class="kw">|</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="restore-memory-from-file">2.3. Restore Memory From File</h2>
+<h2 id="restore-memory">4. Restore Memory</h2>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">restore</span> mem.hex binary 0x555555558000</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Restoring</span> binary file mem.hex into memory <span class="er">(</span><span class="ex">0x555555558000</span> to 0x555555559000<span class="kw">)</span></span>
@@ -326,7 +327,7 @@ Copy Between Memory and a File</a></li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">
-      <a href="../index.html">Home</a>
+      <a href="../index.html"><b>Home</b></a>
    </div>
  </footer>
 </body>
