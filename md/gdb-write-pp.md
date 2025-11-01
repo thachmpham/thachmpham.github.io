@@ -1,12 +1,11 @@
 ---
-title: "GDB: Writing a Pretty-Printer"
-subtitle: "*Print Complex Data in GDB with Python Pretty Printer*"
+title: "GDB Pretty Printer"
 ---
 
 GDB Python pretty printers let you display complex C/C++ data structures in a readable format, making debugging easier and clearer. In this post, we will write simple plugins to print **in_addr** and **linked list** structs.
 
 
-# 1. IP Address Printer
+## 1. IP Address Printer
 In this section, we will write a plugin to print IP address (`struct in_addr`).
 ```c
   
@@ -21,7 +20,7 @@ struct in_addr
   
 ```
 
-## 1.1. Program
+### 1.1. Program
 ```c
   
 #include <arpa/inet.h>
@@ -41,7 +40,7 @@ $ gcc -g -o main main.c
   
 ```
 
-## 1.2. Printer
+### 1.2. Printer
 - Create file in_addr_printer.py.
 ```python
   
@@ -69,7 +68,7 @@ gdb.printing.register_pretty_printer(
 ```
 
 
-## 1.3. Run
+### 1.3. Run
 - Run program under gdb.
 ```sh
   
@@ -110,10 +109,10 @@ $3 = IP address: 192.168.1.1.
 ```
 
 
-# 2. Linked List Printer
+## 2. Linked List Printer
 In this section, we will write a plugin to print a linked list.
 
-## 2.1. Program
+### 2.1. Program
 ```c
   
 struct Node {
@@ -146,7 +145,7 @@ $ gcc -g -o main main.c
   
 ```
 
-## 2.2. Printer
+### 2.2. Printer
 - Create file in_addr_printer.py.
 ```python
   
@@ -186,7 +185,7 @@ gdb.printing.register_pretty_printer(
 ```
 
 
-## 2.3. Run
+### 2.3. Run
 - Run program under gdb.
 ```sh
   
@@ -240,7 +239,7 @@ Node 0x5555555592e0 [data=3, next=null]
 ```
 
 
-# References
+## References
 - [Extending GDB using Python](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Python.html#Python)
 - [GDB.Python Testsuite](https://github.com/bminor/binutils-gdb/tree/master/gdb/testsuite/gdb.python) + grep register_pretty_printers
 - [gdb.printing](https://sourceware.org/gdb/current/onlinedocs/gdb.html/gdb_002eprinting.html#gdb_002eprinting) + /usr/share/gdb/python/gdb/printing.py

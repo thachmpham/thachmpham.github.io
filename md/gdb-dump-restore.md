@@ -104,5 +104,5 @@ Restoring binary file mem.hex into memory (0x555555558000 to 0x555555559000)
 ```
 
 
-# References
+## References
 - [GDB Copy Between Memory and a File](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Dump_002fRestore-Files.html)

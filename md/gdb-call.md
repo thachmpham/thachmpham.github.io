@@ -1,12 +1,10 @@
 ---
-title: Execute Functions With GDB Call
+title: GDB Call
 ---
 
-# 1. Introduction
 The call command in GDB allows you to execute functions, modify variables, and evaluate expressions during debugging. It helps test functions, change program states, and interact with the program dynamically without restarting execution.
 
-# 2. Lab
-## 2.1. No Argument
+## 1. No Argument
 ```c++
   
 void print_hello()
@@ -24,7 +22,7 @@ hello
 ```
 
 
-## 2.2. Pass By Value
+## 2. Pass By Value
 ```c++
   
 void print_int(int a)
@@ -42,7 +40,7 @@ void print_int(int a)
 ```
 
 
-## 2.3. Pass By Reference
+## 3. Pass By Reference
 ```c++
   
 void print_ref_int(int &a)
@@ -62,7 +60,7 @@ void print_ref_int(int &a)
 ```
 
 
-## 2.4. Pass By Pointer
+## 4. Pass By Pointer
 ```c++
   
 void print_pointer_int(int *a)
@@ -81,7 +79,6 @@ void print_pointer_int(int *a)
   
 ```
 
-
-# References
+## References
 - [GDB Call](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Calling.html)
 - [GDB Pass By Reference](https://stackoverflow.com/questions/10460567/cannot-call-function-with-reference-parameter-in-gdb)

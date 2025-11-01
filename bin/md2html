@@ -95,13 +95,13 @@ generate_post tipc
 # generate_post gdb-program-started-by-script
 # generate_post gdb-program-started-by-systemd
 # generate_post gdb-ha-program
-# generate_post gdb-find
-# generate_post gdb-call
+generate_post gdb-find
+generate_post gdb-call
 generate_post gdb-dump-restore
 # generate_post gdb-stl
 # generate_post elf
 # generate_post virtual-addr-elf-offset
-# generate_post gdb-write-pp
+generate_post gdb-write-pp
 # generate_post asm-callstack
 # generate_post gdb-multithread
 
