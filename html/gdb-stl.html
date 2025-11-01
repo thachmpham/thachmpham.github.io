@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Print C++ STL Containers With GDB</title>
+  <title>GDB STL Printer</title>
   <style>
     html {
       color: #1a1a1a;
@@ -58,6 +58,10 @@
       color: #1a1a1a;
     }
     img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
       max-width: 100%;
     }
     h1, h2, h3, h4, h5, h6 {
@@ -161,7 +165,6 @@
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
     pre > code.sourceCode > span { line-height: 1.25; }
@@ -175,7 +178,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -237,15 +240,13 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Print C++ STL Containers With GDB</h1>
+<h1 class="title">GDB STL Printer</h1>
 </header>
-<h1 id="introduction">1. Introduction</h1>
 <p>Looking at C++ STL containers in GDB can be confusing - they’re full
 of internal details. With libstdc++’s Python pretty printers, GDB can
 show these containers in a much cleaner way. This guide will show you
 how to set them up and use them to make debugging easier.</p>
-<h1 id="setup-stdc-python-pretty-printers">2. Setup stdc++ Python Pretty
-Printers</h1>
+<h2 id="setup-stl-printer">1. Setup STL Printer</h2>
 <p>Check if libstdc++ python available.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ls /usr/share/gcc/python/libstdcxx/</span>
@@ -275,7 +276,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a hr
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">mpx_bound128</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">libstdc++-v6</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 id="references">References</h1>
+<h2 id="references">References</h2>
 <ul>
 <li><a
 href="https://stackoverflow.com/questions/11606048/how-to-pretty-print-stl-containers-in-gdb">How

@@ -1,11 +1,10 @@
 ---
-title:  Print C++ STL Containers With GDB
+title:  GDB STL Printer
 ---
 
-# 1. Introduction
 Looking at C++ STL containers in GDB can be confusing - they're full of internal details. With libstdc++'s Python pretty printers, GDB can show these containers in a much cleaner way. This guide will show you how to set them up and use them to make debugging easier.
 
-# 2. Setup stdc++ Python Pretty Printers
+## 1. Setup STL Printer
 Check if libstdc++ python available.
 ```sh
   
@@ -49,6 +48,6 @@ global pretty-printers:
 ```
 
 
-# References
+## References
 - [How to pretty-print STL containers in GDB?](https://stackoverflow.com/questions/11606048/how-to-pretty-print-stl-containers-in-gdb)
 - [STL Support Tools](https://sourceware.org/gdb/wiki/STLSupport)
