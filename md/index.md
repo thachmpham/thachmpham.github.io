@@ -102,15 +102,24 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 
 ## 4. Cheatsheets
 :::::::::::::: {.columns}
-
 ::: {.column}
+
 | Debug |
 |-----------------|
 |[gdb](html/gdb.html) |
 |[bashdb](html/bashdb.html) |
-:::
 
+:::
 ::: {.column}
+
+| Network |
+|-----------------|
+|[tcpdump](html/tcpdump.html) |
+|[pcap-filter](html/pcap-filter.html) |
+
+:::
+::: {.column}
+
 | Text |
 |-----------------|
 |[grep](html/grep.html)|
@@ -118,40 +127,34 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 |[awk](html/awk.html)|
 
 :::
-
 ::: {.column}
+
 | Diagram |
 |-----------------|
 |[plantuml](html/plantuml.html)|
 |[graphviz](html/graphviz.html)|
-:::
 
+:::
 ::: {.column}
+
 | Virtualization |
 |-----------------|
 |[kvm](html/kvm.html)|
 |[docker](html/docker.html)|
-:::
 
+:::
+::::::::::::::
+
+
+:::::::::::::: {.columns}
 ::: {.column}
+
 | Linux |
 |-----------------|
 |[disk](html/fdisk.html)|
 |[systemd](html/systemd.html)|
 |[firewall](html/firewall.html) |
+
 :::
-
-::::::::::::::
-
-
-:::::::::::::: {.columns}
-
-::: {.column}
-| Network |
-|-----------------|
-|[tcpdump](html/tcpdump.html) |
-|[pcap-filter](html/pcap-filter.html) |
-:::
-
 ::::::::::::::
 
