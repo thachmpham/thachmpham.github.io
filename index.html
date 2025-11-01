@@ -174,7 +174,7 @@
 <p class="subtitle">A Software Engineer’s Notebook<br/><em>Computer
 Networking - Distributed Systems - Software Debugging</em></p>
 </header>
-<h2 id="networking">1. Networking</h2>
+<h2 id="networking">Networking</h2>
 <div class="columns">
 <div class="column">
 <table>
@@ -249,8 +249,8 @@ Networking - Distributed Systems - Software Debugging</em></p>
 </div>
 </div>
 <p><br></p>
-<h2 id="distributed-systems">2. Distributed Systems</h2>
-<h3 id="opensaf">2.1. OpenSAF</h3>
+<h2 id="distributed-systems">Distributed Systems</h2>
+<h3 id="opensaf">OpenSAF</h3>
 <div class="columns">
 <div class="column">
 <table>
@@ -320,117 +320,107 @@ Application</a></td>
 </table>
 </div>
 </div>
-<p><br></p>
-<h2 id="software-debugging">3. Software Debugging</h2>
-<h3 id="cc">3.1. C/C++</h3>
+<h2 id="software-debugging">Software Debugging</h2>
+<h3 id="gdb">GDB</h3>
+<div class="columns">
+<div class="column">
 <table>
-<colgroup>
-<col style="width: 51%" />
-<col style="width: 48%" />
-</colgroup>
+<thead>
+<tr class="header">
+<th>Usage</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a
-href="html/gdb-program-started-by-script.html">Debug a Program Started
-by a Script</a></td>
-<td style="text-align: right;"><em>(gdb catch)</em></td>
+<td><a href="html/gdb-find.html">Find Memory</a></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a
-href="html/gdb-program-started-by-systemd.html">Debug A Program Started
-by SystemD</a></td>
-<td style="text-align: right;"><em>(gdb remote)</em></td>
+<td><a href="html/gdb-dump-restore.html">Dump, Restore Memory</a></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/gdb-ha-program.html">Debug a
-High Availability Program</a></td>
-<td style="text-align: right;"><em>(gdb non-stop)</em></td>
+<td><a href="html/gdb-call.html">Call Functions</a></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/gdb-find.html">Find Memory
-Inside Running Process</a></td>
-<td style="text-align: right;"><em>(gdb find)</em></td>
+<td><a href="html/gdb-write-pp.html">Pretty Printer</a></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/gdb-dump-restore.html">Dump
-&amp; Restore Process Memory</a></td>
-<td style="text-align: right;"><em>(gdb dump restore)</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a href="html/gdb-call.html">Execute
-Functions on the Fly</a></td>
-<td style="text-align: right;"><em>(gdb call)</em></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><a href="html/elf.html">Examine Contents
-of ELF File</a></td>
-<td style="text-align: right;"><em>(gdb objdump)</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a
-href="html/virtual-addr-elf-offset.html">Virtual Address &amp; EFL
-Offset</a></td>
-<td style="text-align: right;"><em>(gdb sharedlibrary)</em></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><a href="html/asm-callstack.html">Inspect
-C Stack with Assembly</a></td>
-<td style="text-align: right;"><em>(gdb asm reg)</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a href="html/gdb-stl.html">Print Contents
-of STL Containers</a></td>
-<td style="text-align: right;"><em>(gdb pretty-printer)</em></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><a href="html/gdb-write-pp.html">Method
-for Printing Complex Data</a></td>
-<td style="text-align: right;"><em>(gdb pretty-printer)</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a href="html/ld_preload.html">Modify
-Return Values of Libc Functions</a></td>
-<td style="text-align: right;"><em>(ld_preload dlsym)</em></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><a href="html/gdb-multithread.html">GDB
-&amp; Multiple Threads</a></td>
-<td style="text-align: right;"><em>(gdb thread non-stop async)</em></td>
+<td><a href="html/gdb-stl.html">STL Containers</a></td>
 </tr>
 </tbody>
 </table>
-<h3 id="linux">3.2. Linux</h3>
+</div><div class="column">
 <table>
-<colgroup>
-<col style="width: 51%" />
-<col style="width: 48%" />
-</colgroup>
+<thead>
+<tr class="header">
+<th>Debug</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/kernel_build.html">Build
-&amp; Run Linux Kernel</a></td>
+<td><a href="html/gdb-program-started-by-script.html">Script
+Progrm</a></td>
+</tr>
+<tr class="even">
+<td><a href="html/gdb-program-started-by-systemd.html">Systemd
+Program</a></td>
+</tr>
+<tr class="odd">
+<td><a href="html/gdb-ha-program.html">OpenSAF Program</a></td>
+</tr>
+<tr class="even">
+<td><a href="html/elf.html">Examine ELF File</a></td>
+</tr>
+<tr class="odd">
+<td><a href="html/virtual-addr-elf-offset.html">Virtual Address &amp;
+EFL Offset</a></td>
+</tr>
+<tr class="even">
+<td><a href="html/asm-callstack.html">C Stack under Assembly</a></td>
+</tr>
+<tr class="odd">
+<td><a href="html/ld_preload.html">Override Libc Functions</a></td>
+</tr>
+<tr class="even">
+<td><a href="html/gdb-multithread.html">Multiple Threads</a></td>
+</tr>
+<tr class="odd">
+<td><a href="html/tipc_eagain.html">Reproduce Eagain Socket
+Error</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Linux Kernel</th>
+<th style="text-align: right;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="html/kernel_build.html">Build &amp; Run</a></td>
 <td style="text-align: right;"><em>(buildroot qemu)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/kernel_debug_gdb.html">Debug
-Linux Kernel with GDB</a></td>
+<td><a href="html/kernel_debug_gdb.html">Debug Kernel with GDB</a></td>
 <td style="text-align: right;"><em>(kernel qemu gdb)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a
-href="html/kernel_user_to_kernel.html">From User Space to Kernel
+<td><a href="html/kernel_user_to_kernel.html">User Space to Kernel
 Space</a></td>
 <td style="text-align: right;"><em>(kernel qemu gdb)</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a href="html/tipc_eagain.html">Reproduce
-Eagain Socket Error</a></td>
-<td style="text-align: right;"><em>(tipc socket buffer)</em></td>
 </tr>
 </tbody>
 </table>
 <p><br></p>
-<h2 id="cheatsheets">4. Cheatsheets</h2>
+<h2 id="cheatsheets">Cheatsheets</h2>
 <div class="columns">
 <div class="column">
 <table>
