@@ -9,7 +9,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 ::: {.column}
 
 | Protocols | |
-|:-----------------|----------------:|
+|-----------------|----------------:|
 | [ARP](html/arp.html) | *(arping)* |
 | [IP Route](html/ip-routing.html) | *(iproute2)* |
 | [DHCP](html/dhcp.html) | *(kea-dhcp4)* |
@@ -23,11 +23,11 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 ::: {.column}
 
 | Virtual Interfaces | |
-|:-----------------|----------------:|
-| [Virtual Ethernet](html/veth.html) | (*ip veth netns*) |
-| [Virtual Bridge](html/vbridge.html) | *(ip bridge netns)* |
-| [Dummy Interface](html/vdummy-interface.html) | *(ip dummy netns)* |
-| [Bond Interface](html/vbond-interface.html) | *(ip bond netns)* |
+|-----------------|----------------:|
+| [Virtual Ethernet](html/veth.html) | (*ip veth*) |
+| [Virtual Bridge](html/vbridge.html) | *(ip bridge)* |
+| [Dummy Interface](html/vdummy-interface.html) | *(ip dummy)* |
+| [Bond Interface](html/vbond-interface.html) | *(ip bond)* |
 
 :::
 ::::::::::::::
@@ -37,21 +37,38 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 
 ## 2. Distributed Systems
 ### 2.1. OpenSAF
-| |
-|:-----------------|----------------:|
-| [Build & Install](html/opensaf-install.html) | *(make)* |
-| [Setup Cluster &nbsp;&nbsp; - &nbsp; 1 SC](html/opensaf-1sc.html) | *(opensaf docker)* |
-| [Setup Cluster &nbsp;&nbsp; - &nbsp; 2 SCs](html/opensaf-2sc.html) | *(opensaf docker)* |
-| [Information Model Management](html/opensaf-imm.html) | *(imm)* |
-| [Software Management Framework](html/opensaf-smf.html) | *(smf)* |
-| [Log Service](html/opensaf-log.html) | *(log)* |
-| [Convert Program to High Availability](html/opensaf-amf-non-sa-aware.html) | *(amf non sa-aware)* |
-| [Build High Availability Application](html/opensaf-amf-sa-aware.html) | *(amf sa-aware)* |
-| [Healthcheck](html/opensaf-healthcheck.html) | *(amf)* |
-| [Error Detection & Recovery](html/opensaf-amf-error-detection.html) | *(amf component)* |
+:::::::::::::: {.columns}
+::: {.column}
+
+| Setup |
+|-----------------|
+| [Build & Install](html/opensaf-install.html) |
+| [Setup Cluster 1-SC](html/opensaf-1sc.html) |
+| [Setup Cluster 2-SC](html/opensaf-2sc.html) |
+
+:::
+::: {.column}
+
+| Service |
+|-----------------|
+| [IMM](html/opensaf-imm.html) |
+| [SMF](html/opensaf-smf.html) |
+| [LOG](html/opensaf-log.html) |
+
+:::
+::: {.column}
+
+| Programing |
+|-----------------|
+| [Convert Program to High Availability](html/opensaf-amf-non-sa-aware.html) |
+| [Build High Availability Application](html/opensaf-amf-sa-aware.html) |
+| [Healthcheck](html/opensaf-healthcheck.html) |
+| [Error Detection & Recovery](html/opensaf-amf-error-detection.html) |
+
+:::
+::::::::::::::
 
 <br>
-
 
 ## 3. Software Debugging
 ### 3.1. C/C++

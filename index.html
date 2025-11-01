@@ -180,43 +180,41 @@ Networking - Distributed Systems - Software Debugging</em></p>
 <table>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Protocols</th>
+<th>Protocols</th>
 <th style="text-align: right;"></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/arp.html">ARP</a></td>
+<td><a href="html/arp.html">ARP</a></td>
 <td style="text-align: right;"><em>(arping)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/ip-routing.html">IP
-Route</a></td>
+<td><a href="html/ip-routing.html">IP Route</a></td>
 <td style="text-align: right;"><em>(iproute2)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/dhcp.html">DHCP</a></td>
+<td><a href="html/dhcp.html">DHCP</a></td>
 <td style="text-align: right;"><em>(kea-dhcp4)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/vip.html">Virtual
-IP</a></td>
+<td><a href="html/vip.html">Virtual IP</a></td>
 <td style="text-align: right;"><em>(keepalived)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/pxe.html">PXE</a></td>
+<td><a href="html/pxe.html">PXE</a></td>
 <td style="text-align: right;"><em>(dnsmasq)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/ldap.html">LDAP</a></td>
+<td><a href="html/ldap.html">LDAP</a></td>
 <td style="text-align: right;"><em>(openldap)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/drbd.html">DRBD</a></td>
+<td><a href="html/drbd.html">DRBD</a></td>
 <td style="text-align: right;"><em>(drbd-utils)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/tipc.html">TIPC</a></td>
+<td><a href="html/tipc.html">TIPC</a></td>
 <td style="text-align: right;"><em>(tipcutils)</em></td>
 </tr>
 </tbody>
@@ -225,30 +223,26 @@ IP</a></td>
 <table>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Virtual Interfaces</th>
+<th>Virtual Interfaces</th>
 <th style="text-align: right;"></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/veth.html">Virtual
-Ethernet</a></td>
-<td style="text-align: right;">(<em>ip veth netns</em>)</td>
+<td><a href="html/veth.html">Virtual Ethernet</a></td>
+<td style="text-align: right;">(<em>ip veth</em>)</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/vbridge.html">Virtual
-Bridge</a></td>
-<td style="text-align: right;"><em>(ip bridge netns)</em></td>
+<td><a href="html/vbridge.html">Virtual Bridge</a></td>
+<td style="text-align: right;"><em>(ip bridge)</em></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/vdummy-interface.html">Dummy
-Interface</a></td>
-<td style="text-align: right;"><em>(ip dummy netns)</em></td>
+<td><a href="html/vdummy-interface.html">Dummy Interface</a></td>
+<td style="text-align: right;"><em>(ip dummy)</em></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/vbond-interface.html">Bond
-Interface</a></td>
-<td style="text-align: right;"><em>(ip bond netns)</em></td>
+<td><a href="html/vbond-interface.html">Bond Interface</a></td>
+<td style="text-align: right;"><em>(ip bond)</em></td>
 </tr>
 </tbody>
 </table>
@@ -257,67 +251,75 @@ Interface</a></td>
 <p><br></p>
 <h2 id="distributed-systems">2. Distributed Systems</h2>
 <h3 id="opensaf">2.1. OpenSAF</h3>
+<div class="columns">
+<div class="column">
 <table>
-<colgroup>
-<col style="width: 51%" />
-<col style="width: 48%" />
-</colgroup>
+<thead>
+<tr class="header">
+<th>Setup</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/opensaf-install.html">Build
-&amp; Install</a></td>
-<td style="text-align: right;"><em>(make)</em></td>
+<td><a href="html/opensaf-install.html">Build &amp; Install</a></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="html/opensaf-1sc.html">Setup
-Cluster    -   1 SC</a></td>
-<td style="text-align: right;"><em>(opensaf docker)</em></td>
+<td><a href="html/opensaf-1sc.html">Setup Cluster 1-SC</a></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="html/opensaf-2sc.html">Setup
-Cluster    -   2 SCs</a></td>
-<td style="text-align: right;"><em>(opensaf docker)</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a
-href="html/opensaf-imm.html">Information Model Management</a></td>
-<td style="text-align: right;"><em>(imm)</em></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><a href="html/opensaf-smf.html">Software
-Management Framework</a></td>
-<td style="text-align: right;"><em>(smf)</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a href="html/opensaf-log.html">Log
-Service</a></td>
-<td style="text-align: right;"><em>(log)</em></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><a
-href="html/opensaf-amf-non-sa-aware.html">Convert Program to High
-Availability</a></td>
-<td style="text-align: right;"><em>(amf non sa-aware)</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a
-href="html/opensaf-amf-sa-aware.html">Build High Availability
-Application</a></td>
-<td style="text-align: right;"><em>(amf sa-aware)</em></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><a
-href="html/opensaf-healthcheck.html">Healthcheck</a></td>
-<td style="text-align: right;"><em>(amf)</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a
-href="html/opensaf-amf-error-detection.html">Error Detection &amp;
-Recovery</a></td>
-<td style="text-align: right;"><em>(amf component)</em></td>
+<td><a href="html/opensaf-2sc.html">Setup Cluster 2-SC</a></td>
 </tr>
 </tbody>
 </table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th>Service</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="html/opensaf-imm.html">IMM</a></td>
+</tr>
+<tr class="even">
+<td><a href="html/opensaf-smf.html">SMF</a></td>
+</tr>
+<tr class="odd">
+<td><a href="html/opensaf-log.html">LOG</a></td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Programing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="html/opensaf-amf-non-sa-aware.html">Convert Program to High
+Availability</a></td>
+</tr>
+<tr class="even">
+<td><a href="html/opensaf-amf-sa-aware.html">Build High Availability
+Application</a></td>
+</tr>
+<tr class="odd">
+<td><a href="html/opensaf-healthcheck.html">Healthcheck</a></td>
+</tr>
+<tr class="even">
+<td><a href="html/opensaf-amf-error-detection.html">Error Detection
+&amp; Recovery</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><br></p>
 <h2 id="software-debugging">3. Software Debugging</h2>
 <h3 id="cc">3.1. C/C++</h3>
