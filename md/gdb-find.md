@@ -1,14 +1,10 @@
 ---
-title: Search Memory With GDB Find
+title: GDB Find
 ---
 
-# 1. Introduction
 The find command in GDB is used to search for specific byte sequences in a process's memory. It helps locate values, strings, or addresses within a given memory range.  
 
-# 2. Lab
-
-## 2.1. Program
-Create file demo.c.
+## 1. Program
 ```c++
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,14 +32,12 @@ int main(int argc, char** argv) {
   
 ```
 
-Compile.
 ```sh
   
 $ gcc -g -o demo demo.c
   
 ```
 
-Start program with gdb.
 ```sh
   
 $ gdb demo
@@ -55,7 +49,7 @@ Breakpoint 1, main () at demo.c:20
   
 ```
 
-Print proc mappings.
+## 2. Memory Map
 ```sh
   
 (gdb) info proc mappings
@@ -90,7 +84,8 @@ Mapped address spaces:
   
 ```
 
-## 2.2. Text Segment
+## 3. Find Memory
+### 3.1. Find in Text Segment
 Range of text segment.
 ```sh
   
@@ -117,7 +112,7 @@ $11 = 0x555555557004 "hi text segment"
   
 ```
 
-## 2.3. Data Segment
+### 3.2. Find in Data Segment
 Range of data segment.
 ```sh
   
@@ -137,7 +132,7 @@ $12 = 0x555555558010 <global_initialized> "hi data segment"
   
 ```
 
-## 2.4. Stack
+### 3.3. Find in Stack
 Range of stack segment.
 ```sh
   
@@ -168,7 +163,7 @@ $18 = 0x7fffffffe269 "hi command line argument"
   
 ```
 
-## 2.5. Heap
+### 3.4. Find in Heap
 Range of heap segment.
 ```sh
   
@@ -191,4 +186,3 @@ $14 = 0x5555555596b0 "hi heap"
 
 # References
 - [GDB Searching Memory](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Searching-Memory.html)
-- [Undo.io Search Memory With GDB](https://undo.io/resources/gdb-watchpoint/how-search-byte-sequence-memory-gdb-command-find)

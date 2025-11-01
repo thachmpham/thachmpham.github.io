@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Search Memory With GDB Find</title>
+  <title>GDB Find</title>
   <style>
     html {
       color: #1a1a1a;
@@ -58,6 +58,10 @@
       color: #1a1a1a;
     }
     img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
       max-width: 100%;
     }
     h1, h2, h3, h4, h5, h6 {
@@ -161,7 +165,6 @@
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
     pre > code.sourceCode > span { line-height: 1.25; }
@@ -175,7 +178,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -237,15 +240,12 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Search Memory With GDB Find</h1>
+<h1 class="title">GDB Find</h1>
 </header>
-<h1 id="introduction">1. Introduction</h1>
 <p>The find command in GDB is used to search for specific byte sequences
 in a process’s memory. It helps locate values, strings, or addresses
 within a given memory range.</p>
-<h1 id="lab">2. Lab</h1>
-<h2 id="program">2.1. Program</h2>
-<p>Create file demo.c.</p>
+<h2 id="program">1. Program</h2>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
@@ -271,11 +271,9 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#c
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Compile.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-g</span> <span class="at">-o</span> demo demo.c</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Start program with gdb.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb demo</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">20</span></span>
@@ -284,7 +282,7 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#c
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1, main <span class="er">(</span><span class="kw">)</span> <span class="ex">at</span> demo.c:20</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">20</span>          free<span class="er">(</span><span class="ex">heap_memory</span><span class="kw">);</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Print proc mappings.</p>
+<h2 id="memory-map">2. Memory Map</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> proc mappings</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -316,7 +314,8 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#c
 <span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7ffffffde000</span>     0x7ffffffff000    0x21000        0x0  rw-p   <span class="pp">[</span><span class="ss">stack</span><span class="pp">]</span></span>
 <span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="ex">0xffffffffff600000</span> 0xffffffffff601000     0x1000    0x0  <span class="at">--xp</span>   <span class="pp">[</span><span class="ss">vsyscall</span><span class="pp">]</span></span>
 <span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="text-segment">2.2. Text Segment</h2>
+<h2 id="find-memory">3. Find Memory</h2>
+<h3 id="find-in-text-segment">3.1. Find in Text Segment</h3>
 <p>Range of text segment.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555554000</span>     0x555555555000     0x1000        0x0  r--p   /root/demo/demo</span>
@@ -337,7 +336,7 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#c
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print</span> <span class="er">(</span><span class="ex">char*</span><span class="kw">)</span> <span class="ex">0x555555557004</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span><span class="ex">1</span> = 0x555555557004 <span class="st">&quot;hi text segment&quot;</span></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="data-segment">2.3. Data Segment</h2>
+<h3 id="find-in-data-segment">3.2. Find in Data Segment</h3>
 <p>Range of data segment.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555558000</span>     0x555555559000     0x1000     0x3000  rw-p   /root/demo/demo</span>
@@ -351,7 +350,7 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#c
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print</span> <span class="er">(</span><span class="ex">char*</span><span class="kw">)</span> <span class="ex">0x555555558010</span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span><span class="ex">2</span> = 0x555555558010 <span class="op">&lt;</span>global_initialized<span class="op">&gt;</span> <span class="st">&quot;hi data segment&quot;</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="stack">2.4. Stack</h2>
+<h3 id="find-in-stack">3.3. Find in Stack</h3>
 <p>Range of stack segment.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7ffffffde000</span>     0x7ffffffff000    0x21000        0x0  rw-p   <span class="pp">[</span><span class="ss">stack</span><span class="pp">]</span></span>
@@ -375,7 +374,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print</span> <span class="er">(</span><span class="ex">char*</span><span class="kw">)</span> <span class="ex">0x7fffffffe269</span></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span><span class="ex">8</span> = 0x7fffffffe269 <span class="st">&quot;hi command line argument&quot;</span></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 id="heap">2.5. Heap</h2>
+<h3 id="find-in-heap">3.4. Find in Heap</h3>
 <p>Range of heap segment.</p>
 <div class="sourceCode" id="cb12"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -396,9 +395,6 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#
 <li><a
 href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Searching-Memory.html">GDB
 Searching Memory</a></li>
-<li><a
-href="https://undo.io/resources/gdb-watchpoint/how-search-byte-sequence-memory-gdb-command-find">Undo.io
-Search Memory With GDB</a></li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">
