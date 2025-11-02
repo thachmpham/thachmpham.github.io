@@ -1,52 +1,110 @@
 ---
-title: "GDB - Print Variables"
+title: "GDB - Variables & Memory"
 ---
 
-## Print
-
+## Program Variables
 :::::::::::::: {.columns}
-::: {.column width=50%}
+::: {.column width=60%}
+
 By default, GDB prints a value according to its data type. However, we can change the output format.
 
-- d(dec), u(unsigned), f(float).
-- x(hex), z(padding+hex), t(bin), o(oct).
-- c(char), s(string).
-- a(addr).
-- r(raw, bypass pretty printer).
+- d (dec), u (unsigned), f (float).
+- x (hex), z (pad + hex), t (bin), o (oct).
+- c (char), s (string).
+- a (address).
+- r (raw, bypass pretty printer).
 - array@n : n elements of array.
 
 ```c
 int main(int argc, char** argv)
 {
-    int n = 65;
-    char* s = "hello";
+    int n = 0x01020304;
+    char* str = "hello";
     return 0;
 }
 ```
 
 :::
-::: {.column width=50%}
+::: {.column width=40%}
 
 ```python
 (gdb) p n
-$1 = 65
+$1 = 16909060
 (gdb) p/x n
-$2 = 0x41
+$2 = 0x1020304
 (gdb) p/z n
-$3 = 0x00000041
+$3 = 0x1020304
 (gdb) p/t n
-$4 = 1000001
+$4 = 1000000100000001100000100
 (gdb) p/a &n
 $6 = 0xffffffffec9c
 
-(gdb) print s
+(gdb) print str
 $6 = 0x4006c0 "hello"
-(gdb) p *s@3
+(gdb) p *str@3
 $7 = "hel"
-(gdb) p/x *s@3
+(gdb) p/x *str@3
 $8 = {0x68, 0x65, 0x6c}
 ```
 
 :::
 ::::::::::::::
 
+
+## Convenience Variables
+:::::::::::::: {.columns}
+::: {.column width=60%}
+
+GDB provides convenience variables that can hold on to a value and read later.
+
+:::
+::: {.column width=40%}
+
+```python
+(gdb) set $var1 = n
+(gdb) p $var
+$15 = 16909060
+```
+
+:::
+::::::::::::::
+
+
+## Examine Memory
+
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+The command x is used to examine memory.
+```sh
+    x/nuf addr
+```
+- **n**: Number of unit. Default: 1.
+- **u**: Unit (b, h, w, g).
+- **f**: Format (x, d, u, o, t, a, c, f, s, i).
+- **addr**: Starting address.
+
+:::
+::: {.column width=50%}
+
+```python
+(gdb) x/1wd &n
+0xffffffffec9c: 16909060
+(gdb) x/1wx &n
+0xffffffffec9c: 0x01020304
+(gdb) x/4bx &n
+0xffffffffec9c: 0x04    0x03    0x02    0x01
+
+(gdb) x/s str
+0x4006c8:       "hello"
+(gdb) x/6bc str
+0x4006c8: 104 'h' 101 'e' 108 'l' 108 'l' 111 'o' 0 '\000'
+```
+
+:::
+::::::::::::::
+
+
+## Automatic Display
+Automatic display variables each time the program stops.

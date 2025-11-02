@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>GDB - Print Variables</title>
+  <title>GDB - Variables &amp; Memory</title>
   <style>
     html {
       color: #1a1a1a;
@@ -240,48 +240,88 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">GDB - Print Variables</h1>
+<h1 class="title">GDB - Variables &amp; Memory</h1>
 </header>
-<h2 id="print">Print</h2>
+<h2 id="program-variables">Program Variables</h2>
 <div class="columns">
-<div class="column" style="width:50%;">
+<div class="column" style="width:60%;">
 <p>By default, GDB prints a value according to its data type. However,
 we can change the output format.</p>
 <ul>
-<li>d(dec), u(unsigned), f(float).</li>
-<li>x(hex), z(padding+hex), t(bin), o(oct).</li>
-<li>c(char), s(string).</li>
-<li>a(addr).</li>
-<li>r(raw, bypass pretty printer).</li>
+<li>d (dec), u (unsigned), f (float).</li>
+<li>x (hex), z (pad + hex), t (bin), o (oct).</li>
+<li>c (char), s (string).</li>
+<li>a (address).</li>
+<li>r (raw, bypass pretty printer).</li>
 <li>array@n : n elements of array.</li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> argv<span class="op">)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> n <span class="op">=</span> <span class="dv">65</span><span class="op">;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span><span class="op">*</span> s <span class="op">=</span> <span class="st">&quot;hello&quot;</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> n <span class="op">=</span> <span class="bn">0x01020304</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span><span class="op">*</span> str <span class="op">=</span> <span class="st">&quot;hello&quot;</span><span class="op">;</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-</div><div class="column" style="width:50%;">
+</div><div class="column" style="width:40%;">
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(gdb) p n</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>$<span class="dv">1</span> <span class="op">=</span> <span class="dv">65</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>$<span class="dv">1</span> <span class="op">=</span> <span class="dv">16909060</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>(gdb) p<span class="op">/</span>x n</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>$<span class="dv">2</span> <span class="op">=</span> <span class="bn">0x41</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>$<span class="dv">2</span> <span class="op">=</span> <span class="bn">0x1020304</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>(gdb) p<span class="op">/</span>z n</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>$<span class="dv">3</span> <span class="op">=</span> <span class="bn">0x00000041</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>$<span class="dv">3</span> <span class="op">=</span> <span class="bn">0x1020304</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>(gdb) p<span class="op">/</span>t n</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>$<span class="dv">4</span> <span class="op">=</span> <span class="dv">1000001</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>$<span class="dv">4</span> <span class="op">=</span> <span class="dv">1000000100000001100000100</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>(gdb) p<span class="op">/</span>a <span class="op">&amp;</span>n</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>$<span class="dv">6</span> <span class="op">=</span> <span class="bn">0xffffffffec9c</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>(gdb) <span class="bu">print</span> s</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>(gdb) <span class="bu">print</span> <span class="bu">str</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>$<span class="dv">6</span> <span class="op">=</span> <span class="bn">0x4006c0</span> <span class="st">&quot;hello&quot;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>(gdb) p <span class="op">*</span>s<span class="op">@</span><span class="dv">3</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>(gdb) p <span class="op">*</span>str<span class="op">@</span><span class="dv">3</span></span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>$<span class="dv">7</span> <span class="op">=</span> <span class="st">&quot;hel&quot;</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>(gdb) p<span class="op">/</span>x <span class="op">*</span>s<span class="op">@</span><span class="dv">3</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>(gdb) p<span class="op">/</span>x <span class="op">*</span>str<span class="op">@</span><span class="dv">3</span></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>$<span class="dv">8</span> <span class="op">=</span> {<span class="bn">0x68</span>, <span class="bn">0x65</span>, <span class="bn">0x6c</span>}</span></code></pre></div>
 </div>
 </div>
+<h2 id="convenience-variables">Convenience Variables</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p>GDB provides convenience variables that can hold on to a value and
+read later.</p>
+</div><div class="column" style="width:40%;">
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(gdb) <span class="bu">set</span> $var1 <span class="op">=</span> n</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>(gdb) p $var</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>$<span class="dv">15</span> <span class="op">=</span> <span class="dv">16909060</span></span></code></pre></div>
+</div>
+</div>
+<h2 id="examine-memory">Examine Memory</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>The command x is used to examine memory.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">x/nuf</span> addr</span></code></pre></div>
+<ul>
+<li><strong>n</strong>: Number of unit. Default: 1.</li>
+<li><strong>u</strong>: Unit (b, h, w, g).</li>
+<li><strong>f</strong>: Format (x, d, u, o, t, a, c, f, s, i).</li>
+<li><strong>addr</strong>: Starting address.</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(gdb) x<span class="op">/</span><span class="dv">1</span><span class="er">wd</span> <span class="op">&amp;</span>n</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span>: <span class="dv">16909060</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>(gdb) x<span class="op">/</span><span class="dv">1</span><span class="er">wx</span> <span class="op">&amp;</span>n</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span>: <span class="bn">0x01020304</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>(gdb) x<span class="op">/</span><span class="dv">4</span><span class="er">bx</span> <span class="op">&amp;</span>n</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span>: <span class="bn">0x04</span>    <span class="bn">0x03</span>    <span class="bn">0x02</span>    <span class="bn">0x01</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>(gdb) x<span class="op">/</span>s <span class="bu">str</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="bn">0x4006c8</span>:       <span class="st">&quot;hello&quot;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>(gdb) x<span class="op">/</span><span class="dv">6</span><span class="er">bc</span> <span class="bu">str</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="bn">0x4006c8</span>: <span class="dv">104</span> <span class="st">&#39;h&#39;</span> <span class="dv">101</span> <span class="st">&#39;e&#39;</span> <span class="dv">108</span> <span class="st">&#39;l&#39;</span> <span class="dv">108</span> <span class="st">&#39;l&#39;</span> <span class="dv">111</span> <span class="st">&#39;o&#39;</span> <span class="dv">0</span> <span class="st">&#39;</span><span class="ch">\000</span><span class="st">&#39;</span></span></code></pre></div>
+</div>
+</div>
+<h2 id="automatic-display">Automatic Display</h2>
+<p>Automatic display variables each time the program stops.</p>
 <footer class="footer text-muted">
    <div align="center">
       <a href="../index.html"><b>Home</b></a>
