@@ -91,7 +91,7 @@ generate_post tipc
 # generate_post asm-callstack
 # generate_post gdb-multithread
 
-generate_post gdb/print-var
+generate_post gdb/variable-memory
 
 # ====  BASHDB
 # generate_post bashdbs
