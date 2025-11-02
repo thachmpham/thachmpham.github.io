@@ -167,6 +167,67 @@
     }
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
+  <!-- <script src="../3pp/d3.v7.js"></script> -->
+  <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+          look: 'handDrawn',
+          theme: 'neutral',
+      });
+  </script>
+
+
+
+  <style type="text/css">
+      html {
+          color: #cfcfc2;
+          background-color: #232629;
+          scroll-behavior: smooth;
+      }
+
+      a {
+          color: #cfcfc2;
+          text-decoration-color: rgba(207, 207, 194, 0.3);
+      }
+
+      a:visited {
+          color: #cfcfc2;
+          text-decoration-color: rgba(207, 207, 194, 0.3);
+      }
+      
+      table {
+          border-collapse: collapse;
+      }
+
+      th {
+          border-top: solid #3c3c3c;
+          border-bottom: solid #3c3c3c;
+      }
+
+      
+      /* customize scrollbar begin*/
+      ::-webkit-scrollbar {
+          width: 10px;
+          height: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+          background: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+          background-color: rgba(255, 255, 255, 0.15);
+          border-radius: 6px;
+          transition: background-color 0.3s;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+          background-color: rgba(255, 255, 255, 0.35);
+      }
+      /* customize scrollbar end*/
+
+
+  </style>
 </head>
 <body>
 <header id="title-block-header">
@@ -326,23 +387,26 @@ Program</a></td>
 <table>
 <thead>
 <tr class="header">
-<th>Usage</th>
+<th>Examine Data</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td><a href="html/gdb/print-var.html">Variables &amp; Memory</a></td>
+</tr>
+<tr class="even">
 <td><a href="html/gdb-find.html">Find Memory</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><a href="html/gdb-dump-restore.html">Dump Restore Memory</a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><a href="html/gdb-call.html">Call Functions</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><a href="html/gdb-write-pp.html">Pretty Printer</a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><a href="html/gdb-stl.html">STL Containers</a></td>
 </tr>
 </tbody>
