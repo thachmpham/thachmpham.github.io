@@ -107,4 +107,49 @@ The command x is used to examine memory.
 
 
 ## Automatic Display
+:::::::::::::: {.columns}
+::: {.column width=40%}
+
 Automatic display variables each time the program stops.
+
+```c
+int main(int argc, char** argv)
+{
+    int i = 0, sum = 0;
+    while (i < 3)
+    {
+        sum += i;
+        i += 1;
+    }
+}
+```
+
+:::
+::: {.column width=60%}
+
+```python
+(gdb) set print frame-info location
+(gdb) break 7
+(gdb) display i
+(gdb) display sum
+(gdb) while 1
+ >continue
+ >end
+```
+
+```python
+Breakpoint 1, main (argc=1, argv=0xffffffffee18) at demo.c:7
+1: i = 0
+2: sum = 0
+
+Breakpoint 1, main (argc=1, argv=0xffffffffee18) at demo.c:7
+1: i = 1
+2: sum = 1
+
+Breakpoint 1, main (argc=1, argv=0xffffffffee18) at demo.c:7
+1: i = 2
+2: sum = 3
+```
+
+:::
+::::::::::::::
