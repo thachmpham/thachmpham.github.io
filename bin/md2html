@@ -10,7 +10,7 @@ convert_markdown_to_html() {
     local output_file=$2
 
     pandoc -f markdown -t html \
-    -s --highlight-style tango \
+    -s --highlight-style breezedark \
     --include-in-header ${workspace}/bin/header.html \
     --include-after-body ${workspace}/bin/footer.html \
     -F pandoc-plantuml \
