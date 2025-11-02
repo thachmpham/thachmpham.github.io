@@ -3,6 +3,61 @@ title:  "thachmpham.github.io"
 subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed Systems - Software Debugging*"
 ---
 
+## Software Debugging
+### GDB
+:::::::::::::: {.columns}
+::: {.column}
+
+| Examine Data |
+|-----------------|
+| [Variables & Memory](html/gdb/variable-memory.html)|
+| [Find Memory](html/gdb-find.html) |
+| [Dump Restore Memory](html/gdb-dump-restore.html) |
+| [Call Functions](html/gdb-call.html) |
+| [Pretty Printer](html/gdb-write-pp.html) |
+| [STL Containers](html/gdb-stl.html) |
+
+:::
+::: {.column}
+
+| Best Practice |
+|-----------------|
+| [Script Program](html/gdb-program-started-by-script.html) |
+| [Systemd Program](html/gdb-program-started-by-systemd.html) |
+| [OpenSAF Program](html/gdb-ha-program.html) |
+| [Multiple Threads](html/gdb-multithread.html) |
+
+:::
+::::::::::::::
+
+
+### Linux
+:::::::::::::: {.columns}
+::: {.column}
+
+| Kernel |
+|-----------------|
+| [Build & Run](html/kernel_build.html) |
+| [Debug Kernel with GDB](html/kernel_debug_gdb.html) |
+| [User Space to Kernel Space](html/kernel_user_to_kernel.html) |
+
+:::
+::: {.column}
+
+| Binary Analysis |
+|-----------------|
+| [Examine ELF File](html/elf.html) |
+| [Virtual Address & EFL Offset](html/virtual-addr-elf-offset.html) |
+| [C to Assembly](html/asm-callstack.html) |
+| [LD_PRELOAD](html/ld_preload.html) |
+
+:::
+::::::::::::::
+
+| Reproduce |
+|-----------------|
+| [Socket EAGAIN](html/tipc_eagain.html) |
+
 
 ## Networking
 :::::::::::::: {.columns}
@@ -65,62 +120,6 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 
 :::
 ::::::::::::::
-
-
-## Software Debugging
-### GDB
-:::::::::::::: {.columns}
-::: {.column}
-
-| Examine Data |
-|-----------------|
-| [Variables & Memory](html/gdb/variable-memory.html)|
-| [Find Memory](html/gdb-find.html) |
-| [Dump Restore Memory](html/gdb-dump-restore.html) |
-| [Call Functions](html/gdb-call.html) |
-| [Pretty Printer](html/gdb-write-pp.html) |
-| [STL Containers](html/gdb-stl.html) |
-
-:::
-::: {.column}
-
-| Best Practice |
-|-----------------|
-| [Script Program](html/gdb-program-started-by-script.html) |
-| [Systemd Program](html/gdb-program-started-by-systemd.html) |
-| [OpenSAF Program](html/gdb-ha-program.html) |
-| [Multiple Threads](html/gdb-multithread.html) |
-
-:::
-::::::::::::::
-
-
-### Linux
-:::::::::::::: {.columns}
-::: {.column}
-
-| Kernel |
-|-----------------|
-| [Build & Run](html/kernel_build.html) |
-| [Debug Kernel with GDB](html/kernel_debug_gdb.html) |
-| [User Space to Kernel Space](html/kernel_user_to_kernel.html) |
-
-:::
-::: {.column}
-
-| Binary Analysis |
-|-----------------|
-| [Examine ELF File](html/elf.html) |
-| [Virtual Address & EFL Offset](html/virtual-addr-elf-offset.html) |
-| [C to Assembly](html/asm-callstack.html) |
-| [LD_PRELOAD](html/ld_preload.html) |
-
-:::
-::::::::::::::
-
-| Reproduce |
-|-----------------|
-| [Socket EAGAIN](html/tipc_eagain.html) |
 
 
 ## Cheatsheets

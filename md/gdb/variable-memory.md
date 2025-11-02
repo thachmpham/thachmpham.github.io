@@ -2,7 +2,7 @@
 title: "GDB: Variables & Memory"
 ---
 
-## Program Variables
+## Print Variables
 :::::::::::::: {.columns}
 ::: {.column width=60%}
 
