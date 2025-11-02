@@ -25,12 +25,6 @@ generate_post() {
                                 ${workspace}/html/${post_name}.html
 }
 
-generate_post_with_toc() {
-    local post_name=$1
-    convert_markdown_to_html_with_toc    ${workspace}/md/${post_name}.md \
-                                ${workspace}/html/${post_name}.html
-}
-
 # ====  main()   ==== #
 
 
