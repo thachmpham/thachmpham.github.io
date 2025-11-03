@@ -24,7 +24,6 @@ int main()
   char str[] = "hello-hello";
   short a = 0x0102;
   int b = 0x0a0b0c0d;
-  return 0;
 }
 ```
 

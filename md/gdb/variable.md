@@ -24,7 +24,6 @@ int main()
 {
   int n = 0x01020304;
   char* str = "hello";
-  return 0;
 }
 ```
 

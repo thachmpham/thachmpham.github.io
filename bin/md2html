@@ -87,6 +87,7 @@ generate_post tipc
 
 generate_post gdb/variable
 generate_post gdb/memory
+generate_post gdb/pretty-printer
 
 # ====  BASHDB
 # generate_post bashdbs
