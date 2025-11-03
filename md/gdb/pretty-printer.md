@@ -13,7 +13,7 @@ The pretty printer for C++ STL containers is usually installed into system toget
 :::
 ::: {.column width=50%}
 
-```python
+```sh
 (gdb) info pretty-printer 
   builtin
   libstdc++-v6
@@ -79,12 +79,12 @@ struct in_addr
 :::
 ::::::::::::::
 
-**Sample: Implement Printer for in_addr.**
+Sample: Implement printer for struct in_addr.
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-**Step 1. Printer.**
+Step 1. Printer.
 
 ```python
 import gdb
@@ -103,7 +103,7 @@ class InAddrPrinter:
 :::
 ::: {.column width=50%}
 
-**Step 2. Lookup function.**
+Step 2. Lookup function.
 
 ```python
 import gdb
@@ -118,8 +118,7 @@ def in_addr_lookup(val):
 :::
 ::::::::::::::
 
-**Step 3. Register lookup function**.   
-*File: in_addr_printer.py.*
+Step 3. Register lookup function (*file: in_addr_printer.py*).
 ```python
 from gdb.printing import register_pretty_printer
 
@@ -130,7 +129,7 @@ register_pretty_printer(
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-**Step 4. Test.**
+Step 4. Test.
 
 ```c
 #include <arpa/inet.h>
@@ -148,7 +147,7 @@ int main()
 :::
 ::: {.column width=50%}
 
-```python
+```sh
 
 
 (gdb) source in_addr_printer.py
@@ -170,7 +169,6 @@ $1 = 192.168.1.1.
 ## Explore APIs
 The related APIs to implement pretty printers.
 ```python
-
 (gdb) pi
 >>> import gdb
 >>> from gdb.printing import register_pretty_printer
