@@ -3,10 +3,11 @@ title: "GDB: Variables"
 ---
 
 ## Print Variables
+By default, GDB prints a value according to its data type. However, we can change the output format.
+
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-By default, GDB prints a value according to its data type. However, we can change the output format.
 ```sh
 print [[OPTION]... --] [/FMT] [EXP]
 ```
@@ -31,11 +32,6 @@ int main()
 ::: {.column width=50%}
 
 ```c
-
-
-
-
-
 (gdb) p n
 $1 = 16909060
 (gdb) p/x n
@@ -113,10 +109,11 @@ Breakpoint 1, main (argc=1, argv=0xffffffffee18) at demo.c:7
 <br>
 
 ## Examine Memory
+The command x is used to examine memory.
+
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-The command x is used to examine memory.
 ```sh
     x/nuf addr
 ```
@@ -129,7 +126,6 @@ The command x is used to examine memory.
 ::: {.column width=50%}
 
 ```c
-
 short n = 0x0102;
 
 (gdb) x/1wd &n

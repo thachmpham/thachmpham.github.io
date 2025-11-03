@@ -13,7 +13,10 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 | [Variables](html/gdb/variable.html)|
 | [Memory](html/gdb/memory.html)|
 | [Pretty Printers](html/gdb/pretty-printer.html)|
-| [Call Functions](html/gdb-call.html) |
+
+| Examine Execution |
+|-----------------|
+| [Breakpoints](html/gdb/breakpoint.html)|
 
 :::
 ::: {.column}

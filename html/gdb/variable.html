@@ -300,10 +300,10 @@
 <h1 class="title">GDB: Variables</h1>
 </header>
 <h2 id="print-variables">Print Variables</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
 <p>By default, GDB prints a value according to its data type. However,
 we can change the output format.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">print</span> [<span class="pp">[</span><span class="ss">OPTION</span><span class="pp">]</span>... <span class="at">--]</span> <span class="pp">[</span><span class="ss">/FMT</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">EXP</span><span class="pp">]</span></span></code></pre></div>
 <p>FMT, format:</p>
 <ul>
@@ -321,27 +321,22 @@ class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span i
 <span id="cb2-4"><a href="#cb2-4"></a>  <span class="dt">char</span><span class="op">*</span> str <span class="op">=</span> <span class="st">&quot;hello&quot;</span><span class="op">;</span></span>
 <span id="cb2-5"><a href="#cb2-5"></a><span class="op">}</span></span></code></pre></div>
 </div><div class="column" style="width:50%;">
-<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p n</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>$<span class="dv">1</span> <span class="op">=</span> <span class="dv">16909060</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p<span class="op">/</span>x n</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>$<span class="dv">2</span> <span class="op">=</span> <span class="bn">0x1020304</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p<span class="op">/</span>a <span class="op">&amp;</span>n</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>$<span class="dv">4</span> <span class="op">=</span> <span class="bn">0xffffffffec9c</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p str</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>$<span class="dv">1</span> <span class="op">=</span> <span class="bn">0x4006c0</span> <span class="st">&quot;hello&quot;</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p <span class="op">*</span>str@<span class="dv">6</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>$<span class="dv">2</span> <span class="op">=</span> <span class="st">&quot;hello&quot;</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p<span class="op">/</span>c <span class="op">*</span>str@<span class="dv">6</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>$<span class="dv">3</span> <span class="op">=</span> <span class="op">{</span><span class="dv">104</span> <span class="ch">&#39;h&#39;</span><span class="op">,</span> <span class="dv">101</span> <span class="ch">&#39;e&#39;</span><span class="op">,</span> <span class="dv">108</span> <span class="ch">&#39;l&#39;</span><span class="op">,</span> <span class="dv">108</span> <span class="ch">&#39;l&#39;</span><span class="op">,</span> <span class="dv">111</span> <span class="ch">&#39;o&#39;</span><span class="op">,</span> <span class="dv">0</span> <span class="ch">&#39;</span><span class="sc">\000</span><span class="ch">&#39;</span><span class="op">}</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p<span class="op">/</span>x <span class="op">*</span>str@<span class="dv">6</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>$<span class="dv">4</span> <span class="op">=</span> <span class="op">{</span><span class="bn">0x68</span><span class="op">,</span> <span class="bn">0x65</span><span class="op">,</span> <span class="bn">0x6c</span><span class="op">,</span> <span class="bn">0x6c</span><span class="op">,</span> <span class="bn">0x6f</span><span class="op">,</span> <span class="bn">0x0</span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p n</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>$<span class="dv">1</span> <span class="op">=</span> <span class="dv">16909060</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p<span class="op">/</span>x n</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>$<span class="dv">2</span> <span class="op">=</span> <span class="bn">0x1020304</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p<span class="op">/</span>a <span class="op">&amp;</span>n</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>$<span class="dv">4</span> <span class="op">=</span> <span class="bn">0xffffffffec9c</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p str</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>$<span class="dv">1</span> <span class="op">=</span> <span class="bn">0x4006c0</span> <span class="st">&quot;hello&quot;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p <span class="op">*</span>str@<span class="dv">6</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>$<span class="dv">2</span> <span class="op">=</span> <span class="st">&quot;hello&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p<span class="op">/</span>c <span class="op">*</span>str@<span class="dv">6</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>$<span class="dv">3</span> <span class="op">=</span> <span class="op">{</span><span class="dv">104</span> <span class="ch">&#39;h&#39;</span><span class="op">,</span> <span class="dv">101</span> <span class="ch">&#39;e&#39;</span><span class="op">,</span> <span class="dv">108</span> <span class="ch">&#39;l&#39;</span><span class="op">,</span> <span class="dv">108</span> <span class="ch">&#39;l&#39;</span><span class="op">,</span> <span class="dv">111</span> <span class="ch">&#39;o&#39;</span><span class="op">,</span> <span class="dv">0</span> <span class="ch">&#39;</span><span class="sc">\000</span><span class="ch">&#39;</span><span class="op">}</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p<span class="op">/</span>x <span class="op">*</span>str@<span class="dv">6</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>$<span class="dv">4</span> <span class="op">=</span> <span class="op">{</span><span class="bn">0x68</span><span class="op">,</span> <span class="bn">0x65</span><span class="op">,</span> <span class="bn">0x6c</span><span class="op">,</span> <span class="bn">0x6c</span><span class="op">,</span> <span class="bn">0x6f</span><span class="op">,</span> <span class="bn">0x0</span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
 <p><br></p>
@@ -385,9 +380,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="op">:</span> sum <span class="op">=</span> <span class="dv">3</span></span></code></pre></div>
 <p><br></p>
 <h2 id="examine-memory">Examine Memory</h2>
+<p>The command x is used to examine memory.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>The command x is used to examine memory.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">x/nuf</span> addr</span></code></pre></div>
 <ul>
 <li><strong>n</strong>: Number of unit. Default: 1.</li>
@@ -396,15 +391,14 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <li><strong>addr</strong>: Starting address.</li>
 </ul>
 </div><div class="column" style="width:50%;">
-<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">short</span> n <span class="op">=</span> <span class="bn">0x0102</span><span class="op">;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> x<span class="op">/</span><span class="dv">1</span><span class="er">wd</span> <span class="op">&amp;</span>n</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span><span class="op">:</span> <span class="dv">258</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> x<span class="op">/</span><span class="dv">1</span><span class="er">wx</span> <span class="op">&amp;</span>n</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span><span class="op">:</span> <span class="bn">0x01020</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> x<span class="op">/</span><span class="dv">4</span><span class="er">bx</span> <span class="op">&amp;</span>n</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span><span class="op">:</span> <span class="bn">0x02</span>    <span class="bn">0x01</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">short</span> n <span class="op">=</span> <span class="bn">0x0102</span><span class="op">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> x<span class="op">/</span><span class="dv">1</span><span class="er">wd</span> <span class="op">&amp;</span>n</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span><span class="op">:</span> <span class="dv">258</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> x<span class="op">/</span><span class="dv">1</span><span class="er">wx</span> <span class="op">&amp;</span>n</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span><span class="op">:</span> <span class="bn">0x01020</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> x<span class="op">/</span><span class="dv">4</span><span class="er">bx</span> <span class="op">&amp;</span>n</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span><span class="op">:</span> <span class="bn">0x02</span>    <span class="bn">0x01</span></span></code></pre></div>
 </div>
 </div>
 <p><br></p>
