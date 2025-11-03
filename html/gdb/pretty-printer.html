@@ -302,10 +302,8 @@
 <h2 id="stdc-printer">Stdc++ Printer</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>The <a
-href="https://github.com/gcc-mirror/gcc/tree/master/libstdc%2B%2B-v3/python/libstdcxx">pretty
-printer for C++ STL containers</a> is usually installed into system
-together with g++ and can be found at the below path.</p>
+<p>The pretty printer for C++ STL containers is usually installed into
+system together with g++ and can be found at the below path.</p>
 <ul>
 <li>/usr/share/gcc/python/libstdcxx</li>
 </ul>
@@ -423,6 +421,31 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a h
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>$<span class="dv">1</span> <span class="op">=</span> <span class="fl">192.168.1.1</span>.</span></code></pre></div>
 </div>
 </div>
+<h2 id="apis">APIs</h2>
+<p>The related APIs to implement pretty printers.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>(gdb) pi</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> gdb</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> gdb.printing <span class="im">import</span> register_pretty_printer</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">help</span>(register_pretty_printer)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;&#39;&#39;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">Register pretty-printer PRINTER with OBJ.</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">Arguments:</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">    obj: Either an objfile, progspace, or None (in which case the printer</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">        is registered globally).</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">    printer: Either a function of one argument (old way) or any object</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">        which has attributes: name, enabled, __call__.</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">    replace: If True replace any existing copy of the printer.</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">        Otherwise if the printer already exists raise an exception.</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;&#39;&#39;</span></span></code></pre></div>
+<h2 id="references">References</h2>
+<ul>
+<li><a
+href="https://github.com/bminor/binutils-gdb/tree/master/gdb/python/lib/gdb">github/binutils-gdb/python/lib</a></li>
+<li><a
+href="https://github.com/gcc-mirror/gcc/tree/master/libstdc%2B%2B-v3/python/libstdcxx">github.com/gcc/libstdc++-v3/python</a></li>
+</ul>
 <footer class="footer text-muted">
    <div align="center">
       <a href="/index.html"><b>Home</b></a>

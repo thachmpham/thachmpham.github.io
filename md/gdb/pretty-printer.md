@@ -6,7 +6,7 @@ title: "GDB: Pretty Printers"
 ## Stdc++ Printer
 :::::::::::::: {.columns}
 ::: {.column width=50%}
-The [pretty printer for C++ STL containers](https://github.com/gcc-mirror/gcc/tree/master/libstdc%2B%2B-v3/python/libstdcxx) is usually installed into system together with g++ and can be found at the below path.
+The pretty printer for C++ STL containers is usually installed into system together with g++ and can be found at the below path.
 
 - /usr/share/gcc/python/libstdcxx
 
@@ -127,8 +127,6 @@ register_pretty_printer(
   obj=None, printer=in_addr_lookup, replace=True)
 ```
 
-
-
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
@@ -166,3 +164,29 @@ $1 = 192.168.1.1.
 
 :::
 ::::::::::::::
+
+
+## APIs
+The related APIs to implement pretty printers.
+```python
+
+(gdb) pi
+>>> import gdb
+>>> from gdb.printing import register_pretty_printer
+>>> help(register_pretty_printer)
+'''
+Register pretty-printer PRINTER with OBJ.
+Arguments:
+    obj: Either an objfile, progspace, or None (in which case the printer
+        is registered globally).
+    printer: Either a function of one argument (old way) or any object
+        which has attributes: name, enabled, __call__.
+    replace: If True replace any existing copy of the printer.
+        Otherwise if the printer already exists raise an exception.
+'''
+```
+
+
+## References
+- [github/binutils-gdb/python/lib](https://github.com/bminor/binutils-gdb/tree/master/gdb/python/lib/gdb)
+- [github.com/gcc/libstdc++-v3/python](https://github.com/gcc-mirror/gcc/tree/master/libstdc%2B%2B-v3/python/libstdcxx)

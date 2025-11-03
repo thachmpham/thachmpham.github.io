@@ -14,8 +14,6 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 | [Memory](html/gdb/memory.html)|
 | [Pretty Printers](html/gdb/pretty-printer.html)|
 | [Call Functions](html/gdb-call.html) |
-| [Pretty Printer](html/gdb-write-pp.html) |
-| [STL Containers](html/gdb-stl.html) |
 
 :::
 ::: {.column}
