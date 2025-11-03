@@ -384,6 +384,16 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a hr
 <p>List memory regions.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">info</span> proc mapping</span></code></pre></div>
 <p><br></p>
+<h2 id="core-dump">Core Dump</h2>
+<p>Generate the core dump.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gcore</span> <span class="pp">[</span><span class="ss">file</span><span class="pp">]</span></span></code></pre></div>
+<ul>
+<li>file: if file not specified, the file name defaults to core.pid,
+where pid is the inferior process ID.</li>
+</ul>
+<p>Load the core dump.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gdb</span> program core</span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="/index.html"><b>Home</b></a>

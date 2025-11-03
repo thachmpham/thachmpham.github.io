@@ -110,4 +110,15 @@ info proc mapping
 
 <br>
 
+## Core Dump
+Generate the core dump.
+```sh
+gcore [file]
+```
 
+- file: if file not specified, the file name defaults to core.pid, where pid is the inferior process ID.
+
+Load the core dump.
+```sh
+gdb program core
+```
