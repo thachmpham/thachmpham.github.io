@@ -306,9 +306,10 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="pp">[</span><span class="ss">/sn</span><span class="pp">]</span> start_addr, +len, vals...</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="pp">[</span><span class="ss">/sn</span><span class="pp">]</span> start_addr, end_addr, vals...</span></code></pre></div>
 <ul>
-<li>+len: number of bytes to search.</li>
-<li>s: size of each search query value (b, h, w, g).</li>
-<li>n: number of matches to print.</li>
+<li><strong>+len</strong>: number of bytes to search.</li>
+<li><strong>s</strong>: size of each search query value (b, h, w,
+g).</li>
+<li><strong>n</strong>: number of matches to print.</li>
 </ul>
 </div><div class="column" style="width:40%;">
 <div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> </span>
@@ -335,8 +336,8 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a hr
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>(gdb) find <span class="op">/</span>w <span class="op">&amp;</span>b, <span class="op">+</span><span class="dv">4</span>, <span class="bn">0x0a0b0c0d</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># find b, a</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>(gdb) find <span class="op">&amp;</span>b, <span class="op">+</span><span class="dv">8</span>, (<span class="bu">int</span>)<span class="bn">0x0a0b0c0d</span>, (short)<span class="bn">0x0000</span>, (short)<span class="bn">0x0102</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#                  (int)b         , padding      , (short)a</span></span></code></pre></div>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#                  (int)b         , padding      , (short)a</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>(gdb) find <span class="op">&amp;</span>b, <span class="op">+</span><span class="dv">8</span>, (<span class="bu">int</span>)<span class="bn">0x0a0b0c0d</span>, (short)<span class="bn">0x0000</span>, (short)<span class="bn">0x0102</span></span></code></pre></div>
 <p><br></p>
 <h2 id="export-memory">Export Memory</h2>
 <p>Dump the contents of memory from start_addr to end_addr, or the value
@@ -344,7 +345,7 @@ of expr, to file.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dump</span> <span class="pp">[</span><span class="ss">format</span><span class="pp">]</span> memory filename start_addr end_addr</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">dump</span> <span class="pp">[</span><span class="ss">format</span><span class="pp">]</span> value filename expr</span></code></pre></div>
 <ul>
-<li>Format: binary, ihex, srec, tekhex, verilog.</li>
+<li><strong>format</strong>: binary, ihex, srec, tekhex, verilog.</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(gdb) p <span class="op">&amp;</span><span class="bu">str</span></span>

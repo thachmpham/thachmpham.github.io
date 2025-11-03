@@ -11,9 +11,9 @@ find [/sn] start_addr, +len, vals...
 find [/sn] start_addr, end_addr, vals...
 ```
 
-- +len: number of bytes to search.
-- s: size of each search query value (b, h, w, g).
-- n: number of matches to print.
+- **+len**: number of bytes to search.
+- **s**: size of each search query value (b, h, w, g).
+- **n**: number of matches to print.
 
 :::
 ::: {.column width=40%}
@@ -46,8 +46,8 @@ int main()
 (gdb) find /w &b, +4, 0x0a0b0c0d
 
 # find b, a
-(gdb) find &b, +8, (int)0x0a0b0c0d, (short)0x0000, (short)0x0102
 #                  (int)b         , padding      , (short)a
+(gdb) find &b, +8, (int)0x0a0b0c0d, (short)0x0000, (short)0x0102
 ```
 
 <br>
@@ -58,7 +58,7 @@ Dump the contents of memory from start_addr to end_addr, or the value of expr, t
 dump [format] memory filename start_addr end_addr
 dump [format] value filename expr
 ```
-- Format: binary, ihex, srec, tekhex, verilog.
+- **format**: binary, ihex, srec, tekhex, verilog.
 
 ```python
 (gdb) p &str
