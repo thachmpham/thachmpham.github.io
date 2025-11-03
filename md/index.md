@@ -10,7 +10,8 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 
 | Examine Data |
 |-----------------|
-| [Variables & Memory](html/gdb/variable-memory.html)|
+| [Variables](html/gdb/variable-memory.html)|
+| [Memory](html/gdb/memory-import-export.html)|
 | [Find Memory](html/gdb-find.html) |
 | [Dump Restore Memory](html/gdb-dump-restore.html) |
 | [Call Functions](html/gdb-call.html) |

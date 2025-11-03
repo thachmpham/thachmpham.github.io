@@ -1,5 +1,5 @@
 ---
-title: "GDB: Variables & Memory"
+title: "GDB: Variables"
 ---
 
 ## Print Variables
@@ -71,30 +71,6 @@ $15 = 16909060
 ::::::::::::::
 
 
-## Examine Memory
-The command x is used to examine memory.
-```sh
-    x/nuf addr
-```
-- **n**: Number of unit. Default: 1.
-- **u**: Unit (b, h, w, g).
-- **f**: Format (x, d, u, o, t, a, c, f, s, i).
-- **addr**: Starting address.
-
-```c
-(gdb) x/1wd &n
-0xffffffffec9c: 16909060
-(gdb) x/1wx &n
-0xffffffffec9c: 0x01020304
-(gdb) x/4bx &n
-0xffffffffec9c: 0x04    0x03    0x02    0x01
-
-(gdb) x/s str
-0x4006c8:       "hello"
-(gdb) x/6bc str
-0x4006c8: 104 'h' 101 'e' 108 'l' 108 'l' 111 'o' 0 '\000'
-```
-
 ## Automatic Display
 Automatic display variables each time the program stops.
 
@@ -144,3 +120,35 @@ Breakpoint 1, main (argc=1, argv=0xffffffffee18) at demo.c:7
 1: i = 2
 2: sum = 3
 ```
+
+
+## Examine Memory
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+The command x is used to examine memory.
+```sh
+    x/nuf addr
+```
+- **n**: Number of unit. Default: 1.
+- **u**: Unit (b, h, w, g).
+- **f**: Format (x, d, u, o, t, a, c, f, s, i).
+- **addr**: Starting address.
+
+:::
+::: {.column width=50%}
+
+```c
+
+int n = 0x01020304;
+
+(gdb) x/1wd &n
+0xffffffffec9c: 16909060
+(gdb) x/1wx &n
+0xffffffffec9c: 0x01020304
+(gdb) x/4bx &n
+0xffffffffec9c: 0x04    0x03    0x02    0x01
+```
+
+:::
+::::::::::::::
