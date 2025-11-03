@@ -60,31 +60,6 @@ $4 = {0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x0}
 
 <br>
 
-## Convenience Variables
-:::::::::::::: {.columns}
-::: {.column width=60%}
-
-GDB provides convenience variables that can hold on to a value and read later.
-```sh
-set $variable = value
-show convenience
-```
-:::
-::: {.column width=40%}
-
-```c
-int n = 16909060;
-
-(gdb) set $var1 = n
-(gdb) p $var
-$15 = 16909060
-```
-
-:::
-::::::::::::::
-
-<br>
-
 ## Automatic Display
 Automatic display variables each time the program stops.
 
@@ -167,3 +142,37 @@ short n = 0x0102;
 
 :::
 ::::::::::::::
+
+<br>
+
+## Convenience Variables
+:::::::::::::: {.columns}
+::: {.column width=60%}
+
+GDB provides convenience variables that can hold on to a value and read later.
+```sh
+set $variable = value
+show convenience
+```
+:::
+::: {.column width=40%}
+
+```c
+int n = 16909060;
+
+(gdb) set $var1 = n
+(gdb) p $var
+$15 = 16909060
+```
+
+:::
+::::::::::::::
+
+<br>
+
+## Environment Variables
+```sh
+show environment [varname]
+set environment varname [=value]
+unset environment varname
+```

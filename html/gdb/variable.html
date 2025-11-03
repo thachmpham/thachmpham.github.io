@@ -345,66 +345,50 @@ class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span i
 </div>
 </div>
 <p><br></p>
-<h2 id="convenience-variables">Convenience Variables</h2>
-<div class="columns">
-<div class="column" style="width:60%;">
-<p>GDB provides convenience variables that can hold on to a value and
-read later.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="va">$variable</span> = value</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> convenience</span></code></pre></div>
-</div><div class="column" style="width:40%;">
-<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> n <span class="op">=</span> <span class="dv">16909060</span><span class="op">;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> set $var1 <span class="op">=</span> n</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p $var</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>$<span class="dv">15</span> <span class="op">=</span> <span class="dv">16909060</span></span></code></pre></div>
-</div>
-</div>
-<p><br></p>
 <h2 id="automatic-display">Automatic Display</h2>
 <p>Automatic display variables each time the program stops.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="op">{</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a>  <span class="cf">while</span> <span class="op">(</span>i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">)</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>  <span class="op">{</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>    sum <span class="op">+=</span> i<span class="op">;</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a>    i <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a>  <span class="op">}</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>  <span class="cf">while</span> <span class="op">(</span>i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">)</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="op">{</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>    sum <span class="op">+=</span> i<span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>    i <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>  <span class="op">}</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="op">}</span></span></code></pre></div>
 </div><div class="column" style="width:50%;">
-<div class="sourceCode" id="cb7"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(gdb) <span class="bu">set</span> <span class="bu">print</span> frame<span class="op">-</span>info location</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>(gdb) <span class="cf">break</span> <span class="dv">7</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>(gdb) display i</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>(gdb) display <span class="bu">sum</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>(gdb) <span class="cf">while</span> <span class="dv">1</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a> <span class="op">&gt;</span><span class="cf">continue</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a> <span class="op">&gt;</span>end</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(gdb) <span class="bu">set</span> <span class="bu">print</span> frame<span class="op">-</span>info location</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>(gdb) <span class="cf">break</span> <span class="dv">7</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>(gdb) display i</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>(gdb) display <span class="bu">sum</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>(gdb) <span class="cf">while</span> <span class="dv">1</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a> <span class="op">&gt;</span><span class="cf">continue</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a> <span class="op">&gt;</span>end</span></code></pre></div>
 </div>
 </div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Breakpoint <span class="dv">1</span><span class="op">,</span> main <span class="op">(</span>argc<span class="op">=</span><span class="dv">1</span><span class="op">,</span> argv<span class="op">=</span><span class="bn">0xffffffffee18</span><span class="op">)</span> at demo<span class="op">.</span>c<span class="op">:</span><span class="dv">7</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="op">:</span> i <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="op">:</span> sum <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>Breakpoint <span class="dv">1</span><span class="op">,</span> main <span class="op">(</span>argc<span class="op">=</span><span class="dv">1</span><span class="op">,</span> argv<span class="op">=</span><span class="bn">0xffffffffee18</span><span class="op">)</span> at demo<span class="op">.</span>c<span class="op">:</span><span class="dv">7</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="op">:</span> i <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="op">:</span> sum <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>Breakpoint <span class="dv">1</span><span class="op">,</span> main <span class="op">(</span>argc<span class="op">=</span><span class="dv">1</span><span class="op">,</span> argv<span class="op">=</span><span class="bn">0xffffffffee18</span><span class="op">)</span> at demo<span class="op">.</span>c<span class="op">:</span><span class="dv">7</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="op">:</span> i <span class="op">=</span> <span class="dv">2</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="op">:</span> sum <span class="op">=</span> <span class="dv">3</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Breakpoint <span class="dv">1</span><span class="op">,</span> main <span class="op">(</span>argc<span class="op">=</span><span class="dv">1</span><span class="op">,</span> argv<span class="op">=</span><span class="bn">0xffffffffee18</span><span class="op">)</span> at demo<span class="op">.</span>c<span class="op">:</span><span class="dv">7</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="op">:</span> i <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="op">:</span> sum <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>Breakpoint <span class="dv">1</span><span class="op">,</span> main <span class="op">(</span>argc<span class="op">=</span><span class="dv">1</span><span class="op">,</span> argv<span class="op">=</span><span class="bn">0xffffffffee18</span><span class="op">)</span> at demo<span class="op">.</span>c<span class="op">:</span><span class="dv">7</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="op">:</span> i <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="op">:</span> sum <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>Breakpoint <span class="dv">1</span><span class="op">,</span> main <span class="op">(</span>argc<span class="op">=</span><span class="dv">1</span><span class="op">,</span> argv<span class="op">=</span><span class="bn">0xffffffffee18</span><span class="op">)</span> at demo<span class="op">.</span>c<span class="op">:</span><span class="dv">7</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="op">:</span> i <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="op">:</span> sum <span class="op">=</span> <span class="dv">3</span></span></code></pre></div>
 <p><br></p>
 <h2 id="examine-memory">Examine Memory</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>The command x is used to examine memory.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">x/nuf</span> addr</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">x/nuf</span> addr</span></code></pre></div>
 <ul>
 <li><strong>n</strong>: Number of unit. Default: 1.</li>
 <li><strong>u</strong>: Unit (b, h, w, g).</li>
@@ -412,17 +396,39 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a hr
 <li><strong>addr</strong>: Starting address.</li>
 </ul>
 </div><div class="column" style="width:50%;">
-<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="dt">short</span> n <span class="op">=</span> <span class="bn">0x0102</span><span class="op">;</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> x<span class="op">/</span><span class="dv">1</span><span class="er">wd</span> <span class="op">&amp;</span>n</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span><span class="op">:</span> <span class="dv">258</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> x<span class="op">/</span><span class="dv">1</span><span class="er">wx</span> <span class="op">&amp;</span>n</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span><span class="op">:</span> <span class="bn">0x01020</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> x<span class="op">/</span><span class="dv">4</span><span class="er">bx</span> <span class="op">&amp;</span>n</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span><span class="op">:</span> <span class="bn">0x02</span>    <span class="bn">0x01</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">short</span> n <span class="op">=</span> <span class="bn">0x0102</span><span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> x<span class="op">/</span><span class="dv">1</span><span class="er">wd</span> <span class="op">&amp;</span>n</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span><span class="op">:</span> <span class="dv">258</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> x<span class="op">/</span><span class="dv">1</span><span class="er">wx</span> <span class="op">&amp;</span>n</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span><span class="op">:</span> <span class="bn">0x01020</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> x<span class="op">/</span><span class="dv">4</span><span class="er">bx</span> <span class="op">&amp;</span>n</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="bn">0xffffffffec9c</span><span class="op">:</span> <span class="bn">0x02</span>    <span class="bn">0x01</span></span></code></pre></div>
 </div>
 </div>
+<p><br></p>
+<h2 id="convenience-variables">Convenience Variables</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p>GDB provides convenience variables that can hold on to a value and
+read later.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="va">$variable</span> = value</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> convenience</span></code></pre></div>
+</div><div class="column" style="width:40%;">
+<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> n <span class="op">=</span> <span class="dv">16909060</span><span class="op">;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> set $var1 <span class="op">=</span> n</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p $var</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>$<span class="dv">15</span> <span class="op">=</span> <span class="dv">16909060</span></span></code></pre></div>
+</div>
+</div>
+<p><br></p>
+<h2 id="environment-variables">Environment Variables</h2>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> environment <span class="pp">[</span><span class="ss">varname</span><span class="pp">]</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> environment varname <span class="pp">[</span><span class="ss">=value</span><span class="pp">]</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">unset</span> <span class="va">environment</span> <span class="va">varname</span></span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="/index.html"><b>Home</b></a>
