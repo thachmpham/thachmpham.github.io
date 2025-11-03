@@ -1,5 +1,5 @@
 ---
-title: "Memory"
+title: "GDB: Memory"
 ---
 
 ## Find Memory
