@@ -165,8 +165,9 @@ $1 = 192.168.1.1.
 :::
 ::::::::::::::
 
+<br>
 
-## APIs
+## Explore APIs
 The related APIs to implement pretty printers.
 ```python
 
@@ -186,6 +187,7 @@ Arguments:
 '''
 ```
 
+<br>
 
 ## References
 - [github/binutils-gdb/python/lib](https://github.com/bminor/binutils-gdb/tree/master/gdb/python/lib/gdb)
