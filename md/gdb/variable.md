@@ -4,7 +4,7 @@ title: "GDB: Variables"
 
 ## Print Variables
 :::::::::::::: {.columns}
-::: {.column width=60%}
+::: {.column width=50%}
 
 By default, GDB prints a value according to its data type. However, we can change the output format.
 ```sh
@@ -29,7 +29,7 @@ int main()
 ```
 
 :::
-::: {.column width=40%}
+::: {.column width=50%}
 
 ```c
 
@@ -59,6 +59,7 @@ $4 = {0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x0}
 :::
 ::::::::::::::
 
+<br>
 
 ## Convenience Variables
 :::::::::::::: {.columns}
@@ -83,6 +84,7 @@ $15 = 16909060
 :::
 ::::::::::::::
 
+<br>
 
 ## Automatic Display
 Automatic display variables each time the program stops.
@@ -134,6 +136,7 @@ Breakpoint 1, main (argc=1, argv=0xffffffffee18) at demo.c:7
 2: sum = 3
 ```
 
+<br>
 
 ## Examine Memory
 :::::::::::::: {.columns}

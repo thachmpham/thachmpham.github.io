@@ -301,7 +301,7 @@
 </header>
 <h2 id="print-variables">Print Variables</h2>
 <div class="columns">
-<div class="column" style="width:60%;">
+<div class="column" style="width:50%;">
 <p>By default, GDB prints a value according to its data type. However,
 we can change the output format.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">print</span> [<span class="pp">[</span><span class="ss">OPTION</span><span class="pp">]</span>... <span class="at">--]</span> <span class="pp">[</span><span class="ss">/FMT</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">EXP</span><span class="pp">]</span></span></code></pre></div>
@@ -321,7 +321,7 @@ class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span i
 <span id="cb2-4"><a href="#cb2-4"></a>  <span class="dt">char</span><span class="op">*</span> str <span class="op">=</span> <span class="st">&quot;hello&quot;</span><span class="op">;</span></span>
 <span id="cb2-5"><a href="#cb2-5"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb2-6"><a href="#cb2-6"></a><span class="op">}</span></span></code></pre></div>
-</div><div class="column" style="width:40%;">
+</div><div class="column" style="width:50%;">
 <div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -345,6 +345,7 @@ class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span i
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>$<span class="dv">4</span> <span class="op">=</span> <span class="op">{</span><span class="bn">0x68</span><span class="op">,</span> <span class="bn">0x65</span><span class="op">,</span> <span class="bn">0x6c</span><span class="op">,</span> <span class="bn">0x6c</span><span class="op">,</span> <span class="bn">0x6f</span><span class="op">,</span> <span class="bn">0x0</span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
+<p><br></p>
 <h2 id="convenience-variables">Convenience Variables</h2>
 <div class="columns">
 <div class="column" style="width:60%;">
@@ -360,6 +361,7 @@ read later.</p>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>$<span class="dv">15</span> <span class="op">=</span> <span class="dv">16909060</span></span></code></pre></div>
 </div>
 </div>
+<p><br></p>
 <h2 id="automatic-display">Automatic Display</h2>
 <p>Automatic display variables each time the program stops.</p>
 <div class="columns">
@@ -398,6 +400,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a hr
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>Breakpoint <span class="dv">1</span><span class="op">,</span> main <span class="op">(</span>argc<span class="op">=</span><span class="dv">1</span><span class="op">,</span> argv<span class="op">=</span><span class="bn">0xffffffffee18</span><span class="op">)</span> at demo<span class="op">.</span>c<span class="op">:</span><span class="dv">7</span></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="op">:</span> i <span class="op">=</span> <span class="dv">2</span></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="op">:</span> sum <span class="op">=</span> <span class="dv">3</span></span></code></pre></div>
+<p><br></p>
 <h2 id="examine-memory">Examine Memory</h2>
 <div class="columns">
 <div class="column" style="width:50%;">

@@ -299,15 +299,91 @@
 <header id="title-block-header">
 <h1 class="title">Memory</h1>
 </header>
-<h1 id="memory-regions">Memory Regions</h1>
-<p>List memory regions.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">info</span> proc mapping</span></code></pre></div>
-<h1 id="find-memory">Find Memory</h1>
-<p>Search memory for a sequence of bytes.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>    <span class="fu">find</span> <span class="pp">[</span><span class="ss">/sn</span><span class="pp">]</span> start_addr, end_addr, val1 [, val2, …]</span></code></pre></div>
+<h2 id="find-memory">Find Memory</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p>Search memory for the sequence of bytes.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="pp">[</span><span class="ss">/sn</span><span class="pp">]</span> start_addr, +len, vals...</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="pp">[</span><span class="ss">/sn</span><span class="pp">]</span> start_addr, end_addr, vals...</span></code></pre></div>
 <ul>
-<li>s: search query size</li>
+<li>+len: number of bytes to search.</li>
+<li>s: size of each search query value (b, h, w, g).</li>
+<li>n: number of matches to print.</li>
 </ul>
+</div><div class="column" style="width:40%;">
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">char</span> str<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;hello-hello&quot;</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">short</span> a <span class="op">=</span> <span class="bn">0x0102</span><span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> b <span class="op">=</span> <span class="bn">0x0a0b0c0d</span><span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+</div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find str</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>(gdb) find <span class="op">&amp;</span><span class="bu">str</span>, <span class="op">+</span>sizeof(<span class="bu">str</span>), <span class="st">&quot;hello&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>(gdb) find <span class="op">&amp;</span><span class="bu">str</span>, <span class="op">+</span>sizeof(<span class="bu">str</span>), <span class="st">&#39;h&#39;</span>, <span class="st">&#39;e&#39;</span>, <span class="st">&#39;l&#39;</span>, <span class="st">&#39;l&#39;</span>, <span class="st">&#39;o&#39;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># find a</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>(gdb) find <span class="op">&amp;</span>a, <span class="op">+</span><span class="dv">2</span>, (short)<span class="bn">0x0102</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>(gdb) find <span class="op">/</span>h <span class="op">&amp;</span>a, <span class="op">+</span><span class="dv">2</span>, <span class="bn">0x0102</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>(gdb) find <span class="op">/</span>b <span class="op">&amp;</span>a, <span class="op">+</span><span class="dv">2</span>, <span class="bn">0x02</span>, <span class="bn">0x01</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># find b</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>(gdb) find <span class="op">&amp;</span>b, <span class="op">+</span><span class="dv">4</span>, (<span class="bu">int</span>)<span class="bn">0x0a0b0c0d</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>(gdb) find <span class="op">/</span>w <span class="op">&amp;</span>b, <span class="op">+</span><span class="dv">4</span>, <span class="bn">0x0a0b0c0d</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># find b, a</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>(gdb) find <span class="op">&amp;</span>b, <span class="op">+</span><span class="dv">8</span>, (<span class="bu">int</span>)<span class="bn">0x0a0b0c0d</span>, (short)<span class="bn">0x0000</span>, (short)<span class="bn">0x0102</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#                  (int)b         , padding      , (short)a</span></span></code></pre></div>
+<p><br></p>
+<h2 id="export-memory">Export Memory</h2>
+<p>Dump the contents of memory from start_addr to end_addr, or the value
+of expr, to file.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dump</span> <span class="pp">[</span><span class="ss">format</span><span class="pp">]</span> memory filename start_addr end_addr</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">dump</span> <span class="pp">[</span><span class="ss">format</span><span class="pp">]</span> value filename expr</span></code></pre></div>
+<ul>
+<li>Format: binary, ihex, srec, tekhex, verilog.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(gdb) p <span class="op">&amp;</span><span class="bu">str</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>$<span class="dv">3</span> <span class="op">=</span> (char (<span class="op">*</span>)[<span class="dv">12</span>]) <span class="bn">0xffffffffec88</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>(gdb) dump memory mem.<span class="bu">hex</span> <span class="bn">0xffffffffec88</span> <span class="bn">0xffffffffec88</span><span class="op">+</span><span class="dv">12</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>(gdb) dump value val.<span class="bu">hex</span> <span class="bu">str</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>$ hexdump <span class="op">-</span>C mem.<span class="bu">hex</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="dv">00000000</span>  <span class="dv">68</span> <span class="dv">65</span> <span class="dv">6</span><span class="er">c</span> <span class="dv">6</span><span class="er">c</span> <span class="dv">6</span><span class="er">f</span> <span class="dv">2</span><span class="er">d</span> <span class="dv">68</span> <span class="dv">65</span>  <span class="dv">6</span><span class="er">c</span> <span class="dv">6</span><span class="er">c</span> <span class="dv">6</span><span class="er">f</span> <span class="dv">00</span>              <span class="op">|</span>hello<span class="op">-</span>hello.<span class="op">|</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>$ hexdump <span class="op">-</span>C val.<span class="bu">hex</span> </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="dv">00000000</span>  <span class="dv">68</span> <span class="dv">65</span> <span class="dv">6</span><span class="er">c</span> <span class="dv">6</span><span class="er">c</span> <span class="dv">6</span><span class="er">f</span> <span class="dv">2</span><span class="er">d</span> <span class="dv">68</span> <span class="dv">65</span>  <span class="dv">6</span><span class="er">c</span> <span class="dv">6</span><span class="er">c</span> <span class="dv">6</span><span class="er">f</span> <span class="dv">00</span>              <span class="op">|</span>hello<span class="op">-</span>hello.<span class="op">|</span></span></code></pre></div>
+<p><br></p>
+<h2 id="import-memory">Import Memory</h2>
+<p>Restore the contents of file filename into memory.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">restore</span> file <span class="pp">[</span><span class="ss">binary</span><span class="pp">]</span> offset start end</span></code></pre></div>
+<ul>
+<li><strong>binary</strong>: when file format is raw binary.</li>
+<li><strong>offset</strong>: starting offset in file, default 0.</li>
+<li><strong>start</strong>: starting address in target memory.</li>
+<li><strong>end</strong>: ending address in target memory.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(gdb) p <span class="op">&amp;</span><span class="bu">str</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>$<span class="dv">3</span> <span class="op">=</span> (char (<span class="op">*</span>)[<span class="dv">12</span>]) <span class="bn">0xffffffffec88</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#             file           start</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>(gdb) restore mem.<span class="bu">hex</span> binary <span class="bn">0xffffffffec88</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>Restoring binary <span class="bu">file</span> mem.<span class="bu">hex</span> into memory (<span class="bn">0xffffffffec88</span> to <span class="bn">0xffffffffec94</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#             file           offset     start</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>(gdb) restore mem.<span class="bu">hex</span> binary <span class="dv">0</span>          <span class="bn">0xffffffffec88</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>Start address <span class="kw">is</span> greater than length of binary <span class="bu">file</span> mem.<span class="bu">hex</span>.</span></code></pre></div>
+<p><br></p>
+<h2 id="memory-regions">Memory Regions</h2>
+<p>List memory regions.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">info</span> proc mapping</span></code></pre></div>
+<p><br></p>
 <footer class="footer text-muted">
    <div align="center">
       <a href="/index.html"><b>Home</b></a>
