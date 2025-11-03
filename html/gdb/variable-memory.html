@@ -327,14 +327,16 @@ class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span i
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p<span class="op">/</span>z n</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>$<span class="dv">3</span> <span class="op">=</span> <span class="bn">0x1020304</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p<span class="op">/</span>a <span class="op">&amp;</span>n</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>$<span class="dv">6</span> <span class="op">=</span> <span class="bn">0xffffffffec9c</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>$<span class="dv">4</span> <span class="op">=</span> <span class="bn">0xffffffffec9c</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> print str</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>$<span class="dv">6</span> <span class="op">=</span> <span class="bn">0x4006c0</span> <span class="st">&quot;hello&quot;</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p <span class="op">*</span>str@<span class="dv">3</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>$<span class="dv">7</span> <span class="op">=</span> <span class="st">&quot;hel&quot;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p<span class="op">/</span>x <span class="op">*</span>str@<span class="dv">3</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>$<span class="dv">8</span> <span class="op">=</span> <span class="op">{</span><span class="bn">0x68</span><span class="op">,</span> <span class="bn">0x65</span><span class="op">,</span> <span class="bn">0x6c</span><span class="op">}</span></span></code></pre></div>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p str</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>$<span class="dv">1</span> <span class="op">=</span> <span class="bn">0x4006c0</span> <span class="st">&quot;hello&quot;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p <span class="op">*</span>str@<span class="dv">6</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>$<span class="dv">2</span> <span class="op">=</span> <span class="st">&quot;hello&quot;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p<span class="op">/</span>c <span class="op">*</span>str@<span class="dv">6</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>$<span class="dv">3</span> <span class="op">=</span> <span class="op">{</span><span class="dv">104</span> <span class="ch">&#39;h&#39;</span><span class="op">,</span> <span class="dv">101</span> <span class="ch">&#39;e&#39;</span><span class="op">,</span> <span class="dv">108</span> <span class="ch">&#39;l&#39;</span><span class="op">,</span> <span class="dv">108</span> <span class="ch">&#39;l&#39;</span><span class="op">,</span> <span class="dv">111</span> <span class="ch">&#39;o&#39;</span><span class="op">,</span> <span class="dv">0</span> <span class="ch">&#39;</span><span class="sc">\000</span><span class="ch">&#39;</span><span class="op">}</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>gdb<span class="op">)</span> p<span class="op">/</span>x <span class="op">*</span>str@<span class="dv">6</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>$<span class="dv">4</span> <span class="op">=</span> <span class="op">{</span><span class="bn">0x68</span><span class="op">,</span> <span class="bn">0x65</span><span class="op">,</span> <span class="bn">0x6c</span><span class="op">,</span> <span class="bn">0x6c</span><span class="op">,</span> <span class="bn">0x6f</span><span class="op">,</span> <span class="bn">0x0</span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
 <h2 id="convenience-variables">Convenience Variables</h2>

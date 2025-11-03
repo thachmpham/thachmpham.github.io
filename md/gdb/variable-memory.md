@@ -35,14 +35,17 @@ $2 = 0x1020304
 (gdb) p/z n
 $3 = 0x1020304
 (gdb) p/a &n
-$6 = 0xffffffffec9c
+$4 = 0xffffffffec9c
 
-(gdb) print str
-$6 = 0x4006c0 "hello"
-(gdb) p *str@3
-$7 = "hel"
-(gdb) p/x *str@3
-$8 = {0x68, 0x65, 0x6c}
+(gdb) p str
+$1 = 0x4006c0 "hello"
+(gdb) p *str@6
+$2 = "hello"
+(gdb) p/c *str@6
+$3 = {104 'h', 101 'e', 108 'l', 108 'l', 111 'o', 0 '\000'}
+(gdb) p/x *str@6
+$4 = {0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x0}
+
 ```
 
 :::
