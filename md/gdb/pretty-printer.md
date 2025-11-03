@@ -26,10 +26,10 @@ If the stdc++ printer is not installed yet, you can manually install it.
 
 - Download stdc++ printer.
 ```sh
-$ wget https://github.com/gcc-mirror/gcc/archive/refs/heads/master.zip \
+wget https://github.com/gcc-mirror/gcc/archive/refs/heads/master.zip \
     -O gcc.zip
 
-$ unzip gcc.zip
+unzip gcc.zip
 ```
 
 - Add to .gdbinit.
@@ -84,7 +84,7 @@ struct in_addr
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-Step 1. Printer.
+**Step 1. Printer.**
 
 ```python
 import gdb
@@ -103,7 +103,7 @@ class InAddrPrinter:
 :::
 ::: {.column width=50%}
 
-Step 2. Lookup function.
+**Step 2. Lookup function.**
 
 ```python
 import gdb
@@ -118,8 +118,8 @@ def in_addr_lookup(val):
 :::
 ::::::::::::::
 
-Step 3. Register lookup function.  
-File: in_addr_printer.py.
+**Step 3. Register lookup function**.   
+*File: in_addr_printer.py.*
 ```python
 from gdb.printing import register_pretty_printer
 
@@ -132,7 +132,7 @@ register_pretty_printer(
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-Step 4. Test.
+**Step 4. Test.**
 
 ```c
 #include <arpa/inet.h>

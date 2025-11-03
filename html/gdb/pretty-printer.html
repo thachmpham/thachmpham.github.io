@@ -321,10 +321,10 @@ it.</p>
 <ul>
 <li>Download stdc++ printer.</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> wget https://github.com/gcc-mirror/gcc/archive/refs/heads/master.zip <span class="dt">\</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://github.com/gcc-mirror/gcc/archive/refs/heads/master.zip <span class="dt">\</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">-O</span> gcc.zip</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> unzip gcc.zip</span></code></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span> gcc.zip</span></code></pre></div>
 <ul>
 <li>Add to .gdbinit.</li>
 </ul>
@@ -363,7 +363,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a hr
 <p><strong>Sample: Implement Printer for in_addr.</strong></p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>Step 1. Printer.</p>
+<p><strong>Step 1. Printer.</strong></p>
 <div class="sourceCode" id="cb6"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gdb</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -377,7 +377,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a hr
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      s <span class="op">+=</span> <span class="bu">str</span>(x) <span class="op">+</span> <span class="st">&quot;.&quot;</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> s</span></code></pre></div>
 </div><div class="column" style="width:50%;">
-<p>Step 2. Lookup function.</p>
+<p><strong>Step 2. Lookup function.</strong></p>
 <div class="sourceCode" id="cb7"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gdb</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -388,8 +388,8 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a hr
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="va">None</span></span></code></pre></div>
 </div>
 </div>
-<p>Step 3. Register lookup function.<br />
-File: in_addr_printer.py.</p>
+<p><strong>Step 3. Register lookup function</strong>.<br />
+<em>File: in_addr_printer.py.</em></p>
 <div class="sourceCode" id="cb8"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gdb.printing <span class="im">import</span> register_pretty_printer</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -397,7 +397,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a hr
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  obj<span class="op">=</span><span class="va">None</span>, printer<span class="op">=</span>in_addr_lookup, replace<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>Step 4. Test.</p>
+<p><strong>Step 4. Test.</strong></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;arpa/inet.h&gt;</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
