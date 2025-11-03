@@ -12,8 +12,6 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 |-----------------|
 | [Variables](html/gdb/variable.html)|
 | [Memory](html/gdb/memory.html)|
-| [Find Memory](html/gdb-find.html) |
-| [Dump Restore Memory](html/gdb-dump-restore.html) |
 | [Call Functions](html/gdb-call.html) |
 | [Pretty Printer](html/gdb-write-pp.html) |
 | [STL Containers](html/gdb-stl.html) |
