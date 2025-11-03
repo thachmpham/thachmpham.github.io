@@ -7,6 +7,10 @@ title: "GDB: Variables"
 ::: {.column width=60%}
 
 By default, GDB prints a value according to its data type. However, we can change the output format.
+```sh
+print [[OPTION]... --] [/FMT] [EXP]
+```
+FMT, format:
 
 - d (dec), u (unsigned), f (float).
 - x (hex), z (pad + hex), t (bin), o (oct).
@@ -28,14 +32,18 @@ int main()
 ::: {.column width=40%}
 
 ```c
+
+
+
+
+
 (gdb) p n
 $1 = 16909060
 (gdb) p/x n
 $2 = 0x1020304
-(gdb) p/z n
-$3 = 0x1020304
 (gdb) p/a &n
 $4 = 0xffffffffec9c
+
 
 (gdb) p str
 $1 = 0x4006c0 "hello"
@@ -57,11 +65,16 @@ $4 = {0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x0}
 ::: {.column width=60%}
 
 GDB provides convenience variables that can hold on to a value and read later.
-
+```sh
+set $variable = value
+show convenience
+```
 :::
 ::: {.column width=40%}
 
 ```c
+int n = 16909060;
+
 (gdb) set $var1 = n
 (gdb) p $var
 $15 = 16909060
@@ -140,14 +153,14 @@ The command x is used to examine memory.
 
 ```c
 
-int n = 0x01020304;
+short n = 0x0102;
 
 (gdb) x/1wd &n
-0xffffffffec9c: 16909060
+0xffffffffec9c: 258
 (gdb) x/1wx &n
-0xffffffffec9c: 0x01020304
+0xffffffffec9c: 0x01020
 (gdb) x/4bx &n
-0xffffffffec9c: 0x04    0x03    0x02    0x01
+0xffffffffec9c: 0x02    0x01
 ```
 
 :::
