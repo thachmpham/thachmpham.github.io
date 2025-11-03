@@ -150,6 +150,7 @@ GDB provides convenience variables that can hold on to a value and read later.
 set $variable = value
 show convenience
 ```
+
 :::
 ::: {.column width=40%}
 

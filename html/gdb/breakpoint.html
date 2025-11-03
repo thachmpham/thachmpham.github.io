@@ -302,8 +302,7 @@
 <h2 id="set-breakpoints">Set Breakpoints</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>A breakpoint makes your program stop whenever a certain point in the
-program is reached.</p>
+<p>Stop program whenever a point in the program is reached.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">break</span> <span class="ex">[-qualified]</span> locspec</span></code></pre></div>
 <ul>
 <li><strong>locspec</strong>: can be line number, function name,
@@ -341,6 +340,33 @@ class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span i
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">b</span> <span class="pp">*</span>sum+4</span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">b</span> 0x0000000000400670</span></code></pre></div>
+</div>
+</div>
+<p><br></p>
+<h2 id="conditional-breakpoints">Conditional Breakpoints</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">break</span> <span class="ex">locspec</span> <span class="pp">[-</span><span class="ss">force</span><span class="pp">-</span><span class="ss">condition</span><span class="pp">]</span> if cond</span></code></pre></div>
+<ul>
+<li><strong>cond</strong>: only stop at breakpoint when cond is
+true.</li>
+<li><strong>force-condition</strong>: force to enable to cond.</li>
+</ul>
+<p><br></p>
+<h2 id="regex-breakpoints">Regex Breakpoints</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rbeak</span> regex</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> file:regex</span></code></pre></div>
+<ul>
+<li><strong>regex</strong>: standard regex, like grep.</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> sum.<span class="pp">*</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> demo.c:sum.<span class="pp">*</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># all functions in current program</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> .</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># all functions in file</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> demo.c:.</span></code></pre></div>
 </div>
 </div>
 <footer class="footer text-muted">

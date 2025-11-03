@@ -7,7 +7,7 @@ title: "GDB: Breakpoints"
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-A breakpoint makes your program stop whenever a certain point in the program is reached.
+Stop program whenever a point in the program is reached.
 ```sh
 break [-qualified] locspec
 ```
@@ -50,6 +50,45 @@ int main()
 
 (gdb) b *sum+4
 (gdb) b 0x0000000000400670
+```
+
+:::
+::::::::::::::
+
+<br>
+
+## Conditional Breakpoints
+```sh
+break locspec [-force-condition] if cond
+```
+
+- **cond**: only stop at breakpoint when cond is true.
+- **force-condition**: force to enable to cond.
+
+<br>
+
+## Regex Breakpoints
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+```sh
+rbeak regex
+rbreak file:regex
+```
+
+- **regex**: standard regex, like grep.
+
+:::
+::: {.column width=50%}
+
+```sh
+rbreak sum.*
+rbreak demo.c:sum.*
+
+# all functions in current program
+rbreak .
+# all functions in file
+rbreak demo.c:.
 ```
 
 :::
