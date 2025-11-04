@@ -313,12 +313,13 @@
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> syscall   <span class="co"># Catch system calls by their names, groups and/or numbers.</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> throw     <span class="co"># Catch an exception, when thrown.</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> unload    <span class="co"># Catch unloads of shared libraries.</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> vfork     <span class="co"># Catch calls to vfork</span></span></code></pre></div>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> vfork     <span class="co"># Catch calls to vfork</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p>Show catchpoints.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> breakpoint</span></code></pre></div>
 <p><br></p>
 <h2 id="fork">Fork</h2>
-<p>Stop on fork or vfork.</p>
+<p>Usage.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> fork</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> vfork</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -359,7 +360,7 @@
 </div>
 <p><br></p>
 <h2 id="exec">Exec</h2>
-<p>Stop on exec.</p>
+<p>Usage.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> exec</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> follow-exec-mode [new<span class="kw">|</span><span class="ex">same]</span></span>
@@ -388,9 +389,60 @@
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> inferiors </span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Num</span>  Description       Connection           Executable        </span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="ex">1</span>    process 5909      1 <span class="er">(</span><span class="ex">native</span><span class="kw">)</span>           <span class="ex">/usr/bin/bash</span>     </span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 2    process 5911      1 <span class="er">(</span><span class="ex">native</span><span class="kw">)</span>           <span class="ex">/usr/bin/ls</span></span></code></pre></div>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 2    process 5911      1 <span class="er">(</span><span class="ex">native</span><span class="kw">)</span>           <span class="ex">/usr/bin/ls</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 </div>
 </div>
+<p><br></p>
+<h2 id="syscall">Syscall</h2>
+<p>Usage.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> syscall [name <span class="kw">|</span> <span class="ex">number</span> <span class="kw">|</span> <span class="ex">group:groupname</span> <span class="kw">|</span> <span class="ex">g:groupname]</span> …</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ausyscall</span> <span class="at">--dump</span></span></code></pre></div>
+<p><br></p>
+<h2 id="signal">Signal</h2>
+<p>One reason that catch signal can be more useful than handle is that
+you can attach commands and conditions to the catchpoint.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> signal [signal… <span class="kw">|</span> <span class="ex">‘all’]</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">kill</span> <span class="at">-l</span></span></code></pre></div>
+<p>Sample: Automatically print backtrace before program terminated.</p>
+<div class="columns">
+<div class="column" style="width:20%;">
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> crash<span class="op">()</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">*</span>p <span class="op">=</span> <span class="dv">42</span><span class="op">;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  crash<span class="op">();</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div><div class="column" style="width:80%;">
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">catch</span> signal SIGSEGV</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">commands</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span>backtrace</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span>continue</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span>end</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Catchpoint</span> 1 <span class="er">(</span><span class="ex">signal</span> SIGSEGV<span class="kw">)</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#0  0x000000000040067c in crash () at demo.c:4</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#1  0x0000000000400698 in main () at demo.c:9</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Program</span> terminated with signal SIGSEGV, Segmentation fault.</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+</div>
+</div>
+<h2 id="library-load">Library Load</h2>
+<p>Stop on the loading or unloading of a shared library.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> load <span class="pp">[</span><span class="ss">regexp</span><span class="pp">]</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> unload <span class="pp">[</span><span class="ss">regexp</span><span class="pp">]</span></span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="/index.html"><b>Home</b></a>

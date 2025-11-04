@@ -24,7 +24,6 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 
 | Best Practice |
 |-----------------|
-| [Script Program](html/gdb-program-started-by-script.html) |
 | [Systemd Program](html/gdb-program-started-by-systemd.html) |
 | [OpenSAF Program](html/gdb-ha-program.html) |
 | [Multiple Threads](html/gdb-multithread.html) |

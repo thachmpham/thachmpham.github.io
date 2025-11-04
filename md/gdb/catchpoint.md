@@ -19,6 +19,7 @@ catch syscall   # Catch system calls by their names, groups and/or numbers.
 catch throw     # Catch an exception, when thrown.
 catch unload    # Catch unloads of shared libraries.
 catch vfork     # Catch calls to vfork
+  
 ```
 
 Show catchpoints.
@@ -29,7 +30,7 @@ show breakpoint
 <br>
 
 ## Fork
-Stop on fork or vfork.
+Usage.
 ```sh
 catch fork
 catch vfork
@@ -81,11 +82,10 @@ Catchpoint 1 (forked process 4097), arch_fork (ctid=0x7ffff7d85a10)
 :::
 ::::::::::::::
 
-
 <br>
 
 ## Exec
-Stop on exec.
+Usage.
 ```sh
 catch exec
 
@@ -126,7 +126,76 @@ Thread 2.1 "ls" hit Catchpoint 1 (exec'd /usr/bin/ls')
   Num  Description       Connection           Executable        
   1    process 5909      1 (native)           /usr/bin/bash     
 * 2    process 5911      1 (native)           /usr/bin/ls
+  
 ```
 
 :::
 ::::::::::::::
+
+<br>
+
+## Syscall
+Usage.
+```sh
+catch syscall [name | number | group:groupname | g:groupname] …
+
+ausyscall --dump
+```
+
+<br>
+
+## Signal
+One reason that catch signal can be more useful than handle is that you can attach commands and conditions to the catchpoint.
+```sh
+catch signal [signal… | ‘all’]
+
+kill -l
+```
+
+Sample: Automatically print backtrace before program terminated.
+
+:::::::::::::: {.columns}
+::: {.column width=20%}
+
+```c
+void crash()
+{
+  int *p = 0;
+  *p = 42;
+}
+
+int main()
+{
+  crash();
+}
+```
+
+:::
+::: {.column width=80%}
+
+```sh
+(gdb) catch signal SIGSEGV
+(gdb) commands
+>backtrace
+>continue
+>end
+
+(gdb) run
+
+Catchpoint 1 (signal SIGSEGV)
+#0  0x000000000040067c in crash () at demo.c:4
+#1  0x0000000000400698 in main () at demo.c:9
+
+Program terminated with signal SIGSEGV, Segmentation fault.
+  
+```
+
+:::
+::::::::::::::
+
+## Library Load
+Stop on the loading or unloading of a shared library.
+```sh
+catch load [regexp]
+catch unload [regexp]
+```
