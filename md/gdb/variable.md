@@ -32,21 +32,21 @@ int main()
 ::: {.column width=50%}
 
 ```c
-(gdb) p n
+(gdb) print n
 $1 = 16909060
-(gdb) p/x n
+(gdb) print/x n
 $2 = 0x1020304
-(gdb) p/a &n
+(gdb) print/a &n
 $4 = 0xffffffffec9c
 
 
-(gdb) p str
+(gdb) print str
 $1 = 0x4006c0 "hello"
-(gdb) p *str@6
+(gdb) print *str@6
 $2 = "hello"
-(gdb) p/c *str@6
+(gdb) print/c *str@6
 $3 = {104 'h', 101 'e', 108 'l', 108 'l', 111 'o', 0 '\000'}
-(gdb) p/x *str@6
+(gdb) print/x *str@6
 $4 = {0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x0}
 
 ```
@@ -158,7 +158,7 @@ show convenience
 int n = 16909060;
 
 (gdb) set $var1 = n
-(gdb) p $var
+(gdb) print $var
 $15 = 16909060
 ```
 

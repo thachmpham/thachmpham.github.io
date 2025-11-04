@@ -89,6 +89,7 @@ generate_post gdb/variable
 generate_post gdb/memory
 generate_post gdb/pretty-printer
 generate_post gdb/breakpoint
+generate_post gdb/catchpoint
 
 # ====  BASHDB
 # generate_post bashdbs

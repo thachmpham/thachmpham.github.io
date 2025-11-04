@@ -31,12 +31,12 @@ int main()
 ::: {.column width=50%}
 
 ```sh
-(gdb) b 3
-(gdb) b sum
-(gdb) b demo.c:3
-(gdb) b demo.c:sum
+(gdb) break 3
+(gdb) break sum
+(gdb) break demo.c:3
+(gdb) break demo.c:sum
 
-(gdb) b -qualified exit
+(gdb) break -qualified exit
 
 (gdb) disassemble sum
    0x000000000040066c <+0>:     sub     sp, sp, #0x10
@@ -48,8 +48,8 @@ int main()
    0x0000000000400684 <+24>:    add     sp, sp, #0x10
    0x0000000000400688 <+28>:    ret
 
-(gdb) b *sum+4
-(gdb) b 0x0000000000400670
+(gdb) break *sum+4
+(gdb) break 0x0000000000400670
 ```
 
 :::
@@ -148,15 +148,15 @@ end
 ```sh
 break sum
 commands
-bt
-c
+backtrace
+continue
 end
 
 break sum
 break main
 commands 1, 2
-bt
-c
+backtrace
+continue
 end
 ```
 

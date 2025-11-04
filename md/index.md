@@ -17,6 +17,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 | Examine Execution |
 |-----------------|
 | [Breakpoints](html/gdb/breakpoint.html)|
+| [Catchpoints](html/gdb/catchpoint.html)|
 
 :::
 ::: {.column}
