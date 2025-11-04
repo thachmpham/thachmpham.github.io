@@ -3,8 +3,8 @@ title: "GDB: Catchpoints"
 ---
 
 
-## Set Catchpoints
-Cause the debugger to stop for a event.
+## Catchpoints
+Set catchpoints.
 ```sh
 catch assert    # Catch failed Ada assertions, when raised.
 catch catch     # Catch an exception, when caught.
@@ -21,56 +21,111 @@ catch unload    # Catch unloads of shared libraries.
 catch vfork     # Catch calls to vfork
 ```
 
+Show catchpoints.
+```sh
+show breakpoint
+```
+
 <br>
 
 ## Fork
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-Stop on a call of fork or vfork.
+Stop on fork or vfork.
 ```sh
 catch fork
 catch vfork
 
 set detach-on-fork [on|off]
-show detach-on-fork
-
 set follow-fork-mode [parent|child]
+
+show detach-on-fork
 show follow-fork-mode
 ```
 
-Demo 
+:::::::::::::: {.columns}
+::: {.column width=30%}
+
+Sample
 ```sh
 #include <unistd.h>
+
 int main()
 {    
-  pid_t pid = fork();
+  fork();
   while (1) {}
 }
+  
 ```
 
 :::
-::: {.column width=50%}
+::: {.column width=70%}
 
 ```sh
+
+
 (gdb) set detach-on-fork off
 (gdb) catch fork
 
 (gdb) run
 Catchpoint 1 (forked process 4097), arch_fork (ctid=0x7ffff7d85a10)
 
-(gdb) info inferiors 
-  Num  Description       Connection           Executable        
-* 1    process 4094      1 (native)           /root/demo/demo
-
 (gdb) n
-[New inferior 2 (process 4097)] arch_fork (ctid=0x7ffff7d85a10)
+[New inferior 2 (process 4097)]
 
 (gdb) info inferiors 
   Num  Description       Connection           Executable        
 * 1    process 4094      1 (native)           /root/demo/demo   
   2    process 4097      1 (native)           /root/demo/demo
   
+```
+
+:::
+::::::::::::::
+
+
+<br>
+
+## Exec
+Stop on exec.
+```sh
+catch exec
+
+set follow-exec-mode [new|same]
+show follow-exec-mode
+```
+
+Sample: Debug a program started by a script.
+
+:::::::::::::: {.columns}
+::: {.column width=15%}
+
+```sh
+# run.sh
+# -----
+ls /home
+# -----
+```
+:::
+
+::: {.column width=85%}
+
+```sh
+$ gdb --args bash run.sh
+
+(gdb) set detach-on-fork off
+(gdb) set follow-fork-mode child
+
+(gdb) catch exec
+
+(gdb) run
+[New inferior 2 (process 5911)]
+process 5911 is executing new program: /usr/bin/ls
+[Switching to process 5911]
+Thread 2.1 "ls" hit Catchpoint 1 (exec'd /usr/bin/ls')
+
+(gdb) info inferiors 
+  Num  Description       Connection           Executable        
+  1    process 5909      1 (native)           /usr/bin/bash     
+* 2    process 5911      1 (native)           /usr/bin/ls
 ```
 
 :::
