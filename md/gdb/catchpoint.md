@@ -4,27 +4,27 @@ title: "GDB: Catchpoints"
 
 
 ## Catchpoints
-Set catchpoints.
+Stop on program events, such as C++ exceptions or the loading of a shared library, etc.
 ```sh
-catch assert    # Catch failed Ada assertions, when raised.
-catch catch     # Catch an exception, when caught.
-catch exception # Catch Ada exceptions, when raised.
-catch exec      # Catch calls to exec.
-catch fork      # Catch calls to fork.
-catch handlers  # Catch Ada exceptions, when handled.
-catch load      # Catch loads of shared libraries.
-catch rethrow   # Catch an exception, when rethrown.
-catch signal    # Catch signals by their names and/or numbers.
-catch syscall   # Catch system calls by their names, groups and/or numbers.
-catch throw     # Catch an exception, when thrown.
-catch unload    # Catch unloads of shared libraries.
-catch vfork     # Catch calls to vfork
+  catch assert    # Catch failed Ada assertions, when raised.
+  catch catch     # Catch an exception, when caught.
+  catch exception # Catch Ada exceptions, when raised.
+  catch exec      # Catch calls to exec.
+  catch fork      # Catch calls to fork.
+  catch handlers  # Catch Ada exceptions, when handled.
+  catch load      # Catch loads of shared libraries.
+  catch rethrow   # Catch an exception, when rethrown.
+  catch signal    # Catch signals by their names and/or numbers.
+  catch syscall   # Catch system calls by their names, groups and/or numbers.
+  catch throw     # Catch an exception, when thrown.
+  catch unload    # Catch unloads of shared libraries.
+  catch vfork     # Catch calls to vfork
   
 ```
 
 Show catchpoints.
 ```sh
-show breakpoint
+  show breakpoint
 ```
 
 <br>
@@ -32,14 +32,14 @@ show breakpoint
 ## Fork
 Usage.
 ```sh
-catch fork
-catch vfork
+  catch fork
+  catch vfork
 
-set detach-on-fork [on|off]
-set follow-fork-mode [parent|child]
+  set detach-on-fork [on|off]
+  set follow-fork-mode [parent|child]
 
-show detach-on-fork
-show follow-fork-mode
+  show detach-on-fork
+  show follow-fork-mode
 ```
 
 :::::::::::::: {.columns}
@@ -87,10 +87,10 @@ Catchpoint 1 (forked process 4097), arch_fork (ctid=0x7ffff7d85a10)
 ## Exec
 Usage.
 ```sh
-catch exec
+  catch exec
 
-set follow-exec-mode [new|same]
-show follow-exec-mode
+  set follow-exec-mode [new|same]
+  show follow-exec-mode
 ```
 
 Sample: Debug a program started by a script.
@@ -137,9 +137,9 @@ Thread 2.1 "ls" hit Catchpoint 1 (exec'd /usr/bin/ls')
 ## Syscall
 Usage.
 ```sh
-catch syscall [name | number | group:groupname | g:groupname] …
+  catch syscall [name | number | group:groupname | g:groupname] …
 
-ausyscall --dump
+  ausyscall --dump
 ```
 
 <br>
@@ -147,9 +147,9 @@ ausyscall --dump
 ## Signal
 One reason that catch signal can be more useful than handle is that you can attach commands and conditions to the catchpoint.
 ```sh
-catch signal [signal… | ‘all’]
+  catch signal [signal… | ‘all’]
 
-kill -l
+  kill -l
 ```
 
 Sample: Automatically print backtrace before program terminated.
@@ -196,6 +196,6 @@ Program terminated with signal SIGSEGV, Segmentation fault.
 ## Library Load
 Stop on the loading or unloading of a shared library.
 ```sh
-catch load [regexp]
-catch unload [regexp]
+  catch load [regexp]
+  catch unload [regexp]
 ```

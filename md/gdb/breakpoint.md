@@ -9,10 +9,10 @@ title: "GDB: Breakpoints"
 
 Stop program whenever a point in the program is reached.
 ```sh
-break [-qualified] locspec
+  break [-qualified] locspec
 ```
-- **locspec**: can be line number, function name, address.
-- **qualified**: full match.
+- *locspec*: line number, function name, address.
+- *qualified*: full match.
 
 ```c {.numberLines}
 int sum(int a, int b)
@@ -60,15 +60,15 @@ int main()
 ## Conditional Breakpoints
 Set condition.
 ```sh
-break locspec [-force-condition] if cond
+  break locspec [-force-condition] if cond
 ```
 
-- **cond**: only stop at breakpoint when cond is true.
-- **force-condition**: force to enable to cond.
+- *cond*: only stop at breakpoint when cond is true.
+- *force-condition*: force to enable to cond.
 
 Change condition.
 ```sh
-condition breakpoint [cond]
+  condition breakpoint [cond]
 ```
 
 <br>
@@ -78,11 +78,11 @@ condition breakpoint [cond]
 ::: {.column width=50%}
 
 ```sh
-rbeak regex
-rbreak file:regex
+  rbeak regex
+  rbreak file:regex
 ```
 
-- **regex**: standard regex, like grep.
+- *regex*: standard regex, like grep.
 
 :::
 ::: {.column width=50%}
@@ -104,14 +104,14 @@ rbreak demo.c:.
 
 ## Thread-Specific Breakpoints
 ```sh
-break locspec thread thread-id [if cond]
+  break locspec thread thread-id [if cond]
 ```
 
 <br>
 
 ## Inferior-Specific Breakpoints
 ```sh
-break locspec inferior inferior-id [if cond]
+  break locspec inferior inferior-id [if cond]
 ```
 
 <br>
@@ -119,7 +119,7 @@ break locspec inferior inferior-id [if cond]
 ## Temporary Breakpoints
 Automatically deleted after the hit.
 ```sh
-tbreak args
+  tbreak args
 ```
 
 <br>
@@ -130,16 +130,16 @@ tbreak args
 
 Set commands.
 ```sh
-commands [breakpoints...]
-    commands...
-end
+  commands [breakpoints...]
+      commands...
+  end
 ```
 
 Change commands.
 ```sh
-commands breakpoints...
-    commands...
-end
+  commands breakpoints...
+      commands...
+  end
 ```
 
 :::
@@ -168,27 +168,27 @@ end
 ## Manage Breakpoints
 Show breakpoints
 ```sh
-info break
+  info break
 ```
 
 Delete the breakpoints.
 ```sh
-delete [breakpoints] [list…]
+  delete [breakpoints] [list…]
 ```
 
 Enable, disable breakpoints
 ```sh
-enable breakpoints [breakpoints]
-disable breakpoints [breakpoints]
+  enable breakpoints [breakpoints]
+  disable breakpoints [breakpoints]
 ```
 
 Delete all breakpoints at to locspec.
 ```sh
-clear locspec
+  clear locspec
 ```
 
 Save, restore breakpoints.
 ```sh
-save breakpoints file
-source file
+  save breakpoints file
+  source file
 ```

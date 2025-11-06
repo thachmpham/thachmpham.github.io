@@ -304,7 +304,7 @@
 we can change the output format.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">print</span> [<span class="pp">[</span><span class="ss">OPTION</span><span class="pp">]</span>... <span class="at">--]</span> <span class="pp">[</span><span class="ss">/FMT</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">EXP</span><span class="pp">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">print</span> <span class="pp">[</span><span class="ss">OPTION</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">/FMT</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">EXP</span><span class="pp">]</span></span></code></pre></div>
 <p>FMT, format:</p>
 <ul>
 <li>d (dec), u (unsigned), f (float).</li>
@@ -385,10 +385,10 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <div class="column" style="width:50%;">
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">x/nuf</span> addr</span></code></pre></div>
 <ul>
-<li><strong>n</strong>: Number of unit. Default: 1.</li>
-<li><strong>u</strong>: Unit (b, h, w, g).</li>
-<li><strong>f</strong>: Format (x, d, u, o, t, a, c, f, s, i).</li>
-<li><strong>addr</strong>: Starting address.</li>
+<li><em>n</em>: Number of unit. Default: 1.</li>
+<li><em>u</em>: Unit (b, h, w, g).</li>
+<li><em>f</em>: Format (x, d, u, o, t, a, c, f, s, i).</li>
+<li><em>addr</em>: Starting address.</li>
 </ul>
 </div><div class="column" style="width:50%;">
 <div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">short</span> n <span class="op">=</span> <span class="bn">0x0102</span><span class="op">;</span></span>
@@ -407,8 +407,8 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <div class="column" style="width:60%;">
 <p>GDB provides convenience variables that can hold on to a value and
 read later.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="va">$variable</span> = value</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> convenience</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  <span class="bu">set</span> <span class="va">$variable</span> = value</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">show</span> convenience</span></code></pre></div>
 </div><div class="column" style="width:40%;">
 <div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> n <span class="op">=</span> <span class="dv">16909060</span><span class="op">;</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -420,9 +420,9 @@ read later.</p>
 <p><br></p>
 <h2 id="environment-variables">Environment Variables</h2>
 <div class="sourceCode" id="cb11"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> environment <span class="pp">[</span><span class="ss">varname</span><span class="pp">]</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> environment varname <span class="pp">[</span><span class="ss">=value</span><span class="pp">]</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">unset</span> <span class="va">environment</span> <span class="va">varname</span></span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">show</span> environment <span class="pp">[</span><span class="ss">varname</span><span class="pp">]</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">set</span> environment varname <span class="pp">[</span><span class="ss">=value</span><span class="pp">]</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">unset</span> <span class="va">environment</span> <span class="va">varname</span></span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="/index.html"><b>Home</b></a>

@@ -303,13 +303,12 @@
 <div class="columns">
 <div class="column" style="width:60%;">
 <p>Search memory for the sequence of bytes.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="pp">[</span><span class="ss">/sn</span><span class="pp">]</span> start_addr, +len, vals...</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="pp">[</span><span class="ss">/sn</span><span class="pp">]</span> start_addr, end_addr, vals...</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">find</span> <span class="pp">[</span><span class="ss">/sn</span><span class="pp">]</span> start_addr, +len, vals...</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">find</span> <span class="pp">[</span><span class="ss">/sn</span><span class="pp">]</span> start_addr, end_addr, vals...</span></code></pre></div>
 <ul>
-<li><strong>+len</strong>: number of bytes to search.</li>
-<li><strong>s</strong>: size of each search query value (b, h, w,
-g).</li>
-<li><strong>n</strong>: number of matches to print.</li>
+<li><em>+len</em>: number of bytes to search.</li>
+<li><em>s</em>: size of each search query value (b, h, w, g).</li>
+<li><em>n</em>: number of matches to print.</li>
 </ul>
 </div><div class="column" style="width:40%;">
 <div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> </span>
@@ -341,10 +340,10 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a hr
 <h2 id="export-memory">Export Memory</h2>
 <p>Dump the contents of memory from start_addr to end_addr, or the value
 of expr, to file.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dump</span> <span class="pp">[</span><span class="ss">format</span><span class="pp">]</span> memory filename start_addr end_addr</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">dump</span> <span class="pp">[</span><span class="ss">format</span><span class="pp">]</span> value filename expr</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">dump</span> <span class="pp">[</span><span class="ss">format</span><span class="pp">]</span> memory filename start_addr end_addr</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">dump</span> <span class="pp">[</span><span class="ss">format</span><span class="pp">]</span> value filename expr</span></code></pre></div>
 <ul>
-<li><strong>format</strong>: binary, ihex, srec, tekhex, verilog.</li>
+<li><em>format</em>: binary, ihex, srec, tekhex, verilog.</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(gdb) p <span class="op">&amp;</span><span class="bu">str</span></span>
@@ -361,12 +360,12 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <p><br></p>
 <h2 id="import-memory">Import Memory</h2>
 <p>Restore the contents of file filename into memory.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">restore</span> file <span class="pp">[</span><span class="ss">binary</span><span class="pp">]</span> offset start end</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">restore</span> file <span class="pp">[</span><span class="ss">binary</span><span class="pp">]</span> offset start end</span></code></pre></div>
 <ul>
-<li><strong>binary</strong>: when file format is raw binary.</li>
-<li><strong>offset</strong>: starting offset in file, default 0.</li>
-<li><strong>start</strong>: starting address in target memory.</li>
-<li><strong>end</strong>: ending address in target memory.</li>
+<li><em>binary</em>: when file format is raw binary.</li>
+<li><em>offset</em>: starting offset in file, default 0.</li>
+<li><em>start</em>: starting address in target memory.</li>
+<li><em>end</em>: ending address in target memory.</li>
 </ul>
 <div class="sourceCode" id="cb7"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(gdb) p <span class="op">&amp;</span><span class="bu">str</span></span>
@@ -382,18 +381,18 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a hr
 <p><br></p>
 <h2 id="memory-regions">Memory Regions</h2>
 <p>List memory regions.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">info</span> proc mapping</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">info</span> proc mapping</span></code></pre></div>
 <p><br></p>
 <h2 id="core-dump">Core Dump</h2>
 <p>Generate the core dump.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gcore</span> <span class="pp">[</span><span class="ss">file</span><span class="pp">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">gcore</span> <span class="pp">[</span><span class="ss">file</span><span class="pp">]</span></span></code></pre></div>
 <ul>
 <li>file: if file not specified, the file name defaults to core.pid,
 where pid is the inferior process ID.</li>
 </ul>
 <p>Load the core dump.</p>
 <div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gdb</span> program core</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gdb</span> program core</span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="/index.html"><b>Home</b></a>

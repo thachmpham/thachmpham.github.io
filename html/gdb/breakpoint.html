@@ -303,11 +303,10 @@
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Stop program whenever a point in the program is reached.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">break</span> <span class="ex">[-qualified]</span> locspec</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="cf">break</span> <span class="ex">[-qualified]</span> locspec</span></code></pre></div>
 <ul>
-<li><strong>locspec</strong>: can be line number, function name,
-address.</li>
-<li><strong>qualified</strong>: full match.</li>
+<li><em>locspec</em>: line number, function name, address.</li>
+<li><em>qualified</em>: full match.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1"></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span></span>
@@ -345,22 +344,21 @@ class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span i
 <p><br></p>
 <h2 id="conditional-breakpoints">Conditional Breakpoints</h2>
 <p>Set condition.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">break</span> <span class="ex">locspec</span> <span class="pp">[-</span><span class="ss">force</span><span class="pp">-</span><span class="ss">condition</span><span class="pp">]</span> if cond</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  <span class="cf">break</span> <span class="ex">locspec</span> <span class="pp">[-</span><span class="ss">force</span><span class="pp">-</span><span class="ss">condition</span><span class="pp">]</span> if cond</span></code></pre></div>
 <ul>
-<li><strong>cond</strong>: only stop at breakpoint when cond is
-true.</li>
-<li><strong>force-condition</strong>: force to enable to cond.</li>
+<li><em>cond</em>: only stop at breakpoint when cond is true.</li>
+<li><em>force-condition</em>: force to enable to cond.</li>
 </ul>
 <p>Change condition.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">condition</span> breakpoint <span class="pp">[</span><span class="ss">cond</span><span class="pp">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">condition</span> breakpoint <span class="pp">[</span><span class="ss">cond</span><span class="pp">]</span></span></code></pre></div>
 <p><br></p>
 <h2 id="regex-breakpoints">Regex Breakpoints</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rbeak</span> regex</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> file:regex</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">rbeak</span> regex</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">rbreak</span> file:regex</span></code></pre></div>
 <ul>
-<li><strong>regex</strong>: standard regex, like grep.</li>
+<li><em>regex</em>: standard regex, like grep.</li>
 </ul>
 </div><div class="column" style="width:50%;">
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> sum.<span class="pp">*</span></span>
@@ -374,30 +372,30 @@ true.</li>
 </div>
 <p><br></p>
 <h2 id="thread-specific-breakpoints">Thread-Specific Breakpoints</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">break</span> <span class="ex">locspec</span> thread thread-id [if cond]</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  <span class="cf">break</span> <span class="ex">locspec</span> thread thread-id [if cond]</span></code></pre></div>
 <p><br></p>
 <h2 id="inferior-specific-breakpoints">Inferior-Specific
 Breakpoints</h2>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">break</span> <span class="ex">locspec</span> inferior inferior-id [if cond]</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  <span class="cf">break</span> <span class="ex">locspec</span> inferior inferior-id [if cond]</span></code></pre></div>
 <p><br></p>
 <h2 id="temporary-breakpoints">Temporary Breakpoints</h2>
 <p>Automatically deleted after the hit.</p>
 <div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tbreak</span> args</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">tbreak</span> args</span></code></pre></div>
 <p><br></p>
 <h2 id="commands">Commands</h2>
 <div class="columns">
 <div class="column" style="width:60%;">
 <p>Set commands.</p>
 <div class="sourceCode" id="cb11"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">commands</span> <span class="pp">[</span><span class="ss">breakpoints...</span><span class="pp">]</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">commands...</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">end</span></span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">commands</span> <span class="pp">[</span><span class="ss">breakpoints...</span><span class="pp">]</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>      <span class="ex">commands...</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">end</span></span></code></pre></div>
 <p>Change commands.</p>
 <div class="sourceCode" id="cb12"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">commands</span> breakpoints...</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">commands...</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">end</span></span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">commands</span> breakpoints...</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>      <span class="ex">commands...</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">end</span></span></code></pre></div>
 </div><div class="column" style="width:40%;">
 <div class="sourceCode" id="cb13"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">break</span> <span class="fu">sum</span></span>
@@ -418,21 +416,21 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#
 <h2 id="manage-breakpoints">Manage Breakpoints</h2>
 <p>Show breakpoints</p>
 <div class="sourceCode" id="cb14"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">info</span> break</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">info</span> break</span></code></pre></div>
 <p>Delete the breakpoints.</p>
 <div class="sourceCode" id="cb15"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">delete</span> <span class="pp">[</span><span class="ss">breakpoints</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">list…</span><span class="pp">]</span></span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">delete</span> <span class="pp">[</span><span class="ss">breakpoints</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">list…</span><span class="pp">]</span></span></code></pre></div>
 <p>Enable, disable breakpoints</p>
 <div class="sourceCode" id="cb16"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">enable</span> breakpoints <span class="pp">[</span><span class="ss">breakpoints</span><span class="pp">]</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">disable</span> breakpoints <span class="pp">[</span><span class="ss">breakpoints</span><span class="pp">]</span></span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  <span class="bu">enable</span> breakpoints <span class="pp">[</span><span class="ss">breakpoints</span><span class="pp">]</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">disable</span> breakpoints <span class="pp">[</span><span class="ss">breakpoints</span><span class="pp">]</span></span></code></pre></div>
 <p>Delete all breakpoints at to locspec.</p>
 <div class="sourceCode" id="cb17"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clear</span> locspec</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clear</span> locspec</span></code></pre></div>
 <p>Save, restore breakpoints.</p>
 <div class="sourceCode" id="cb18"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> breakpoints file</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> file</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">save</span> breakpoints file</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">source</span> file</span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="/index.html"><b>Home</b></a>

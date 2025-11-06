@@ -300,34 +300,35 @@
 <h1 class="title">GDB: Catchpoints</h1>
 </header>
 <h2 id="catchpoints">Catchpoints</h2>
-<p>Set catchpoints.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> assert    <span class="co"># Catch failed Ada assertions, when raised.</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> catch     <span class="co"># Catch an exception, when caught.</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> exception <span class="co"># Catch Ada exceptions, when raised.</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> exec      <span class="co"># Catch calls to exec.</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> fork      <span class="co"># Catch calls to fork.</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> handlers  <span class="co"># Catch Ada exceptions, when handled.</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> load      <span class="co"># Catch loads of shared libraries.</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> rethrow   <span class="co"># Catch an exception, when rethrown.</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> signal    <span class="co"># Catch signals by their names and/or numbers.</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> syscall   <span class="co"># Catch system calls by their names, groups and/or numbers.</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> throw     <span class="co"># Catch an exception, when thrown.</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> unload    <span class="co"># Catch unloads of shared libraries.</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> vfork     <span class="co"># Catch calls to vfork</span></span>
+<p>Stop on program events, such as C++ exceptions or the loading of a
+shared library, etc.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> assert    <span class="co"># Catch failed Ada assertions, when raised.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> catch     <span class="co"># Catch an exception, when caught.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> exception <span class="co"># Catch Ada exceptions, when raised.</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> exec      <span class="co"># Catch calls to exec.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> fork      <span class="co"># Catch calls to fork.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> handlers  <span class="co"># Catch Ada exceptions, when handled.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> load      <span class="co"># Catch loads of shared libraries.</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> rethrow   <span class="co"># Catch an exception, when rethrown.</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> signal    <span class="co"># Catch signals by their names and/or numbers.</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> syscall   <span class="co"># Catch system calls by their names, groups and/or numbers.</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> throw     <span class="co"># Catch an exception, when thrown.</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> unload    <span class="co"># Catch unloads of shared libraries.</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> vfork     <span class="co"># Catch calls to vfork</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p>Show catchpoints.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> breakpoint</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">show</span> breakpoint</span></code></pre></div>
 <p><br></p>
 <h2 id="fork">Fork</h2>
 <p>Usage.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> fork</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> vfork</span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> fork</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> vfork</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> detach-on-fork [on<span class="kw">|</span><span class="ex">off]</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> follow-fork-mode [parent<span class="kw">|</span><span class="ex">child]</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">set</span> detach-on-fork [on<span class="kw">|</span><span class="ex">off]</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">set</span> follow-fork-mode [parent<span class="kw">|</span><span class="ex">child]</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> detach-on-fork</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> follow-fork-mode</span></code></pre></div>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="ex">show</span> detach-on-fork</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">show</span> follow-fork-mode</span></code></pre></div>
 <div class="columns">
 <div class="column" style="width:30%;">
 <p>Sample</p>
@@ -361,10 +362,10 @@
 <p><br></p>
 <h2 id="exec">Exec</h2>
 <p>Usage.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> exec</span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> exec</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> follow-exec-mode [new<span class="kw">|</span><span class="ex">same]</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">show</span> follow-exec-mode</span></code></pre></div>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">set</span> follow-exec-mode [new<span class="kw">|</span><span class="ex">same]</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">show</span> follow-exec-mode</span></code></pre></div>
 <p>Sample: Debug a program started by a script.</p>
 <div class="columns">
 <div class="column" style="width:15%;">
@@ -396,17 +397,17 @@
 <p><br></p>
 <h2 id="syscall">Syscall</h2>
 <p>Usage.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> syscall [name <span class="kw">|</span> <span class="ex">number</span> <span class="kw">|</span> <span class="ex">group:groupname</span> <span class="kw">|</span> <span class="ex">g:groupname]</span> …</span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> syscall [name <span class="kw">|</span> <span class="ex">number</span> <span class="kw">|</span> <span class="ex">group:groupname</span> <span class="kw">|</span> <span class="ex">g:groupname]</span> …</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ausyscall</span> <span class="at">--dump</span></span></code></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">ausyscall</span> <span class="at">--dump</span></span></code></pre></div>
 <p><br></p>
 <h2 id="signal">Signal</h2>
 <p>One reason that catch signal can be more useful than handle is that
 you can attach commands and conditions to the catchpoint.</p>
 <div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> signal [signal… <span class="kw">|</span> <span class="ex">‘all’]</span></span>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> signal [signal… <span class="kw">|</span> <span class="ex">‘all’]</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">kill</span> <span class="at">-l</span></span></code></pre></div>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">kill</span> <span class="at">-l</span></span></code></pre></div>
 <p>Sample: Automatically print backtrace before program terminated.</p>
 <div class="columns">
 <div class="column" style="width:20%;">
@@ -441,8 +442,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#
 <h2 id="library-load">Library Load</h2>
 <p>Stop on the loading or unloading of a shared library.</p>
 <div class="sourceCode" id="cb13"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> load <span class="pp">[</span><span class="ss">regexp</span><span class="pp">]</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">catch</span> unload <span class="pp">[</span><span class="ss">regexp</span><span class="pp">]</span></span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> load <span class="pp">[</span><span class="ss">regexp</span><span class="pp">]</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">catch</span> unload <span class="pp">[</span><span class="ss">regexp</span><span class="pp">]</span></span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="/index.html"><b>Home</b></a>

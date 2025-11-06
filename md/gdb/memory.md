@@ -7,13 +7,13 @@ title: "GDB: Memory"
 ::: {.column width=60%}
 Search memory for the sequence of bytes.
 ```sh
-find [/sn] start_addr, +len, vals...
-find [/sn] start_addr, end_addr, vals...
+  find [/sn] start_addr, +len, vals...
+  find [/sn] start_addr, end_addr, vals...
 ```
 
-- **+len**: number of bytes to search.
-- **s**: size of each search query value (b, h, w, g).
-- **n**: number of matches to print.
+- *+len*: number of bytes to search.
+- *s*: size of each search query value (b, h, w, g).
+- *n*: number of matches to print.
 
 :::
 ::: {.column width=40%}
@@ -54,10 +54,10 @@ int main()
 ## Export Memory
 Dump the contents of memory from start_addr to end_addr, or the value of expr, to file.
 ```sh
-dump [format] memory filename start_addr end_addr
-dump [format] value filename expr
+  dump [format] memory filename start_addr end_addr
+  dump [format] value filename expr
 ```
-- **format**: binary, ihex, srec, tekhex, verilog.
+- *format*: binary, ihex, srec, tekhex, verilog.
 
 ```python
 (gdb) p &str
@@ -78,13 +78,13 @@ $ hexdump -C val.hex
 ## Import Memory
 Restore the contents of file filename into memory.
 ```sh
-restore file [binary] offset start end
+  restore file [binary] offset start end
 ```
 
-- **binary**: when file format is raw binary.
-- **offset**: starting offset in file, default 0.
-- **start**: starting address in target memory.
-- **end**: ending address in target memory.
+- *binary*: when file format is raw binary.
+- *offset*: starting offset in file, default 0.
+- *start*: starting address in target memory.
+- *end*: ending address in target memory.
 
 ```python
 (gdb) p &str
@@ -105,7 +105,7 @@ Start address is greater than length of binary file mem.hex.
 ## Memory Regions
 List memory regions.
 ```sh
-info proc mapping
+  info proc mapping
 ```
 
 <br>
@@ -113,12 +113,12 @@ info proc mapping
 ## Core Dump
 Generate the core dump.
 ```sh
-gcore [file]
+  gcore [file]
 ```
 
 - file: if file not specified, the file name defaults to core.pid, where pid is the inferior process ID.
 
 Load the core dump.
 ```sh
-gdb program core
+  gdb program core
 ```

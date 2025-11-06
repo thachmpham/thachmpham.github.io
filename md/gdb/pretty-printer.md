@@ -48,9 +48,9 @@ end
 ## Manage Printers
 Enable, disable and show pretty printers info.
 ```sh
-enable pretty-printer [object-regexp [name-regexp]]
-disable pretty-printer [object-regexp [name-regexp]]
-info pretty-printer [object-regexp [name-regexp]]
+  enable pretty-printer [object-regexp [name-regexp]]
+  disable pretty-printer [object-regexp [name-regexp]]
+  info pretty-printer [object-regexp [name-regexp]]
 ```
 
 <br>

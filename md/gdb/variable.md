@@ -9,7 +9,7 @@ By default, GDB prints a value according to its data type. However, we can chang
 ::: {.column width=50%}
 
 ```sh
-print [[OPTION]... --] [/FMT] [EXP]
+  print [OPTION] [/FMT] [EXP]
 ```
 FMT, format:
 
@@ -117,10 +117,10 @@ The command x is used to examine memory.
 ```sh
     x/nuf addr
 ```
-- **n**: Number of unit. Default: 1.
-- **u**: Unit (b, h, w, g).
-- **f**: Format (x, d, u, o, t, a, c, f, s, i).
-- **addr**: Starting address.
+- *n*: Number of unit. Default: 1.
+- *u*: Unit (b, h, w, g).
+- *f*: Format (x, d, u, o, t, a, c, f, s, i).
+- *addr*: Starting address.
 
 :::
 ::: {.column width=50%}
@@ -147,8 +147,8 @@ short n = 0x0102;
 
 GDB provides convenience variables that can hold on to a value and read later.
 ```sh
-set $variable = value
-show convenience
+  set $variable = value
+  show convenience
 ```
 
 :::
@@ -169,7 +169,7 @@ $15 = 16909060
 
 ## Environment Variables
 ```sh
-show environment [varname]
-set environment varname [=value]
-unset environment varname
+  show environment [varname]
+  set environment varname [=value]
+  unset environment varname
 ```
