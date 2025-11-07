@@ -115,6 +115,7 @@ main () at demo.c:10
 :::
 ::::::::::::::
 
+
 <br>
 
 ## Memory Watchpoints
@@ -162,19 +163,58 @@ Hardware watchpoint 2: -location *p
 Old value = 10
 New value = 100
 main () at demo.c:10
-
   
 ```
 
 :::
 ::::::::::::::
 
-| Command         | Explain                                             | 
-|:----------------|:---------------------------------------------------|
-| `watch p`       | Consider p as expression. Watch value of the expression.  |
-| `watch *p`      | Consider *p as expression. Watch value of the expression. |
-| `watch -l p`    | Find memory address of p. Watch content at the address.   |
-| `watch -l *p`   | Find address p points to. Watch content at the address.   |
+
+Sample: Watch an absolute memory.
+
+:::::::::::::: {.columns}
+::: {.column width=40%}
+
+```c {.numberLines}
+int main()
+{
+  int n = 3;// watch *((int*)address of n)
+  n += 1;   // hit
+  return 0;
+}
+  
+```
+
+:::
+::: {.column width=60%}
+
+```python
+(gdb) print &n
+$1 = (int *) 0xffffffffec9c
+(gdb) print *((int *) 0xffffffffec9c)
+$2 = 3
+
+# watch a 4-byte region at the address
+(gdb) watch *((int *) 0xffffffffec9c)
+
+(gdb) continue
+Hardware watchpoint 2: *((int *) 0xffffffffec9c)
+Old value = 3
+New value = 4
+main () at demo.c:5
+  
+```
+
+:::
+::::::::::::::
+  
+| Command               | Explain                                            |
+|:----------------------|:---------------------------------------------------|
+| `watch p`             | Consider p as expression. Watch value of the expression.  |
+| `watch *p`            | Consider *p as expression. Watch value of the expression. |
+| `watch -l p`          | Find memory address of p. Watch content at the address.   |
+| `watch -l *p`         | Find address p points to. Watch content at the address.   |
+| `watch *((int*)addr)` | Watch absolute memory. |
 
 <br>
 
@@ -192,3 +232,5 @@ Stop when the expression is either read or written.
 ```sh
   awatch [-l|-location] expression
 ```
+
+<br>
