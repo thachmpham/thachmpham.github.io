@@ -299,30 +299,28 @@
 <header id="title-block-header">
 <h1 class="title">GDB: Watchpoints</h1>
 </header>
-<h2 id="watchpoints">Watchpoints</h2>
+<h2 id="expression-watchpoints">Expression Watchpoints</h2>
 <p>Stop when the value of the expression changes.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">watch</span> [-l<span class="kw">|</span><span class="ex">-location]</span> expression</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">watch</span> expression</span></code></pre></div>
 <ul>
 <li><code>expression</code>: a variable, an address cast to an data
 type, a C/C++ expression.</li>
-<li><code>-l, -location</code>: watch the memory refrred to by the
-expression.</li>
 </ul>
-<p>Sample: watch p (<em>stop when p changed</em>).</p>
+<p>Sample: stop when p changes.</p>
 <div class="columns">
-<div class="column" style="width:40%;">
+<div class="column" style="width:50%;">
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="op">{</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a>  <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="dv">0</span><span class="op">;</span><span class="co">//watch p</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a>  <span class="dt">int</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb2-5"><a href="#cb2-5"></a>  <span class="dt">int</span> b <span class="op">=</span> <span class="dv">2</span><span class="op">;</span>  </span>
-<span id="cb2-6"><a href="#cb2-6"></a>  p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a>  p <span class="op">=</span> <span class="op">&amp;</span>b<span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>  p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span> <span class="co">//hit</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>  p <span class="op">=</span> <span class="op">&amp;</span>b<span class="op">;</span> <span class="co">//hit</span></span>
 <span id="cb2-8"><a href="#cb2-8"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb2-9"><a href="#cb2-9"></a><span class="op">}</span></span>
 <span id="cb2-10"><a href="#cb2-10"></a>  </span></code></pre></div>
-</div><div class="column" style="width:60%;">
+</div><div class="column" style="width:50%;">
 <div class="sourceCode" id="cb3"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(gdb) p <span class="op">&amp;</span>a</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>$<span class="dv">1</span> <span class="op">=</span> (<span class="bu">int</span> <span class="op">*</span>) <span class="bn">0xffffffffec94</span></span>
@@ -346,23 +344,23 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a hr
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 </div>
 </div>
-<p>Sample: watch *p (<em>stop when *p changed</em>).</p>
+<p>Sample: stop when *p changes.</p>
 <div class="columns">
-<div class="column" style="width:50%;">
+<div class="column" style="width:60%;">
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="op">{</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="co">// *p = undef</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="co">//watch *p</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a>  <span class="dt">int</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb4-5"><a href="#cb4-5"></a>  <span class="dt">int</span> b <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>  p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span> <span class="co">// *p = 1</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a>  <span class="op">*</span>p <span class="op">=</span> <span class="dv">10</span><span class="op">;</span><span class="co">// *p = 10</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a>  a <span class="op">=</span> <span class="dv">100</span><span class="op">;</span><span class="co">// *p = a = 100</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>  p <span class="op">=</span> <span class="op">&amp;</span>b<span class="op">;</span> <span class="co">// *p = b = 2</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>  p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span> <span class="co">//hit: *p = 1</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>  <span class="op">*</span>p <span class="op">=</span> <span class="dv">10</span><span class="op">;</span><span class="co">//hit: *p = 10</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>  a <span class="op">=</span> <span class="dv">100</span><span class="op">;</span><span class="co">//hit: *p = a = 100</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>  p <span class="op">=</span> <span class="op">&amp;</span>b<span class="op">;</span> <span class="co">//hit: *p = b = 2</span></span>
 <span id="cb4-10"><a href="#cb4-10"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb4-11"><a href="#cb4-11"></a><span class="op">}</span></span>
 <span id="cb4-12"><a href="#cb4-12"></a>  </span></code></pre></div>
-</div><div class="column" style="width:50%;">
+</div><div class="column" style="width:40%;">
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(gdb) watch <span class="op">*</span>p</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Hardware watchpoint <span class="dv">2</span>: <span class="op">*</span>p</span>
@@ -394,13 +392,92 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 </div>
 </div>
 <p><br></p>
+<h2 id="memory-watchpoints">Memory Watchpoints</h2>
+<p>Stop when the memory referred to by the expression changes.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">watch</span> <span class="at">-location</span> expression</span></code></pre></div>
+<ul>
+<li><code>-location, -l</code>: watch the memory referred to by the
+expression. The memory address is fixed at the moment the watchpoint is
+set. Stop when contents at that address change.</li>
+</ul>
+<p>Sample: watch the memory p points to.</p>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="op">{</span>  </span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="dt">int</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> b <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span> <span class="co">// watch -l *p</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>  p <span class="op">=</span> <span class="op">&amp;</span>b<span class="op">;</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>  b <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a>  <span class="op">*</span>p <span class="op">=</span> <span class="dv">200</span><span class="op">;</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a>  a <span class="op">=</span> <span class="dv">10</span><span class="op">;</span> <span class="co">// hit</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a>  a <span class="op">=</span> <span class="dv">100</span><span class="op">;</span><span class="co">// hit</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="op">}</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a>  </span></code></pre></div>
+</div><div class="column" style="width:40%;">
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>(gdb) watch <span class="op">-</span>l <span class="op">*</span>p</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>(gdb) <span class="cf">continue</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>Hardware watchpoint <span class="dv">2</span>: <span class="op">-</span>location <span class="op">*</span>p</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>Old value <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>New value <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>main () at demo.c:<span class="dv">9</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>(gdb) <span class="cf">continue</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>Hardware watchpoint <span class="dv">2</span>: <span class="op">-</span>location <span class="op">*</span>p</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>Old value <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>New value <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>main () at demo.c:<span class="dv">10</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+</div>
+</div>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Command</th>
+<th style="text-align: left;">Explain</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>watch p</code></td>
+<td style="text-align: left;">Consider p as expression. Watch value of
+the expression.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>watch *p</code></td>
+<td style="text-align: left;">Consider *p as expression. Watch value of
+the expression.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>watch -l p</code></td>
+<td style="text-align: left;">Find memory address of p. Watch content at
+the address.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>watch -l *p</code></td>
+<td style="text-align: left;">Find address p points to. Watch content at
+the address.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
 <h2 id="read-watchpoints">Read Watchpoints</h2>
 <p>Stop when the expression is read.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">rwatch</span> [-l<span class="kw">|</span><span class="ex">-location]</span> expression</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">rwatch</span> [-l<span class="kw">|</span><span class="ex">-location]</span> expression</span></code></pre></div>
 <p><br></p>
 <h2 id="read-write-watchpoints">Read-Write Watchpoints</h2>
 <p>Stop when the expression is either read or written.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">awatch</span> [-l<span class="kw">|</span><span class="ex">-location]</span> expression</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">awatch</span> [-l<span class="kw">|</span><span class="ex">-location]</span> expression</span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="/index.html"><b>Home</b></a>
