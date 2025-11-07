@@ -14,6 +14,8 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 | [Memory](html/gdb/memory.html)|
 | [Pretty Printers](html/gdb/pretty-printer.html)|
 
+<br>
+
 | Examine Execution |
 |-----------------|
 | [Breakpoints](html/gdb/breakpoint.html)|
@@ -22,6 +24,11 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 
 :::
 ::: {.column}
+| Remote Debug |
+|-----------------|
+| [GDBServer](html/gdb/gdbserver.html) |
+
+<br>
 
 | Best Practice |
 |-----------------|

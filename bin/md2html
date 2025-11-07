@@ -91,6 +91,7 @@ generate_post gdb/pretty-printer
 generate_post gdb/breakpoint
 generate_post gdb/catchpoint
 generate_post gdb/watchpoint
+generate_post gdb/gdbserver
 
 
 # ====  BASHDB
