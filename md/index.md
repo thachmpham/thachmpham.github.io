@@ -22,6 +22,14 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 | [Catchpoints](html/gdb/catchpoint.html)|
 | [Watchpoints](html/gdb/watchpoint.html)|
 
+<br>
+
+| Examine Binary |
+|-----------------|
+| [Symbols](html/gdb/symbol.html)|
+| <br> |
+| <br> |
+
 :::
 ::: {.column}
 
@@ -29,6 +37,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 |-----------------|
 | [GDBServer](html/gdb/gdbserver.html) |
 | [Tracepoints](html/gdb/tracepoint.html) |
+| <br> |
 
 <br>
 
