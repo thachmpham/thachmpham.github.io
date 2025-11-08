@@ -55,7 +55,7 @@ Sample: Server attachs to running vim process. Client connect to debug.
 Server
 ```sh
 vim
-gdbserver --attach localhost:12345 `pidof vim`
+gdbserver --attach :12345 19832
   
 ```
 
@@ -65,7 +65,7 @@ gdbserver --attach localhost:12345 `pidof vim`
 Client
 ```sh
 (gdb) file vim
-(gdb) target remote localhost:12345
+(gdb) target remote :12345
   
 ```
 
@@ -83,26 +83,32 @@ Start gdbsever in multi mode
 
 <br>
 
-Sample: Server starts in multi mode. Client connects and attach to a running process.
-
+Sample: Server starts in multi mode.
+```sh
+vim
+gdbserver --multi :12345
+  
+```
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-Server
+Client runs vim program.
 ```sh
-vim
-gdbserver --multi localhost:12345
+(gdb) target extended-remote :12345
+(gdb) set remote exec-file vim
+(gdb) start
+(gdb) monitor exit
   
 ```
 
 :::
 ::: {.column}
 
-Client
-```sh
-(gdb) target extended-remote localhost:12345
-(gdb) attach 19832
 
+Client attachs to a running process.
+```sh
+(gdb) target extended-remote :12345
+(gdb) attach 19832
 (gdb) monitor exit
   
 ```

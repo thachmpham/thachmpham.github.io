@@ -24,9 +24,11 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 
 :::
 ::: {.column}
+
 | Remote Debug |
 |-----------------|
 | [GDBServer](html/gdb/gdbserver.html) |
+| [Tracepoints](html/gdb/tracepoint.html) |
 
 <br>
 

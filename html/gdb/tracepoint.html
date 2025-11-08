@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>GDB: GDBServer</title>
+  <title>GDB: Tracepoints</title>
   <style>
     html {
       color: #1a1a1a;
@@ -297,74 +297,58 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">GDB: GDBServer</h1>
+<h1 class="title">GDB: Tracepoints</h1>
 </header>
-<h2 id="launch-program">Launch Program</h2>
-<p>Launch a proram under gdbserver control.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gdb</span> connection program args...</span></code></pre></div>
+<h2 id="set-tracepoints">Set Tracepoints</h2>
+<p>Observe the program without interrupting it.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">trace</span> <span class="pp">[</span><span class="ss">PROBE_MODIFIER</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">LOCATION</span><span class="pp">]</span> [thread THREADNUM]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>        <span class="ex">[-force-condition]</span> [if CONDITION]</span></code></pre></div>
 <ul>
-<li><em>connection</em>: ip:port (TCP), TTY device, stdio, ‘-’.</li>
+<li><em>force-condition</em>: defined even if condition invalid for
+current locations.</li>
 </ul>
-<p><br></p>
-<p>Sample: Server starts ls program. Client connect to debug.</p>
-<div class="columns">
-<div class="column">
-<p>Server</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gdbserver</span> localhost:12345 ls</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-</div><div class="column">
-<p>Client</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="fu">file</span> ls</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">target</span> remote localhost:12345</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-</div>
-</div>
-<p><br></p>
-<h2 id="attach-to-running-process">Attach to Running Process</h2>
-<p>Attach gdbserver to a running process.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gdb</span> <span class="at">--attach</span> connection pid</span></code></pre></div>
-<p><br></p>
-<p>Sample: Server attachs to running vim process. Client connect to
-debug.</p>
-<div class="columns">
-<div class="column" style="width:60%;">
-<p>Server</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vim</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gdbserver</span> <span class="at">--attach</span> :12345 19832</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-</div><div class="column">
-<p>Client</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="fu">file</span> vim</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">target</span> remote :12345</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-</div>
-</div>
-<p><br></p>
-<h2 id="multi-mode">Multi Mode</h2>
-<p>Start gdbsever in multi mode</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">gdbserver</span> <span class="at">--multi</span> connection</span></code></pre></div>
-<p><br></p>
-<p>Sample: Server starts in multi mode.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vim</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gdbserver</span> <span class="at">--multi</span> :12345</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>Client runs vim program.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">target</span> extended-remote :12345</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> remote exec-file vim</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">start</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">monitor</span> exit</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-</div><div class="column">
-<p>Client attachs to a running process.</p>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">target</span> extended-remote :12345</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">attach</span> 19832</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">monitor</span> exit</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<p>Set actions to be taken at a trace.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">actions</span> <span class="pp">[</span><span class="ss">tracepoint</span><span class="pp">]</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">&gt;</span> collect</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">&gt;</span> while-stepping</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">&gt;</span> end</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<p>Set data item to collect.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">collect</span> expressions...</span></code></pre></div>
+<ul>
+<li><em>expressions</em>: variables, registers, $regs, $args, $locals,
+$_sdata.</li>
+</ul>
 </div>
 </div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Set stepping commands.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>    <span class="op">&gt;</span> while-stepping <span class="ex">N</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>        <span class="op">&gt;</span> collect <span class="ex">...</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="op">&gt;</span> end</span></code></pre></div>
+<ul>
+<li><em>N</em>: step N instructions after the tracepoint, can collect
+data in each step.</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p>Set passcount.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">passcount</span> count <span class="pp">[</span><span class="ss">tracepoint</span><span class="pp">]</span></span></code></pre></div>
+<ul>
+<li><em>count</em>: stop trace when passed ‘count’ times.</li>
+</ul>
+</div>
+</div>
+<h2 id="collect-traces">Collect Traces</h2>
+<p>Start trace data collection.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">tstart</span></span></code></pre></div>
+<p>Stop trace data collection.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">tstop</span></span></code></pre></div>
+<p>Show status.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">tstatus</span></span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="/index.html"><b>Home</b></a>
