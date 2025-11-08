@@ -116,3 +116,104 @@ File demo.cpp:
 
 :::
 ::::::::::::::
+
+
+## Variables
+Global and static variables.
+```sh
+  info variables [-q] [-n] [-t type_regexp] [regexp]
+```
+
+<br>
+
+## Address of Symbol
+Find address of a symbol.
+```sh
+  info address sym
+```
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+```c
+int g = 0;
+
+int sum(int a, int b)
+{
+    return a + b;
+}
+  
+```
+
+:::
+::: {.column width=50%}
+
+```sh
+(gdb) info address g
+Symbol "g" is static storage at address 0x420020.
+
+(gdb) info address sum
+Symbol "sum" is a function at address 0x40066c.
+  
+```
+
+:::
+::::::::::::::
+
+<br>
+
+## Symbol at Address
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+Find symbol at an address. Only global, static scope.
+```sh
+  info sym addr
+```
+
+:::
+::: {.column width=50%}
+
+```sh
+(gdb) info symbol 0x420020
+g in section .bss
+
+(gdb) info symbol 0x40066c
+sum in section .text
+  
+```
+
+:::
+::::::::::::::
+
+<br>
+
+## Demangle
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+Demangle a name.
+```sh
+  demangle [--] name
+  set print demangle [on|off]
+  
+```
+
+- `--`: useful when name begins with a dash.
+
+:::
+::: {.column width=50%}
+
+```sh
+(gdb) demangle _ZN5PointC2Eii
+Point::Point(int, int)
+
+(gdb) demangle _ZN5Point4moveEii
+Point::move(int, int)
+  
+```
+
+:::
+::::::::::::::
