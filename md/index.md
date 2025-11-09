@@ -27,7 +27,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 | Examine Binary |
 |-----------------|
 | [Symbols](html/gdb/symbol.html)|
-| <br> |
+| [DebugInfo](html/gdb/debuginfo.html) |
 | <br> |
 
 :::

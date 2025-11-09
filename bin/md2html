@@ -94,6 +94,7 @@ generate_post gdb/watchpoint
 generate_post gdb/gdbserver
 generate_post gdb/tracepoint
 generate_post gdb/symbol
+generate_post gdb/debuginfo
 
 
 # ====  BASHDB
