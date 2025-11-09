@@ -163,7 +163,6 @@ Without debuginfo.
 24. comment
 25. annobin.notes
 26. gnu.build.attributes
-#-----------------------
   
 ```
 
@@ -181,13 +180,6 @@ Creates a .gnu_debuglink section which contains a reference to debuginfo file an
   objcopy --add-gnu-debuglink=debuginfo binary
 ```
 
-Objcopy searches for debuginfo files in the below paths.
-
-- Absolute path if being used.
-- Same directory as executable.
-- A sub-directory named named .debug.
-- /usr/lib/debug
-
 <br>
 
 Sample: Attach debuginfo to binary
@@ -203,13 +195,7 @@ Without debuginfo.
 0.  note.gnu.build-id
 1.  interp
 2.  gnu.hash
-3.  dynsym
-4.  dynstr
-5.  gnu.version
 ..  .....
-21. got.plt
-22. data
-23. bss
 24. comment
 25. annobin.notes
 26. gnu.build.attributes
@@ -217,6 +203,33 @@ Without debuginfo.
 27. gnu_debuglink
   
 ```
+
+:::
+::::::::::::::
+
+
+## Debuginfo Search Directory
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+Default, GDB searches for debuginfo files in the below directories.
+
+- Absolute paths.
+- Same directory as binary.
+- In .debug subdirectory.
+- /usr/lib/debug
+
+:::
+::: {.column width=50%}
+
+However, we can change the search directories.
+```sh
+  set debug-file-directory dirs
+  show debug-file-directory
+```
+
+- *dirs*: multiple paths separated by ':'.
 
 :::
 ::::::::::::::
