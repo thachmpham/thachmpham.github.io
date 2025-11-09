@@ -217,3 +217,52 @@ Point::move(int, int)
 
 :::
 ::::::::::::::
+
+<br>
+
+## Line Info
+Print source line info.
+```sh
+  info line locspec
+```
+
+- *locspec*: function, address, etc.
+
+<br>
+
+Sample: Find line info of function, offset and instruction address.
+
+:::::::::::::: {.columns}
+::: {.column width=45%}
+
+```c {.numberLines}
+int triple(int a)
+{
+    return 3 * a;
+}
+
+int main()
+{
+
+}
+  
+```
+
+:::
+::: {.column width=55%}
+
+```sh
+(gdb) info line triple
+Line 2 of "demo.c" starts at address 0x40066c <triple>
+   and ends at 0x400674 <triple+8>.
+(gdb) info line *triple+8
+Line 3 of "demo.c" starts at address 0x400674 <triple+8>
+   and ends at 0x400684 <triple+24>.
+(gdb) info line *0x400674
+Line 3 of "demo.c" starts at address 0x400674 <triple+8>
+   and ends at 0x400684 <triple+24>.
+  
+```
+
+:::
+::::::::::::::
