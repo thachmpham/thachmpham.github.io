@@ -104,7 +104,7 @@ Binary with debuginfo.
 :::::::::::::: {.columns}
 ::: {.column width=70%}
 
-GDB allows to split the debuginfo of a binary into a separate file. The purpose is to optimize binary size. We can load the debuginfo later when need debug.
+GDB allows to split the debuginfo of a binary into a separate file. The purpose is to optimize binary size. When debugging is needed later, the debug information can be reattached.
 
 Extract debuginfo into a file.
 ```sh
@@ -164,6 +164,57 @@ Without debuginfo.
 25. annobin.notes
 26. gnu.build.attributes
 #-----------------------
+  
+```
+
+:::
+::::::::::::::
+
+
+## Attach DebugInfo
+
+:::::::::::::: {.columns}
+::: {.column width=70%}
+
+Creates a .gnu_debuglink section which contains a reference to debuginfo file and adds it to the binary file.
+```sh
+  objcopy --add-gnu-debuglink=debuginfo binary
+```
+
+Objcopy searches for debuginfo files in the below paths.
+
+- Absolute path if being used.
+- Same directory as executable.
+- A sub-directory named named .debug.
+- /usr/lib/debug
+
+<br>
+
+Sample: Attach debuginfo to binary
+```sh
+objcopy --add-gnu-debuglink=demo.debuginfo demo
+```
+
+:::
+::: {.column width=30%}
+
+Without debuginfo.
+```yml
+0.  note.gnu.build-id
+1.  interp
+2.  gnu.hash
+3.  dynsym
+4.  dynstr
+5.  gnu.version
+..  .....
+21. got.plt
+22. data
+23. bss
+24. comment
+25. annobin.notes
+26. gnu.build.attributes
+#-----------------------
+27. gnu_debuglink
   
 ```
 
