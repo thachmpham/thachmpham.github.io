@@ -190,7 +190,7 @@ objcopy --add-gnu-debuglink=demo.debuginfo demo
 :::
 ::: {.column width=30%}
 
-Without debuginfo.
+With debuglink.
 ```yml
 0.  note.gnu.build-id
 1.  interp
@@ -208,7 +208,7 @@ Without debuginfo.
 ::::::::::::::
 
 
-## Debuginfo Search Directory
+## Search Directory
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}

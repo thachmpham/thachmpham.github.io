@@ -437,7 +437,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#
 <div class="sourceCode" id="cb12"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">objcopy</span> <span class="at">--add-gnu-debuglink</span><span class="op">=</span>demo.debuginfo demo</span></code></pre></div>
 </div><div class="column" style="width:30%;">
-<p>Without debuginfo.</p>
+<p>With debuglink.</p>
 <div class="sourceCode" id="cb13"><pre
 class="sourceCode yml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="at">0.  note.gnu.build-id</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="at">1.  interp</span></span>
@@ -451,7 +451,7 @@ class="sourceCode yml"><code class="sourceCode yaml"><span id="cb13-1"><a href="
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span></span></code></pre></div>
 </div>
 </div>
-<h2 id="debuginfo-search-directory">Debuginfo Search Directory</h2>
+<h2 id="search-directory">Search Directory</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Default, GDB searches for debuginfo files in the below
