@@ -9,7 +9,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 ::: {.column}
 
 | Examine Data |
-|-----------------|
+|:-----------------|
 | [Variables](html/gdb/variable.html)|
 | [Memory](html/gdb/memory.html)|
 | [Pretty Printers](html/gdb/pretty-printer.html)|
@@ -17,7 +17,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 <br>
 
 | Examine Execution |
-|-----------------|
+|:-----------------|
 | [Breakpoints](html/gdb/breakpoint.html)|
 | [Catchpoints](html/gdb/catchpoint.html)|
 | [Watchpoints](html/gdb/watchpoint.html)|
@@ -25,7 +25,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 <br>
 
 | Examine Binary |
-|-----------------|
+|:-----------------|
 | [Symbols](html/gdb/symbol.html)|
 | [DebugInfo](html/gdb/debuginfo.html) |
 | <br> |
@@ -33,16 +33,16 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 :::
 ::: {.column}
 
-| Remote Debug |
-|-----------------|
+| Remote Debugging |
+|:-----------------|
 | [GDBServer](html/gdb/gdbserver.html) |
 | [Tracepoints](html/gdb/tracepoint.html) |
-| <br> |
+| [Stripped Remote Binary](html/gdb/stripped_remote_binary.html) |
 
 <br>
 
 | Best Practice |
-|-----------------|
+|:-----------------|
 | [Systemd Program](html/gdb-program-started-by-systemd.html) |
 | [OpenSAF Program](html/gdb-ha-program.html) |
 | [Multiple Threads](html/gdb-multithread.html) |

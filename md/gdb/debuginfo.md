@@ -46,9 +46,9 @@ int main()
 
 ```sh
 #-------------------------------
-$ gcc -g demo.c -o demo
+gcc -g demo.c -o demo
 
-$ objdump --section-headers demo
+objdump --section-headers demo
 #-------------------------------
   
 ```
@@ -121,12 +121,12 @@ Remove debuginfo from binary.
 Sample: Strip a binary.
 ```sh
 #-------------------------------
-$ gcc -g demo.c -o demo
+gcc -g demo.c -o demo
 
-$ objcopy --only-keep-debug demo demo.debuginfo
-$ strip --strip-debug demo
+objcopy --only-keep-debug demo demo.debuginfo
+strip --strip-debug demo
 
-$ objdump --section-headers demo
+objdump --section-headers demo
 #-------------------------------
   
 ```
