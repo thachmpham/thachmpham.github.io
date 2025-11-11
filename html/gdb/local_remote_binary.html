@@ -360,6 +360,28 @@ directories.</p>
 <p>Set solib path.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> solib-search-prefix path</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">show</span> solib-search-prefix</span></code></pre></div>
+<p><br></p>
+<h2 id="path-substitution">Path Substitution</h2>
+<p>Path substitution can be used when the source code paths in the a
+binary differ from in the local filesystem paths.</p>
+<p>Set substitude rules.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> substitude-path from to</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">unset</span> <span class="va">substitude</span>-path <span class="va">[</span>path<span class="op">]</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">show</span> substitude-path <span class="pp">[</span><span class="ss">path</span><span class="pp">]</span></span></code></pre></div>
+<p><br></p>
+<p>Sample: Source of the remote program is under /root/demo. But, in the
+local, the debug source is under /root/sample.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">list</span> main</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">warning:</span> 2      /root/demo/main.c: No such file or directory</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> substitute-path /root/demo /root/sample</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">list</span> main</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">5</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ex">6</span>       int main<span class="er">(</span><span class="kw">)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">7</span>       {</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ex">8</span>           </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="ex">9</span>       }</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">
       <a href="/index.html"><b>Home</b></a>
