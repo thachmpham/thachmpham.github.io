@@ -1,16 +1,15 @@
 ---
-title: "GDB: Stripped Remote Binary"
-subtitle: "Debug Stripped Binaries on a Remote Target"
+title: "GDB: Local & Remote Binary"
 ---
 
 
-## Local Binary
+## Stripped Remote Binary
 
 
 :::::::::::::: {.columns}
 ::: {.column width=60%}
 
-If the remote binary is stripped, we can start GDB with a local unstripped binary.
+If the remote binary is stripped, you can start GDB with the local unstripped version. The debug symbols from the local binary will then be loaded into GDB.
 
 Sample.
 
@@ -71,3 +70,26 @@ $ objcopy --add-gnu-debuglink=demo.debuginfo demo_with_debug
 ```
 :::
 ::::::::::::::
+
+<br>
+
+## Sysroot
+
+Sysroot is the directy where gdb can find the shared libraries. Using local sysroot helps to prevent the need to fetch libraries from the remote target.
+
+Set an alternative sysroot.
+```sh
+(gdb) set sysroot path
+(gdb) show sysroot
+```
+
+<br>
+
+## Solib Directory
+If a library not found in sysroot, gdb then searches in solib directories.
+
+Set solib path.
+```sh
+(gdb) set solib-search-prefix path
+(gdb) show solib-search-prefix
+```

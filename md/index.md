@@ -37,7 +37,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 |:-----------------|
 | [GDBServer](html/gdb/gdbserver.html) |
 | [Tracepoints](html/gdb/tracepoint.html) |
-| [Stripped Remote Binary](html/gdb/stripped_remote_binary.html) |
+| [Local & Remote Binary](html/gdb/local_remote_binary.html) |
 
 <br>
 
