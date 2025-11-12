@@ -21,6 +21,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 | [Breakpoints](html/gdb/breakpoint.html)|
 | [Catchpoints](html/gdb/catchpoint.html)|
 | [Watchpoints](html/gdb/watchpoint.html)|
+| [Signals](html/gdb/signal.html)|
 
 <br>
 
