@@ -1,14 +1,14 @@
 ---
 title:  "thachmpham.github.io"
-subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed Systems - Software Debugging*"
+subtitle: "*A Software Developer Notebook*"
 ---
 
-## Software Debugging
-### GDB
+
+## GDB
 :::::::::::::: {.columns}
 ::: {.column}
 
-| Examine Data |
+| Data Manipulation |
 |:-----------------|
 | [Variables](html/gdb/variable.html)|
 | [Memory](html/gdb/memory.html)|
@@ -16,7 +16,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 
 <br>
 
-| Examine Execution |
+| Execution Control |
 |:-----------------|
 | [Breakpoints](html/gdb/breakpoint.html)|
 | [Catchpoints](html/gdb/catchpoint.html)|
@@ -34,7 +34,7 @@ subtitle: "A Software Engineer's Notebook<br/>*Computer Networking - Distributed
 :::
 ::: {.column}
 
-| Remote Debugging |
+| Remote Debuging |
 |:-----------------|
 | [GDBServer](html/gdb/gdbserver.html) |
 | [Tracepoints](html/gdb/tracepoint.html) |

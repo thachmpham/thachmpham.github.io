@@ -110,6 +110,49 @@ List memory regions.
 
 <br>
 
+Sample: Add a memory region by gdb.
+
+:::::::::::::: {.columns}
+::: {.column}
+
+- main.c
+```c
+int main()
+{
+  return 0
+}
+```
+
+:::
+::: {.column}
+
+- hello.txt
+```sh
+hello world
+```
+
+:::
+::::::::::::::
+
+- GDB session.
+
+```sh
+(gdb) set $fd = (int) open("hello.txt", 0)
+
+(gdb) set $region_addr = (void*) mmap(0, 4096, 1, 1, $fd, 0)
+
+(gdb) info proc mappings
+Start Addr         End Addr           Size    Offset  Perms File 
+0x0000fffff7ff5000 0x0000fffff7ff6000 0x1000  0x0     r--s  /root/demo/hello.txt 
+...
+
+(gdb) x/s $region_addr
+0xfffff7ff5000: "hello world\n"
+    
+```
+
+<br>
+
 ## Core Dump
 Generate the core dump.
 ```sh
