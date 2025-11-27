@@ -567,8 +567,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb22-1"><a href="#
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>      <span class="ex">Start</span> Addr           End Addr       Size     Offset  Perms  objfile</span>
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">0x7ffff7ffa000</span>     0x7ffff7ffb000     0x1000        0x0  r-xp   math.o</span>
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># add-symbol-file &lt;file&gt; &lt;.text segment address in memory&gt;</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># text_addr = region_start_addr + text_offset_in_elf</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># add-symbol-file &lt;file&gt; &lt;.text address in memory&gt;</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># .text addr = region addr + .text offset in ELF</span></span>
 <span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co">#              = 0x7ffff7ffa000 + 0x0040</span></span>
 <span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co">#              = 0x7ffff7ffa040</span></span>
 <span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">add-symbol-file</span> math.o 0x7ffff7ffa040</span>

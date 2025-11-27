@@ -351,8 +351,8 @@ Set hbreak.
       Start Addr           End Addr       Size     Offset  Perms  objfile
   0x7ffff7ffa000     0x7ffff7ffb000     0x1000        0x0  r-xp   math.o
 
-# add-symbol-file <file> <.text segment address in memory>
-# text_addr = region_start_addr + text_offset_in_elf
+# add-symbol-file <file> <.text address in memory>
+# .text addr = region addr + .text offset in ELF
 #              = 0x7ffff7ffa000 + 0x0040
 #              = 0x7ffff7ffa040
 (gdb) add-symbol-file math.o 0x7ffff7ffa040
