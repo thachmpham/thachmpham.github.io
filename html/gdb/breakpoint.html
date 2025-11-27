@@ -299,15 +299,57 @@
 <header id="title-block-header">
 <h1 class="title">GDB: Breakpoints</h1>
 </header>
-<h2 id="set-breakpoints">Set Breakpoints</h2>
+<h2 id="overview">Overview</h2>
+<p>GDB supports two types of breakpoints: software and hardware
+breakpoints.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>Stop program whenever a point in the program is reached.</p>
+<p><strong>Software Breakpoint.</strong></p>
+<p><span style="color: yellow">Mechanism:</span> To setup a software
+breakpoint, GDB replaces the program instruction with a trap, illegal
+divide or some other instructions that will cause an exception. When the
+exception raised, GDB catches it and stops the program.</p>
+<p><span style="color: yellow">Maximum:</span> The number of software
+breakpoints is unlimited.</p>
+<p><br><br><br></p>
+<p><span style="color: yellow">Permission:</span> To set a software
+breakpoint, the target address must reside in a writable memory
+region.</p>
+<p><br><br><br></p>
+<p><span style="color: yellow">Usage:</span> Typically used for regular
+debugging, where performance and memory permissions are not
+critical.</p>
+</div><div class="column" style="width:50%;">
+<p><strong>Hardware Breakpoint.</strong></p>
+<p><span style="color: yellow">Mechanism:</span> To setup a hardware
+breakpoint, GDB stores the breakpoint address to a debug register. When
+the program counter $pc matches the value in the debug register, GDB
+stops the program.</p>
+<p><span style="color: yellow">Maximum:</span> The number of debug
+registers are limited and varies depending on the architecture. For
+example, x86 has 4 debug registers, DR0-DR3. So, the number of hardward
+breakpoints is limited.</p>
+<p><span style="color: yellow">Permission:</span> A hardware breakpoint
+can be placed at an address in read-only memory region.</p>
+<p><span style="color: yellow">Performance:</span> The impact of a
+hardware breakpoint on program performance is smaller than that of a
+software breakpoint.</p>
+<p><span style="color: yellow">Usage:</span> Typically used for
+read-only code or in live system, where performance and memory safety
+are critical.</p>
+</div>
+</div>
+<p><br></p>
+<h2 id="software-breakpoints">Software Breakpoints</h2>
+<p><span style="color: yellow">Breakpoint:</span> Stop program whenever
+a point in the program is reached.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="cf">break</span> <span class="ex">[-qualified]</span> locspec</span></code></pre></div>
 <ul>
 <li><em>locspec</em>: line number, function name, address.</li>
 <li><em>qualified</em>: full match.</li>
 </ul>
+<div class="columns">
+<div class="column" style="width:50%;">
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1"></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="op">{</span></span>
@@ -338,99 +380,108 @@ class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span i
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000400688</span> <span class="op">&lt;</span>+28<span class="op">&gt;</span>:    ret</span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">*sum+4</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">0x0000000000400670</span></span></code></pre></div>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">0x0000000000400670</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+</div>
+</div>
+<p><span style="color: yellow">Regex Breakpoints:</span> Break by
+regular expression.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Set breakpoints on all functions matching the regular expression
+regex</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">rbeak</span> regex</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">rbreak</span> file:regex</span></code></pre></div>
+<ul>
+<li><em>regex</em>: use standard regular expression, like grep.</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> sum.<span class="pp">*</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> demo.c:sum.<span class="pp">*</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># all functions in current program</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> .</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># all functions in file</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> demo.c:.</span></code></pre></div>
 </div>
 </div>
 <p><br></p>
-<h2 id="conditional-breakpoints">Conditional Breakpoints</h2>
-<p>Set condition.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  <span class="cf">break</span> <span class="ex">locspec</span> <span class="pp">[-</span><span class="ss">force</span><span class="pp">-</span><span class="ss">condition</span><span class="pp">]</span> if cond</span></code></pre></div>
+<p><span style="color: yellow">Conditional Breakpoints:</span> Only stop
+on certain conditions.</p>
+<p>Set a conditional breakpoint.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="cf">break</span> <span class="ex">locspec</span> <span class="pp">[-</span><span class="ss">force</span><span class="pp">-</span><span class="ss">condition</span><span class="pp">]</span> if cond</span></code></pre></div>
 <ul>
 <li><em>cond</em>: only stop at breakpoint when cond is true.</li>
 <li><em>force-condition</em>: force to enable to cond.</li>
 </ul>
 <p>Change condition.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">condition</span> breakpoint <span class="pp">[</span><span class="ss">cond</span><span class="pp">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">condition</span> breakpoint <span class="pp">[</span><span class="ss">cond</span><span class="pp">]</span></span></code></pre></div>
 <p><br></p>
-<h2 id="regex-breakpoints">Regex Breakpoints</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">rbeak</span> regex</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">rbreak</span> file:regex</span></code></pre></div>
-<ul>
-<li><em>regex</em>: standard regex, like grep.</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> sum.<span class="pp">*</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> demo.c:sum.<span class="pp">*</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># all functions in current program</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> .</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># all functions in file</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">rbreak</span> demo.c:.</span></code></pre></div>
-</div>
-</div>
+<p><span style="color: yellow">Inferior-Specific Breakpoints:</span>
+Only stop on certain processes.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  <span class="cf">break</span> <span class="ex">locspec</span> inferior inferior-id [if cond]</span></code></pre></div>
 <p><br></p>
-<h2 id="thread-specific-breakpoints">Thread-Specific Breakpoints</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  <span class="cf">break</span> <span class="ex">locspec</span> thread thread-id [if cond]</span></code></pre></div>
+<p><span style="color: yellow">Thread-Specific Breakpoints:</span> Only
+stop on certain threads.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  <span class="cf">break</span> <span class="ex">locspec</span> thread thread-id [if cond]</span></code></pre></div>
 <p><br></p>
-<h2 id="inferior-specific-breakpoints">Inferior-Specific
-Breakpoints</h2>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  <span class="cf">break</span> <span class="ex">locspec</span> inferior inferior-id [if cond]</span></code></pre></div>
-<p><br></p>
-<h2 id="temporary-breakpoints">Temporary Breakpoints</h2>
-<p>Automatically deleted after the hit.</p>
+<p><span style="color: yellow">Temporary Breakpoints:</span>
+Automatically deleted after the hit.</p>
 <div class="sourceCode" id="cb10"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">tbreak</span> args</span></code></pre></div>
 <p><br></p>
-<h2 id="commands">Commands</h2>
+<p><span style="color: yellow">Commands:</span> Automate debugging
+actions when a breakpoint is hit.</p>
 <div class="columns">
-<div class="column" style="width:60%;">
+<div class="column" style="width:50%;">
 <p>Set commands.</p>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">commands</span> <span class="pp">[</span><span class="ss">breakpoints...</span><span class="pp">]</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>      <span class="ex">commands...</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">end</span></span></code></pre></div>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>      <span class="bu">command</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>      <span class="ex">...</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">end</span></span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <p>Change commands.</p>
 <div class="sourceCode" id="cb12"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">commands</span> breakpoints...</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>      <span class="ex">commands...</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">end</span></span></code></pre></div>
-</div><div class="column" style="width:40%;">
-<div class="sourceCode" id="cb13"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">break</span> <span class="fu">sum</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">commands</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">backtrace</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="cf">continue</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">end</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="cf">break</span> <span class="fu">sum</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="cf">break</span> <span class="ex">main</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="ex">commands</span> 1, 2</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="ex">backtrace</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="cf">continue</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="ex">end</span></span></code></pre></div>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>      <span class="bu">command</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>      <span class="ex">...</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">end</span></span></code></pre></div>
 </div>
 </div>
 <p><br></p>
 <h2 id="manage-breakpoints">Manage Breakpoints</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <p>Show breakpoints</p>
-<div class="sourceCode" id="cb14"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">info</span> break</span></code></pre></div>
-<p>Delete the breakpoints.</p>
-<div class="sourceCode" id="cb15"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">delete</span> <span class="pp">[</span><span class="ss">breakpoints</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">list…</span><span class="pp">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">info</span> break</span></code></pre></div>
 <p>Enable, disable breakpoints</p>
-<div class="sourceCode" id="cb16"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  <span class="bu">enable</span> breakpoints <span class="pp">[</span><span class="ss">breakpoints</span><span class="pp">]</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">disable</span> breakpoints <span class="pp">[</span><span class="ss">breakpoints</span><span class="pp">]</span></span></code></pre></div>
-<p>Delete all breakpoints at to locspec.</p>
-<div class="sourceCode" id="cb17"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clear</span> locspec</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  <span class="bu">enable</span> breakpoints <span class="pp">[</span><span class="ss">breakpoints</span><span class="pp">]</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">disable</span> breakpoints <span class="pp">[</span><span class="ss">breakpoints</span><span class="pp">]</span></span></code></pre></div>
 <p>Save, restore breakpoints.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">save</span> breakpoints file</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">source</span> file</span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<p>Delete breakpoints.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">delete</span> <span class="pp">[</span><span class="ss">breakpoints</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">list…</span><span class="pp">]</span></span></code></pre></div>
+<p>Delete all breakpoints.</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">delete</span> breakpoints</span></code></pre></div>
+<p>Delete all breakpoints at to locspec.</p>
 <div class="sourceCode" id="cb18"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">save</span> breakpoints file</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">source</span> file</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clear</span> locspec</span></code></pre></div>
+</div>
+</div>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a
+href="https://sourceware.org/gdb/wiki/Internals/Breakpoint%20Handling">GDB
+Internal, Breakpoint Handling</a></li>
+</ul>
 <footer class="footer text-muted">
    <div align="center">
       <a href="/index.html"><b>Home</b></a>

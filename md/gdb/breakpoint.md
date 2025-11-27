@@ -2,17 +2,67 @@
 title: "GDB: Breakpoints"
 ---
 
+## Overview
+GDB supports two types of breakpoints: software and hardware breakpoints.
 
-## Set Breakpoints
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
+**Software Breakpoint.**
+
+<span style="color: yellow">Mechanism:</span>
+To setup a software breakpoint, GDB replaces the program instruction with a trap, illegal divide or some other instructions that will cause an exception. When the exception raised, GDB catches it and stops the program.
+
+<span style="color: yellow">Maximum:</span>
+The number of software breakpoints is unlimited.
+
+<br><br><br>
+
+<span style="color: yellow">Permission:</span>
+To set a software breakpoint, the target address must reside in a writable memory region.
+
+<br><br><br>
+
+<span style="color: yellow">Usage:</span>
+Typically used for regular debugging, where performance and memory permissions are not critical.
+
+:::
+::: {.column width=50%}
+
+**Hardware Breakpoint.**
+
+<span style="color: yellow">Mechanism:</span>
+To setup a hardware breakpoint, GDB stores the breakpoint address to a debug register. When the program counter $pc matches the value in the debug register, GDB stops the program.
+
+<span style="color: yellow">Maximum:</span>
+The number of debug registers are limited and varies depending on the architecture. For example, x86 has 4 debug registers, DR0-DR3. So, the number of hardward breakpoints is limited.
+
+<span style="color: yellow">Permission:</span>
+A hardware breakpoint can be placed at an address in read-only memory region.
+
+<span style="color: yellow">Performance:</span>
+The impact of a hardware breakpoint on program performance is smaller than that of a software breakpoint.
+
+<span style="color: yellow">Usage:</span>
+Typically used for read-only code or in live system, where performance and memory safety are critical.
+
+:::
+::::::::::::::
+
+<br>
+
+## Software Breakpoints
+<span style="color: yellow">Breakpoint:</span>
 Stop program whenever a point in the program is reached.
+
 ```sh
   break [-qualified] locspec
 ```
 - *locspec*: line number, function name, address.
 - *qualified*: full match.
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
 
 ```c {.numberLines}
 int sum(int a, int b)
@@ -50,39 +100,25 @@ int main()
 
 (gdb) break *sum+4
 (gdb) break 0x0000000000400670
+  
 ```
 
 :::
 ::::::::::::::
 
-<br>
+<span style="color: yellow">Regex Breakpoints:</span>
+Break by regular expression.
 
-## Conditional Breakpoints
-Set condition.
-```sh
-  break locspec [-force-condition] if cond
-```
-
-- *cond*: only stop at breakpoint when cond is true.
-- *force-condition*: force to enable to cond.
-
-Change condition.
-```sh
-  condition breakpoint [cond]
-```
-
-<br>
-
-## Regex Breakpoints
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
+Set breakpoints on all functions matching the regular expression regex
 ```sh
   rbeak regex
   rbreak file:regex
 ```
 
-- *regex*: standard regex, like grep.
+- *regex*: use standard regular expression, like grep.
 
 :::
 ::: {.column width=50%}
@@ -102,21 +138,43 @@ rbreak demo.c:.
 
 <br>
 
-## Thread-Specific Breakpoints
+<span style="color: yellow">Conditional Breakpoints:</span>
+Only stop on certain conditions.
+
+Set a conditional breakpoint.
 ```sh
-  break locspec thread thread-id [if cond]
+  break locspec [-force-condition] if cond
+```
+
+- *cond*: only stop at breakpoint when cond is true.
+- *force-condition*: force to enable to cond.
+
+Change condition.
+```sh
+  condition breakpoint [cond]
 ```
 
 <br>
 
-## Inferior-Specific Breakpoints
+<span style="color: yellow">Inferior-Specific Breakpoints:</span>
+Only stop on certain processes.
+
 ```sh
   break locspec inferior inferior-id [if cond]
 ```
 
 <br>
 
-## Temporary Breakpoints
+<span style="color: yellow">Thread-Specific Breakpoints:</span>
+Only stop on certain threads.
+
+```sh
+  break locspec thread thread-id [if cond]
+```
+
+<br>
+
+<span style="color: yellow">Temporary Breakpoints:</span>
 Automatically deleted after the hit.
 ```sh
   tbreak args
@@ -124,56 +182,46 @@ Automatically deleted after the hit.
 
 <br>
 
-## Commands
+<span style="color: yellow">Commands:</span>
+Automate debugging actions when a breakpoint is hit.
+
 :::::::::::::: {.columns}
-::: {.column width=60%}
+::: {.column width=50%}
 
 Set commands.
 ```sh
   commands [breakpoints...]
-      commands...
-  end
-```
-
-Change commands.
-```sh
-  commands breakpoints...
-      commands...
+      command
+      ...
   end
 ```
 
 :::
-::: {.column width=40%}
+::: {.column width=50%}
 
+Change commands.
 ```sh
-break sum
-commands
-backtrace
-continue
-end
-
-break sum
-break main
-commands 1, 2
-backtrace
-continue
-end
+  commands breakpoints...
+      command
+      ...
+  end
 ```
 
 :::
 ::::::::::::::
 
+
+
 <br>
 
 ## Manage Breakpoints
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
 Show breakpoints
 ```sh
   info break
-```
-
-Delete the breakpoints.
-```sh
-  delete [breakpoints] [list…]
 ```
 
 Enable, disable breakpoints
@@ -182,13 +230,32 @@ Enable, disable breakpoints
   disable breakpoints [breakpoints]
 ```
 
-Delete all breakpoints at to locspec.
-```sh
-  clear locspec
-```
-
 Save, restore breakpoints.
 ```sh
   save breakpoints file
   source file
 ```
+
+:::
+::: {.column width=50%}
+
+Delete breakpoints.
+```sh
+  delete [breakpoints] [list…]
+```
+
+Delete all breakpoints.
+```sh
+  delete breakpoints
+```
+
+Delete all breakpoints at to locspec.
+```sh
+  clear locspec
+```
+
+:::
+::::::::::::::
+
+## Reference
+- [GDB Internal, Breakpoint Handling](https://sourceware.org/gdb/wiki/Internals/Breakpoint%20Handling)
