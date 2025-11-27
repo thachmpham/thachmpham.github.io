@@ -85,18 +85,18 @@ pandoc -f markdown -t html -s \
 # generate_post asm-callstack
 # generate_post gdb-multithread
 
-generate_post gdb/variable
-generate_post gdb/memory
-generate_post gdb/pretty-printer
+# generate_post gdb/variable
+# generate_post gdb/memory
+# generate_post gdb/pretty-printer
 generate_post gdb/breakpoint
-generate_post gdb/catchpoint
-generate_post gdb/watchpoint
-generate_post gdb/gdbserver
-generate_post gdb/tracepoint
-generate_post gdb/symbol
-generate_post gdb/debuginfo
-generate_post gdb/local_remote_binary
-generate_post gdb/signal
+# generate_post gdb/catchpoint
+# generate_post gdb/watchpoint
+# generate_post gdb/gdbserver
+# generate_post gdb/tracepoint
+# generate_post gdb/symbol
+# generate_post gdb/debuginfo
+# generate_post gdb/local_remote_binary
+# generate_post gdb/signal
 
 
 # ====  BASHDB
