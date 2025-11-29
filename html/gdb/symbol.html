@@ -656,8 +656,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb25-1"><a href="#
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <div class="columns">
 <div class="column" style="width:70%;">
-<p>Dump the .symtab section. Size of elf64_sym is 24 bytes, so use
-option ‘xxd -c 24’ to display 24 bytes each line.</p>
+<p>Dump the .symtab section. The elf64_sym struct has a size of 24
+bytes, so use option ‘xxd -c 24’ to display 24 bytes each line.</p>
 <div class="sourceCode" id="cb26"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> xxd <span class="at">-p</span> <span class="at">-g</span> 1 <span class="at">-c</span> 24 <span class="at">-s</span> 0x003048 <span class="at">-l</span> 0x000378 main</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">340100001100170010400000000000000400000000000000</span></span>
@@ -674,7 +674,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb27-1"><a href="#
 <span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 </div>
 </div>
-<p>Decode the first hex line to elf64_sym.</p>
+<p>Decode the first line.</p>
 <div class="sourceCode" id="cb28"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> hex_to_elf64_sym.py 340100001100170010400000000000000400000000000000</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">name</span>     info    other  shndx   value     size</span>
@@ -693,8 +693,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb28-1"><a href="#
 <tr class="odd">
 <td style="text-align: left;">st_name</td>
 <td style="text-align: left;">0x134</td>
-<td style="text-align: left;">Name: g_int (index 0x134 in string
-table)</td>
+<td style="text-align: left;">Index 0x134 in string table: g_int</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">st_info</td>
@@ -724,7 +723,7 @@ table)</td>
 </tbody>
 </table>
 <p><br></p>
-<p>Decode the second hex line to elf64_sym.</p>
+<p>Decode the second line.</p>
 <div class="sourceCode" id="cb29"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> hex_to_elf64_sym.py 6301000012000e0029110000000000001800000000000000</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">name</span>     info    other  shndx  value     size</span>
@@ -742,8 +741,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb29-1"><a href="#
 <tr class="odd">
 <td style="text-align: left;">st_name</td>
 <td style="text-align: left;">0x163</td>
-<td style="text-align: left;">Name: sum (index 0x136 in string
-table)</td>
+<td style="text-align: left;">Index 0x136 in string table: sum</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">st_info</td>
@@ -763,13 +761,13 @@ table)</td>
 <tr class="odd">
 <td style="text-align: left;">st_value</td>
 <td style="text-align: left;">0x4010</td>
-<td style="text-align: left;">Offset: 0x4010</td>
+<td style="text-align: left;">Offset 0x1129</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">st_size</td>
 <td style="text-align: left;">0x18</td>
-<td style="text-align: left;">Size: 24, from instruction 0x1140 to
-0x1129</td>
+<td style="text-align: left;">Size: 24, from instruction 0x1129 to
+0x1140</td>
 </tr>
 </tbody>
 </table>

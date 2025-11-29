@@ -399,7 +399,7 @@ $ readelf --section-headers main
 :::::::::::::: {.columns}
 ::: {.column width=70%}
 
-Dump the .symtab section. Size of elf64_sym is 24 bytes, so use option 'xxd -c 24' to display 24 bytes each line.
+Dump the .symtab section. The elf64_sym struct has a size of 24 bytes, so use option 'xxd -c 24' to display 24 bytes each line.
 ```sh
 $ xxd -p -g 1 -c 24 -s 0x003048 -l 0x000378 main
 340100001100170010400000000000000400000000000000
@@ -423,7 +423,7 @@ $ readelf --string-dump=.strtab main
 :::
 ::::::::::::::
 
-Decode the first hex line to elf64_sym.
+Decode the first line.
 ```sh
 $ hex_to_elf64_sym.py 340100001100170010400000000000000400000000000000
   name     info    other  shndx   value     size
@@ -435,7 +435,7 @@ Interpret the output.
 
 | Field      | Value   | Meaning                                |
 |:-----------|:--------|:----------------------------------------|
-| st_name    | 0x134   | Name: g_int (index 0x134 in string table) |
+| st_name    | 0x134   | Index 0x134 in string table: g_int   |
 | st_info    | 0x11    | Type, binding: OBJECT, GLOBAL          |
 | st_other   | 0x0     | Visibility: DEFAULT                     |
 | st_shndx   | 0x17    | Section: 0x17 = 23 = .data              |
@@ -444,7 +444,7 @@ Interpret the output.
 
 <br>
 
-Decode the second hex line to elf64_sym.
+Decode the second line.
 ```sh
 $ hex_to_elf64_sym.py 6301000012000e0029110000000000001800000000000000
   name     info    other  shndx  value     size
@@ -455,9 +455,9 @@ Interpret the output.
 
 | Field      | Value   | Meaning                                |
 |:-----------|:--------|:----------------------------------------|
-| st_name    | 0x163   | Name: sum (index 0x136 in string table) |
+| st_name    | 0x163   | Index 0x136 in string table: sum |
 | st_info    | 0x11    | Type, binding: FUNC, GLOBAL          |
 | st_other   | 0x0     | Visibility: DEFAULT                     |
 | st_shndx   | 0x17    | Section: 0xe = 14 = .text              |
-| st_value   | 0x4010  | Offset: 0x4010                         |
-| st_size    | 0x18     | Size: 24, from instruction 0x1140 to 0x1129|
+| st_value   | 0x4010  | Offset 0x1129                         |
+| st_size    | 0x18    | Size: 24, from instruction 0x1129 to 0x1140|
