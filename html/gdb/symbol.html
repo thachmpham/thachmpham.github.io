@@ -292,6 +292,10 @@
       }
       /* customize scrollbar end*/
 
+      hr {        
+          height: 2px;
+          background-color: #3c3c3c;        
+      }
 
   </style>
 </head>
@@ -299,7 +303,25 @@
 <header id="title-block-header">
 <h1 class="title">GDB: Symbols</h1>
 </header>
-<h2 id="data-type">Data Type</h2>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#usage" id="toc-usage">1. Usage</a>
+<ul>
+<li><a href="#data-type" id="toc-data-type">1.1. Data Type</a></li>
+<li><a href="#function" id="toc-function">1.2. Function</a></li>
+<li><a href="#variable" id="toc-variable">1.3. Variable</a></li>
+<li><a href="#address-to-symbol" id="toc-address-to-symbol">1.4. Address
+to Symbol</a></li>
+<li><a href="#symbol-to-address" id="toc-symbol-to-address">1.5. Symbol
+to Address</a></li>
+<li><a href="#demangle" id="toc-demangle">1.6. Demangle</a></li>
+<li><a href="#line" id="toc-line">1.7. Line</a></li>
+</ul></li>
+</ul>
+</nav>
+<hr />
+<h2 id="usage">1. Usage</h2>
+<h3 id="data-type">1.1. Data Type</h3>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Name of data type.</p>
@@ -345,7 +367,7 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#c
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="ex">1:</span>      Point<span class="kw">;</span></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p><br></p>
-<h2 id="function">Function</h2>
+<h3 id="function">1.2. Function</h3>
 <p>Function names matches a regex.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">info</span> functions <span class="pp">[-</span><span class="ss">q</span><span class="pp">]</span> <span class="pp">[-</span><span class="ss">n</span><span class="pp">]</span> [-t type_regex] <span class="pp">[</span><span class="ss">regex</span><span class="pp">]</span></span></code></pre></div>
 <ul>
@@ -382,11 +404,11 @@ type by <em>whatis</em>.</li>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 </div>
 </div>
-<h2 id="variables">Variables</h2>
+<h3 id="variable">1.3. Variable</h3>
 <p>Global and static variables.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">info</span> variables <span class="pp">[-</span><span class="ss">q</span><span class="pp">]</span> <span class="pp">[-</span><span class="ss">n</span><span class="pp">]</span> [-t type_regexp] <span class="pp">[</span><span class="ss">regexp</span><span class="pp">]</span></span></code></pre></div>
 <p><br></p>
-<h2 id="address-of-symbol">Address of Symbol</h2>
+<h3 id="address-to-symbol">1.4. Address to Symbol</h3>
 <p>Find address of a symbol.</p>
 <div class="sourceCode" id="cb10"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">info</span> address sym</span></code></pre></div>
@@ -410,7 +432,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#
 </div>
 </div>
 <p><br></p>
-<h2 id="symbol-at-address">Symbol at Address</h2>
+<h3 id="symbol-to-address">1.5. Symbol to Address</h3>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Find symbol at an address. Only global, static scope.</p>
@@ -427,7 +449,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#
 </div>
 </div>
 <p><br></p>
-<h2 id="demangle">Demangle</h2>
+<h3 id="demangle">1.6. Demangle</h3>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Demangle a name.</p>
@@ -449,7 +471,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#
 </div>
 </div>
 <p><br></p>
-<h2 id="line-info">Line Info</h2>
+<h3 id="line">1.7. Line</h3>
 <p>Print source line info.</p>
 <div class="sourceCode" id="cb17"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">info</span> line locspec</span></code></pre></div>

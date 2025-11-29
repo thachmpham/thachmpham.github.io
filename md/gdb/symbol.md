@@ -2,8 +2,11 @@
 title: "GDB: Symbols"
 ---
 
+* * * * *
 
-## Data Type
+## 1. Usage
+### 1.1. Data Type
+
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
@@ -69,7 +72,7 @@ File demo.cpp:
 
 <br>
 
-## Function
+### 1.2. Function
 Function names matches a regex.
 ```sh
   info functions [-q] [-n] [-t type_regex] [regex]
@@ -118,7 +121,7 @@ File demo.cpp:
 ::::::::::::::
 
 
-## Variables
+### 1.3. Variable
 Global and static variables.
 ```sh
   info variables [-q] [-n] [-t type_regexp] [regexp]
@@ -126,7 +129,7 @@ Global and static variables.
 
 <br>
 
-## Address of Symbol
+### 1.4. Address to Symbol
 Find address of a symbol.
 ```sh
   info address sym
@@ -162,7 +165,7 @@ Symbol "sum" is a function at address 0x40066c.
 
 <br>
 
-## Symbol at Address
+### 1.5. Symbol to Address
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -189,7 +192,7 @@ sum in section .text
 
 <br>
 
-## Demangle
+### 1.6. Demangle
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -220,7 +223,8 @@ Point::move(int, int)
 
 <br>
 
-## Line Info
+
+### 1.7. Line
 Print source line info.
 ```sh
   info line locspec
