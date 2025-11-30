@@ -959,7 +959,8 @@ start address of the section.</p>
 <p>According to <a
 href="https://man7.org/linux/man-pages/man5/elf.5.html">man elf</a>, the
 symbol table is represented by the Elf64_Sym or Elf32_Sym struct. For a
-deeper understanding, we can manually decode it from the ELF file.</p>
+deeper understanding, we will extract it from the ELF file and decode
+manually.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="sourceCode" id="cb36"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>$ pahole elf64_sym</span>
@@ -1048,8 +1049,6 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb38-1"><a href="#
 <span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[26]</span> .symtab    SYMTAB      0000000000000000 003048 000378 18     27  18  8</span>
 <span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="ex">[27]</span> .strtab    STRTAB      0000000000000000 0033c0 0001d3 00      0   0  1</span>
 <span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<div class="columns">
-<div class="column" style="width:70%;">
 <p>Dump the .symtab section. The elf64_sym struct has a size of 24
 bytes, so use option ‘xxd -c 24’ to display 24 bytes each line.</p>
 <div class="sourceCode" id="cb39"><pre
@@ -1058,23 +1057,15 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb39-1"><a href="#
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="ex">6301000012000e0029110000000000001800000000000000</span></span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="ex">8701000012000e0041110000000000003a00000000000000</span></span>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-</div><div class="column" style="width:30%;">
-<p>Print string table.</p>
-<div class="sourceCode" id="cb40"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--string-dump</span><span class="op">=</span>.strtab main</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span>   134]  g_int</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>[   163]  <span class="er">sum</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span>   187]  main</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-</div>
-</div>
 <p>Decode the first line.</p>
-<div class="sourceCode" id="cb41"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> hex_to_elf64_sym.py 340100001100170010400000000000000400000000000000</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">name</span>     info    other  shndx   value     size</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[</span><span class="st">&#39;0x134&#39;</span><span class="ex">,</span> <span class="st">&#39;0x11&#39;</span>, <span class="st">&#39;0x0&#39;</span>, <span class="st">&#39;0x17&#39;</span>, <span class="st">&#39;0x4010&#39;</span>, <span class="st">&#39;0x4&#39;</span>]</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Interpret the output.</p>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> hex_to_elf64_sym.py 340100001100170010400000000000000400000000000000</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">name</span>     info    other  shndx   value     size</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[</span><span class="st">&#39;0x134&#39;</span><span class="ex">,</span> <span class="st">&#39;0x11&#39;</span>, <span class="st">&#39;0x0&#39;</span>, <span class="st">&#39;0x17&#39;</span>, <span class="st">&#39;0x4010&#39;</span>, <span class="st">&#39;0x4&#39;</span>]</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="columns">
+<div class="column" style="width:70%;">
+<p>Explain the output.</p>
 <table>
 <thead>
 <tr class="header">
@@ -1092,37 +1083,47 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb41-1"><a href="#
 <tr class="even">
 <td style="text-align: left;">st_info</td>
 <td style="text-align: left;">0x11</td>
-<td style="text-align: left;">Type, binding: OBJECT, GLOBAL</td>
+<td style="text-align: left;">OBJECT, GLOBAL</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">st_other</td>
 <td style="text-align: left;">0x0</td>
-<td style="text-align: left;">Visibility: DEFAULT</td>
+<td style="text-align: left;">Visibility DEFAULT</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">st_shndx</td>
 <td style="text-align: left;">0x17</td>
-<td style="text-align: left;">Section: 0x17 = 23 = .data</td>
+<td style="text-align: left;">Section 0x17 = 23 = .data</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">st_value</td>
 <td style="text-align: left;">0x4010</td>
-<td style="text-align: left;">Offset: 0x4010</td>
+<td style="text-align: left;">Offset 0x4010</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">st_size</td>
 <td style="text-align: left;">0x4</td>
-<td style="text-align: left;">Size: 4 (int)</td>
+<td style="text-align: left;">Size of 4 bytes</td>
 </tr>
 </tbody>
 </table>
+</div><div class="column" style="width:30%;">
+<p>String table.</p>
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--string-dump</span><span class="op">=</span>.strtab main</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span>   134]  g_int</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>[   163]  <span class="er">sum</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span>   187]  main</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+</div>
+</div>
 <p><br></p>
 <p>Decode the second line.</p>
 <div class="sourceCode" id="cb42"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> hex_to_elf64_sym.py 6301000012000e0029110000000000001800000000000000</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">name</span>     info    other  shndx  value     size</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[</span><span class="st">&#39;0x163&#39;</span><span class="ex">,</span> <span class="st">&#39;0x12&#39;</span>, <span class="st">&#39;0x0&#39;</span>, <span class="st">&#39;0xe&#39;</span>, <span class="st">&#39;0x1129&#39;</span>, <span class="st">&#39;0x18&#39;</span>]</span></code></pre></div>
-<p>Interpret the output.</p>
+<p>Explain the output.</p>
 <table>
 <thead>
 <tr class="header">
@@ -1140,12 +1141,12 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb42-1"><a href="#
 <tr class="even">
 <td style="text-align: left;">st_info</td>
 <td style="text-align: left;">0x11</td>
-<td style="text-align: left;">Type, binding: FUNC, GLOBAL</td>
+<td style="text-align: left;">FUNC, GLOBAL</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">st_other</td>
 <td style="text-align: left;">0x0</td>
-<td style="text-align: left;">Visibility: DEFAULT</td>
+<td style="text-align: left;">Visibility DEFAULT</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">st_shndx</td>
@@ -1160,8 +1161,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb42-1"><a href="#
 <tr class="even">
 <td style="text-align: left;">st_size</td>
 <td style="text-align: left;">0x18</td>
-<td style="text-align: left;">Size: 24, from instruction 0x1129 to
-0x1140</td>
+<td style="text-align: left;">Size of 24 bytes</td>
 </tr>
 </tbody>
 </table>

@@ -719,7 +719,7 @@ Within .text, the function is positioned at offset 0x1129 from the start address
 <br>
 
 ### 2.2. Decode Symbol Table
-According to [man elf](https://man7.org/linux/man-pages/man5/elf.5.html), the symbol table is represented by the Elf64_Sym or Elf32_Sym struct. For a deeper understanding, we can manually decode it from the ELF file.
+According to [man elf](https://man7.org/linux/man-pages/man5/elf.5.html), the symbol table is represented by the Elf64_Sym or Elf32_Sym struct. For a deeper understanding, we will extract it from the ELF file and decode manually.
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -786,10 +786,6 @@ $ readelf --section-headers main
   
 ```
 
-
-:::::::::::::: {.columns}
-::: {.column width=70%}
-
 Dump the .symtab section. The elf64_sym struct has a size of 24 bytes, so use option 'xxd -c 24' to display 24 bytes each line.
 ```sh
 $ xxd -p -g 1 -c 24 -s 0x003048 -l 0x000378 main
@@ -799,10 +795,33 @@ $ xxd -p -g 1 -c 24 -s 0x003048 -l 0x000378 main
   
 ```
 
+
+Decode the first line.
+```sh
+$ hex_to_elf64_sym.py 340100001100170010400000000000000400000000000000
+  name     info    other  shndx   value     size
+['0x134', '0x11', '0x0', '0x17', '0x4010', '0x4']
+  
+```
+
+:::::::::::::: {.columns}
+::: {.column width=70%}
+
+Explain the output.
+
+| Field      | Value   | Meaning                                |
+|:-----------|:--------|:----------------------------------------|
+| st_name    | 0x134   | Index 0x134 in string table: g_int   |
+| st_info    | 0x11    | OBJECT, GLOBAL          |
+| st_other   | 0x0     | Visibility DEFAULT                     |
+| st_shndx   | 0x17    | Section 0x17 = 23 = .data              |
+| st_value   | 0x4010  | Offset 0x4010                         |
+| st_size    | 0x4     | Size of 4 bytes                           |
+
 :::
 ::: {.column width=30%}
 
-Print string table.
+String table.
 ```sh
 $ readelf --string-dump=.strtab main
 [   134]  g_int
@@ -814,24 +833,6 @@ $ readelf --string-dump=.strtab main
 :::
 ::::::::::::::
 
-Decode the first line.
-```sh
-$ hex_to_elf64_sym.py 340100001100170010400000000000000400000000000000
-  name     info    other  shndx   value     size
-['0x134', '0x11', '0x0', '0x17', '0x4010', '0x4']
-  
-```
-
-Interpret the output.
-
-| Field      | Value   | Meaning                                |
-|:-----------|:--------|:----------------------------------------|
-| st_name    | 0x134   | Index 0x134 in string table: g_int   |
-| st_info    | 0x11    | Type, binding: OBJECT, GLOBAL          |
-| st_other   | 0x0     | Visibility: DEFAULT                     |
-| st_shndx   | 0x17    | Section: 0x17 = 23 = .data              |
-| st_value   | 0x4010  | Offset: 0x4010                         |
-| st_size    | 0x4     | Size: 4 (int)                           |
 
 <br>
 
@@ -842,13 +843,13 @@ $ hex_to_elf64_sym.py 6301000012000e0029110000000000001800000000000000
 ['0x163', '0x12', '0x0', '0xe', '0x1129', '0x18']
 ```
 
-Interpret the output.
+Explain the output.
 
 | Field      | Value   | Meaning                                |
 |:-----------|:--------|:----------------------------------------|
 | st_name    | 0x163   | Index 0x136 in string table: sum |
-| st_info    | 0x11    | Type, binding: FUNC, GLOBAL          |
-| st_other   | 0x0     | Visibility: DEFAULT                     |
+| st_info    | 0x11    | FUNC, GLOBAL          |
+| st_other   | 0x0     | Visibility DEFAULT                     |
 | st_shndx   | 0x17    | Section: 0xe = 14 = .text              |
 | st_value   | 0x4010  | Offset 0x1129                         |
-| st_size    | 0x18    | Size: 24, from instruction 0x1129 to 0x1140|
+| st_size    | 0x18    | Size of 24 bytes |
