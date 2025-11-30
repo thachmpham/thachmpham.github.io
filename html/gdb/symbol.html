@@ -480,8 +480,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#
 </div>
 <p><br></p>
 <h3 id="add-symbol">1.7. Add Symbol</h3>
-<p>GDB supports adding additional symbol files, especially useful when
-debugging code loaded by mmap.</p>
+<p>GDB supports adding additional symbol files, it is especially useful
+when debugging code loaded by mmap.</p>
 <div class="sourceCode" id="cb17"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">add-symbol-file</span> filename [ <span class="at">-readnow</span> <span class="kw">|</span> <span class="ex">-readnever</span> ] <span class="dt">\</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                  [ <span class="at">-o</span> offset ] <span class="dt">\</span></span>
@@ -612,8 +612,8 @@ class="sourceCode go"><code class="sourceCode go"><span id="cb24-1"><a href="#cb
 <span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
 <span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
 <span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<p>Add symbols. GDB uses the given section addresses to determine the
-actual memory addresses of the symbols contained in those sections.</p>
+<p>Add symbols. GDB uses the given sections and addresses to determine
+the memory addresses of the symbols contained in those sections.</p>
 <div class="sourceCode" id="cb25"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">add-symbol-file</span> math.o 0x7ffff7ffa040 <span class="at">-s</span> .data 0x7ffff7ffa070</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>

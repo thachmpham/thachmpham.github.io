@@ -224,7 +224,7 @@ Point::move(int, int)
 <br>
 
 ### 1.7. Add Symbol
-GDB supports adding additional symbol files, especially useful when debugging code loaded by mmap.
+GDB supports adding additional symbol files, it is especially useful when debugging code loaded by mmap.
 
 ```sh
   add-symbol-file filename [ -readnow | -readnever ] \
@@ -379,7 +379,7 @@ Compute the memory layout.
   
 ```
 
-Add symbols. GDB uses the given section addresses to determine the actual memory addresses of the symbols contained in those sections.
+Add symbols. GDB uses the given sections and addresses to determine the memory addresses of the symbols contained in those sections.
 ```sh
 (gdb) add-symbol-file math.o 0x7ffff7ffa040 -s .data 0x7ffff7ffa070
 

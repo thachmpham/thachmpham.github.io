@@ -292,6 +292,10 @@
       }
       /* customize scrollbar end*/
 
+      hr {        
+          height: 2px;
+          background-color: #3c3c3c;        
+      }
 
   </style>
 </head>
@@ -299,6 +303,17 @@
 <header id="title-block-header">
 <h1 class="title">GDB: Breakpoints</h1>
 </header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#overview" id="toc-overview">1. Overview</a></li>
+<li><a href="#software-breakpoints" id="toc-software-breakpoints">2.
+Software Breakpoints</a></li>
+<li><a href="#hardware-breakpoints" id="toc-hardware-breakpoints">3.
+Hardware Breakpoints</a></li>
+<li><a href="#management" id="toc-management">4. Management</a></li>
+<li><a href="#reference" id="toc-reference">Reference</a></li>
+</ul>
+</nav>
 <h2 id="overview">1. Overview</h2>
 <p>GDB supports two types of breakpoints: software and hardware
 breakpoints.</p>
@@ -607,8 +622,8 @@ class="sourceCode go"><code class="sourceCode go"><span id="cb23-1"><a href="#cb
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">/</span>root<span class="op">/</span>demo<span class="op">/</span>math<span class="op">.</span>o   <span class="op">|</span> At<span class="op">:</span> <span class="bn">0x0000fffff7ff5000</span> <span class="op">(</span>region addr<span class="op">)</span></span>
 <span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   <span class="op">.</span>text             <span class="op">|</span> At<span class="op">:</span> <span class="bn">0x0000fffff7ff5040</span> <span class="op">(</span>region addr <span class="op">+</span> <span class="op">.</span>text offset<span class="op">)</span></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>  <span class="op">+</span> sum<span class="op">()</span>            <span class="op">|</span> At<span class="op">:</span> <span class="bn">0x0000fffff7ff5040</span> <span class="op">(.</span>text addr <span class="op">+</span> sum offset<span class="op">)</span></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>  <span class="op">+</span> sub<span class="op">()</span>            <span class="op">|</span> At<span class="op">:</span> <span class="bn">0x0000fffff7ff5058</span> <span class="op">(.</span>text addr <span class="op">+</span> sub offset<span class="op">)</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   ├── sum<span class="op">()</span>         <span class="op">|</span> At<span class="op">:</span> <span class="bn">0x0000fffff7ff5040</span> <span class="op">(.</span>text addr <span class="op">+</span> sum offset<span class="op">)</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   └── sub<span class="op">()</span>         <span class="op">|</span> At<span class="op">:</span> <span class="bn">0x0000fffff7ff5058</span> <span class="op">(.</span>text addr <span class="op">+</span> sub offset<span class="op">)</span></span>
 <span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
 <span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">........</span>            <span class="op">|</span> <span class="op">(</span>Other regions<span class="op">)</span></span>
 <span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
