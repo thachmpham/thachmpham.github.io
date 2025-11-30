@@ -393,8 +393,8 @@ Illustration of the memory mapping in the process.
 +---------------------+
 | /root/demo/math.o   | At: 0x0000fffff7ff5000 (region addr)
 |   .text             | At: 0x0000fffff7ff5040 (region addr + .text offset)
-|  + sum()            | At: 0x0000fffff7ff5040 (.text addr + sum offset)
-|  + sub()            | At: 0x0000fffff7ff5058 (.text addr + sub offset)
+|   ├── sum()         | At: 0x0000fffff7ff5040 (.text addr + sum offset)
+|   └── sub()         | At: 0x0000fffff7ff5058 (.text addr + sub offset)
 +---------------------+
 | ........            | (Other regions)
 |                     |

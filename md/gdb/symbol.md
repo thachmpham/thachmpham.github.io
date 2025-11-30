@@ -223,8 +223,207 @@ Point::move(int, int)
 
 <br>
 
+### 1.7. Add Symbol
+GDB supports adding additional symbol files, especially useful when debugging code loaded by mmap.
 
-### 1.7. Line
+```sh
+  add-symbol-file filename [ -readnow | -readnever ] \
+                  [ -o offset ] \
+                  [ textaddress ] \
+                  [ -s section address … ]
+  
+```
+- *filename*: Symbol file.
+- *textaddress*: Memory address of .text section.
+- *section*: Additional section to load.
+- *address*: Memory address of additional section.
+- -*readnow*: Load symbols immediately.
+- -*readnever*: Not load symbol.
+- *offset*: Offset to add to load addresses.
+
+<br>
+
+Sample: Add symbols for memory regions loaded by mmap.
+
+:::::::::::::: {.columns}
+::: {.column width=35%}
+
+File math.c
+```c
+int number1 = 0xCAFEBABE;
+int number2 = 0xC1A0C1A0;
+
+int sum(int x, int y)
+{
+    return x + y;
+}
+
+int sub(int x, int y)
+{
+    return x - y;
+}
+  
+```
+
+<br>
+
+Build.
+```sh
+$ gcc -c math.c -o math.o
+$ gcc -g main.c -o main
+```
+
+:::
+::: {.column width=65%}
+
+File main.c
+```c
+#include <sys/mman.h>
+#include <stddef.h>
+#include <fcntl.h>
+
+int main()
+{    
+    int fd = open("math.o", O_RDONLY);
+    
+    // load math.o to memory
+    mmap(
+        NULL, // delegate kernel to choose starting address of region
+        4096, // length of the region
+        PROT_READ|PROT_EXEC, // protection mode
+        MAP_PRIVATE,         // visible mode
+        fd,                  // file to load
+        0                    // offset in file
+    );
+
+    return 0;
+    
+}
+ 
+```
+
+:::
+::::::::::::::
+
+Find the sections, symbols in file math.o
+```sh
+$ readelf --section-headers --wide math.o
+[Nr] Name     Type        Address          Off    Size   ES Flg Lk Inf Al
+[ 1] .text    PROGBITS    0000000000000000 000040 00002e 00  AX  0   0  1
+[ 2] .data    PROGBITS    0000000000000000 000070 000008 00  WA  0   0  4
+
+$ readelf --symbols math.o
+Num:    Value          Size Type    Bind   Vis      Ndx Name
+  3: 0000000000000000     4 OBJECT  GLOBAL DEFAULT    2 number1
+  4: 0000000000000004     4 OBJECT  GLOBAL DEFAULT    2 number2
+  5: 0000000000000000    24 FUNC    GLOBAL DEFAULT    1 sum
+  6: 0000000000000018    22 FUNC    GLOBAL DEFAULT    1 sub
+  
+```
+
+Interpret the output.
+```go
++---------------------+
+| ELF Header          | At: 0x0000
++---------------------+
+| Program Header      |
++---------------------+
+| .text section       | At: 0x0040
+| ├── sum()           | At: 0x0040 + 0x0000
+| └── sub()           | At: 0x0040 + 0x0018
+|                     |
++---------------------+
+| .data section       | At: 0x0070
+| ├── number1         | At: 0x0070 + 0x0000
+| └── number2         | At: 0x0070 + 0x0004
+|                     |
++---------------------+
+|       ........      | Other sections
++---------------------+
+| Section Header      |
++---------------------+
+  
+```
+
+Inspect the memory with GDB.
+```sh
+(gdb) file main
+(gdb) break main.c:19
+(gdb) run
+
+(gdb) info proc mappings
+    Start Addr           End Addr       Size     Offset  Perms  objfile
+0x7ffff7ffa000     0x7ffff7ffb000     0x1000        0x0  r-xp   /root/demo/math.o
+  
+```
+
+Compute the memory layout.
+```go
++---------------------+
+| ........            | Other regions
+|                     |
++---------------------+
+| math.o              | At: 0x7ffff7ffa000
+|                     |
+|   .text             | At: 0x7ffff7ffa000 + 0x0040 = 0x7ffff7ffa040
+|   ├── sum()         | At: 0x7ffff7ffa040 + 0x0000
+|   └── sub()         | At: 0x7ffff7ffa040 + 0x0018
+|                     |
+|   .data             | At: 0x7ffff7ffa000 + 0x0070 = 0x7ffff7ffa070
+|   ├── number1       | At: 0x7ffff7ffa070 + 0x0000
+|   └── number2       | At: 0x7ffff7ffa070 + 0x0040
++---------------------+
+| ........            | Other regions
+|                     |
++---------------------+
+  
+```
+
+Add symbols. GDB uses the given section addresses to determine the actual memory addresses of the symbols contained in those sections.
+```sh
+(gdb) add-symbol-file math.o 0x7ffff7ffa040 -s .data 0x7ffff7ffa070
+
+(gdb) info files
+0x00007ffff7ffa040 - 0x00007ffff7ffa06e is .text in /root/demo/math.o
+0x00007ffff7ffa070 - 0x00007ffff7ffa078 is .data in /root/demo/math.o  
+
+(gdb) info function sum
+0x00007ffff7ffa040  sum
+
+(gdb) info function sub
+0x00007ffff7ffa058  sub
+
+(gdb) info variable number1
+0x00007ffff7ffa070  number1
+
+(gdb) info variable number2
+0x00007ffff7ffa074  number2
+  
+```
+
+Call the functions represented by the symbols.
+```sh
+(gdb) call (int) sum(4, 5)
+$3 = 9
+
+(gdb) call (int) sub(4, 5)
+$5 = -1
+  
+```
+
+Print the variables represented by the symbols.
+```sh
+(gdb) print/x (int)number1
+$1 = 0xcafebabe
+
+(gdb) print/x (int)number2
+$2 = 0xc1a0c1a0
+  
+```
+
+<br>
+
+### 1.8. Line
 Print source line info.
 ```sh
   info line locspec
@@ -379,8 +578,8 @@ hex_to_elf64_sym(sys.argv[1])
 | `st_info`   | Type & binding: `STT_FUNC`, `STB_GLOBAL`, `STB_WEAK`,...                  |
 | `st_other`  | Visibility `STV_DEFAULT`, `STV_HIDDEN`, `STV_PROTECTED`,...              |
 | `st_shndx`  | Index of the section the symbol belongs to.                              |
-| `st_value`  | For functions or variables, this value represents the their address.     |
-| `st_size`   | For functions or variables, this value represents their size.            |
+| `st_value`  | For functions or variables, this value is offset to start of their section |
+| `st_size`   | For functions or variables, this value is their size |
 
 <br>
 
