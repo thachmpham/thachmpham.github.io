@@ -224,26 +224,54 @@ Point::move(int, int)
 <br>
 
 ### 1.7. Add Symbol
+:::::::::::::: {.columns}
+::: {.column width=40%}
+
 GDB supports adding additional symbol files, it is especially useful when debugging code loaded by mmap.
 
+To add the symbols.
 ```sh
-  add-symbol-file filename [ -readnow | -readnever ] \
-                  [ -o offset ] \
-                  [ textaddress ] \
-                  [ -s section address … ]
-  
+  add-symbol-file filename
+    [-readnow|-readnever]
+    [-o offset]
+    [textaddr]
+    [-s section addr…]
 ```
-- *filename*: Symbol file.
-- *textaddress*: Memory address of .text section.
-- *section*: Additional section to load.
-- *address*: Memory address of additional section.
-- -*readnow*: Load symbols immediately.
-- -*readnever*: Not load symbol.
-- *offset*: Offset to add to load addresses.
+
+To debug functions defined object file, we load the symbols for the .text section — the section that holds the executable code.
+
+- *textaddr*: memory address where file’s text section loaded.
+
+:::
+::: {.column width=60%}
+
+We can load the symbols for other sections as well, such as: .bss, .data to inspect the variables.
+
+- *section*: section to load.
+- *addr*: memory address where the section loaded.
+
+Other options.
+
+- *readnow*: load symbols immediately.
+- *readnever*: not load symbol.
+- *offset*: offset to add to the start address of each section, except those for which the address was specified explicitly.
 
 <br>
 
-Sample: Add symbols for memory regions loaded by mmap.
+To remove the symbols.
+```sh
+  remove-symbol-file filename
+  remove-symbol-file -a addr
+  
+```
+
+:::
+::::::::::::::
+
+<br>
+
+<span style="color: yellow">Sample:</span>
+Add symbols for memory regions loaded by mmap.
 
 :::::::::::::: {.columns}
 ::: {.column width=35%}
@@ -288,7 +316,7 @@ int main()
     
     // load math.o to memory
     mmap(
-        NULL, // delegate kernel to choose starting address of region
+        NULL, // let kernel choose start addr of region
         4096, // length of the region
         PROT_READ|PROT_EXEC, // protection mode
         MAP_PRIVATE,         // visible mode
@@ -297,15 +325,14 @@ int main()
     );
 
     return 0;
-    
 }
- 
+  
 ```
 
 :::
 ::::::::::::::
 
-Find the sections, symbols in file math.o
+Inspect the ELF file.
 ```sh
 $ readelf --section-headers --wide math.o
 [Nr] Name     Type        Address          Off    Size   ES Flg Lk Inf Al
@@ -321,72 +348,179 @@ Num:    Value          Size Type    Bind   Vis      Ndx Name
   
 ```
 
-Interpret the output.
+<span style="color: yellow">Compute ELF offsets.</span>
+
+- 'readelf --section-headers' provides section offset from the start of the file.
+- 'readelf --symbols' shows each symbol offset from the start of its section. Adding this offset to the section location gives the symbol location.
+
+:::::::::::::: {.columns}
+::: {.column width=45%}
+From 'readelf --section-headers',
+
+- Section .text at 0x40. 
+- Section .data at 0x70.
+
+From 'readelf --symbols',
+
+Symbol sum.
+
+- In .text section (Ndx 1).
+- Offset 0x00 in section .text (Value 0x00).
+
+Symbol sub.
+
+- In .text section (Ndx 1).
+- Offset 0x18 in section .text (Value 0x18).
+
+Symbol number1.
+
+- In .data section (Ndx 2).
+- Offset 0x00 in section .data (Value 0x00).
+- Size of 4 bytes.
+
+Symbol number2.
+
+- In .data section (Ndx 2).
+- Offset 0x04 in section .data (Value 0x04).
+- Size of 4 bytes.
+
+:::
+::: {.column width=55%}
+
+Sketch struct of the ELF file.
+
 ```go
 +---------------------+
-| ELF Header          | At: 0x0000
+| ELF File Header     | 0x00
 +---------------------+
-| Program Header      |
+| Program Headers     |
 +---------------------+
-| .text section       | At: 0x0040
-| ├── sum()           | At: 0x0040 + 0x0000
-| └── sub()           | At: 0x0040 + 0x0018
+| .text Section       | 0x40
+| ├── sum()           |      + 0x00
+| └── sub()           |      + 0x18
 |                     |
 +---------------------+
-| .data section       | At: 0x0070
-| ├── number1         | At: 0x0070 + 0x0000
-| └── number2         | At: 0x0070 + 0x0004
+| .data Section       | 0x70
+| ├── number1         |      + 0x00
+| └── number2         |      + 0x04
 |                     |
 +---------------------+
-|       ........      | Other sections
+| Other Sections...   | 
 +---------------------+
-| Section Header      |
+| Section Headers     |
 +---------------------+
   
 ```
 
-Inspect the memory with GDB.
+Summary:
+
+|  |  |
+|-----------------|---------|
+| .text           | 0x40    |
+| sum             | 0x40    |
+| sub             | 0x58    |
+
+|  |  |
+|-----------------|---------|
+| .data           | 0x70    |
+| number1         | 0x70    |
+| number2         | 0x74    |
+
+
+:::
+::::::::::::::
+
+
+Start program.
 ```sh
 (gdb) file main
 (gdb) break main.c:19
 (gdb) run
+```
 
+Print the memory mappings.
+```sh
 (gdb) info proc mappings
-    Start Addr           End Addr       Size     Offset  Perms  objfile
-0x7ffff7ffa000     0x7ffff7ffb000     0x1000        0x0  r-xp   /root/demo/math.o
+    Start Addr         End Addr   Size     Offset  Perms  objfile
+0x7ffff7ffa000   0x7ffff7ffb000   0x1000   0x0     r-xp   math.o
   
 ```
 
-Compute the memory layout.
+<span style="color: yellow">Compute memory addresses.</span>
+
+The offsets of sections within the ELF file, and the offsets of symbols within their sections, remain the same in memory. 
+
+So, once the start address of the file in memory is known, we can calculate the addresses of sections and symbols by adding their respective ELF offsets.
+
+:::::::::::::: {.columns}
+::: {.column width=45%}
+
+From 'info proc mappings',
+
+- math.o loaded at 0x7ffff7ffa000.
+
+
+By adding corresponding ELF offsets,
+
+Section .text:
+
+- .text at 0x7ffff7ffa040.
+- sum at 0x7ffff7ffa040.
+- sub at 0x7ffff7ffa058.
+
+Section .data:
+
+- .data at 0x7ffff7ffa070.
+- number1 at 0x7ffff7ffa070.
+- number2 at 0x7ffff7ffa074.
+
+:::
+::: {.column width=55%}
+
+Sketch the memory layout.
+
 ```go
 +---------------------+
-| ........            | Other regions
-|                     |
+| Other Regions...    |
 +---------------------+
-| math.o              | At: 0x7ffff7ffa000
+| math.o              | 0x7ffff7ffa000
 |                     |
-|   .text             | At: 0x7ffff7ffa000 + 0x0040 = 0x7ffff7ffa040
-|   ├── sum()         | At: 0x7ffff7ffa040 + 0x0000
-|   └── sub()         | At: 0x7ffff7ffa040 + 0x0018
+|   .text             | 0x7ffff7ffa040
+|   ├── sum()         |         + 0x00
+|   └── sub()         |         + 0x18
 |                     |
-|   .data             | At: 0x7ffff7ffa000 + 0x0070 = 0x7ffff7ffa070
-|   ├── number1       | At: 0x7ffff7ffa070 + 0x0000
-|   └── number2       | At: 0x7ffff7ffa070 + 0x0040
+|   .data             | 0x7ffff7ffa070
+|   ├── number1       |         + 0x00
+|   └── number2       |         + 0x40
 +---------------------+
-| ........            | Other regions
-|                     |
+| Other Regions...    |
 +---------------------+
   
 ```
 
-Add symbols. GDB uses the given sections and addresses to determine the memory addresses of the symbols contained in those sections.
+:::
+::::::::::::::
+
+
+<span style="color: yellow">Add symbol file</span>
+
+After loaded symbol file, GDB uses the given sections and addresses to determine the memory addresses of the symbols contained in those sections.
+
 ```sh
 (gdb) add-symbol-file math.o 0x7ffff7ffa040 -s .data 0x7ffff7ffa070
 
 (gdb) info files
 0x00007ffff7ffa040 - 0x00007ffff7ffa06e is .text in /root/demo/math.o
 0x00007ffff7ffa070 - 0x00007ffff7ffa078 is .data in /root/demo/math.o  
+  
+```
 
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+Print address of symbols.
+
+```sh
 (gdb) info function sum
 0x00007ffff7ffa040  sum
 
@@ -398,28 +532,30 @@ Add symbols. GDB uses the given sections and addresses to determine the memory a
 
 (gdb) info variable number2
 0x00007ffff7ffa074  number2
-  
 ```
 
-Call the functions represented by the symbols.
+:::
+::: {.column width=50%}
+
+Call functions, print variables.
+
 ```sh
 (gdb) call (int) sum(4, 5)
 $3 = 9
 
 (gdb) call (int) sub(4, 5)
 $5 = -1
-  
-```
 
-Print the variables represented by the symbols.
-```sh
 (gdb) print/x (int)number1
 $1 = 0xcafebabe
 
 (gdb) print/x (int)number2
 $2 = 0xc1a0c1a0
-  
 ```
+
+:::
+::::::::::::::
+
 
 <br>
 
@@ -525,6 +661,41 @@ $ readelf --symbols main
     32: 0000000000001141    58 FUNC    GLOBAL DEFAULT   14 main  
     
 ```
+
+Print section headers.
+```sh
+$ readelf --section-headers main
+[Nr] Name       Type        Address          Off    Size   ES Flg Lk Inf Al
+[14] .text      PROGBITS    0000000000001040 001040 00013b 00  AX  0   0 16
+[23] .data      PROGBITS    0000000000004000 003000 000014 00  WA  0   0  8
+[26] .symtab    SYMTAB      0000000000000000 003048 000378 18     27  18  8
+[27] .strtab    STRTAB      0000000000000000 0033c0 0001d3 00      0   0  1
+  
+```
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+Interpret the output.
+
+| Field | Value | Meaning |
+|:-----|:-----|:-----|
+| Name | g_int | |
+| Ndx | 23 | Section 14, .data |
+| Type | OBJECT | Variable |
+| Value | 0x4010 | Offset in section |
+| Size | 4 | 4 bytes |
+
+The symbol g_int represents a 4-byte variable stored in the .data section.
+Within .data, the variable is positioned at offset 0x4010 from the section’s starting address.
+
+:::
+::: {.column width=50%}
+
+:::
+::::::::::::::
+
+<br>
 
 ### 2.2. Decode Symbol Table
 According to [man elf](https://man7.org/linux/man-pages/man5/elf.5.html), the symbol table is represented by the Elf64_Sym or Elf32_Sym struct. For a deeper understanding, we can manually decode it from the ELF file.
