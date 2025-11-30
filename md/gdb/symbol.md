@@ -652,18 +652,15 @@ $ gcc main.c -o main
 :::
 ::::::::::::::
 
-Print symbol table.
+Inspect the symbol table in ELF file.
+
 ```sh
 $ readelf --symbols main
    Num:    Value          Size Type    Bind   Vis      Ndx Name     
     23: 0000000000004010     4 OBJECT  GLOBAL DEFAULT   23 g_int    
     27: 0000000000001129    24 FUNC    GLOBAL DEFAULT   14 sum    
     32: 0000000000001141    58 FUNC    GLOBAL DEFAULT   14 main  
-    
-```
-
-Print section headers.
-```sh
+  
 $ readelf --section-headers main
 [Nr] Name       Type        Address          Off    Size   ES Flg Lk Inf Al
 [14] .text      PROGBITS    0000000000001040 001040 00013b 00  AX  0   0 16
@@ -673,24 +670,48 @@ $ readelf --section-headers main
   
 ```
 
+Explain the output, g_int.
+
 :::::::::::::: {.columns}
 ::: {.column width=50%}
-
-Interpret the output.
 
 | Field | Value | Meaning |
 |:-----|:-----|:-----|
 | Name | g_int | |
-| Ndx | 23 | Section 14, .data |
+| Ndx | 23 | Section 23, .data |
 | Type | OBJECT | Variable |
 | Value | 0x4010 | Offset in section |
 | Size | 4 | 4 bytes |
 
-The symbol g_int represents a 4-byte variable stored in the .data section.
-Within .data, the variable is positioned at offset 0x4010 from the section’s starting address.
+:::
+::: {.column width=50%}
+
+The symbol g_int represents a 4-byte variable in the .data section.
+
+Within .data, the variable is positioned at offset 0x4010 from the start address of the section.
+
+:::
+::::::::::::::
+
+
+Explain the output, sum.
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+| Field | Value | Meaning |
+|:-----|:-----|:-----|
+| Name | sum | |
+| Ndx | 14 | Section 14, .text |
+| Type | FUNC | Function |
+| Value | 0x1129 | Offset in section |
 
 :::
 ::: {.column width=50%}
+
+The symbol sum represents a function in the .text section.
+
+Within .text, the function is positioned at offset 0x1129 from the start address of the section.
 
 :::
 ::::::::::::::

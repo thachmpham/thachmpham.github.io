@@ -853,26 +853,24 @@ runtime.</li>
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc main.c <span class="at">-o</span> main</span></code></pre></div>
 </div>
 </div>
-<p>Print symbol table.</p>
+<p>Inspect the symbol table in ELF file.</p>
 <div class="sourceCode" id="cb35"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--symbols</span> main</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Num:</span>    Value          Size Type    Bind   Vis      Ndx Name     </span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">23:</span> 0000000000004010     4 OBJECT  GLOBAL DEFAULT   23 g_int    </span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">27:</span> 0000000000001129    24 FUNC    GLOBAL DEFAULT   14 sum    </span>
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">32:</span> 0000000000001141    58 FUNC    GLOBAL DEFAULT   14 main  </span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div>
-<p>Print section headers.</p>
-<div class="sourceCode" id="cb36"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--section-headers</span> main</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Nr]</span> Name       Type        Address          Off    Size   ES Flg Lk Inf Al</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[14]</span> .text      PROGBITS    0000000000001040 001040 00013b 00  AX  0   0 16</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[23]</span> .data      PROGBITS    0000000000004000 003000 000014 00  WA  0   0  8</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[26]</span> .symtab    SYMTAB      0000000000000000 003048 000378 18     27  18  8</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="ex">[27]</span> .strtab    STRTAB      0000000000000000 0033c0 0001d3 00      0   0  1</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--section-headers</span> main</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="ex">[Nr]</span> Name       Type        Address          Off    Size   ES Flg Lk Inf Al</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="ex">[14]</span> .text      PROGBITS    0000000000001040 001040 00013b 00  AX  0   0 16</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="ex">[23]</span> .data      PROGBITS    0000000000004000 003000 000014 00  WA  0   0  8</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="ex">[26]</span> .symtab    SYMTAB      0000000000000000 003048 000378 18     27  18  8</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="ex">[27]</span> .strtab    STRTAB      0000000000000000 0033c0 0001d3 00      0   0  1</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<p>Explain the output, g_int.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>Interpret the output.</p>
 <table>
 <thead>
 <tr class="header">
@@ -890,7 +888,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb36-1"><a href="#
 <tr class="even">
 <td style="text-align: left;">Ndx</td>
 <td style="text-align: left;">23</td>
-<td style="text-align: left;">Section 14, .data</td>
+<td style="text-align: left;">Section 23, .data</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Type</td>
@@ -909,11 +907,51 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb36-1"><a href="#
 </tr>
 </tbody>
 </table>
-<p>The symbol g_int represents a 4-byte variable stored in the .data
-section. Within .data, the variable is positioned at offset 0x4010 from
-the section’s starting address.</p>
 </div><div class="column" style="width:50%;">
-
+<p>The symbol g_int represents a 4-byte variable in the .data
+section.</p>
+<p>Within .data, the variable is positioned at offset 0x4010 from the
+start address of the section.</p>
+</div>
+</div>
+<p>Explain the output, sum.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Value</th>
+<th style="text-align: left;">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">sum</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ndx</td>
+<td style="text-align: left;">14</td>
+<td style="text-align: left;">Section 14, .text</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Type</td>
+<td style="text-align: left;">FUNC</td>
+<td style="text-align: left;">Function</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Value</td>
+<td style="text-align: left;">0x1129</td>
+<td style="text-align: left;">Offset in section</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:50%;">
+<p>The symbol sum represents a function in the .text section.</p>
+<p>Within .text, the function is positioned at offset 0x1129 from the
+start address of the section.</p>
 </div>
 </div>
 <p><br></p>
@@ -924,35 +962,35 @@ symbol table is represented by the Elf64_Sym or Elf32_Sym struct. For a
 deeper understanding, we can manually decode it from the ELF file.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="sourceCode" id="cb37"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>$ pahole elf64_sym</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> elf64_sym <span class="op">{</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  Elf64_Word      st_name<span class="op">;</span>  <span class="co">// 0  4</span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">unsigned</span> <span class="dt">char</span>   st_info<span class="op">;</span>  <span class="co">// 4  1</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">unsigned</span> <span class="dt">char</span>   st_other<span class="op">;</span> <span class="co">// 5  1</span></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  Elf64_Half      st_shndx<span class="op">;</span> <span class="co">// 6  2</span></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  Elf64_Addr      st_value<span class="op">;</span> <span class="co">// 8  8</span></span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  Elf64_Xword     st_size<span class="op">;</span>  <span class="co">// 16 8</span></span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* size: 24 bytes */</span></span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>$ pahole elf64_sym</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> elf64_sym <span class="op">{</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  Elf64_Word      st_name<span class="op">;</span>  <span class="co">// 0  4</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">unsigned</span> <span class="dt">char</span>   st_info<span class="op">;</span>  <span class="co">// 4  1</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">unsigned</span> <span class="dt">char</span>   st_other<span class="op">;</span> <span class="co">// 5  1</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  Elf64_Half      st_shndx<span class="op">;</span> <span class="co">// 6  2</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  Elf64_Addr      st_value<span class="op">;</span> <span class="co">// 8  8</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  Elf64_Xword     st_size<span class="op">;</span>  <span class="co">// 16 8</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* size: 24 bytes */</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 </div><div class="column" style="width:50%;">
 <p>File <code>hex_to_elf64_sym.py</code></p>
-<div class="sourceCode" id="cb38"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/python3</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> struct, sys</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hex_to_elf64_sym(strhex):</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  raw <span class="op">=</span> <span class="bu">bytes</span>.fromhex(strhex)</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  fmt <span class="op">=</span> <span class="st">&quot;=IBBHQQ&quot;</span></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  tup <span class="op">=</span> struct.unpack(fmt, raw)</span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  arr <span class="op">=</span> [<span class="bu">hex</span>(x) <span class="cf">for</span> x <span class="kw">in</span> tup]</span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">&quot;name&quot;</span>, <span class="st">&quot;info&quot;</span>, <span class="st">&quot;other&quot;</span>, <span class="st">&quot;shndx&quot;</span>, <span class="st">&quot;value&quot;</span>, <span class="st">&quot;size&quot;</span>, sep<span class="op">=</span><span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(arr, sep<span class="op">=</span><span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>hex_to_elf64_sym(sys.argv[<span class="dv">1</span>])</span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/python3</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> struct, sys</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hex_to_elf64_sym(strhex):</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  raw <span class="op">=</span> <span class="bu">bytes</span>.fromhex(strhex)</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  fmt <span class="op">=</span> <span class="st">&quot;=IBBHQQ&quot;</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  tup <span class="op">=</span> struct.unpack(fmt, raw)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  arr <span class="op">=</span> [<span class="bu">hex</span>(x) <span class="cf">for</span> x <span class="kw">in</span> tup]</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(<span class="st">&quot;name&quot;</span>, <span class="st">&quot;info&quot;</span>, <span class="st">&quot;other&quot;</span>, <span class="st">&quot;shndx&quot;</span>, <span class="st">&quot;value&quot;</span>, <span class="st">&quot;size&quot;</span>, sep<span class="op">=</span><span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(arr, sep<span class="op">=</span><span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>hex_to_elf64_sym(sys.argv[<span class="dv">1</span>])</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 </div>
 </div>
 <table>
@@ -1002,40 +1040,40 @@ their size</td>
 <p><br></p>
 <p>Print the list of sections. The output shows that the .symtab section
 begins at offset 0x003048 and has a size of 0x000378.</p>
-<div class="sourceCode" id="cb39"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--section-headers</span> main</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Nr]</span> Name       Type        Address          Off    Size   ES Flg Lk Inf Al</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[14]</span> .text      PROGBITS    0000000000001040 001040 00013b 00  AX  0   0 16</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[23]</span> .data      PROGBITS    0000000000004000 003000 000014 00  WA  0   0  8</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[26]</span> .symtab    SYMTAB      0000000000000000 003048 000378 18     27  18  8</span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="ex">[27]</span> .strtab    STRTAB      0000000000000000 0033c0 0001d3 00      0   0  1</span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--section-headers</span> main</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Nr]</span> Name       Type        Address          Off    Size   ES Flg Lk Inf Al</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[14]</span> .text      PROGBITS    0000000000001040 001040 00013b 00  AX  0   0 16</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[23]</span> .data      PROGBITS    0000000000004000 003000 000014 00  WA  0   0  8</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[26]</span> .symtab    SYMTAB      0000000000000000 003048 000378 18     27  18  8</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="ex">[27]</span> .strtab    STRTAB      0000000000000000 0033c0 0001d3 00      0   0  1</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <div class="columns">
 <div class="column" style="width:70%;">
 <p>Dump the .symtab section. The elf64_sym struct has a size of 24
 bytes, so use option ‘xxd -c 24’ to display 24 bytes each line.</p>
-<div class="sourceCode" id="cb40"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> xxd <span class="at">-p</span> <span class="at">-g</span> 1 <span class="at">-c</span> 24 <span class="at">-s</span> 0x003048 <span class="at">-l</span> 0x000378 main</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="ex">340100001100170010400000000000000400000000000000</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="ex">6301000012000e0029110000000000001800000000000000</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="ex">8701000012000e0041110000000000003a00000000000000</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> xxd <span class="at">-p</span> <span class="at">-g</span> 1 <span class="at">-c</span> 24 <span class="at">-s</span> 0x003048 <span class="at">-l</span> 0x000378 main</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="ex">340100001100170010400000000000000400000000000000</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="ex">6301000012000e0029110000000000001800000000000000</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="ex">8701000012000e0041110000000000003a00000000000000</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 </div><div class="column" style="width:30%;">
 <p>Print string table.</p>
-<div class="sourceCode" id="cb41"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--string-dump</span><span class="op">=</span>.strtab main</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span>   134]  g_int</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>[   163]  <span class="er">sum</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span>   187]  main</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--string-dump</span><span class="op">=</span>.strtab main</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span>   134]  g_int</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>[   163]  <span class="er">sum</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span>   187]  main</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 </div>
 </div>
 <p>Decode the first line.</p>
-<div class="sourceCode" id="cb42"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> hex_to_elf64_sym.py 340100001100170010400000000000000400000000000000</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">name</span>     info    other  shndx   value     size</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[</span><span class="st">&#39;0x134&#39;</span><span class="ex">,</span> <span class="st">&#39;0x11&#39;</span>, <span class="st">&#39;0x0&#39;</span>, <span class="st">&#39;0x17&#39;</span>, <span class="st">&#39;0x4010&#39;</span>, <span class="st">&#39;0x4&#39;</span>]</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> hex_to_elf64_sym.py 340100001100170010400000000000000400000000000000</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">name</span>     info    other  shndx   value     size</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[</span><span class="st">&#39;0x134&#39;</span><span class="ex">,</span> <span class="st">&#39;0x11&#39;</span>, <span class="st">&#39;0x0&#39;</span>, <span class="st">&#39;0x17&#39;</span>, <span class="st">&#39;0x4010&#39;</span>, <span class="st">&#39;0x4&#39;</span>]</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 <p>Interpret the output.</p>
 <table>
 <thead>
@@ -1080,10 +1118,10 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb42-1"><a href="#
 </table>
 <p><br></p>
 <p>Decode the second line.</p>
-<div class="sourceCode" id="cb43"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> hex_to_elf64_sym.py 6301000012000e0029110000000000001800000000000000</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">name</span>     info    other  shndx  value     size</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[</span><span class="st">&#39;0x163&#39;</span><span class="ex">,</span> <span class="st">&#39;0x12&#39;</span>, <span class="st">&#39;0x0&#39;</span>, <span class="st">&#39;0xe&#39;</span>, <span class="st">&#39;0x1129&#39;</span>, <span class="st">&#39;0x18&#39;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> hex_to_elf64_sym.py 6301000012000e0029110000000000001800000000000000</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">name</span>     info    other  shndx  value     size</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[</span><span class="st">&#39;0x163&#39;</span><span class="ex">,</span> <span class="st">&#39;0x12&#39;</span>, <span class="st">&#39;0x0&#39;</span>, <span class="st">&#39;0xe&#39;</span>, <span class="st">&#39;0x1129&#39;</span>, <span class="st">&#39;0x18&#39;</span>]</span></code></pre></div>
 <p>Interpret the output.</p>
 <table>
 <thead>
