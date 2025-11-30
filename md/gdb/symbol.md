@@ -129,7 +129,7 @@ Global and static variables.
 
 <br>
 
-### 1.4. Address to Symbol
+### 1.4. Symbol to Address
 Find address of a symbol.
 ```sh
   info address sym
@@ -165,7 +165,7 @@ Symbol "sum" is a function at address 0x40066c.
 
 <br>
 
-### 1.5. Symbol to Address
+### 1.5. Address to Symbol
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
