@@ -1,8 +1,235 @@
 ---
-title: "GDB: Symbols"
+title: "The Symbol Table"
 ---
 
-* * * * *
+
+## 1. Symbol Table
+A symbol represents a function, a global variable, and other named entities. In ELF files, the symbol table is the section that maps these symbols to their corresponding addresses.
+
+:::::::::::::: {.columns}
+::: {.column width=30%}
+
+**Creation**
+
+The symbol table is created by compiler when building object files, it is typically stored in the '.symtab' section.
+
+:::
+::: {.column width=40%}
+
+**Symbol Resolution**
+
+If an object file refers to a symbol defined in another, the compiler search the symbol definition in other object files:
+
+- If not found, it results in "undefined reference to" error.
+- If found, it proceeds to the relocation step.
+
+:::
+::: {.column width=30%}
+
+**Relocation**
+
+The linker assigns memory addresses to the sections.
+
+The symbols address is computed relative to the address of the section where it resides.
+
+:::
+::::::::::::::
+
+### 1.1. Struct Elf64_Sym
+According to [man elf](https://man7.org/linux/man-pages/man5/elf.5.html), the symbol table is represented by the Elf64_Sym or Elf32_Sym struct.
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+```sh
+$ pahole elf64_sym
+```
+
+```c
+struct elf64_sym {          // offset size
+  Elf64_Word      st_name;  // 0      4
+  unsigned char   st_info;  // 4      1
+  unsigned char   st_other; // 5      1
+  Elf64_Half      st_shndx; // 6      2
+  Elf64_Addr      st_value; // 8      8
+  Elf64_Xword     st_size;  // 16     8
+  /* size: 24 bytes */
+};
+```
+
+:::
+::: {.column width=50%}
+
+<br>
+
+<br>
+
+| Field       |                                                                   |
+|:------------|:-------------------------------------------------------------------------|
+| `st_name`   | Index of symbol name in string table.                          |
+| `st_info`   | Type, binding.                  |
+| `st_other`  | Visibility.              |
+| `st_shndx`  | Section index that symbol belongs to.                             |
+| `st_value`  | Offset to the start of section. |
+| `st_size`   | Size of the definition. |
+
+:::
+::::::::::::::
+
+
+### 1.2. Decode .symtab
+The .symtab section contains the symbol table. In the following steps, we extract and decode section .symtab in an ELF file.
+
+:::::::::::::: {.columns}
+::: {.column width=40%}
+
+File main.c
+
+```c
+int g_int = 0xcafebabe;
+
+int sum(int x, int y)
+{
+    return x + y;
+}
+
+int main(int argc, char** argv)
+{
+    int a = 1, b = 2;
+    int s = sum(a, b);
+    return 0;
+}
+```
+
+```sh
+$ gcc main.c -o main
+```
+
+:::
+::: {.column width=60%}
+
+Find section .symtab.
+
+```sh
+$ readelf --section-headers main
+[Nr] Name       Type        Address          Off    Size   ES Flg Lk Inf Al
+[14] .text      PROGBITS    0000000000001040 001040 00013b 00  AX  0   0 16
+[23] .data      PROGBITS    0000000000004000 003000 000014 00  WA  0   0  8
+[26] .symtab    SYMTAB      0000000000000000 003048 000378 18     27  18  8
+[27] .strtab    STRTAB      0000000000000000 0033c0 0001d3 00      0   0  1
+```
+
+Extract section .symtab, which starts at offset 0x003048, size of 0x000378. The elf64_sym struct has a size of 24 bytes, so use option 'xxd -c 24' to display 24 bytes each line.
+
+```sh
+$ xxd -p -g 1 -c 24 -s 0x003048 -l 0x000378 main
+340100001100170010400000000000000400000000000000
+6301000012000e0029110000000000001800000000000000
+8701000012000e0041110000000000003a00000000000000  
+```
+
+:::
+::::::::::::::
+
+
+
+To decode struct elf64_sym from raw hex memory into readable fields, we use script hex_to_elf64_sym.py.
+
+```python
+import struct
+import sys
+
+FMT_ELF64_SYM = "=IBBHQQ"
+
+def hex_to_elf64_sym(hex_str: str):
+    data = bytes.fromhex(hex_str)
+    name, info, other, shndx, value, size = struct.unpack(FMT_ELF64_SYM, data)
+    print("name info other shndx value size")
+    print(hex(name), hex(info), hex(other),
+            hex(shndx), hex(value), hex(size))
+
+hex_to_elf64_sym(sys.argv[1])
+```
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+Decode the first line.
+
+```sh
+$ hex_to_elf64_sym.py 340100001100170010400000000000000400000000000000
+  name     info    other  shndx   value     size
+['0x134', '0x11', '0x0', '0x17', '0x4010', '0x4']
+```
+
+Decode the second line.
+
+```sh
+$ hex_to_elf64_sym.py 6301000012000e0029110000000000001800000000000000
+  name     info    other  shndx  value     size
+['0x163', '0x12', '0x0', '0xe', '0x1129', '0x18']
+```
+
+String table.
+
+```sh
+$ readelf --string-dump=.strtab main
+[   134]  g_int
+[   163]  sum
+[   187]  main
+```
+
+:::
+::: {.column width=50%}
+
+Explain the outputs.
+
+| First Line     |    |                                 |
+|:-----------|:--------|:----------------------------------------|
+| st_name    | 0x134   | Index 0x134 in string table: g_int   |
+| st_info    | 0x11    | Type OBJECT, GLOBAL          |
+| st_other   | 0x0     | Visibility DEFAULT                     |
+| st_shndx   | 0x17    | Section 0x17 = 23 = .data              |
+| st_value   | 0x4010  | Offset 0x4010                         |
+| st_size    | 0x4     | Size of 4 bytes                           |
+
+
+| Second Line      |    |                                 |
+|:-----------|:--------|:----------------------------------------|
+| st_name    | 0x163   | Index 0x136 in string table: sum |
+| st_info    | 0x11    | Type FUNC, GLOBAL          |
+| st_other   | 0x0     | Visibility DEFAULT                     |
+| st_shndx   | 0x17    | Section: 0xe = 14 = .text              |
+| st_value   | 0x4010  | Offset 0x1129                         |
+| st_size    | 0x18    | Size of 24 bytes |
+
+
+:::
+::::::::::::::
+
+### 1.3. Tool readelf
+The readelf tool lets us quickly view the symbol tables in an ELF file, showing symbol names, types, addresses, and sizes, which makes it easy to inspect executables or object files without writing custom parsing code.
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+```sh
+$ readelf --symbols main
+   Num:    Value          Size Type    Bind   Vis      Ndx Name     
+    23: 0000000000004010     4 OBJECT  GLOBAL DEFAULT   23 g_int    
+    27: 0000000000001129    24 FUNC    GLOBAL DEFAULT   14 sum    
+    32: 0000000000001141    58 FUNC    GLOBAL DEFAULT   14 main  
+```
+
+:::
+::: {.column width=50%}
+Explain the output:
+
+- The symbol g_int represents a 4-byte variable in the .data section. Within .data, the variable is positioned at offset 0x4010 from the start address of the section.
+- The symbol sum represents a function in the .text section. Within .text, the function is positioned at offset 0x1129 from the start address of the section.
+
+:::
+::::::::::::::
 
 ## 1. Usage
 ### 1.1. Data Type
@@ -607,249 +834,3 @@ Line 3 of "demo.c" starts at address 0x400674 <triple+8>
 ::::::::::::::
 
 <br>
-
-## 2. Concepts
-### 2.1. Symbol Table
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-In an ELF file, the symbol table is a section that maps symbolic names to their address. A symbol represents a function, a global variables, etc.
-
-The symbol table is needed for resolving references, for example, when an object file calls a function defined in another object file, the table provides the information to link them together.
-
-Two typical symbol tables:
-
-- .symtab:  Symbol table - the symbols defined in the file.
-- .dynsym:  Dynamic symbol table - the symbols resolved by loader at runtime.
-
-:::
-::: {.column width=50%}
-
-File `main.c`
-```c
-int g_int = 0xcafebabe;
-
-int sum(int x, int y)
-{
-    return x + y;
-}
-
-int main(int argc, char** argv)
-{
-    int a = 1, b = 2;
-    int s = sum(a, b);
-    return 0;
-}
-  
-```
-
-Build
-```sh
-$ gcc main.c -o main
-```
-
-:::
-::::::::::::::
-
-Inspect the symbol table in ELF file.
-
-```sh
-$ readelf --symbols main
-   Num:    Value          Size Type    Bind   Vis      Ndx Name     
-    23: 0000000000004010     4 OBJECT  GLOBAL DEFAULT   23 g_int    
-    27: 0000000000001129    24 FUNC    GLOBAL DEFAULT   14 sum    
-    32: 0000000000001141    58 FUNC    GLOBAL DEFAULT   14 main  
-  
-$ readelf --section-headers main
-[Nr] Name       Type        Address          Off    Size   ES Flg Lk Inf Al
-[14] .text      PROGBITS    0000000000001040 001040 00013b 00  AX  0   0 16
-[23] .data      PROGBITS    0000000000004000 003000 000014 00  WA  0   0  8
-[26] .symtab    SYMTAB      0000000000000000 003048 000378 18     27  18  8
-[27] .strtab    STRTAB      0000000000000000 0033c0 0001d3 00      0   0  1
-  
-```
-
-Explain the output, g_int.
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-| Field | Value | Meaning |
-|:-----|:-----|:-----|
-| Name | g_int | |
-| Ndx | 23 | Section 23, .data |
-| Type | OBJECT | Variable |
-| Value | 0x4010 | Offset in section |
-| Size | 4 | 4 bytes |
-
-:::
-::: {.column width=50%}
-
-The symbol g_int represents a 4-byte variable in the .data section.
-
-Within .data, the variable is positioned at offset 0x4010 from the start address of the section.
-
-:::
-::::::::::::::
-
-
-Explain the output, sum.
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-| Field | Value | Meaning |
-|:-----|:-----|:-----|
-| Name | sum | |
-| Ndx | 14 | Section 14, .text |
-| Type | FUNC | Function |
-| Value | 0x1129 | Offset in section |
-
-:::
-::: {.column width=50%}
-
-The symbol sum represents a function in the .text section.
-
-Within .text, the function is positioned at offset 0x1129 from the start address of the section.
-
-:::
-::::::::::::::
-
-<br>
-
-### 2.2. Decode Symbol Table
-According to [man elf](https://man7.org/linux/man-pages/man5/elf.5.html), the symbol table is represented by the Elf64_Sym or Elf32_Sym struct. For a deeper understanding, we will extract it from the ELF file and decode manually.
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-```c
-$ pahole elf64_sym
-
-struct elf64_sym {
-  Elf64_Word      st_name;  // 0  4
-  unsigned char   st_info;  // 4  1
-  unsigned char   st_other; // 5  1
-  Elf64_Half      st_shndx; // 6  2
-  Elf64_Addr      st_value; // 8  8
-  Elf64_Xword     st_size;  // 16 8
-
-  /* size: 24 bytes */
-};
-  
-```
-
-:::
-::: {.column width=50%}
-
-File `hex_to_elf64_sym.py`
-
-```python
-#!/usr/bin/python3
-import struct, sys
-
-def hex_to_elf64_sym(strhex):
-  raw = bytes.fromhex(strhex)
-  fmt = "=IBBHQQ"
-  tup = struct.unpack(fmt, raw)
-  arr = [hex(x) for x in tup]
-  print("name", "info", "other", "shndx", "value", "size", sep="\t")
-  print(arr, sep="\t")
-
-hex_to_elf64_sym(sys.argv[1])
-  
-```
-
-:::
-::::::::::::::
-
-| Field       | Meaning                                                                  |
-|:------------|:-------------------------------------------------------------------------|
-| `st_name`   | Index of the symbol’s name in the string table.                          |
-| `st_info`   | Type & binding: `STT_FUNC`, `STB_GLOBAL`, `STB_WEAK`,...                  |
-| `st_other`  | Visibility `STV_DEFAULT`, `STV_HIDDEN`, `STV_PROTECTED`,...              |
-| `st_shndx`  | Index of the section the symbol belongs to.                              |
-| `st_value`  | For functions or variables, this value is offset to start of their section |
-| `st_size`   | For functions or variables, this value is their size |
-
-<br>
-
-Print the list of sections. The output shows that the .symtab section begins at offset 0x003048 and has a size of 0x000378.
-```sh
-$ readelf --section-headers main
-[Nr] Name       Type        Address          Off    Size   ES Flg Lk Inf Al
-[14] .text      PROGBITS    0000000000001040 001040 00013b 00  AX  0   0 16
-[23] .data      PROGBITS    0000000000004000 003000 000014 00  WA  0   0  8
-[26] .symtab    SYMTAB      0000000000000000 003048 000378 18     27  18  8
-[27] .strtab    STRTAB      0000000000000000 0033c0 0001d3 00      0   0  1
-  
-```
-
-Dump the .symtab section. The elf64_sym struct has a size of 24 bytes, so use option 'xxd -c 24' to display 24 bytes each line.
-```sh
-$ xxd -p -g 1 -c 24 -s 0x003048 -l 0x000378 main
-340100001100170010400000000000000400000000000000
-6301000012000e0029110000000000001800000000000000
-8701000012000e0041110000000000003a00000000000000
-  
-```
-
-
-Decode the first line.
-```sh
-$ hex_to_elf64_sym.py 340100001100170010400000000000000400000000000000
-  name     info    other  shndx   value     size
-['0x134', '0x11', '0x0', '0x17', '0x4010', '0x4']
-  
-```
-
-:::::::::::::: {.columns}
-::: {.column width=70%}
-
-Explain the output.
-
-| Field      | Value   | Meaning                                |
-|:-----------|:--------|:----------------------------------------|
-| st_name    | 0x134   | Index 0x134 in string table: g_int   |
-| st_info    | 0x11    | OBJECT, GLOBAL          |
-| st_other   | 0x0     | Visibility DEFAULT                     |
-| st_shndx   | 0x17    | Section 0x17 = 23 = .data              |
-| st_value   | 0x4010  | Offset 0x4010                         |
-| st_size    | 0x4     | Size of 4 bytes                           |
-
-:::
-::: {.column width=30%}
-
-String table.
-```sh
-$ readelf --string-dump=.strtab main
-[   134]  g_int
-[   163]  sum
-[   187]  main
-  
-```
-
-:::
-::::::::::::::
-
-
-<br>
-
-Decode the second line.
-```sh
-$ hex_to_elf64_sym.py 6301000012000e0029110000000000001800000000000000
-  name     info    other  shndx  value     size
-['0x163', '0x12', '0x0', '0xe', '0x1129', '0x18']
-```
-
-Explain the output.
-
-| Field      | Value   | Meaning                                |
-|:-----------|:--------|:----------------------------------------|
-| st_name    | 0x163   | Index 0x136 in string table: sum |
-| st_info    | 0x11    | FUNC, GLOBAL          |
-| st_other   | 0x0     | Visibility DEFAULT                     |
-| st_shndx   | 0x17    | Section: 0xe = 14 = .text              |
-| st_value   | 0x4010  | Offset 0x1129                         |
-| st_size    | 0x18    | Size of 24 bytes |
