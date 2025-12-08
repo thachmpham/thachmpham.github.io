@@ -9,7 +9,7 @@ When joining a large project, one of the biggest challenges is learning the code
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-- [Symbols: A Deep Dive into Symbol Tables in ELF and Running Processes](/html/gdb/symbol.html)
+- [A Deep Dive into the Symbol Tables](/html/gdb/symbol.html)
 
 :::
 ::: {.column width=50%}

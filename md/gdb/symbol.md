@@ -269,7 +269,12 @@ Explain the output:
 
 ## 1.3. Section .dynsym
 
-The .dynsym section contains the dynamic symbol table, where each entry points to .dynstr for the symbol name. The address of symbols this section are resolved at runtime by the loader, which search through the dynamic lirbaries to locate the symbols. The resolved addresses are then stored in the .got segment in memory.
+The .dynsym section contains the dynamic symbol table.
+
+Relationships to other sections.
+
+- Field st_index represents the symbol name, which points to index of an entry in the string table .dynstr.
+- The address of symbols this section are resolved at runtime by the loader, which search through the dynamic lirbaries to locate the symbols. The resolved addresses are then stored in the .got segment in memory.
 
 ### 1.3.1. Print .dynsym by readelf
 
