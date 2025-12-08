@@ -13,7 +13,7 @@ convert_markdown_to_html() {
         --css /html/style/dark.css \
         --include-in-header ${workspace}/bin/header.html \
         --include-after-body ${workspace}/bin/footer.html \
-        --highlight-style zenburn \
+        --highlight-style breezeDark \
         --filter pandoc-plantuml \
         --table-of-contents \
         --standalone \
