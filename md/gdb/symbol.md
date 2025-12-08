@@ -3,40 +3,52 @@ title: "The Symbol Table"
 ---
 
 
-## 1. Symbol Table
-A symbol represents a function, a global variable, and other named entities. In ELF files, the symbol table is the section that maps these symbols to their corresponding addresses.
+# 1. Symbol Table
+A symbol represents a function, a global variable, and other named entities. The symbol table is the section that maps these symbols to their corresponding addresses.
 
 :::::::::::::: {.columns}
-::: {.column width=30%}
+::: {.column width=25%}
 
 **Creation**
 
-The symbol table is created by compiler when building object files, it is typically stored in the '.symtab' section.
+The compiler generates the symbol table when building object files, typically storing it in the .symtab and .dynsym sections.
+
+- Symbols in .symtab have addresses fixed at build time.
+- Symbols in .dynsym are resolved at runtime.
 
 :::
-::: {.column width=40%}
+::: {.column width=25%}
 
 **Symbol Resolution**
 
-If an object file refers to a symbol defined in another, the compiler search the symbol definition in other object files:
+If an object file refers to a symbol defined in another, compiler search the symbol definition in other object files and libraries:
 
 - If not found, it results in "undefined reference to" error.
 - If found, it proceeds to the relocation step.
 
 :::
-::: {.column width=30%}
+::: {.column width=25%}
 
 **Relocation**
 
 The linker assigns memory addresses to the sections.
 
-The symbols address is computed relative to the address of the section where it resides.
+Address of symbols in .symtab is computed relative to the address of the section where it resides.
+
+:::
+::: {.column width=25%}
+
+**Runtime**
+
+The loader searches through the dynamic libraries to resolve the addresses of symbols in .dynsym.
+
+The resolved addresses are then stored in the .got section.
 
 :::
 ::::::::::::::
 
-### 1.1. Struct Elf64_Sym
-According to [man elf](https://man7.org/linux/man-pages/man5/elf.5.html), the symbol table is represented by the Elf64_Sym or Elf32_Sym struct.
+## 1.1. Struct Elf64_Sym
+According to [man elf](https://man7.org/linux/man-pages/man5/elf.5.html), each entry in symbol table is represented by the Elf64_Sym or Elf32_Sym struct.
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -64,21 +76,47 @@ struct elf64_sym {          // offset size
 
 <br>
 
-| Field       |                                                                   |
+| Field       |                                                                          |
 |:------------|:-------------------------------------------------------------------------|
-| `st_name`   | Index of symbol name in string table.                          |
-| `st_info`   | Type, binding.                  |
-| `st_other`  | Visibility.              |
-| `st_shndx`  | Section index that symbol belongs to.                             |
-| `st_value`  | Offset to the start of section. |
-| `st_size`   | Size of the definition. |
+| `st_name`   | Symbol name                                                              |
+| `st_info`   | Type, binding.                                                           |
+| `st_other`  | Visibility.                                                              |
+| `st_shndx`  | Section which the symbol resides                                         |
+| `st_value`  | Offset to the start of section.                                          |
+| `st_size`   | Size.                                                                    |
 
 :::
 ::::::::::::::
 
 
-### 1.2. Decode .symtab
-The .symtab section contains the symbol table. In the following steps, we extract and decode section .symtab in an ELF file.
+## 1.2. Section .symtab
+### 1.2.1. Decode .symtab
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+The .symtab section contains the static symbol table.
+
+Relationships to other sections.
+
+- Field st_index represents the symbol name, which points to index of an entry in the string table .strtab.
+- Field st_shndx represents the section that , which points to index of an entry in the section header table.
+
+:::
+::: {.column width=50%}
+
+```go
+┌────────────┐       ┌────────────┐        ┌────────────┐
+│   .strtab  │       │  .symtab   │        │  section   |
+┼────────────┤       ┼────────────┤        ┼────────────┤
+│   index ◄──┼───────┼─ st_index  │   ┌────┼► index     │
+│            │       │            │   │    │            │
+│   value    │       │  st_shndx ─┼───┘    │  .....     │
+└────────────┘       └────────────┘        └────────────┘
+```
+
+:::
+::::::::::::::
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
@@ -125,15 +163,13 @@ Extract section .symtab, which starts at offset 0x003048, size of 0x000378. The 
 $ xxd -p -g 1 -c 24 -s 0x003048 -l 0x000378 main
 340100001100170010400000000000000400000000000000
 6301000012000e0029110000000000001800000000000000
-8701000012000e0041110000000000003a00000000000000  
+8701000012000e0041110000000000003a00000000000000
 ```
 
 :::
 ::::::::::::::
 
-
-
-To decode struct elf64_sym from raw hex memory into readable fields, we use script hex_to_elf64_sym.py.
+In x86_64, symbol entry is represented by struct elf64_sym. To decode struct elf64_sym from raw hex memory, we use script hex_to_elf64_sym.py.
 
 ```python
 import struct
@@ -170,7 +206,7 @@ $ hex_to_elf64_sym.py 6301000012000e0029110000000000001800000000000000
 ['0x163', '0x12', '0x0', '0xe', '0x1129', '0x18']
 ```
 
-String table.
+Print string table .strtab.
 
 ```sh
 $ readelf --string-dump=.strtab main
@@ -186,9 +222,9 @@ Explain the outputs.
 
 | First Line     |    |                                 |
 |:-----------|:--------|:----------------------------------------|
-| st_name    | 0x134   | Index 0x134 in string table: g_int   |
-| st_info    | 0x11    | Type OBJECT, GLOBAL          |
-| st_other   | 0x0     | Visibility DEFAULT                     |
+| st_name    | 0x134   | Index 0x134 in .strtab: g_int   |
+| st_info    | 0x11    | Type object, global          |
+| st_other   | 0x0     | Visibility default                    |
 | st_shndx   | 0x17    | Section 0x17 = 23 = .data              |
 | st_value   | 0x4010  | Offset 0x4010                         |
 | st_size    | 0x4     | Size of 4 bytes                           |
@@ -196,9 +232,9 @@ Explain the outputs.
 
 | Second Line      |    |                                 |
 |:-----------|:--------|:----------------------------------------|
-| st_name    | 0x163   | Index 0x136 in string table: sum |
-| st_info    | 0x11    | Type FUNC, GLOBAL          |
-| st_other   | 0x0     | Visibility DEFAULT                     |
+| st_name    | 0x163   | Index 0x136 in .strtab: sum |
+| st_info    | 0x11    | Type func, global          |
+| st_other   | 0x0     | Visibility default                     |
 | st_shndx   | 0x17    | Section: 0xe = 14 = .text              |
 | st_value   | 0x4010  | Offset 0x1129                         |
 | st_size    | 0x18    | Size of 24 bytes |
@@ -207,18 +243,18 @@ Explain the outputs.
 :::
 ::::::::::::::
 
-### 1.3. Tool readelf
-The readelf tool lets us quickly view the symbol tables in an ELF file, showing symbol names, types, addresses, and sizes, which makes it easy to inspect executables or object files without writing custom parsing code.
+### 1.2.2. Print .symtab by readelf
+The readelf tool lets us quickly view the symbol tables in an ELF file, showing symbol names, types, addresses, and sizes, which makes it easy to inspect ELF without writing custom parsing code.
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
 ```sh
 $ readelf --symbols main
-   Num:    Value          Size Type    Bind   Vis      Ndx Name     
-    23: 0000000000004010     4 OBJECT  GLOBAL DEFAULT   23 g_int    
-    27: 0000000000001129    24 FUNC    GLOBAL DEFAULT   14 sum    
-    32: 0000000000001141    58 FUNC    GLOBAL DEFAULT   14 main  
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+    23: 0000000000004010     4 OBJECT  GLOBAL DEFAULT   23 g_int
+    27: 0000000000001129    24 FUNC    GLOBAL DEFAULT   14 sum
+    32: 0000000000001141    58 FUNC    GLOBAL DEFAULT   14 main
 ```
 
 :::
@@ -231,8 +267,59 @@ Explain the output:
 :::
 ::::::::::::::
 
-## 1. Usage
-### 1.1. Data Type
+## 1.3. Section .dynsym
+
+The .dynsym section contains the dynamic symbol table, where each entry points to .dynstr for the symbol name. The address of symbols this section are resolved at runtime by the loader, which search through the dynamic lirbaries to locate the symbols. The resolved addresses are then stored in the .got segment in memory.
+
+### 1.3.1. Print .dynsym by readelf
+
+The below program calls functions puts and sleep, which are defined in the dynamic library libc.so. So, these functions appears in the .dynsym section.
+
+:::::::::::::: {.columns}
+::: {.column width=45%}
+
+```c
+#include <stdio.h>
+#include <unistd.h>
+
+int main(int argc, char** argv)
+{
+    puts("hello");
+    sleep(1);
+    return 0;
+}
+```
+
+```sh
+$ gcc main.c -o main
+```
+
+:::
+::: {.column width=55%}
+
+```sh
+$ readelf --dyn-syms main
+
+Symbol table '.dynsym' contains 8 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
+     1: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND _[...]@GLIBC_2.34 (2)
+     2: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterT[...]
+     3: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND puts@GLIBC_2.2.5 (3)
+     4: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+     5: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMC[...]
+     6: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sleep@GLIBC_2.2.5 (3)
+     7: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND [...]@GLIBC_2.2.5 (3)
+```
+
+:::
+::::::::::::::
+
+### 1.3.1. Examine .got in memory
+
+
+# 1. Usage
+## 1.1. Data Type
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -272,7 +359,7 @@ int main() {
   Point p(1, 2);
   p.move(3, 4);
 }
-  
+
 ```
 
 :::
@@ -294,7 +381,7 @@ type = Point
 (gdb) info types -q Poi*
 File demo.cpp:
 1:      Point;
-  
+
 ```
 
 <br>
@@ -322,7 +409,7 @@ char* echo(char* s)
 {
   return 0;
 }
-  
+
 ```
 
 :::
@@ -341,7 +428,7 @@ File demo.cpp:
 (gdb) info function -t int echo
 File demo.cpp:
 1:      int echo(int);
-  
+
 ```
 
 :::
@@ -372,7 +459,7 @@ int sum(int a, int b)
 {
     return a + b;
 }
-  
+
 ```
 
 :::
@@ -384,7 +471,7 @@ Symbol "g" is static storage at address 0x420020.
 
 (gdb) info address sum
 Symbol "sum" is a function at address 0x40066c.
-  
+
 ```
 
 :::
@@ -411,7 +498,7 @@ g in section .bss
 
 (gdb) info symbol 0x40066c
 sum in section .text
-  
+
 ```
 
 :::
@@ -428,7 +515,7 @@ Demangle a name.
 ```sh
   demangle [--] name
   set print demangle [on|off]
-  
+
 ```
 
 - `--`: useful when name begins with a dash.
@@ -442,7 +529,7 @@ Point::Point(int, int)
 
 (gdb) demangle _ZN5Point4moveEii
 Point::move(int, int)
-  
+
 ```
 
 :::
@@ -489,7 +576,7 @@ To remove the symbols.
 ```sh
   remove-symbol-file filename
   remove-symbol-file -a addr
-  
+
 ```
 
 :::
@@ -517,7 +604,7 @@ int sub(int x, int y)
 {
     return x - y;
 }
-  
+
 ```
 
 <br>
@@ -538,9 +625,9 @@ File main.c
 #include <fcntl.h>
 
 int main()
-{    
+{
     int fd = open("math.o", O_RDONLY);
-    
+
     // load math.o to memory
     mmap(
         NULL, // let kernel choose start addr of region
@@ -553,7 +640,7 @@ int main()
 
     return 0;
 }
-  
+
 ```
 
 :::
@@ -572,7 +659,7 @@ Num:    Value          Size Type    Bind   Vis      Ndx Name
   4: 0000000000000004     4 OBJECT  GLOBAL DEFAULT    2 number2
   5: 0000000000000000    24 FUNC    GLOBAL DEFAULT    1 sum
   6: 0000000000000018    22 FUNC    GLOBAL DEFAULT    1 sub
-  
+
 ```
 
 <span style="color: yellow">Compute ELF offsets.</span>
@@ -584,7 +671,7 @@ Num:    Value          Size Type    Bind   Vis      Ndx Name
 ::: {.column width=45%}
 From 'readelf --section-headers',
 
-- Section .text at 0x40. 
+- Section .text at 0x40.
 - Section .data at 0x70.
 
 From 'readelf --symbols',
@@ -632,11 +719,11 @@ Sketch struct of the ELF file.
 | └── number2         |      + 0x04
 |                     |
 +---------------------+
-| Other Sections...   | 
+| Other Sections...   |
 +---------------------+
 | Section Headers     |
 +---------------------+
-  
+
 ```
 
 Summary:
@@ -670,12 +757,12 @@ Print the memory mappings.
 (gdb) info proc mappings
     Start Addr         End Addr   Size     Offset  Perms  objfile
 0x7ffff7ffa000   0x7ffff7ffb000   0x1000   0x0     r-xp   math.o
-  
+
 ```
 
 <span style="color: yellow">Compute memory addresses.</span>
 
-The offsets of sections within the ELF file, and the offsets of symbols within their sections, remain the same in memory. 
+The offsets of sections within the ELF file, and the offsets of symbols within their sections, remain the same in memory.
 
 So, once the start address of the file in memory is known, we can calculate the addresses of sections and symbols by adding their respective ELF offsets.
 
@@ -722,7 +809,7 @@ Sketch the memory layout.
 +---------------------+
 | Other Regions...    |
 +---------------------+
-  
+
 ```
 
 :::
@@ -738,8 +825,8 @@ After loaded symbol file, GDB uses the given sections and addresses to determine
 
 (gdb) info files
 0x00007ffff7ffa040 - 0x00007ffff7ffa06e is .text in /root/demo/math.o
-0x00007ffff7ffa070 - 0x00007ffff7ffa078 is .data in /root/demo/math.o  
-  
+0x00007ffff7ffa070 - 0x00007ffff7ffa078 is .data in /root/demo/math.o
+
 ```
 
 :::::::::::::: {.columns}
@@ -811,7 +898,7 @@ int main()
 {
 
 }
-  
+
 ```
 
 :::
@@ -827,7 +914,7 @@ Line 3 of "demo.c" starts at address 0x400674 <triple+8>
 (gdb) info line *0x400674
 Line 3 of "demo.c" starts at address 0x400674 <triple+8>
    and ends at 0x400684 <triple+24>.
-  
+
 ```
 
 :::

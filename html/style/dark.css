@@ -148,6 +148,7 @@ table {
     overflow-x: auto;
     display: block;
     font-variant-numeric: lining-nums tabular-nums;
+    font-size: 95%;
 }
 
 table, th, td {
