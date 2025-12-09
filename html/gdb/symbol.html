@@ -127,7 +127,7 @@ Sections .plt, .got</a></li>
 <li><a href="#add-symbols" id="toc-add-symbols">2.1. Add Symbols</a>
 <ul>
 <li><a href="#add-symbols-to-mmap-regions"
-id="toc-add-symbols-to-mmap-regions">2.1.1. Add Symbols to MMAP
+id="toc-add-symbols-to-mmap-regions">2.1.1. Add Symbols to mmap
 Regions</a></li>
 </ul></li>
 </ul></li>
@@ -559,7 +559,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="ex">puts</span> in section .text of /lib/x86_64-linux-gnu/libc.so.6</span></code></pre></div>
 </div>
 </div>
-<p>Illustrate the process memory mappings.</p>
+<p>Illustrate the memory.</p>
 <div class="sourceCode" id="cb22"><pre
 class="sourceCode go"><code class="sourceCode go"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>                 file<span class="op">:</span> main                                    file<span class="op">:</span> main                              file<span class="op">:</span> libc<span class="op">.</span>so</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>              section<span class="op">:</span> <span class="op">.</span>plt                                 section<span class="op">:</span> <span class="op">.</span>got                           section<span class="op">:</span> <span class="op">.</span>text</span>
@@ -613,7 +613,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb24-1"><a href="#
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">remove-symbol-file</span> <span class="at">-a</span> addr</span></code></pre></div>
 </div>
 </div>
-<h3 id="add-symbols-to-mmap-regions">2.1.1. Add Symbols to MMAP
+<h3 id="add-symbols-to-mmap-regions">2.1.1. Add Symbols to mmap
 Regions</h3>
 <p>In the following steps, we will add symbols for memory regions loaded
 by mmap.</p>
@@ -714,8 +714,7 @@ class="sourceCode go"><code class="sourceCode go"><span id="cb29-1"><a href="#cb
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="fu">file</span> main</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">main.c:19</span></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span></code></pre></div>
-<p>Print the memory mappings. File math.o is loaded at address
-0x7ffff7ffa000 in memory.</p>
+<p>Print the memory mappings.</p>
 <div class="sourceCode" id="cb31"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> proc mappings</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Start</span> Addr         End Addr   Size     Offset  Perms  objfile</span>
@@ -725,8 +724,11 @@ symbols within their sections, remain the same in memory. So, once the
 start address of the file in memory is known, we can calculate the
 addresses of sections and symbols by adding their respective ELF
 offsets.</p>
-<p>In memory, .text of math.o started at 0x7ffff7ffa040. The .data of
-math.o started at 0x7ffff7ffa070.</p>
+<p>In memory, file math.o is loaded at address 0x7ffff7ffa000. So,</p>
+<ul>
+<li>Section .text of math.o started at 0x7ffff7ffa040.</li>
+<li>Section .data of math.o started at 0x7ffff7ffa070.</li>
+</ul>
 </div><div class="column" style="width:40%;">
 <p>Illustrate the Memory Mappings.</p>
 <div class="sourceCode" id="cb32"><pre

@@ -435,7 +435,7 @@ puts in section .text of /lib/x86_64-linux-gnu/libc.so.6
 :::
 ::::::::::::::
 
-Illustrate the process memory mappings.
+Illustrate the memory.
 ```go
                  file: main                                    file: main                              file: libc.so
               section: .plt                                 section: .got                           section: .text
@@ -499,7 +499,7 @@ To remove the symbols.
 :::
 ::::::::::::::
 
-### 2.1.1. Add Symbols to MMAP Regions
+### 2.1.1. Add Symbols to mmap Regions
 
 In the following steps, we will add symbols for memory regions loaded by mmap.
 
@@ -628,7 +628,7 @@ Start program and examine memory.
 (gdb) run
 ```
 
-Print the memory mappings. File math.o is loaded at address 0x7ffff7ffa000 in memory.
+Print the memory mappings. 
 ```sh
 (gdb) info proc mappings
     Start Addr         End Addr   Size     Offset  Perms  objfile
@@ -638,7 +638,14 @@ Print the memory mappings. File math.o is loaded at address 0x7ffff7ffa000 in me
 
 The offsets of sections within the ELF file, and the offsets of symbols within their sections, remain the same in memory. So, once the start address of the file in memory is known, we can calculate the addresses of sections and symbols by adding their respective ELF offsets.
 
-In memory, .text of math.o started at 0x7ffff7ffa040. The .data of math.o started at 0x7ffff7ffa070.
+In memory, file math.o is loaded at address 0x7ffff7ffa000. So,
+
+- Section .text of math.o started at 0x7ffff7ffa040.
+- Section .data of math.o started at 0x7ffff7ffa070.
+
+
+
+
 
 :::
 ::: {.column width=40%}
