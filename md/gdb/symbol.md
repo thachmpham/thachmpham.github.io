@@ -437,9 +437,9 @@ puts in section .text of /lib/x86_64-linux-gnu/libc.so.6
 
 Illustrate the process memory mappings.
 ```go
-            file     main                                     file      main                          file     libc.so
-            section  .plt                                     section  .got                           section  .text
-            function puts@plt()                                                                       function puts
+                 file: main                                    file: main                              file: libc.so
+              section: .plt                                 section: .got                           section: .text
+             function: puts@plt()                                                                   function: puts
 
 ┌────────────────────┬─────────────────────┐      ┌────────────────┬────────────────┐      ┌────────────────┬────────────────┐
 │ address            │ value               │      │ address        │     value      │      │ address        │     value      │

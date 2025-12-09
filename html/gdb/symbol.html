@@ -567,9 +567,9 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#
 </div>
 <p>Illustrate the process memory mappings.</p>
 <div class="sourceCode" id="cb22"><pre
-class="sourceCode go"><code class="sourceCode go"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>            file     main                                     file      main                          file     libc<span class="op">.</span>so</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>            section  <span class="op">.</span>plt                                     section  <span class="op">.</span>got                           section  <span class="op">.</span>text</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>            function puts@plt<span class="op">()</span>                                                                       function puts</span>
+class="sourceCode go"><code class="sourceCode go"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>                 file<span class="op">:</span> main                                    file<span class="op">:</span> main                              file<span class="op">:</span> libc<span class="op">.</span>so</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>              section<span class="op">:</span> <span class="op">.</span>plt                                 section<span class="op">:</span> <span class="op">.</span>got                           section<span class="op">:</span> <span class="op">.</span>text</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>             function<span class="op">:</span> puts@plt<span class="op">()</span>                                                                   function<span class="op">:</span> puts</span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>┌────────────────────┬─────────────────────┐      ┌────────────────┬────────────────┐      ┌────────────────┬────────────────┐</span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>│ address            │ value               │      │ address        │     value      │      │ address        │     value      │</span>
