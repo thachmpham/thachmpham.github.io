@@ -452,226 +452,11 @@ Illustrate the process memory mappings.
 └────────────────────┴─────────────────────┘      └────────────────┴────────────────┘      └────────────────┴────────────────┘
 ```
 
-# 1. Usage
-## 1.1. Data Type
 
-:::::::::::::: {.columns}
-::: {.column width=50%}
+# 2. GDB
 
-Name of data type.
-```sh
-  whatis expr
-```
+## 2.1. Add Symbols
 
-Definition of data type.
-```sh
-  ptype [/flags] expr
-```
-
-- *expr*: variable, struct, class name.
-- *flag*: r, m, M, t, T, x, d, o (offset).
-
-
-Find data type match a regex.
-```sh
-  info types [-q] [regex]
-```
-
-:::
-::: {.column width=50%}
-
-```cpp
-class Point
-{
-public:
-  int x, y;
-  Point(int a, int b)  {}
-  void move(int dx, int dy){}
-};
-
-int main() {
-  Point p(1, 2);
-  p.move(3, 4);
-}
-
-```
-
-:::
-::::::::::::::
-
-Sample: Inspect a variable and a class.
-
-```sh
-(gdb) whatis p
-type = Point
-(gdb) ptype /o class Point
-/* offset      |    size */  type = class Point {
-                             public:
-/*      0      |       4 */    int x;
-/*      4      |       4 */    int y;
-
-                               /* total size (bytes):    8 */
-                             }
-(gdb) info types -q Poi*
-File demo.cpp:
-1:      Point;
-
-```
-
-<br>
-
-### 1.2. Function
-Function names matches a regex.
-```sh
-  info functions [-q] [-n] [-t type_regex] [regex]
-```
-
-- *-q*: quite.
-- *-n*: not print non-debug symbols.
-- *-t*: only print functions whose type match type_regex. Check type by *whatis*.
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-```c
-int echo(int n)
-{
-  return 0;
-}
-
-char* echo(char* s)
-{
-  return 0;
-}
-
-```
-
-:::
-::: {.column width=50%}
-
-```sh
-(gdb) info function echo
-File demo.cpp:
-2:      char *echo(char*);
-1:      int echo(int);
-
-(gdb) info function -t char* echo
-File demo.cpp:
-2:      char *echo(char*)
-
-(gdb) info function -t int echo
-File demo.cpp:
-1:      int echo(int);
-
-```
-
-:::
-::::::::::::::
-
-
-### 1.3. Variable
-Global and static variables.
-```sh
-  info variables [-q] [-n] [-t type_regexp] [regexp]
-```
-
-<br>
-
-### 1.4. Symbol to Address
-Find address of a symbol.
-```sh
-  info address sym
-```
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-```c
-int g = 0;
-
-int sum(int a, int b)
-{
-    return a + b;
-}
-
-```
-
-:::
-::: {.column width=50%}
-
-```sh
-(gdb) info address g
-Symbol "g" is static storage at address 0x420020.
-
-(gdb) info address sum
-Symbol "sum" is a function at address 0x40066c.
-
-```
-
-:::
-::::::::::::::
-
-<br>
-
-### 1.5. Address to Symbol
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-Find symbol at an address. Only global, static scope.
-```sh
-  info sym addr
-```
-
-:::
-::: {.column width=50%}
-
-```sh
-(gdb) info symbol 0x420020
-g in section .bss
-
-(gdb) info symbol 0x40066c
-sum in section .text
-
-```
-
-:::
-::::::::::::::
-
-<br>
-
-### 1.6. Demangle
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-Demangle a name.
-```sh
-  demangle [--] name
-  set print demangle [on|off]
-
-```
-
-- `--`: useful when name begins with a dash.
-
-:::
-::: {.column width=50%}
-
-```sh
-(gdb) demangle _ZN5PointC2Eii
-Point::Point(int, int)
-
-(gdb) demangle _ZN5Point4moveEii
-Point::move(int, int)
-
-```
-
-:::
-::::::::::::::
-
-<br>
-
-### 1.7. Add Symbol
 :::::::::::::: {.columns}
 ::: {.column width=40%}
 
@@ -704,8 +489,6 @@ Other options.
 - *readnever*: not load symbol.
 - *offset*: offset to add to the start address of each section, except those for which the address was specified explicitly.
 
-<br>
-
 To remove the symbols.
 ```sh
   remove-symbol-file filename
@@ -716,10 +499,9 @@ To remove the symbols.
 :::
 ::::::::::::::
 
-<br>
+### 2.1.1. Add Symbols to MMAP Regions
 
-<span style="color: yellow">Sample:</span>
-Add symbols for memory regions loaded by mmap.
+In the following steps, we will add symbols for memory regions loaded by mmap.
 
 :::::::::::::: {.columns}
 ::: {.column width=35%}
@@ -780,7 +562,11 @@ int main()
 :::
 ::::::::::::::
 
-Inspect the ELF file.
+
+:::::::::::::: {.columns}
+::: {.column width=60%}
+
+Examine the ELF file.
 ```sh
 $ readelf --section-headers --wide math.o
 [Nr] Name     Type        Address          Off    Size   ES Flg Lk Inf Al
@@ -793,49 +579,17 @@ Num:    Value          Size Type    Bind   Vis      Ndx Name
   4: 0000000000000004     4 OBJECT  GLOBAL DEFAULT    2 number2
   5: 0000000000000000    24 FUNC    GLOBAL DEFAULT    1 sum
   6: 0000000000000018    22 FUNC    GLOBAL DEFAULT    1 sub
-
 ```
 
-<span style="color: yellow">Compute ELF offsets.</span>
-
-- 'readelf --section-headers' provides section offset from the start of the file.
-- 'readelf --symbols' shows each symbol offset from the start of its section. Adding this offset to the section location gives the symbol location.
-
-:::::::::::::: {.columns}
-::: {.column width=45%}
-From 'readelf --section-headers',
-
-- Section .text at 0x40.
-- Section .data at 0x70.
-
-From 'readelf --symbols',
-
-Symbol sum.
-
-- In .text section (Ndx 1).
-- Offset 0x00 in section .text (Value 0x00).
-
-Symbol sub.
-
-- In .text section (Ndx 1).
-- Offset 0x18 in section .text (Value 0x18).
-
-Symbol number1.
-
-- In .data section (Ndx 2).
-- Offset 0x00 in section .data (Value 0x00).
-- Size of 4 bytes.
-
-Symbol number2.
-
-- In .data section (Ndx 2).
-- Offset 0x04 in section .data (Value 0x04).
-- Size of 4 bytes.
+- The .text section begins at address 0x40.
+- The .data section begins at address 0x70.
+- In .text, the symbols sum and sub are located at offsets 0x00 and 0x18 from the start of the section.
+- In .data, the symbols number1 and number2 are located at offsets 0x00 and 0x14 from the start of the section.
 
 :::
-::: {.column width=55%}
+::: {.column width=40%}
 
-Sketch struct of the ELF file.
+Illustrate the ELF.
 
 ```go
 +---------------------+
@@ -860,33 +614,22 @@ Sketch struct of the ELF file.
 
 ```
 
-Summary:
-
-|  |  |
-|-----------------|---------|
-| .text           | 0x40    |
-| sum             | 0x40    |
-| sub             | 0x58    |
-
-|  |  |
-|-----------------|---------|
-| .data           | 0x70    |
-| number1         | 0x70    |
-| number2         | 0x74    |
-
-
 :::
 ::::::::::::::
 
 
-Start program.
+:::::::::::::: {.columns}
+::: {.column width=60%}
+
+
+Start program and examine memory.
 ```sh
 (gdb) file main
 (gdb) break main.c:19
 (gdb) run
 ```
 
-Print the memory mappings.
+Print the memory mappings. File math.o is loaded at address 0x7ffff7ffa000 in memory.
 ```sh
 (gdb) info proc mappings
     Start Addr         End Addr   Size     Offset  Perms  objfile
@@ -894,38 +637,14 @@ Print the memory mappings.
 
 ```
 
-<span style="color: yellow">Compute memory addresses.</span>
+The offsets of sections within the ELF file, and the offsets of symbols within their sections, remain the same in memory. So, once the start address of the file in memory is known, we can calculate the addresses of sections and symbols by adding their respective ELF offsets.
 
-The offsets of sections within the ELF file, and the offsets of symbols within their sections, remain the same in memory.
-
-So, once the start address of the file in memory is known, we can calculate the addresses of sections and symbols by adding their respective ELF offsets.
-
-:::::::::::::: {.columns}
-::: {.column width=45%}
-
-From 'info proc mappings',
-
-- math.o loaded at 0x7ffff7ffa000.
-
-
-By adding corresponding ELF offsets,
-
-Section .text:
-
-- .text at 0x7ffff7ffa040.
-- sum at 0x7ffff7ffa040.
-- sub at 0x7ffff7ffa058.
-
-Section .data:
-
-- .data at 0x7ffff7ffa070.
-- number1 at 0x7ffff7ffa070.
-- number2 at 0x7ffff7ffa074.
+In memory, .text of math.o started at 0x7ffff7ffa040. The .data of math.o started at 0x7ffff7ffa070.
 
 :::
-::: {.column width=55%}
+::: {.column width=40%}
 
-Sketch the memory layout.
+Illustrate the Memory Mappings.  
 
 ```go
 +---------------------+
@@ -943,16 +662,12 @@ Sketch the memory layout.
 +---------------------+
 | Other Regions...    |
 +---------------------+
-
 ```
 
 :::
 ::::::::::::::
 
-
-<span style="color: yellow">Add symbol file</span>
-
-After loaded symbol file, GDB uses the given sections and addresses to determine the memory addresses of the symbols contained in those sections.
+Tell GDB to load the symbols in math.o. The given section addresses are needed for GDB to put the symbols to correct places in memory.
 
 ```sh
 (gdb) add-symbol-file math.o 0x7ffff7ffa040 -s .data 0x7ffff7ffa070
@@ -960,7 +675,6 @@ After loaded symbol file, GDB uses the given sections and addresses to determine
 (gdb) info files
 0x00007ffff7ffa040 - 0x00007ffff7ffa06e is .text in /root/demo/math.o
 0x00007ffff7ffa070 - 0x00007ffff7ffa078 is .data in /root/demo/math.o
-
 ```
 
 :::::::::::::: {.columns}
@@ -1003,55 +717,3 @@ $2 = 0xc1a0c1a0
 
 :::
 ::::::::::::::
-
-
-<br>
-
-### 1.8. Line
-Print source line info.
-```sh
-  info line locspec
-```
-
-- *locspec*: function, address, etc.
-
-<br>
-
-Sample: Find line info of function, offset and instruction address.
-
-:::::::::::::: {.columns}
-::: {.column width=45%}
-
-```c {.numberLines}
-int triple(int a)
-{
-    return 3 * a;
-}
-
-int main()
-{
-
-}
-
-```
-
-:::
-::: {.column width=55%}
-
-```sh
-(gdb) info line triple
-Line 2 of "demo.c" starts at address 0x40066c <triple>
-   and ends at 0x400674 <triple+8>.
-(gdb) info line *triple+8
-Line 3 of "demo.c" starts at address 0x400674 <triple+8>
-   and ends at 0x400684 <triple+24>.
-(gdb) info line *0x400674
-Line 3 of "demo.c" starts at address 0x400674 <triple+8>
-   and ends at 0x400684 <triple+24>.
-
-```
-
-:::
-::::::::::::::
-
-<br>
