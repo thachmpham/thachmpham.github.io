@@ -89,13 +89,13 @@ struct elf64_sym {          // offset size
 ::::::::::::::
 
 
-## 1.2. Section .symtab
-### 1.2.1. Decode .symtab
+## 1.2. Static Symbol Table
+### 1.2.1. Section .symtab
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-The .symtab section contains the static symbol table.
+The .symtab section contains the static symbol table. The address of symbols in .symtab are resolved at building time.
 
 Relationships to other sections.
 
@@ -117,6 +117,9 @@ Relationships to other sections.
 
 :::
 ::::::::::::::
+
+
+### 1.2.2. Decode .symtab
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
@@ -146,7 +149,7 @@ $ gcc main.c -o main
 :::
 ::: {.column width=60%}
 
-Find section .symtab.
+List sections.
 
 ```sh
 $ readelf --section-headers main
@@ -243,8 +246,8 @@ Explain the outputs.
 :::
 ::::::::::::::
 
-### 1.2.2. Print .symtab by readelf
-The readelf tool lets us quickly view the symbol tables in an ELF file, showing symbol names, types, addresses, and sizes, which makes it easy to inspect ELF without writing custom parsing code.
+### 1.2.3. readelf .symtab
+The goal of decoding .symtab is to understand the format of the symbol table. For everyday work, we can simply view .symtab using readelf.
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -267,16 +270,33 @@ Explain the output:
 :::
 ::::::::::::::
 
-## 1.3. Section .dynsym
+## 1.3. Dynamic Symbol Table
+### 1.3.1. Section .dynsym
 
-The .dynsym section contains the dynamic symbol table.
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+The .dynsym section contains the dynamic symbol table. The address of symbols this section are resolved at runtime by the loader, which search through the dynamic lirbaries to locate the symbols. 
 
 Relationships to other sections.
 
 - Field st_index represents the symbol name, which points to index of an entry in the string table .dynstr.
-- The address of symbols this section are resolved at runtime by the loader, which search through the dynamic lirbaries to locate the symbols. The resolved addresses are then stored in the .got segment in memory.
 
-### 1.3.1. Print .dynsym by readelf
+:::
+::: {.column width=50%}
+
+```go
+┌────────────┐       ┌────────────┐
+│   .dynstr  │       │  .dynsym   │
+┼────────────┤       ┼────────────┤
+│   index ◄──┼───────┼─ st_index  │
+│            │       │            │
+│   value    │       │  .....     |
+└────────────┘       └────────────┘
+```
+
+:::
+::::::::::::::
 
 The below program calls functions puts and sleep, which are defined in the dynamic library libc.so. So, these functions appears in the .dynsym section.
 
@@ -320,7 +340,36 @@ Symbol table '.dynsym' contains 8 entries:
 :::
 ::::::::::::::
 
-### 1.3.1. Examine .got in memory
+
+### 1.3.2. Sections .plt, .got
+
+The .plt (procedure linkage table) section contains functions that helps program calls functions in dynamic libraries without knowing their actual memory addresses.  
+The .got (global offset table) section contains the memory addresses of functions located in dynamic libraries.
+
+Interaction between .plt and .got.
+
+:::::::::::::: {.columns}
+::: {.column width=30%}
+
+
+:::
+::: {.column width=70%}
+
+```go
+                                            ┌──────────────────┐                                  
+┌──────────┐    ┌──────────────────────┐    │   ┌───────────┐  │   ┌─────────────────────────────┐
+│ main()   │    │.plt                  │    │   │.got       │  │   │ld.so                        │
+│          │    |──────────────────────|    │   |───────────|  │   |─────────────────────────────|
+│   puts()─┼────┼► puts@plt()          │    │   │           │  └───┼─►_dl_runtime_resolve()      │
+│          │    │    find puts in .got─┼────┼──►│           │      │    find puts                │
+└──────────┘    │    if not found      │    │   │           │◄─────┼─── update puts addr to .got │
+                │       let ld.so find─┼────┘   └───────────┘      └─────────────────────────────┘
+                │    call puts         │                                                          
+                └──────────────────────┘                                                          
+```
+
+:::
+::::::::::::::
 
 
 # 1. Usage
