@@ -368,7 +368,7 @@ Function puts@put simply read the resolved address from .got and jump directly t
 :::::::::::::: {.columns}
 ::: {.column width=40%}
 
-Sample: Examine the .plt and .got.
+Examine the .plt and .got.
 
 ```c
 #include <stdio.h>
@@ -523,9 +523,8 @@ int sub(int x, int y)
 
 ```
 
-<br>
-
 Build.
+
 ```sh
 $ gcc -c math.c -o math.o
 $ gcc -g main.c -o main
