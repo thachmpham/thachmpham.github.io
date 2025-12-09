@@ -13,18 +13,14 @@ A symbol represents a function, a global variable, and other named entities. The
 
 The compiler generates the symbol table when building object files, typically storing it in the .symtab and .dynsym sections.
 
-- Symbols in .symtab have addresses fixed at build time.
-- Symbols in .dynsym are resolved at runtime.
+Symbols in .symtab have addresses fixed at build time. Symbols in .dynsym are resolved at runtime.
 
 :::
 ::: {.column width=25%}
 
 **Symbol Resolution**
 
-If an object file refers to a symbol defined in another, compiler search the symbol definition in other object files and libraries:
-
-- If not found, it results in "undefined reference to" error.
-- If found, it proceeds to the relocation step.
+If an object file refers to a symbol defined in another, compiler search the symbol definition in other object files and libraries. If not found, it results in "undefined reference to" error. If found, it proceeds to the relocation step.
 
 :::
 ::: {.column width=25%}

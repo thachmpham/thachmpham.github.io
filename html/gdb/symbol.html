@@ -142,18 +142,14 @@ their corresponding addresses.</p>
 <p><strong>Creation</strong></p>
 <p>The compiler generates the symbol table when building object files,
 typically storing it in the .symtab and .dynsym sections.</p>
-<ul>
-<li>Symbols in .symtab have addresses fixed at build time.</li>
-<li>Symbols in .dynsym are resolved at runtime.</li>
-</ul>
+<p>Symbols in .symtab have addresses fixed at build time. Symbols in
+.dynsym are resolved at runtime.</p>
 </div><div class="column" style="width:25%;">
 <p><strong>Symbol Resolution</strong></p>
 <p>If an object file refers to a symbol defined in another, compiler
-search the symbol definition in other object files and libraries:</p>
-<ul>
-<li>If not found, it results in “undefined reference to” error.</li>
-<li>If found, it proceeds to the relocation step.</li>
-</ul>
+search the symbol definition in other object files and libraries. If not
+found, it results in “undefined reference to” error. If found, it
+proceeds to the relocation step.</p>
 </div><div class="column" style="width:25%;">
 <p><strong>Relocation</strong></p>
 <p>The linker assigns memory addresses to the sections.</p>
