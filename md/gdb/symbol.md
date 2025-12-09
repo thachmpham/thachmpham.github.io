@@ -298,44 +298,29 @@ Relationships to other sections.
 :::
 ::::::::::::::
 
-The below program calls functions puts and sleep, which are defined in the dynamic library libc.so. So, these functions appears in the .dynsym section.
 
 :::::::::::::: {.columns}
-::: {.column width=45%}
+::: {.column width=60%}
 
-```c
-#include <stdio.h>
-#include <unistd.h>
-
-int main(int argc, char** argv)
-{
-    puts("hello");
-    sleep(1);
-    return 0;
-}
-```
+Use readelf to print dynamic symbols in file.
 
 ```sh
-$ gcc main.c -o main
+$ readelf --wide --dyn-syms /usr/bin/ls
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+    86: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND mempcpy@GLIBC_2.2.5 (3)
+    87: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memmove@GLIBC_2.2.5 (3)
+   118: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND free@GLIBC_2.2.5 (3)
+   120: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND malloc@GLIBC_2.2.5 (3)
 ```
 
 :::
-::: {.column width=55%}
+::: {.column width=40%}
 
-```sh
-$ readelf --dyn-syms main
+<br>
 
-Symbol table '.dynsym' contains 8 entries:
-   Num:    Value          Size Type    Bind   Vis      Ndx Name
-     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
-     1: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND _[...]@GLIBC_2.34 (2)
-     2: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterT[...]
-     3: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND puts@GLIBC_2.2.5 (3)
-     4: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
-     5: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMC[...]
-     6: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sleep@GLIBC_2.2.5 (3)
-     7: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND [...]@GLIBC_2.2.5 (3)
-```
+Explain the output.
+
+- Functions memcpy, memove, free, malloc are the functions defined in the external library libc.so, not in the program. So they appear in the dynamic symbol table for runtime linker to resolve at runtime.
 
 :::
 ::::::::::::::
@@ -346,19 +331,28 @@ Symbol table '.dynsym' contains 8 entries:
 The .plt (procedure linkage table) section contains functions that helps program calls functions in dynamic libraries without knowing their actual memory addresses.  
 The .got (global offset table) section contains the memory addresses of functions located in dynamic libraries.
 
+:::::::::::::: {.columns}
+::: {.column width=35%}
+
 Interaction between .plt and .got.
 
-:::::::::::::: {.columns}
-::: {.column width=30%}
+**First call.**  
+When program calls puts, the call goes to puts@plt. Because the symbol is not resolved yet, the plt redirects to runtime linker to:
 
+- Look up the address of puts in libc.so.
+- Call puts once.
+- Write the resolved address to .got.
+
+**Later calls.**  
+Function puts@put simply read the resolved address from .got and jump directly to the real puts function.
 
 :::
-::: {.column width=70%}
+::: {.column width=65%}
 
 ```go
                                             ┌──────────────────┐                                  
 ┌──────────┐    ┌──────────────────────┐    │   ┌───────────┐  │   ┌─────────────────────────────┐
-│ main()   │    │.plt                  │    │   │.got       │  │   │ld.so                        │
+│ main()   │    │.plt                  │    │   │.got       │  │   │ runtime linker              │
 │          │    |──────────────────────|    │   |───────────|  │   |─────────────────────────────|
 │   puts()─┼────┼► puts@plt()          │    │   │           │  └───┼─►_dl_runtime_resolve()      │
 │          │    │    find puts in .got─┼────┼──►│           │      │    find puts                │
@@ -371,6 +365,92 @@ Interaction between .plt and .got.
 :::
 ::::::::::::::
 
+:::::::::::::: {.columns}
+::: {.column width=40%}
+
+Sample: Examine the .plt and .got.
+
+```c
+#include <stdio.h>
+
+int main(int argc, char** argv)
+{
+    puts("hello");    
+    return 0;
+}
+```
+
+Use '-fcf-protection=none' to place puts@plt to .plt instead of .plt.sec.
+
+```sh
+$ gcc -fcf-protection=none main.c -o main
+```
+
+Trace the call flow: puts@plt() to puts().
+
+```sh
+(gdb) start
+(gdb) break puts@plt
+Breakpoint 2 at 0x555555555030
+(gdb) break puts
+Breakpoint 3 at 0x7ffff7e08e50
+(gdb) continue
+Breakpoint 2, 0x0000555555555030 in puts@plt ()
+(gdb) continue
+Breakpoint 3, __GI__IO_puts (str=0x555555556004 "hello")
+```
+
+:::
+::: {.column width=60%}
+
+Check address of puts@plt(). It is function resides in .plt section.
+```sh
+(gdb) info address puts@plt
+Symbol "puts@plt" is at 0x555555555030 in a file compiled without debugging.
+
+(gdb) info symbol 0x555555555030
+puts@plt in section .plt of /root/demo/main
+```
+
+Disassemble puts@plt(). It jumps to address 0x555555557fd0 that is an entry in .got.
+```sh
+(gdb) disassemble 0x555555555030
+   0x0000555555555030 <+0>:     jmp    *0x2f9a(%rip)    # 0x555555557fd0 <puts@got.plt>
+   0x0000555555555036 <+6>:     push   $0x0
+   0x000055555555503b <+11>:    jmp    0x555555555020
+
+(gdb) info symbol 0x555555557fd0
+puts@got[plt] in section .got of /root/demo/main
+```
+
+Examine the .got entry. It stores address of function puts() in libc.so.
+```sh
+(gdb) x/a 0x555555557fd0
+0x555555557fd0 <puts@got.plt>:  0x7ffff7e08e50 <__GI__IO_puts>
+
+(gdb) info symbol 0x7ffff7e08e50
+puts in section .text of /lib/x86_64-linux-gnu/libc.so.6
+```
+
+:::
+::::::::::::::
+
+Illustrate the process memory mappings.
+```go
+            file     main                                     file      main                          file     libc.so
+            section  .plt                                     section  .got                           section  .text
+            function puts@plt()                                                                       function puts
+
+┌────────────────────┬─────────────────────┐      ┌────────────────┬────────────────┐      ┌────────────────┬────────────────┐
+│ address            │ value               │      │ address        │     value      │      │ address        │     value      │
+┼────────────────────┼─────────────────────┤      ┼────────────────┼────────────────┤      ┼────────────────┼────────────────┤
+│ 0x0000555555555030 │ jump  0x555555557fd0┼───┐  │                │                │  ┌───┼►0x7ffff7e08e50 │ endbr64        │
+│                    │                     │   │  │                │                │  │   │                │                │
+│ 0x0000555555555036 │ push  $0x0          │   └──┼►0x555555557fd0 │ 0x7ffff7e08e50─┼──┘   │ 0x7ffff7e08e54 │ push   %r14    │
+│                    │                     │      │                │                │      │                │                │
+│ 0x000055555555503b │ jmp   0x555555555020│      │                │                │      │ 0x7ffff7e08e56 │ push   %r13    │
+└────────────────────┴─────────────────────┘      └────────────────┴────────────────┘      └────────────────┴────────────────┘
+```
 
 # 1. Usage
 ## 1.1. Data Type
