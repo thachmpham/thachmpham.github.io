@@ -14,7 +14,6 @@ convert_markdown_to_html() {
         --include-in-header ${workspace}/bin/header.html \
         --include-after-body ${workspace}/bin/footer.html \
         --highlight-style zenburn \
-        --filter pandoc-plantuml \
         --table-of-contents \
         --standalone \
         --mathml \
@@ -91,14 +90,14 @@ pandoc --from markdown --to html \
 # generate_post gdb-multithread
 
 # generate_post gdb/variable
-# generate_post gdb/memory
+generate_post gdb/memory
 # generate_post gdb/pretty-printer
 # generate_post gdb/breakpoint
 # generate_post gdb/catchpoint
 # generate_post gdb/watchpoint
 # generate_post gdb/gdbserver
 # generate_post gdb/tracepoint
-generate_post gdb/symbol
+# generate_post gdb/symbol
 # generate_post gdb/debuginfo
 # generate_post gdb/local_remote_binary
 # generate_post gdb/signal

@@ -2,6 +2,225 @@
 title: "GDB: Memory"
 ---
 
+# 1. Stack
+
+:::::::::::::: {.columns}
+::: {.column width=33%}
+
+**Definition**  
+The stack is a per-thread memory region, meaning each thread has its own stack that is not shared with others.
+
+:::
+::: {.column width=33%}
+
+**Movement**  
+On each function call, the stack grows downward from high address to low address.
+It shrinks when function returns
+
+:::
+::: {.column width=33%}
+
+**Contents**  
+Stores local variables and saved registers, such as the previous %rbp, and the return address (or the next instruction).
+
+:::
+::::::::::::::
+
+## 1.1. Stack Pointer
+The stack pointer (rsp) always points to the current top of the stack. The push/pop, call/ret instructions will adjust %rsp.
+
+### 1.1.1. Push & Pop
+The push instruction put a value onto the stack. The pop instruction remove a value from the stack. Register rsp automatically moves to the top of the stack.
+
+:::::::::::::: {.columns}
+::: {.column width=40%}
+
+File main.s
+```asm
+.section .text
+.global _start
+
+.text
+_start:
+    movabs  $0xabcdabcdabcdabcd, %rax
+    push    %rax
+
+    movabs  $0x1234123412341234, %rax
+    push    %rax
+
+    movq    $60, %rax     # syscall: exit
+    xorq    %rdi, %rdi    # exit code 0
+    syscall
+```
+
+Build.
+```sh
+as main.s -o main.o
+ld main.o -o main
+```
+
+Debug.
+```sh
+(gdb) file main
+(gdb) break _start
+(gdb) run
+Breakpoint 1, 0x0000000000401000 in _start ()
+```
+
+:::
+::: {.column width=60%}
+
+Monitor the stack through instructions.
+```sh
+(gdb) disassemble
+Dump of assembler code for function _start:
+=> 0x0000000000401000 <+0>:     movabs $0xabcdabcdabcdabcd,%rax
+   0x000000000040100a <+10>:    push   %rax
+   0x000000000040100b <+11>:    movabs $0x1234123412341234,%rax
+   0x0000000000401015 <+21>:    push   %rax
+   0x0000000000401016 <+22>:    mov    $0x3c,%rax
+   0x000000000040101d <+29>:    xor    %rdi,%rdi
+   0x0000000000401020 <+32>:    syscall
+
+(gdb) while 1
+> x/4gx $rsp
+> x/i $rip
+> nexti
+> end
+```
+
+```sh
+0x7fffffffe700: 0x0000000000000001      0x00007fffffffe9ab
+0x7fffffffe710: 0x0000000000000000      0x00007fffffffe9bc
+
+=> 0x401000 <_start>:   movabs $0xabcdabcdabcdabcd,%rax
+=> 0x40100a <_start+10>:        push   %rax
+0x7fffffffe6f8: 0xabcdabcdabcdabcd      0x0000000000000001
+0x7fffffffe708: 0x00007fffffffe9ab      0x0000000000000000
+
+=> 0x40100b <_start+11>:        movabs $0x1234123412341234,%rax
+=> 0x401015 <_start+21>:        push   %rax
+0x7fffffffe6f0: 0x1234123412341234      0xabcdabcdabcdabcd
+0x7fffffffe700: 0x0000000000000001      0x00007fffffffe9ab
+```
+
+:::
+::::::::::::::
+
+Changes of the stack.
+```go
+┌───────────────┬───────────────────┐        ┌───────────────┬───────────────────┐        ┌───────────────┬───────────────────┐
+│   address     │       value       │        │   address     │       value       │        │   address     │       value       │
+├───────────────┼───────────────────┤        ├───────────────┼───────────────────┤        ├───────────────┼───────────────────┤
+│               │                   │        │               │                   │        │               │                   │
+│               │                   │ push   │               │                   │ push   │0x7fffffffe6f0 │ 0x1234123412341234│
+│               │                   │ ─────► │0x7fffffffe6f8 │ 0xabcdabcdabcdabcd│ ─────► │0x7fffffffe6f8 │ 0xabcdabcdabcdabcd│
+│0x7fffffffe700 │ 0x0000000000000001│        │0x7fffffffe700 │ 0x0000000000000001│        │0x7fffffffe700 │ 0x0000000000000001│
+│0x7fffffffe708 │ 0x00007fffffffe9ab│        │0x7fffffffe708 │ 0x00007fffffffe9ab│        │0x7fffffffe708 │ 0x00007fffffffe9ab│
+│0x7fffffffe710 │ 0x0000000000000000│        │0x7fffffffe710 │ 0x0000000000000000│        │0x7fffffffe710 │ 0x0000000000000000│
+│0x7fffffffe718 │ 0x00007fffffffe9bc│        │0x7fffffffe718 │ 0x00007fffffffe9bc│        │0x7fffffffe718 │ 0x00007fffffffe9bc│
+└───────────────┴───────────────────┘        └───────────────┴───────────────────┘        └───────────────┴───────────────────┘
+```
+
+### 1.1.2. Call & Ret
+The call instruction pushes the address of the next instruction (rip) onto the stack then jump to the target function. This address is also called the return address.  
+The ret instruction pops the return address from the stack to the instruction pointer (rip) and continues execution at that address.
+
+:::::::::::::: {.columns}
+::: {.column width=40%}
+
+File main.s
+```asm
+.section .text
+.global _start
+
+_start:    
+    mov     $5, %rdi    # x = 5
+    mov     $7, %rsi    # y = 7
+    call    sum         # sum(x, y)
+
+    mov     $60, %rax   # syscall: exit
+    xor     %rdi, %rdi  # exit code 0
+    syscall
+
+# add two integers
+sum:
+    add     %rsi, %rdi  # x += y
+    mov     %rdi, %rax  # rax = x
+    ret
+```
+
+```sh
+as main.s -o main.o
+ld main.o -o main
+```
+
+```sh
+(gdb) file main
+(gdb) break _start
+(gdb) run
+Breakpoint 1, 0x0000000000401000 in _start ()
+```
+
+:::
+::: {.column width=60%}
+
+Monitor the stack through instructions.
+```sh
+(gdb) disassemble
+Dump of assembler code for function _start:
+=> 0x0000000000401000 <+0>:     mov    $0x5,%rdi
+   0x0000000000401007 <+7>:     mov    $0x7,%rsi
+   0x000000000040100e <+14>:    call   0x40101f <sum>
+   0x0000000000401013 <+19>:    mov    $0x3c,%rax
+   0x000000000040101a <+26>:    xor    %rdi,%rdi
+   0x000000000040101d <+29>:    syscall
+
+(gdb) while 1
+> x/4gx $rsp
+> x/i $rip
+> stepi
+> end
+```
+
+```sh
+0x7fffffffe700: 0x0000000000000001      0x00007fffffffe9ab
+0x7fffffffe710: 0x0000000000000000      0x00007fffffffe9bc
+
+=> 0x40100e <_start+14>:        call   0x40101f <sum>
+0x7fffffffe6f8: 0x0000000000401013      0x0000000000000001
+0x7fffffffe708: 0x00007fffffffe9ab      0x0000000000000000
+
+=> 0x401025 <sum+6>:    ret    
+0x7fffffffe700: 0x0000000000000001      0x00007fffffffe9ab
+0x7fffffffe710: 0x0000000000000000      0x00007fffffffe9bc
+```
+
+:::
+::::::::::::::
+
+Changes of the stack.
+```go
+┌───────────────┬───────────────────┐        ┌───────────────┬───────────────────┐        ┌───────────────┬───────────────────┐
+│   address     │       value       │        │   address     │       value       │        │   address     │       value       │
+├───────────────┼───────────────────┤        ├───────────────┼───────────────────┤        ├───────────────┼───────────────────┤
+│               │                   │        │               │                   │        │               │                   │
+│               │                   │ call   │               │                   │ ret    │               │                   │
+│               │                   │ ─────► │0x7fffffffe6f8 │ 0x0000000000401013│ ─────► │               │                   │
+│0x7fffffffe700 │ 0x0000000000000001│        │0x7fffffffe700 │ 0x0000000000000001│        │0x7fffffffe700 │ 0x0000000000000001│
+│0x7fffffffe708 │ 0x00007fffffffe9ab│        │0x7fffffffe708 │ 0x00007fffffffe9ab│        │0x7fffffffe708 │ 0x00007fffffffe9ab│
+│0x7fffffffe710 │ 0x0000000000000000│        │0x7fffffffe710 │ 0x0000000000000000│        │0x7fffffffe710 │ 0x0000000000000000│
+│0x7fffffffe718 │ 0x00007fffffffe9bc│        │0x7fffffffe718 │ 0x00007fffffffe9bc│        │0x7fffffffe718 │ 0x00007fffffffe9bc│
+└───────────────┴───────────────────┘        └───────────────┴───────────────────┘        └───────────────┴───────────────────┘
+```
+
+- The call instruction pushes $rip 0x0000000000401013 to the stack then jump to the sum function.
+- After finish the sum function, it pops 0x0000000000401013 from the stack then jump to this address.
+
+## 1.2. Base Pointer
+The base pointer (rbp) points to the base of the current stack frame. It remains fixed throughout the function, allowing compiler to use its stable position to generate offsets for local variables and parameter.
+
+# GDB
 ## Find Memory
 :::::::::::::: {.columns}
 ::: {.column width=60%}
