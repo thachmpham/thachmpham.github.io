@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>GDB: Memory</title>
+  <title>Memory</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -95,7 +95,7 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">GDB: Memory</h1>
+<h1 class="title">Memory</h1>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -488,8 +488,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb25-1"><a href="#
 <p>Examine arguments and local variables.</p>
 <div class="sourceCode" id="cb26"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/-6wx</span> <span class="va">$rbp</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5d0:</span> 0xffffe5f0      0x00007fff      0x5555517c      0x00005555</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5e0:</span> 0xffffe708      0x00007fff</span></code></pre></div>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5b8:</span> 0x22222222      0x11111111      0xaaaaaaaa      0xbbbbbbbb</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5c8:</span> 0xcccccccc      0xdddddddd</span></code></pre></div>
 <p>Examine parent’s $rip and $rbp.</p>
 <div class="sourceCode" id="cb27"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/2a</span> <span class="va">$rbp</span></span>

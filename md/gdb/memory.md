@@ -1,5 +1,5 @@
 ---
-title: "GDB: Memory"
+title: "Memory"
 ---
 
 # 1. Stack
@@ -443,8 +443,8 @@ Breakpoint 1, 0x0000555555555153 in func ()
 Examine arguments and local variables.
 ```sh
 (gdb) x/-6wx $rbp
-0x7fffffffe5d0: 0xffffe5f0      0x00007fff      0x5555517c      0x00005555
-0x7fffffffe5e0: 0xffffe708      0x00007fff
+0x7fffffffe5b8: 0x22222222      0x11111111      0xaaaaaaaa      0xbbbbbbbb
+0x7fffffffe5c8: 0xcccccccc      0xdddddddd
 ```
 
 Examine parent's $rip and $rbp.
