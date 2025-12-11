@@ -124,7 +124,7 @@ Changes of the stack.
 
 ### 1.1.2. Call & Ret
 The call instruction pushes the address of the next instruction (rip) onto the stack then jump to the target function. This address is also called the return address.  
-The ret instruction pops the return address from the stack to the instruction pointer (rip) and continues execution at that address.
+The ret instruction pops the return address from the stack and jump to this address.
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
@@ -214,11 +214,265 @@ Changes of the stack.
 └───────────────┴───────────────────┘        └───────────────┴───────────────────┘        └───────────────┴───────────────────┘
 ```
 
-- The call instruction pushes $rip 0x0000000000401013 to the stack then jump to the sum function.
-- After finish the sum function, it pops 0x0000000000401013 from the stack then jump to this address.
+- The call instruction pushes $rip 0x0000000000401013 to the stack, and jump to the sum function.
+- The ret instruction pops 0x0000000000401013 from the stack, and then jump to this address.
 
 ## 1.2. Base Pointer
-The base pointer (rbp) points to the base of the current stack frame. It remains fixed throughout the function, allowing compiler to use its stable position to generate offsets for local variables and parameter.
+The base pointer (rbp) stores the start address of the function stack frame. It remains fixed throughout the function, allowing compiler to use its stable position to generate offsets for local variables and parameter.
+
+### 1.2.1. Prolog & Epilog
+
+:::::::::::::: {.columns}
+::: {.column width=40%}
+
+When calling a new C/C++ function, prolog is the compiler-generated code that sets up the stack frame for the new function.
+
+When leaving a C/C++ function, epilog is the compiler-generated code that restores the parent's stack frame and jump back to parent function.
+
+Example: parent_func calls child_func.
+```c
+parent_func() {
+    child_func()
+}
+
+child_func() {
+
+}
+```
+
+:::
+::: {.column width=60%}
+
+```asm
+<parent_func>:
+call    child_func  # save parent next instruction address (rip) to stack,
+                    # jump to child_func.
+```
+
+```asm
+<child_func>:
+                    # prolog
+push   %rbp         # save parent base pointer (rbp) to stack.
+mov    %rsp, %rbp   # move current base pointer to top of stack (rsp).
+
+...                 # function body
+
+                    # epilog
+pop    %rbp         # restore parent base pointer from stack.
+ret                 # restore parent next instruction address from stack,
+                    # jump to this instruction (parent_func).
+```
+
+:::
+::::::::::::::
+
+Changes of the stack on prolog and epilog.
+```go
+        ┌───────────┐              ┌───────────┐             ┌───────────┐             ┌───────────┐
+        │   stack   │              │   stack   │             │   stack   │             │   stack   │
+$rbp ─┐ ├───────────┤              ├───────────┤    $rbp ─┐  ├───────────┤    $rbp ──┐ ├───────────┤
+      │ │           │              │           │          │  │           │           │ │           │
+      │ │           │              │           │          │  │           │           │ │           │
+      │ │           │              │           │          │  │           │           │ │           │
+      │ │           │  parent_func │           │          └─►│parent $rbp│           │ │           │
+      │ │           │  call        │parent $rip│             │parent $rip│           │ │           │
+      └─┼►          │  child_func  │           │   prolog    │           │  epilog   └─┼►          │
+        │           │ ───────────► │           │ ──────────► │           │ ──────────► │           │
+        └───────────┘              └───────────┘             └───────────┘             └───────────┘
+```
+
+### 1.2.2. Arguments & Local Variables
+
+Local variables locates on the stack for each function call. Their addresses are based on negative offsets from the base pointer rbp.
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+```c
+int a, b, c;
+a = 1;
+b = 2;
+c = 3;
+```
+
+:::
+::: {.column width=50%}
+
+```asm
+
+movl   $0x1,-0xc(%rbp)  ; a at $rbp-0xc
+movl   $0x2,-0x8(%rbp)  ; b at $rbp-0x8
+movl   $0x3,-0x4(%rbp)  ; c at $rbp-0x4
+```
+
+:::
+::::::::::::::
+
+When the parent function calls the child function, the arguments are saved in the registers rdi, rsi, rdx, rcx, r8, and r9.
+If more than 6 arguments, the extra arguments are saved on the stack.  
+Inside the child function, it reads the registers and saves the arguments into its stack frame. The argument addresses in the stack frame are based on the base pointer rbp.
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+```c
+parent_function()
+{
+    child_func(a, b);
+}
+
+int child_func(int a, int b)
+{
+}
+```
+
+:::
+::: {.column width=50%}
+
+```asm
+<parent_function>:
+  mov    -0x8(%rbp),%esi    # save a to $esi
+  mov    -0xc(%rbp),%edi    # save b to $edi
+  call   child_func
+
+<child_func>:
+  mov    %edi,-0x14(%rbp)   # save $edi to stack, b
+  mov    %esi,-0x18(%rbp)   # save $esi to stack, a
+```
+
+:::
+::::::::::::::
+
+### 1.2.3. Examine Stack Frame
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+The call instruction pushes the parent $rip onto the stack. The function prologue pushes the parent $rip onto the stack.
+Function arguments and local variables are stored in the stack, and their addresses are based on the current RBP.
+
+As you can see in the figure:
+
+- From current $rbp, go backward to lower addresses, we reach the local variables and arguments.
+- From current $rbp, go forward to higher addresses, we reach the parent $rbp and $rip.
+
+So, in GDB:
+
+- To examine arguments and local variables, examine backward from RBP, eg: `x/-6wx $rbp`.
+- To examine the parent’s RBP and RIP, examine forward from RBP: `x/2a $rbp`.
+
+:::
+::: {.column width=50%}
+
+```go
+───low address  ┌────────────────┐
+                │     stack      │
+                ├────────────────┤
+                │                │
+                │ ...            │
+                │ argument       │
+                │ argument       │
+                │ ...            │
+                │ local variable │
+                │ local variable │
+      $rbp ───► │ parent $rbp    │
+                │ parent %rip    │
+                │                │
+──high address  └────────────────┘
+```
+
+:::
+::::::::::::::
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+File main.c
+```c
+int func(int argv1, int argv2)
+{
+    int a = 0xaaaaaaaa;
+    int b = 0xbbbbbbbb;
+    int c = 0xcccccccc;
+    int d = 0xdddddddd;
+    return 0;
+}
+
+int main(int argc, char** argv)
+{
+    func(0x11111111, 0x22222222);
+    return 0;
+}
+```
+
+```sh
+$ gcc main.c -o main
+```
+
+Run under GDB.
+
+```sh
+(gdb) file main
+(gdb) disassemble func
+   0x0000000000001129 <+0>:     endbr64 
+   0x000000000000112d <+4>:     push   %rbp
+   0x000000000000112e <+5>:     mov    %rsp,%rbp
+   0x0000000000001131 <+8>:     mov    %edi,-0x14(%rbp)
+   0x0000000000001134 <+11>:    mov    %esi,-0x18(%rbp)
+   0x0000000000001137 <+14>:    movl   $0xaaaaaaaa,-0x10(%rbp)
+   0x000000000000113e <+21>:    movl   $0xbbbbbbbb,-0xc(%rbp)
+   0x0000000000001145 <+28>:    movl   $0xcccccccc,-0x8(%rbp)
+   0x000000000000114c <+35>:    movl   $0xdddddddd,-0x4(%rbp)
+   0x0000000000001153 <+42>:    mov    $0x0,%eax
+   0x0000000000001158 <+47>:    pop    %rbp
+   0x0000000000001159 <+48>:    ret
+```
+
+:::
+::: {.column width=50%}
+
+Set breakpoint at the end of func.
+
+```sh
+(gdb) break *func+42
+
+(gdb) run
+Breakpoint 1, 0x0000555555555153 in func ()
+```
+
+Examine arguments and local variables.
+```sh
+(gdb) x/-6wx $rbp
+0x7fffffffe5d0: 0xffffe5f0      0x00007fff      0x5555517c      0x00005555
+0x7fffffffe5e0: 0xffffe708      0x00007fff
+```
+
+Examine parent's $rip and $rbp.
+```sh
+(gdb) x/2a $rbp
+0x7fffffffe5d0: 0x7fffffffe5f0  0x55555555517c <main+34>
+```
+
+Illustrate the stack.
+```go
+                         ┌────────────────┐               
+                         │     stack      │               
+          ───low address ├────────────────┤               
+                         │                │               
+          0x7fffffffe5b8 │ 0x22222222     │ argument argv2
+                         │ 0x11111111     │ argument argv2
+                         │ 0xaaaaaaaa     │ variable a    
+                         │ 0xbbbbbbbb     │ variable b    
+          0x7fffffffe5c8 │ 0xcccccccc     │ variable c    
+                         │ 0xdddddddd     │ variable d    
+$rbp ───► 0x7fffffffe5d0 │ 0x7fffffffe5f0 │ parent $rbp   
+                         │ 0x55555555517c │ parent $rip   
+                         │                │               
+          ──high address └────────────────┘               
+```
+
+:::
+::::::::::::::
 
 # GDB
 ## Find Memory
