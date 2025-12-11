@@ -348,8 +348,8 @@ int child_func(int a, int b)
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-The call instruction pushes the parent $rip onto the stack. The function prologue pushes the parent $rip onto the stack.
-Function arguments and local variables are stored in the stack, and their addresses are based on the current RBP.
+The call instruction pushes the parent $rip onto the stack. Prolog pushes the parent $rip onto the stack.
+Function arguments and local variables are stored in the stack, and their addresses are based on the current $rbp.
 
 As you can see in the figure:
 
