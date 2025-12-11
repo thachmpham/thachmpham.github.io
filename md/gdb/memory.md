@@ -343,7 +343,7 @@ int child_func(int a, int b)
 :::
 ::::::::::::::
 
-### 1.2.3. Examine Stack Frame
+## 1.3. Examine Stack Frame
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
