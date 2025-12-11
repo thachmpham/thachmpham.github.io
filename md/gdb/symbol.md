@@ -1,5 +1,5 @@
 ---
-title: "The Symbol Table"
+title: "Symbol Table"
 ---
 
 

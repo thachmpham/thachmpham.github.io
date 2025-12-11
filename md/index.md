@@ -8,7 +8,7 @@ subtitle: "*thachmpham.github.io*"
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-- [The Symbol Table](/html/gdb/symbol.html)
+- [Symbol Table](/html/gdb/symbol.html)
 - [Memory](/html/gdb/memory.html)
 
 :::
