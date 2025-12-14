@@ -1,5 +1,5 @@
 ---
-title:  "A Software Developer Notebook"
+title:  "A Developer Notebook"
 subtitle: "*thachmpham.github.io*"
 ---
 
