@@ -99,54 +99,61 @@
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
-<li><a href="#symbol-table" id="toc-symbol-table">Symbol Table</a></li>
-<li><a href="#static-symbol-table" id="toc-static-symbol-table">Static
-Symbol Table</a>
+<li><a href="#symbol-table" id="toc-symbol-table"><span
+class="toc-section-number">1</span> Symbol Table</a></li>
+<li><a href="#static-symbol-table" id="toc-static-symbol-table"><span
+class="toc-section-number">2</span> Static Symbol Table</a>
 <ul>
-<li><a href="#section-header" id="toc-section-header">Section
-Header</a></li>
-<li><a href="#section-.strtab" id="toc-section-.strtab">Section
-.strtab</a></li>
-<li><a href="#section-.symtab" id="toc-section-.symtab">Section
-.symtab</a></li>
+<li><a href="#section-header" id="toc-section-header"><span
+class="toc-section-number">2.1</span> Section Header</a></li>
+<li><a href="#section-.strtab" id="toc-section-.strtab"><span
+class="toc-section-number">2.2</span> Section .strtab</a></li>
+<li><a href="#section-.symtab" id="toc-section-.symtab"><span
+class="toc-section-number">2.3</span> Section .symtab</a></li>
 </ul></li>
-<li><a href="#dynamic-symbol-table"
-id="toc-dynamic-symbol-table">Dynamic Symbol Table</a>
+<li><a href="#dynamic-symbol-table" id="toc-dynamic-symbol-table"><span
+class="toc-section-number">3</span> Dynamic Symbol Table</a>
 <ul>
-<li><a href="#section-.dynsym" id="toc-section-.dynsym">Section
-.dynsym</a></li>
-<li><a href="#section-rela.plt" id="toc-section-rela.plt">Section
-rela.plt</a></li>
+<li><a href="#section-.dynsym" id="toc-section-.dynsym"><span
+class="toc-section-number">3.1</span> Section .dynsym</a></li>
+<li><a href="#section-rela.plt" id="toc-section-rela.plt"><span
+class="toc-section-number">3.2</span> Section rela.plt</a></li>
 <li><a href="#sections-.plt-and-.got"
-id="toc-sections-.plt-and-.got">Sections .plt and .got</a>
+id="toc-sections-.plt-and-.got"><span
+class="toc-section-number">3.3</span> Sections .plt and .got</a>
 <ul>
-<li><a href="#runtime-linking" id="toc-runtime-linking">Runtime
-Linking</a></li>
-<li><a href="#before-first-call" id="toc-before-first-call">Before First
-Call</a></li>
-<li><a href="#after-first-call" id="toc-after-first-call">After First
-Call</a></li>
+<li><a href="#runtime-linking" id="toc-runtime-linking"><span
+class="toc-section-number">3.3.1</span> Runtime Linking</a></li>
+<li><a href="#before-first-call" id="toc-before-first-call"><span
+class="toc-section-number">3.3.2</span> Before First Call</a></li>
+<li><a href="#after-first-call" id="toc-after-first-call"><span
+class="toc-section-number">3.3.3</span> After First Call</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#decode-symbol-table" id="toc-decode-symbol-table">Decode
-Symbol Table</a>
+<li><a href="#decode-symbol-table" id="toc-decode-symbol-table"><span
+class="toc-section-number">4</span> Decode Symbol Table</a>
 <ul>
-<li><a href="#struct-elf64_sym" id="toc-struct-elf64_sym">Struct
-Elf64_Sym</a></li>
-<li><a href="#decode-.symtab" id="toc-decode-.symtab">Decode
-.symtab</a></li>
+<li><a href="#struct-elf64_sym" id="toc-struct-elf64_sym"><span
+class="toc-section-number">4.1</span> Struct Elf64_Sym</a></li>
+<li><a href="#decode-.symtab" id="toc-decode-.symtab"><span
+class="toc-section-number">4.2</span> Decode .symtab</a></li>
 </ul></li>
-<li><a href="#gdb" id="toc-gdb">GDB</a>
+<li><a href="#gdb" id="toc-gdb"><span
+class="toc-section-number">5</span> GDB</a>
 <ul>
-<li><a href="#add-symbols" id="toc-add-symbols">Add Symbols</a></li>
+<li><a href="#add-symbols" id="toc-add-symbols"><span
+class="toc-section-number">5.1</span> Add Symbols</a></li>
 <li><a href="#add-symbols-to-mmap-regions"
-id="toc-add-symbols-to-mmap-regions">Add Symbols to mmap
+id="toc-add-symbols-to-mmap-regions"><span
+class="toc-section-number">5.2</span> Add Symbols to mmap
 Regions</a></li>
 </ul></li>
-<li><a href="#references" id="toc-references">References</a></li>
+<li><a href="#references" id="toc-references"><span
+class="toc-section-number">6</span> References</a></li>
 </ul>
 </nav>
-<h1 id="symbol-table">Symbol Table</h1>
+<h1 data-number="1" id="symbol-table"><span
+class="header-section-number">1</span> Symbol Table</h1>
 <p>A symbol represents a function, a global variable, and other named
 entity. The symbol table is a section that maps symbols to their
 addresses. Two typical symbol tables are the .symtab and .dynsym
@@ -173,7 +180,8 @@ program execution.</li>
 </div>
 </div>
 <p><br></p>
-<h1 id="static-symbol-table">Static Symbol Table</h1>
+<h1 data-number="2" id="static-symbol-table"><span
+class="header-section-number">2</span> Static Symbol Table</h1>
 <p>The .symtab section is associated with the section header and the
 .strtab section.</p>
 <ul>
@@ -197,7 +205,8 @@ resides in one section.</li>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc main.c <span class="at">-o</span> main</span></code></pre></div>
-<h2 id="section-header">Section Header</h2>
+<h2 data-number="2.1" id="section-header"><span
+class="header-section-number">2.1</span> Section Header</h2>
 <p>The section header provides a list of sections and their details in
 the ELF file.</p>
 <div class="columns">
@@ -236,7 +245,8 @@ bytes.</p></li>
 </ul>
 </div>
 </div>
-<h2 id="section-.strtab">Section .strtab</h2>
+<h2 data-number="2.2" id="section-.strtab"><span
+class="header-section-number">2.2</span> Section .strtab</h2>
 <p>The .strtab section is a string table that contains null-terminated
 strings. Each string represents a symbol name.</p>
 <div class="columns">
@@ -262,7 +272,8 @@ section.</p></li>
 </ul>
 </div>
 </div>
-<h2 id="section-.symtab">Section .symtab</h2>
+<h2 data-number="2.3" id="section-.symtab"><span
+class="header-section-number">2.3</span> Section .symtab</h2>
 <p>The .symtab section contains all symbols in the file.</p>
 <div class="columns">
 <div class="column" style="width:60%;">
@@ -290,7 +301,8 @@ located at 0x1141.</p></li>
 </ul>
 </div>
 </div>
-<h1 id="dynamic-symbol-table">Dynamic Symbol Table</h1>
+<h1 data-number="3" id="dynamic-symbol-table"><span
+class="header-section-number">3</span> Dynamic Symbol Table</h1>
 <p>External symbol is a symbol whose address cannot be determined at
 compile time, but must be resolved at runtime.</p>
 <p>.dynsym is the section that contains the list of external symbols.
@@ -317,7 +329,8 @@ symbol addresses.</li>
 <p>Use ‘-fcf-protection=none’ to place puts@plt to .plt instead of
 .plt.sec.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-fcf-protection</span><span class="op">=</span>none main.c <span class="at">-o</span> main</span></code></pre></div>
-<h2 id="section-.dynsym">Section .dynsym</h2>
+<h2 data-number="3.1" id="section-.dynsym"><span
+class="header-section-number">3.1</span> Section .dynsym</h2>
 <p>The .dynsym section is a string table that contains null-terminated
 strings. Each string represents a external symbol name.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--string-dump</span><span class="op">=</span>.dynstr main</span>
@@ -325,7 +338,8 @@ strings. Each string represents a external symbol name.</p>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">...</span>  </span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">[</span>    22]  puts</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  ...</span></code></pre></div>
-<h2 id="section-rela.plt">Section rela.plt</h2>
+<h2 data-number="3.2" id="section-rela.plt"><span
+class="header-section-number">3.2</span> Section rela.plt</h2>
 <p>rela.plt is a relocation table that tells the runtime linker how to
 find addresses for external symbols.</p>
 <div class="columns">
@@ -345,8 +359,10 @@ bytes.</p></li>
 </ul>
 </div>
 </div>
-<h2 id="sections-.plt-and-.got">Sections .plt and .got</h2>
-<h3 id="runtime-linking">Runtime Linking</h3>
+<h2 data-number="3.3" id="sections-.plt-and-.got"><span
+class="header-section-number">3.3</span> Sections .plt and .got</h2>
+<h3 data-number="3.3.1" id="runtime-linking"><span
+class="header-section-number">3.3.1</span> Runtime Linking</h3>
 <p>The .plt section contains a small executable code to find addresses
 for external symbols. The .got section holds the external symbol
 addresses.</p>
@@ -386,7 +402,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> environment LD_LIBRARY_PATH .</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="fu">file</span> main</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">start</span></span></code></pre></div>
-<h3 id="before-first-call">Before First Call</h3>
+<h3 data-number="3.3.2" id="before-first-call"><span
+class="header-section-number">3.3.2</span> Before First Call</h3>
 <p>In the main function, when we call puts, it goes to puts@plt.</p>
 <div class="sourceCode" id="cb13"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span> main</span>
@@ -452,7 +469,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555557fd8:</span> 0x0     0x0</span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555557fe8:</span> 0x0     0x0</span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555557ff8:</span> 0x0</span></code></pre></div>
-<h3 id="after-first-call">After First Call</h3>
+<h3 data-number="3.3.3" id="after-first-call"><span
+class="header-section-number">3.3.3</span> After First Call</h3>
 <p>Continue program, it will stop when libc.so loaded.</p>
 <div class="sourceCode" id="cb19"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">continue</span></span>
@@ -497,8 +515,10 @@ class="sourceCode go"><code class="sourceCode go"><span id="cb22-1"><a href="#cb
 <span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>│                    │                     │      │                │                │      │                │                │</span>
 <span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>│ <span class="bn">0x000055555555503b</span> │ jmp   <span class="bn">0x555555555020</span>│      │                │                │      │ <span class="bn">0x7ffff7e08e56</span> │ push   <span class="op">%</span>r13    │</span>
 <span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>└────────────────────┴─────────────────────┘      └────────────────┴────────────────┘      └────────────────┴────────────────┘</span></code></pre></div>
-<h1 id="decode-symbol-table">Decode Symbol Table</h1>
-<h2 id="struct-elf64_sym">Struct Elf64_Sym</h2>
+<h1 data-number="4" id="decode-symbol-table"><span
+class="header-section-number">4</span> Decode Symbol Table</h1>
+<h2 data-number="4.1" id="struct-elf64_sym"><span
+class="header-section-number">4.1</span> Struct Elf64_Sym</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>The entry in symbol table is represented by the Elf64_Sym struct in
@@ -548,7 +568,8 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a h
 <span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>            <span class="bu">hex</span>(shndx), <span class="bu">hex</span>(value), <span class="bu">hex</span>(size))</span>
 <span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>hex_to_elf64_sym(sys.argv[<span class="dv">1</span>])</span></code></pre></div>
-<h2 id="decode-.symtab">Decode .symtab</h2>
+<h2 data-number="4.2" id="decode-.symtab"><span
+class="header-section-number">4.2</span> Decode .symtab</h2>
 <p>We will extract and decode .symtab of the below program.</p>
 <div class="columns">
 <div class="column" style="width:40%;">
@@ -691,8 +712,10 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb33-1"><a href="#
 </table>
 </div>
 </div>
-<h1 id="gdb">GDB</h1>
-<h2 id="add-symbols">Add Symbols</h2>
+<h1 data-number="5" id="gdb"><span
+class="header-section-number">5</span> GDB</h1>
+<h2 data-number="5.1" id="add-symbols"><span
+class="header-section-number">5.1</span> Add Symbols</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>GDB supports adding symbol table from file, it is useful when
@@ -732,7 +755,9 @@ except sections specified addresses explicitly.</li>
 </ul>
 </div>
 </div>
-<h2 id="add-symbols-to-mmap-regions">Add Symbols to mmap Regions</h2>
+<h2 data-number="5.2" id="add-symbols-to-mmap-regions"><span
+class="header-section-number">5.2</span> Add Symbols to mmap
+Regions</h2>
 <p>In the below example, we will add symbols for memory regions that is
 loaded by mmap.</p>
 <div class="columns">
@@ -908,7 +933,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb48-1"><a href="#
 <span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="va">$2</span> = 0xc1a0c1a0</span></code></pre></div>
 </div>
 </div>
-<h1 id="references">References</h1>
+<h1 data-number="6" id="references"><span
+class="header-section-number">6</span> References</h1>
 <ul>
 <li><a href="https://man7.org/linux/man-pages/man5/elf.5.html">ELF
 Manual</a></li>

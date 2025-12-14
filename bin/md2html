@@ -17,6 +17,7 @@ convert_markdown_to_html() {
         --table-of-contents \
         --standalone \
         --mathml \
+        --number-sections \
         --output=${output_file} \
         ${input_file}
 }

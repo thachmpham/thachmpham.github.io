@@ -99,39 +99,49 @@
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
-<li><a href="#stack" id="toc-stack">1. Stack</a>
+<li><a href="#stack" id="toc-stack"><span
+class="toc-section-number">1</span> 1. Stack</a>
 <ul>
-<li><a href="#stack-pointer" id="toc-stack-pointer">1.1. Stack
-Pointer</a>
+<li><a href="#stack-pointer" id="toc-stack-pointer"><span
+class="toc-section-number">1.1</span> 1.1. Stack Pointer</a>
 <ul>
-<li><a href="#push-pop" id="toc-push-pop">1.1.1. Push &amp; Pop</a></li>
-<li><a href="#call-ret" id="toc-call-ret">1.1.2. Call &amp; Ret</a></li>
+<li><a href="#push-pop" id="toc-push-pop"><span
+class="toc-section-number">1.1.1</span> 1.1.1. Push &amp; Pop</a></li>
+<li><a href="#call-ret" id="toc-call-ret"><span
+class="toc-section-number">1.1.2</span> 1.1.2. Call &amp; Ret</a></li>
 </ul></li>
-<li><a href="#base-pointer" id="toc-base-pointer">1.2. Base Pointer</a>
+<li><a href="#base-pointer" id="toc-base-pointer"><span
+class="toc-section-number">1.2</span> 1.2. Base Pointer</a>
 <ul>
-<li><a href="#prolog-epilog" id="toc-prolog-epilog">1.2.1. Prolog &amp;
+<li><a href="#prolog-epilog" id="toc-prolog-epilog"><span
+class="toc-section-number">1.2.1</span> 1.2.1. Prolog &amp;
 Epilog</a></li>
 <li><a href="#arguments-local-variables"
-id="toc-arguments-local-variables">1.2.2. Arguments &amp; Local
+id="toc-arguments-local-variables"><span
+class="toc-section-number">1.2.2</span> 1.2.2. Arguments &amp; Local
 Variables</a></li>
 </ul></li>
-<li><a href="#examine-stack-frame" id="toc-examine-stack-frame">1.3.
-Examine Stack Frame</a></li>
+<li><a href="#examine-stack-frame" id="toc-examine-stack-frame"><span
+class="toc-section-number">1.3</span> 1.3. Examine Stack Frame</a></li>
 </ul></li>
-<li><a href="#gdb" id="toc-gdb">GDB</a>
+<li><a href="#gdb" id="toc-gdb"><span
+class="toc-section-number">2</span> GDB</a>
 <ul>
-<li><a href="#find-memory" id="toc-find-memory">Find Memory</a></li>
-<li><a href="#export-memory" id="toc-export-memory">Export
-Memory</a></li>
-<li><a href="#import-memory" id="toc-import-memory">Import
-Memory</a></li>
-<li><a href="#memory-regions" id="toc-memory-regions">Memory
-Regions</a></li>
-<li><a href="#core-dump" id="toc-core-dump">Core Dump</a></li>
+<li><a href="#find-memory" id="toc-find-memory"><span
+class="toc-section-number">2.1</span> Find Memory</a></li>
+<li><a href="#export-memory" id="toc-export-memory"><span
+class="toc-section-number">2.2</span> Export Memory</a></li>
+<li><a href="#import-memory" id="toc-import-memory"><span
+class="toc-section-number">2.3</span> Import Memory</a></li>
+<li><a href="#memory-regions" id="toc-memory-regions"><span
+class="toc-section-number">2.4</span> Memory Regions</a></li>
+<li><a href="#core-dump" id="toc-core-dump"><span
+class="toc-section-number">2.5</span> Core Dump</a></li>
 </ul></li>
 </ul>
 </nav>
-<h1 id="stack">1. Stack</h1>
+<h1 data-number="1" id="stack"><span
+class="header-section-number">1</span> 1. Stack</h1>
 <div class="columns">
 <div class="column" style="width:33%;">
 <p><strong>Definition</strong><br />
@@ -147,10 +157,12 @@ Stores local variables and saved registers, such as the previous %rbp,
 and the return address (or the next instruction).</p>
 </div>
 </div>
-<h2 id="stack-pointer">1.1. Stack Pointer</h2>
+<h2 data-number="1.1" id="stack-pointer"><span
+class="header-section-number">1.1</span> 1.1. Stack Pointer</h2>
 <p>The stack pointer (rsp) always points to the current top of the
 stack. The push/pop, call/ret instructions will adjust %rsp.</p>
-<h3 id="push-pop">1.1.1. Push &amp; Pop</h3>
+<h3 data-number="1.1.1" id="push-pop"><span
+class="header-section-number">1.1.1</span> 1.1.1. Push &amp; Pop</h3>
 <p>The push instruction put a value onto the stack. The pop instruction
 remove a value from the stack. Register rsp automatically moves to the
 top of the stack.</p>
@@ -223,7 +235,8 @@ class="sourceCode asm"><code class="sourceCode fasm"><span id="cb1-1"><a href="#
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>│<span class="bn">0x7fffffffe710</span> │ <span class="bn">0x0000000000000000</span>│        │<span class="bn">0x7fffffffe710</span> │ <span class="bn">0x0000000000000000</span>│        │<span class="bn">0x7fffffffe710</span> │ <span class="bn">0x0000000000000000</span>│</span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>│<span class="bn">0x7fffffffe718</span> │ <span class="bn">0x00007fffffffe9bc</span>│        │<span class="bn">0x7fffffffe718</span> │ <span class="bn">0x00007fffffffe9bc</span>│        │<span class="bn">0x7fffffffe718</span> │ <span class="bn">0x00007fffffffe9bc</span>│</span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>└───────────────┴───────────────────┘        └───────────────┴───────────────────┘        └───────────────┴───────────────────┘</span></code></pre></div>
-<h3 id="call-ret">1.1.2. Call &amp; Ret</h3>
+<h3 data-number="1.1.2" id="call-ret"><span
+class="header-section-number">1.1.2</span> 1.1.2. Call &amp; Ret</h3>
 <p>The call instruction pushes the address of the next instruction (rip)
 onto the stack then jump to the target function. This address is also
 called the return address.<br />
@@ -305,12 +318,15 @@ and jump to the sum function.</li>
 <li>The ret instruction pops 0x0000000000401013 from the stack, and then
 jump to this address.</li>
 </ul>
-<h2 id="base-pointer">1.2. Base Pointer</h2>
+<h2 data-number="1.2" id="base-pointer"><span
+class="header-section-number">1.2</span> 1.2. Base Pointer</h2>
 <p>The base pointer (rbp) stores the start address of the function stack
 frame. It remains fixed throughout the function, allowing compiler to
 use its stable position to generate offsets for local variables and
 parameter.</p>
-<h3 id="prolog-epilog">1.2.1. Prolog &amp; Epilog</h3>
+<h3 data-number="1.2.1" id="prolog-epilog"><span
+class="header-section-number">1.2.1</span> 1.2.1. Prolog &amp;
+Epilog</h3>
 <div class="columns">
 <div class="column" style="width:40%;">
 <p>When calling a new C/C++ function, prolog is the compiler-generated
@@ -358,7 +374,8 @@ class="sourceCode go"><code class="sourceCode go"><span id="cb16-1"><a href="#cb
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>      └─┼►          │  child_func  │           │   prolog    │           │  epilog   └─┼►          │</span>
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        │           │ ───────────► │           │ ──────────► │           │ ──────────► │           │</span>
 <span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        └───────────┘              └───────────┘             └───────────┘             └───────────┘</span></code></pre></div>
-<h3 id="arguments-local-variables">1.2.2. Arguments &amp; Local
+<h3 data-number="1.2.2" id="arguments-local-variables"><span
+class="header-section-number">1.2.2</span> 1.2.2. Arguments &amp; Local
 Variables</h3>
 <p>Local variables locates on the stack for each function call. Their
 addresses are based on negative offsets from the base pointer rbp.</p>
@@ -404,7 +421,8 @@ class="sourceCode asm"><code class="sourceCode fasm"><span id="cb20-1"><a href="
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span>    <span class="op">%</span><span class="kw">esi</span><span class="op">,-</span><span class="bn">0x18</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>   <span class="op">#</span> save <span class="op">$</span>esi to stack<span class="op">,</span> a</span></code></pre></div>
 </div>
 </div>
-<h2 id="examine-stack-frame">1.3. Examine Stack Frame</h2>
+<h2 data-number="1.3" id="examine-stack-frame"><span
+class="header-section-number">1.3</span> 1.3. Examine Stack Frame</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>The call instruction pushes the parent $rip onto the stack. Prolog
@@ -512,8 +530,10 @@ class="sourceCode go"><code class="sourceCode go"><span id="cb28-1"><a href="#cb
 <span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>          ──high address └────────────────┘               </span></code></pre></div>
 </div>
 </div>
-<h1 id="gdb">GDB</h1>
-<h2 id="find-memory">Find Memory</h2>
+<h1 data-number="2" id="gdb"><span
+class="header-section-number">2</span> GDB</h1>
+<h2 data-number="2.1" id="find-memory"><span
+class="header-section-number">2.1</span> Find Memory</h2>
 <div class="columns">
 <div class="column" style="width:60%;">
 <p>Search memory for the sequence of bytes.</p>
@@ -552,7 +572,8 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a h
 <span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a><span class="co">#                  (int)b         , padding      , (short)a</span></span>
 <span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>(gdb) find <span class="op">&amp;</span>b, <span class="op">+</span><span class="dv">8</span>, (<span class="bu">int</span>)<span class="bn">0x0a0b0c0d</span>, (short)<span class="bn">0x0000</span>, (short)<span class="bn">0x0102</span></span></code></pre></div>
 <p><br></p>
-<h2 id="export-memory">Export Memory</h2>
+<h2 data-number="2.2" id="export-memory"><span
+class="header-section-number">2.2</span> Export Memory</h2>
 <p>Dump the contents of memory from start_addr to end_addr, or the value
 of expr, to file.</p>
 <div class="sourceCode" id="cb32"><pre
@@ -574,7 +595,8 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a h
 <span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>$ hexdump <span class="op">-</span>C val.<span class="bu">hex</span> </span>
 <span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="dv">00000000</span>  <span class="dv">68</span> <span class="dv">65</span> <span class="dv">6</span><span class="er">c</span> <span class="dv">6</span><span class="er">c</span> <span class="dv">6</span><span class="er">f</span> <span class="dv">2</span><span class="er">d</span> <span class="dv">68</span> <span class="dv">65</span>  <span class="dv">6</span><span class="er">c</span> <span class="dv">6</span><span class="er">c</span> <span class="dv">6</span><span class="er">f</span> <span class="dv">00</span>              <span class="op">|</span>hello<span class="op">-</span>hello.<span class="op">|</span></span></code></pre></div>
 <p><br></p>
-<h2 id="import-memory">Import Memory</h2>
+<h2 data-number="2.3" id="import-memory"><span
+class="header-section-number">2.3</span> Import Memory</h2>
 <p>Restore the contents of file filename into memory.</p>
 <div class="sourceCode" id="cb34"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">restore</span> file <span class="pp">[</span><span class="ss">binary</span><span class="pp">]</span> offset start end</span></code></pre></div>
@@ -596,7 +618,8 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a h
 <span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>(gdb) restore mem.<span class="bu">hex</span> binary <span class="dv">0</span>          <span class="bn">0xffffffffec88</span></span>
 <span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>Start address <span class="kw">is</span> greater than length of binary <span class="bu">file</span> mem.<span class="bu">hex</span>.</span></code></pre></div>
 <p><br></p>
-<h2 id="memory-regions">Memory Regions</h2>
+<h2 data-number="2.4" id="memory-regions"><span
+class="header-section-number">2.4</span> Memory Regions</h2>
 <p>List memory regions.</p>
 <div class="sourceCode" id="cb36"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">info</span> proc mapping</span></code></pre></div>
@@ -636,7 +659,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb39-1"><a href="#
 <span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="ex">0xfffff7ff5000:</span> <span class="st">&quot;hello world\n&quot;</span></span>
 <span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div>
 <p><br></p>
-<h2 id="core-dump">Core Dump</h2>
+<h2 data-number="2.5" id="core-dump"><span
+class="header-section-number">2.5</span> Core Dump</h2>
 <p>Generate the core dump.</p>
 <div class="sourceCode" id="cb40"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">gcore</span> <span class="pp">[</span><span class="ss">file</span><span class="pp">]</span></span></code></pre></div>
