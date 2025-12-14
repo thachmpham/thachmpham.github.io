@@ -411,6 +411,181 @@ Illustrate the call flow.
 └────────────────────┴─────────────────────┘      └────────────────┴────────────────┘      └────────────────┴────────────────┘
 ```
 
+# Decode Symbol Table
+## Struct Elf64_Sym
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+The entry in symbol table is represented by the Elf64_Sym struct in x86_64 or Elf32_Sym struct in x86.
+
+```sh
+$ pahole elf64_sym
+```
+
+```c
+struct elf64_sym {          // offset size
+  Elf64_Word      st_name;  // 0      4
+  unsigned char   st_info;  // 4      1
+  unsigned char   st_other; // 5      1
+  Elf64_Half      st_shndx; // 6      2
+  Elf64_Addr      st_value; // 8      8
+  Elf64_Xword     st_size;  // 16     8
+  /* size: 24 bytes */
+};
+```
+
+:::
+::: {.column width=50%}
+
+Relationships to other sections.
+
+- Field st_index represents the symbol name, which points to index of an entry in the string table .strtab.
+- Field st_shndx represents the section that , which points to index of an entry in the section header table.
+
+```go
+┌────────────┐       ┌────────────┐        ┌────────────┐
+│   .strtab  │       │  .symtab   │        │  section   |
+┼────────────┤       ┼────────────┤        ┼────────────┤
+│   index ◄──┼───────┼─ st_index  │   ┌────┼► index     │
+│            │       │            │   │    │            │
+│   value    │       │  st_shndx ─┼───┘    │  .....     │
+└────────────┘       └────────────┘        └────────────┘
+```
+
+:::
+::::::::::::::
+
+To decode struct elf64_sym from raw hex memory, we use python script hex_to_elf64_sym.py.
+
+```python
+import struct
+import sys
+
+FMT_ELF64_SYM = "=IBBHQQ"
+
+def hex_to_elf64_sym(hex_str: str):
+    data = bytes.fromhex(hex_str)
+    name, info, other, shndx, value, size = struct.unpack(FMT_ELF64_SYM, data)
+    print("name info other shndx value size")
+    print(hex(name), hex(info), hex(other),
+            hex(shndx), hex(value), hex(size))
+
+hex_to_elf64_sym(sys.argv[1])
+```
+
+## Decode .symtab
+
+We will extract and decode .symtab of the below program.
+
+:::::::::::::: {.columns}
+::: {.column width=40%}
+
+File main.c
+
+```c
+int g_int = 0xcafebabe;
+
+int sum(int x, int y)
+{
+    return x + y;
+}
+
+int main(int argc, char** argv)
+{
+    int a = 1, b = 2;
+    int s = sum(a, b);
+    return 0;
+}
+```
+
+```sh
+$ gcc main.c -o main
+```
+
+:::
+::: {.column width=60%}
+
+List sections.
+
+```sh
+$ readelf --section-headers main
+[Nr] Name       Type        Address          Off    Size   ES Flg Lk Inf Al
+[14] .text      PROGBITS    0000000000001040 001040 00013b 00  AX  0   0 16
+[23] .data      PROGBITS    0000000000004000 003000 000014 00  WA  0   0  8
+[26] .symtab    SYMTAB      0000000000000000 003048 000378 18     27  18  8
+[27] .strtab    STRTAB      0000000000000000 0033c0 0001d3 00      0   0  1
+```
+
+Print string table .strtab.
+
+```sh
+$ readelf --string-dump=.strtab main
+[   134]  g_int
+[   163]  sum
+[   187]  main
+```
+
+:::
+::::::::::::::
+
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+Extract section .symtab, which starts at offset 0x003048, size of 0x000378. The elf64_sym struct has a size of 24 bytes, so use option 'xxd -c 24' to display 24 bytes each line.
+
+```sh
+$ xxd -p -g 1 -c 24 -s 0x003048 -l 0x000378 main
+340100001100170010400000000000000400000000000000
+6301000012000e0029110000000000001800000000000000
+8701000012000e0041110000000000003a00000000000000
+```
+
+Decode the first line.
+
+```sh
+$ hex_to_elf64_sym.py 340100001100170010400000000000000400000000000000
+  name     info    other  shndx   value     size
+['0x134', '0x11', '0x0', '0x17', '0x4010', '0x4']
+```
+
+Decode the second line.
+
+```sh
+$ hex_to_elf64_sym.py 6301000012000e0029110000000000001800000000000000
+  name     info    other  shndx  value     size
+['0x163', '0x12', '0x0', '0xe', '0x1129', '0x18']
+```
+
+:::
+::: {.column width=50%}
+
+Explain the outputs.
+
+| First Line     |    |                                 |
+|:-----------|:--------|:----------------------------------------|
+| st_name    | 0x134   | Index 0x134 in .strtab: g_int   |
+| st_info    | 0x11    | Type object, global          |
+| st_other   | 0x0     | Visibility default                    |
+| st_shndx   | 0x17    | Section 0x17 = 23 = .data              |
+| st_value   | 0x4010  | Offset 0x4010                         |
+| st_size    | 0x4     | Size of 4 bytes                           |
+
+
+| Second Line      |    |                                 |
+|:-----------|:--------|:----------------------------------------|
+| st_name    | 0x163   | Index 0x136 in .strtab: sum |
+| st_info    | 0x11    | Type func, global          |
+| st_other   | 0x0     | Visibility default                     |
+| st_shndx   | 0x17    | Section: 0xe = 14 = .text              |
+| st_value   | 0x4010  | Offset 0x1129                         |
+| st_size    | 0x18    | Size of 24 bytes |
+
+:::
+::::::::::::::
+
+
 # GDB
 ## Add Symbols
 :::::::::::::: {.columns}
@@ -683,3 +858,6 @@ $2 = 0xc1a0c1a0
 :::
 ::::::::::::::
 
+
+# References
+- [ELF Manual](https://man7.org/linux/man-pages/man5/elf.5.html)

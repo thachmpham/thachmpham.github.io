@@ -128,6 +128,14 @@ Call</a></li>
 Call</a></li>
 </ul></li>
 </ul></li>
+<li><a href="#decode-symbol-table" id="toc-decode-symbol-table">Decode
+Symbol Table</a>
+<ul>
+<li><a href="#struct-elf64_sym" id="toc-struct-elf64_sym">Struct
+Elf64_Sym</a></li>
+<li><a href="#decode-.symtab" id="toc-decode-.symtab">Decode
+.symtab</a></li>
+</ul></li>
 <li><a href="#gdb" id="toc-gdb">GDB</a>
 <ul>
 <li><a href="#add-symbols" id="toc-add-symbols">Add Symbols</a></li>
@@ -135,6 +143,7 @@ Call</a></li>
 id="toc-add-symbols-to-mmap-regions">Add Symbols to mmap
 Regions</a></li>
 </ul></li>
+<li><a href="#references" id="toc-references">References</a></li>
 </ul>
 </nav>
 <h1 id="symbol-table">Symbol Table</h1>
@@ -488,6 +497,200 @@ class="sourceCode go"><code class="sourceCode go"><span id="cb22-1"><a href="#cb
 <span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>│                    │                     │      │                │                │      │                │                │</span>
 <span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>│ <span class="bn">0x000055555555503b</span> │ jmp   <span class="bn">0x555555555020</span>│      │                │                │      │ <span class="bn">0x7ffff7e08e56</span> │ push   <span class="op">%</span>r13    │</span>
 <span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>└────────────────────┴─────────────────────┘      └────────────────┴────────────────┘      └────────────────┴────────────────┘</span></code></pre></div>
+<h1 id="decode-symbol-table">Decode Symbol Table</h1>
+<h2 id="struct-elf64_sym">Struct Elf64_Sym</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>The entry in symbol table is represented by the Elf64_Sym struct in
+x86_64 or Elf32_Sym struct in x86.</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> pahole elf64_sym</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> elf64_sym <span class="op">{</span>          <span class="co">// offset size</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  Elf64_Word      st_name<span class="op">;</span>  <span class="co">// 0      4</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">unsigned</span> <span class="dt">char</span>   st_info<span class="op">;</span>  <span class="co">// 4      1</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">unsigned</span> <span class="dt">char</span>   st_other<span class="op">;</span> <span class="co">// 5      1</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  Elf64_Half      st_shndx<span class="op">;</span> <span class="co">// 6      2</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  Elf64_Addr      st_value<span class="op">;</span> <span class="co">// 8      8</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  Elf64_Xword     st_size<span class="op">;</span>  <span class="co">// 16     8</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* size: 24 bytes */</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<p>Relationships to other sections.</p>
+<ul>
+<li>Field st_index represents the symbol name, which points to index of
+an entry in the string table .strtab.</li>
+<li>Field st_shndx represents the section that , which points to index
+of an entry in the section header table.</li>
+</ul>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode go"><code class="sourceCode go"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>┌────────────┐       ┌────────────┐        ┌────────────┐</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>│   <span class="op">.</span>strtab  │       │  <span class="op">.</span>symtab   │        │  section   <span class="op">|</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>┼────────────┤       ┼────────────┤        ┼────────────┤</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>│   index ◄──┼───────┼─ st_index  │   ┌────┼► index     │</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>│            │       │            │   │    │            │</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>│   value    │       │  st_shndx ─┼───┘    │  <span class="op">.....</span>     │</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>└────────────┘       └────────────┘        └────────────┘</span></code></pre></div>
+</div>
+</div>
+<p>To decode struct elf64_sym from raw hex memory, we use python script
+hex_to_elf64_sym.py.</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> struct</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>FMT_ELF64_SYM <span class="op">=</span> <span class="st">&quot;=IBBHQQ&quot;</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hex_to_elf64_sym(hex_str: <span class="bu">str</span>):</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> <span class="bu">bytes</span>.fromhex(hex_str)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    name, info, other, shndx, value, size <span class="op">=</span> struct.unpack(FMT_ELF64_SYM, data)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;name info other shndx value size&quot;</span>)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="bu">hex</span>(name), <span class="bu">hex</span>(info), <span class="bu">hex</span>(other),</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>            <span class="bu">hex</span>(shndx), <span class="bu">hex</span>(value), <span class="bu">hex</span>(size))</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>hex_to_elf64_sym(sys.argv[<span class="dv">1</span>])</span></code></pre></div>
+<h2 id="decode-.symtab">Decode .symtab</h2>
+<p>We will extract and decode .symtab of the below program.</p>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p>File main.c</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> g_int <span class="op">=</span> <span class="bn">0xcafebabe</span><span class="op">;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> argv<span class="op">)</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> b <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> s <span class="op">=</span> sum<span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc main.c <span class="at">-o</span> main</span></code></pre></div>
+</div><div class="column" style="width:60%;">
+<p>List sections.</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--section-headers</span> main</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Nr]</span> Name       Type        Address          Off    Size   ES Flg Lk Inf Al</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[14]</span> .text      PROGBITS    0000000000001040 001040 00013b 00  AX  0   0 16</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[23]</span> .data      PROGBITS    0000000000004000 003000 000014 00  WA  0   0  8</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[26]</span> .symtab    SYMTAB      0000000000000000 003048 000378 18     27  18  8</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="ex">[27]</span> .strtab    STRTAB      0000000000000000 0033c0 0001d3 00      0   0  1</span></code></pre></div>
+<p>Print string table .strtab.</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--string-dump</span><span class="op">=</span>.strtab main</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span>   134]  g_int</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>[   163]  <span class="er">sum</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span>   187]  main</span></code></pre></div>
+</div>
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Extract section .symtab, which starts at offset 0x003048, size of
+0x000378. The elf64_sym struct has a size of 24 bytes, so use option
+‘xxd -c 24’ to display 24 bytes each line.</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> xxd <span class="at">-p</span> <span class="at">-g</span> 1 <span class="at">-c</span> 24 <span class="at">-s</span> 0x003048 <span class="at">-l</span> 0x000378 main</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="ex">340100001100170010400000000000000400000000000000</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="ex">6301000012000e0029110000000000001800000000000000</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="ex">8701000012000e0041110000000000003a00000000000000</span></span></code></pre></div>
+<p>Decode the first line.</p>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> hex_to_elf64_sym.py 340100001100170010400000000000000400000000000000</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">name</span>     info    other  shndx   value     size</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[</span><span class="st">&#39;0x134&#39;</span><span class="ex">,</span> <span class="st">&#39;0x11&#39;</span>, <span class="st">&#39;0x0&#39;</span>, <span class="st">&#39;0x17&#39;</span>, <span class="st">&#39;0x4010&#39;</span>, <span class="st">&#39;0x4&#39;</span>]</span></code></pre></div>
+<p>Decode the second line.</p>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> hex_to_elf64_sym.py 6301000012000e0029110000000000001800000000000000</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">name</span>     info    other  shndx  value     size</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[</span><span class="st">&#39;0x163&#39;</span><span class="ex">,</span> <span class="st">&#39;0x12&#39;</span>, <span class="st">&#39;0x0&#39;</span>, <span class="st">&#39;0xe&#39;</span>, <span class="st">&#39;0x1129&#39;</span>, <span class="st">&#39;0x18&#39;</span>]</span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<p>Explain the outputs.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">First Line</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">st_name</td>
+<td style="text-align: left;">0x134</td>
+<td style="text-align: left;">Index 0x134 in .strtab: g_int</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">st_info</td>
+<td style="text-align: left;">0x11</td>
+<td style="text-align: left;">Type object, global</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">st_other</td>
+<td style="text-align: left;">0x0</td>
+<td style="text-align: left;">Visibility default</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">st_shndx</td>
+<td style="text-align: left;">0x17</td>
+<td style="text-align: left;">Section 0x17 = 23 = .data</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">st_value</td>
+<td style="text-align: left;">0x4010</td>
+<td style="text-align: left;">Offset 0x4010</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">st_size</td>
+<td style="text-align: left;">0x4</td>
+<td style="text-align: left;">Size of 4 bytes</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Second Line</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">st_name</td>
+<td style="text-align: left;">0x163</td>
+<td style="text-align: left;">Index 0x136 in .strtab: sum</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">st_info</td>
+<td style="text-align: left;">0x11</td>
+<td style="text-align: left;">Type func, global</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">st_other</td>
+<td style="text-align: left;">0x0</td>
+<td style="text-align: left;">Visibility default</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">st_shndx</td>
+<td style="text-align: left;">0x17</td>
+<td style="text-align: left;">Section: 0xe = 14 = .text</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">st_value</td>
+<td style="text-align: left;">0x4010</td>
+<td style="text-align: left;">Offset 0x1129</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">st_size</td>
+<td style="text-align: left;">0x18</td>
+<td style="text-align: left;">Size of 24 bytes</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <h1 id="gdb">GDB</h1>
 <h2 id="add-symbols">Add Symbols</h2>
 <div class="columns">
@@ -495,16 +698,16 @@ class="sourceCode go"><code class="sourceCode go"><span id="cb22-1"><a href="#cb
 <p>GDB supports adding symbol table from file, it is useful when
 debugging code loaded by mmap.</p>
 <p>To add the symbols.</p>
-<div class="sourceCode" id="cb23"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">add-symbol-file</span> filename</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[-readnow</span><span class="kw">|</span><span class="ex">-readnever]</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[-o</span> offset]</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[textaddr]</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[-s</span> section addr…]</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">add-symbol-file</span> filename</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[-readnow</span><span class="kw">|</span><span class="ex">-readnever]</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[-o</span> offset]</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[textaddr]</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[-s</span> section addr…]</span></code></pre></div>
 <p>To remove symbols.</p>
-<div class="sourceCode" id="cb24"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">remove-symbol-file</span> filename</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">remove-symbol-file</span> <span class="at">-a</span> addr</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">remove-symbol-file</span> filename</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">remove-symbol-file</span> <span class="at">-a</span> addr</span></code></pre></div>
 </div><div class="column" style="width:50%;">
 <p>Parameters:</p>
 <ul>
@@ -535,62 +738,62 @@ loaded by mmap.</p>
 <div class="columns">
 <div class="column" style="width:60%;">
 <p>File main.c</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;sys/mman.h&gt;</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stddef.h&gt;</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;fcntl.h&gt;</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> fd <span class="op">=</span> open<span class="op">(</span><span class="st">&quot;math.o&quot;</span><span class="op">,</span> O_RDONLY<span class="op">);</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// load math.o to memory</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    mmap<span class="op">(</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>        NULL<span class="op">,</span> <span class="co">// let kernel choose start addr of region</span></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>        <span class="dv">4096</span><span class="op">,</span> <span class="co">// length of the region</span></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>        PROT_READ<span class="op">|</span>PROT_EXEC<span class="op">,</span> <span class="co">// protection mode</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>        MAP_PRIVATE<span class="op">,</span>         <span class="co">// visible mode</span></span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>        fd<span class="op">,</span>                  <span class="co">// file to load</span></span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>        <span class="dv">0</span>                    <span class="co">// offset in file</span></span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;sys/mman.h&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stddef.h&gt;</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;fcntl.h&gt;</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> fd <span class="op">=</span> open<span class="op">(</span><span class="st">&quot;math.o&quot;</span><span class="op">,</span> O_RDONLY<span class="op">);</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// load math.o to memory</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>    mmap<span class="op">(</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>        NULL<span class="op">,</span> <span class="co">// let kernel choose start addr of region</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>        <span class="dv">4096</span><span class="op">,</span> <span class="co">// length of the region</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>        PROT_READ<span class="op">|</span>PROT_EXEC<span class="op">,</span> <span class="co">// protection mode</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>        MAP_PRIVATE<span class="op">,</span>         <span class="co">// visible mode</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>        fd<span class="op">,</span>                  <span class="co">// file to load</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>        <span class="dv">0</span>                    <span class="co">// offset in file</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </div><div class="column" style="width:40%;">
 <p>File math.c</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> number1 <span class="op">=</span> <span class="bn">0xCAFEBABE</span><span class="op">;</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> number2 <span class="op">=</span> <span class="bn">0xC1A0C1A0</span><span class="op">;</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sub<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">-</span> y<span class="op">;</span></span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> number1 <span class="op">=</span> <span class="bn">0xCAFEBABE</span><span class="op">;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> number2 <span class="op">=</span> <span class="bn">0xC1A0C1A0</span><span class="op">;</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sub<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">-</span> y<span class="op">;</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Build.</p>
-<div class="sourceCode" id="cb27"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-c</span> math.c <span class="at">-o</span> math.o</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-g</span> main.c <span class="at">-o</span> main</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-c</span> math.c <span class="at">-o</span> math.o</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-g</span> main.c <span class="at">-o</span> main</span></code></pre></div>
 </div>
 </div>
 <div class="columns">
 <div class="column" style="width:60%;">
 <p>Sections in math.o.</p>
-<div class="sourceCode" id="cb28"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--section-headers</span> <span class="at">--wide</span> math.o</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Nr]</span> Name     Type        Address          Off    Size   ES Flg Lk Inf Al</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> 1] .text    PROGBITS    <span class="er">0000000000000000</span> <span class="ex">000040</span> 00002e 00  AX  0   0  1</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> 2] .data    PROGBITS    <span class="er">0000000000000000</span> <span class="ex">000070</span> 000008 00  WA  0   0  4</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--section-headers</span> <span class="at">--wide</span> math.o</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Nr]</span> Name     Type        Address          Off    Size   ES Flg Lk Inf Al</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> 1] .text    PROGBITS    <span class="er">0000000000000000</span> <span class="ex">000040</span> 00002e 00  AX  0   0  1</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> 2] .data    PROGBITS    <span class="er">0000000000000000</span> <span class="ex">000070</span> 000008 00  WA  0   0  4</span></code></pre></div>
 <p>Symbols in math.o.</p>
-<div class="sourceCode" id="cb29"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--symbols</span> math.o</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Num:</span>    Value          Size Type    Bind   Vis      Ndx Name</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">3:</span> 0000000000000000     4 OBJECT  GLOBAL DEFAULT    2 number1</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">4:</span> 0000000000000004     4 OBJECT  GLOBAL DEFAULT    2 number2</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">5:</span> 0000000000000000    24 FUNC    GLOBAL DEFAULT    1 sum</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">6:</span> 0000000000000018    22 FUNC    GLOBAL DEFAULT    1 sub</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--symbols</span> math.o</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Num:</span>    Value          Size Type    Bind   Vis      Ndx Name</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">3:</span> 0000000000000000     4 OBJECT  GLOBAL DEFAULT    2 number1</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">4:</span> 0000000000000004     4 OBJECT  GLOBAL DEFAULT    2 number2</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">5:</span> 0000000000000000    24 FUNC    GLOBAL DEFAULT    1 sum</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">6:</span> 0000000000000018    22 FUNC    GLOBAL DEFAULT    1 sub</span></code></pre></div>
 <ul>
 <li>Section .text locates at offset 0x40.</li>
 <li>Section .data locates at offset 0x70.</li>
@@ -600,40 +803,40 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb29-1"><a href="#
 </ul>
 </div><div class="column" style="width:40%;">
 <p>Illustrate math.o.</p>
-<div class="sourceCode" id="cb30"><pre
-class="sourceCode go"><code class="sourceCode go"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> ELF File Header     <span class="op">|</span> <span class="bn">0x00</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Program Headers     <span class="op">|</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">.</span>text Section       <span class="op">|</span> <span class="bn">0x40</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> ├── sum<span class="op">()</span>           <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x00</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> └── sub<span class="op">()</span>           <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x18</span></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">.</span>data Section       <span class="op">|</span> <span class="bn">0x70</span></span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> ├── number1         <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x00</span></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> └── number2         <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x04</span></span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Other Sections<span class="op">...</span>   <span class="op">|</span></span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Section Headers     <span class="op">|</span></span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode go"><code class="sourceCode go"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> ELF File Header     <span class="op">|</span> <span class="bn">0x00</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Program Headers     <span class="op">|</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">.</span>text Section       <span class="op">|</span> <span class="bn">0x40</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> ├── sum<span class="op">()</span>           <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x00</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> └── sub<span class="op">()</span>           <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x18</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">.</span>data Section       <span class="op">|</span> <span class="bn">0x70</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> ├── number1         <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x00</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> └── number2         <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x04</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Other Sections<span class="op">...</span>   <span class="op">|</span></span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Section Headers     <span class="op">|</span></span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span></code></pre></div>
 </div>
 </div>
 <div class="columns">
 <div class="column" style="width:60%;">
 <p>Start program.</p>
-<div class="sourceCode" id="cb31"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="fu">file</span> main</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">main.c:19</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="fu">file</span> main</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">main.c:19</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span></code></pre></div>
 <p>Print memory mappings.</p>
-<div class="sourceCode" id="cb32"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> proc mappings</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Start</span> Addr         End Addr   Size     Offset  Perms  objfile</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7ffff7ffa000</span>   0x7ffff7ffb000   0x1000   0x0     r-xp   math.o</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> proc mappings</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Start</span> Addr         End Addr   Size     Offset  Perms  objfile</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7ffff7ffa000</span>   0x7ffff7ffb000   0x1000   0x0     r-xp   math.o</span></code></pre></div>
 <p>When math.o is loaded into memory, the offsets of sections and
 symbols remain the same as in the ELF file. Once the memory address of
 the file is known, the addresses of sections and symbols can be
@@ -646,65 +849,70 @@ math.o:</p>
 </ul>
 </div><div class="column" style="width:40%;">
 <p>Illustrate memory.</p>
-<div class="sourceCode" id="cb33"><pre
-class="sourceCode go"><code class="sourceCode go"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Other Regions<span class="op">...</span>    <span class="op">|</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> math<span class="op">.</span>o              <span class="op">|</span> <span class="bn">0x7ffff7ffa000</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   <span class="op">.</span>text             <span class="op">|</span> <span class="bn">0x7ffff7ffa040</span></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   ├── sum<span class="op">()</span>         <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x00</span></span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   └── sub<span class="op">()</span>         <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x18</span></span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   <span class="op">.</span>data             <span class="op">|</span> <span class="bn">0x7ffff7ffa070</span></span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   ├── number1       <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x00</span></span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   └── number2       <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x40</span></span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Other Regions<span class="op">...</span>    <span class="op">|</span></span>
-<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre
+class="sourceCode go"><code class="sourceCode go"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Other Regions<span class="op">...</span>    <span class="op">|</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> math<span class="op">.</span>o              <span class="op">|</span> <span class="bn">0x7ffff7ffa000</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   <span class="op">.</span>text             <span class="op">|</span> <span class="bn">0x7ffff7ffa040</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   ├── sum<span class="op">()</span>         <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x00</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   └── sub<span class="op">()</span>         <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x18</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   <span class="op">.</span>data             <span class="op">|</span> <span class="bn">0x7ffff7ffa070</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   ├── number1       <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x00</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   └── number2       <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x40</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Other Regions<span class="op">...</span>    <span class="op">|</span></span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span></code></pre></div>
 </div>
 </div>
 <p>We need to add symbols in .text and .data of math.o, so we provide
 memory address of these sections to GDB.</p>
-<div class="sourceCode" id="cb34"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">add-symbol-file</span> math.o 0x7ffff7ffa040 <span class="at">-s</span> .data 0x7ffff7ffa070</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">add-symbol-file</span> math.o 0x7ffff7ffa040 <span class="at">-s</span> .data 0x7ffff7ffa070</span></code></pre></div>
 <p>Check the loaded files and sections.</p>
-<div class="sourceCode" id="cb35"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> files</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa040</span> <span class="at">-</span> 0x00007ffff7ffa06e is .text in /root/demo/math.o</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa070</span> <span class="at">-</span> 0x00007ffff7ffa078 is .data in /root/demo/math.o</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> files</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa040</span> <span class="at">-</span> 0x00007ffff7ffa06e is .text in /root/demo/math.o</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa070</span> <span class="at">-</span> 0x00007ffff7ffa078 is .data in /root/demo/math.o</span></code></pre></div>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Check the symbol addresses.</p>
-<div class="sourceCode" id="cb36"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> function sum</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa040</span>  sum</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> function sub</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa058</span>  sub</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> variable number1</span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa070</span>  number1</span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> variable number2</span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa074</span>  number2</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> function sum</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa040</span>  sum</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> function sub</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa058</span>  sub</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> variable number1</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa070</span>  number1</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> variable number2</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa074</span>  number2</span></code></pre></div>
 </div><div class="column" style="width:50%;">
 <p>After loaded symbols, we can print and call them through symbol
 names.</p>
-<div class="sourceCode" id="cb37"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">call</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span> <span class="fu">sum</span><span class="er">(</span><span class="ex">4,</span> 5<span class="kw">)</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="va">$3</span> = 9</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">call</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span> <span class="ex">sub</span><span class="er">(</span><span class="ex">4,</span> 5<span class="kw">)</span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="va">$5</span> = <span class="at">-1</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print/x</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span><span class="ex">number1</span></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span> = 0xcafebabe</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print/x</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span><span class="ex">number2</span></span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="va">$2</span> = 0xc1a0c1a0</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">call</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span> <span class="fu">sum</span><span class="er">(</span><span class="ex">4,</span> 5<span class="kw">)</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="va">$3</span> = 9</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">call</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span> <span class="ex">sub</span><span class="er">(</span><span class="ex">4,</span> 5<span class="kw">)</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="va">$5</span> = <span class="at">-1</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print/x</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span><span class="ex">number1</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span> = 0xcafebabe</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print/x</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span><span class="ex">number2</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="va">$2</span> = 0xc1a0c1a0</span></code></pre></div>
 </div>
 </div>
+<h1 id="references">References</h1>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/man5/elf.5.html">ELF
+Manual</a></li>
+</ul>
 <footer class="footer text-muted">
    <div align="center">
       <a href="/index.html"><b>Home</b></a>
