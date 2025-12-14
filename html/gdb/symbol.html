@@ -99,502 +99,201 @@
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
-<li><a href="#symbol-table" id="toc-symbol-table">1. Symbol Table</a>
+<li><a href="#symbol-table" id="toc-symbol-table">Symbol Table</a></li>
+<li><a href="#static-symbol-table" id="toc-static-symbol-table">Static
+Symbol Table</a>
 <ul>
-<li><a href="#struct-elf64_sym" id="toc-struct-elf64_sym">1.1. Struct
-Elf64_Sym</a></li>
-<li><a href="#static-symbol-table" id="toc-static-symbol-table">1.2.
-Static Symbol Table</a>
-<ul>
-<li><a href="#section-.symtab" id="toc-section-.symtab">1.2.1. Section
-.symtab</a></li>
-<li><a href="#decode-.symtab" id="toc-decode-.symtab">1.2.2. Decode
-.symtab</a></li>
-<li><a href="#readelf-.symtab" id="toc-readelf-.symtab">1.2.3. readelf
+<li><a href="#section-header" id="toc-section-header">Section
+Header</a></li>
+<li><a href="#section-.strtab" id="toc-section-.strtab">Section
+.strtab</a></li>
+<li><a href="#section-.symtab" id="toc-section-.symtab">Section
 .symtab</a></li>
 </ul></li>
-<li><a href="#dynamic-symbol-table" id="toc-dynamic-symbol-table">1.3.
-Dynamic Symbol Table</a>
+<li><a href="#dynamic-symbol-table"
+id="toc-dynamic-symbol-table">Dynamic Symbol Table</a></li>
+<li><a href="#gdb" id="toc-gdb">GDB</a>
 <ul>
-<li><a href="#section-.dynsym" id="toc-section-.dynsym">1.3.1. Section
-.dynsym</a></li>
-<li><a href="#sections-.plt-.got" id="toc-sections-.plt-.got">1.3.2.
-Sections .plt, .got</a></li>
-</ul></li>
-</ul></li>
-<li><a href="#gdb" id="toc-gdb">2. GDB</a>
-<ul>
-<li><a href="#add-symbols" id="toc-add-symbols">2.1. Add Symbols</a>
-<ul>
+<li><a href="#add-symbols" id="toc-add-symbols">Add Symbols</a></li>
 <li><a href="#add-symbols-to-mmap-regions"
-id="toc-add-symbols-to-mmap-regions">2.1.1. Add Symbols to mmap
+id="toc-add-symbols-to-mmap-regions">Add Symbols to mmap
 Regions</a></li>
-</ul></li>
 </ul></li>
 </ul>
 </nav>
-<h1 id="symbol-table">1. Symbol Table</h1>
+<h1 id="symbol-table">Symbol Table</h1>
 <p>A symbol represents a function, a global variable, and other named
-entities. The symbol table is the section that maps these symbols to
-their corresponding addresses.</p>
-<div class="columns">
-<div class="column" style="width:25%;">
-<p><strong>Creation</strong></p>
-<p>The compiler generates the symbol table when building object files,
-typically storing it in the .symtab and .dynsym sections.</p>
-<p>Symbols in .symtab have addresses fixed at build time. Symbols in
-.dynsym are resolved at runtime.</p>
-</div><div class="column" style="width:25%;">
-<p><strong>Symbol Resolution</strong></p>
-<p>If an object file refers to a symbol defined in another, compiler
-search the symbol definition in other object files and libraries. If not
-found, it results in “undefined reference to” error. If found, it
-proceeds to the relocation step.</p>
-</div><div class="column" style="width:25%;">
-<p><strong>Relocation</strong></p>
-<p>The linker assigns memory addresses to the sections.</p>
-<p>Address of symbols in .symtab is computed relative to the address of
-the section where it resides.</p>
-</div><div class="column" style="width:25%;">
-<p><strong>Runtime</strong></p>
-<p>The loader searches through the dynamic libraries to resolve the
-addresses of symbols in .dynsym.</p>
-<p>The resolved addresses are then stored in the .got section.</p>
-</div>
-</div>
-<h2 id="struct-elf64_sym">1.1. Struct Elf64_Sym</h2>
-<p>According to <a
-href="https://man7.org/linux/man-pages/man5/elf.5.html">man elf</a>,
-each entry in symbol table is represented by the Elf64_Sym or Elf32_Sym
-struct.</p>
+entity. The symbol table is a section that maps symbols to their
+addresses. Two typical symbol tables are the .symtab and .dynsym
+sections.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> pahole elf64_sym</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> elf64_sym <span class="op">{</span>          <span class="co">// offset size</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  Elf64_Word      st_name<span class="op">;</span>  <span class="co">// 0      4</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">unsigned</span> <span class="dt">char</span>   st_info<span class="op">;</span>  <span class="co">// 4      1</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">unsigned</span> <span class="dt">char</span>   st_other<span class="op">;</span> <span class="co">// 5      1</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  Elf64_Half      st_shndx<span class="op">;</span> <span class="co">// 6      2</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  Elf64_Addr      st_value<span class="op">;</span> <span class="co">// 8      8</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  Elf64_Xword     st_size<span class="op">;</span>  <span class="co">// 16     8</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* size: 24 bytes */</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>The .symtab section.</p>
+<ul>
+<li>Contains all symbols in the file.</li>
+<li>Used by the static linker at build time to resolve symbol references
+between object files and perform relocations.</li>
+<li>Can be stripped from the binary without affecting program
+execution.</li>
+</ul>
 </div><div class="column" style="width:50%;">
+<p>The .dynsym section.</p>
+<ul>
+<li>A subset of .symtab, contains only dynamic symbols.</li>
+<li>Used by dynamic linker at runtime to resolve external references to
+shared libraries.</li>
+<li>Cannot be stripped from the binary because it is required for
+program execution.</li>
+</ul>
+</div>
+</div>
 <p><br></p>
+<h1 id="static-symbol-table">Static Symbol Table</h1>
+<p>The .symtab section is associated with the section header and the
+.strtab section.</p>
+<ul>
+<li>Each symbol resides in a section described by the section
+header.</li>
+<li>Each symbol name is taken from the .strtab section.</li>
+</ul>
 <p><br></p>
-<table>
-<colgroup>
-<col style="width: 14%" />
-<col style="width: 85%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Field</th>
-<th style="text-align: left;"></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><code>st_name</code></td>
-<td style="text-align: left;">Symbol name</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>st_info</code></td>
-<td style="text-align: left;">Type, binding.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>st_other</code></td>
-<td style="text-align: left;">Visibility.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>st_shndx</code></td>
-<td style="text-align: left;">Section which the symbol resides</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>st_value</code></td>
-<td style="text-align: left;">Offset to the start of section.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>st_size</code></td>
-<td style="text-align: left;">Size.</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<h2 id="static-symbol-table">1.2. Static Symbol Table</h2>
-<h3 id="section-.symtab">1.2.1. Section .symtab</h3>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p>The .symtab section contains the static symbol table. The address of
-symbols in .symtab are resolved at building time.</p>
-<p>Relationships to other sections.</p>
-<ul>
-<li>Field st_index represents the symbol name, which points to index of
-an entry in the string table .strtab.</li>
-<li>Field st_shndx represents the section that , which points to index
-of an entry in the section header table.</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<div class="sourceCode" id="cb3"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>┌────────────┐       ┌────────────┐        ┌────────────┐</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>│   <span class="op">.</span>strtab  │       │  <span class="op">.</span>symtab   │        │  section   <span class="op">|</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>┼────────────┤       ┼────────────┤        ┼────────────┤</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>│   index ◄──┼───────┼─ st_index  │   ┌────┼► index     │</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>│            │       │            │   │    │            │</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>│   value    │       │  st_shndx ─┼───┘    │  <span class="op">.....</span>     │</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>└────────────┘       └────────────┘        └────────────┘</span></code></pre></div>
-</div>
-</div>
-<h3 id="decode-.symtab">1.2.2. Decode .symtab</h3>
-<div class="columns">
-<div class="column" style="width:40%;">
-<p>File main.c</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> g_int <span class="op">=</span> <span class="bn">0xcafebabe</span><span class="op">;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> argv<span class="op">)</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> b <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> s <span class="op">=</span> sum<span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc main.c <span class="at">-o</span> main</span></code></pre></div>
-</div><div class="column" style="width:60%;">
-<p>List sections.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--section-headers</span> main</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Nr]</span> Name       Type        Address          Off    Size   ES Flg Lk Inf Al</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[14]</span> .text      PROGBITS    0000000000001040 001040 00013b 00  AX  0   0 16</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[23]</span> .data      PROGBITS    0000000000004000 003000 000014 00  WA  0   0  8</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[26]</span> .symtab    SYMTAB      0000000000000000 003048 000378 18     27  18  8</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">[27]</span> .strtab    STRTAB      0000000000000000 0033c0 0001d3 00      0   0  1</span></code></pre></div>
-<p>Extract section .symtab, which starts at offset 0x003048, size of
-0x000378. The elf64_sym struct has a size of 24 bytes, so use option
-‘xxd -c 24’ to display 24 bytes each line.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> xxd <span class="at">-p</span> <span class="at">-g</span> 1 <span class="at">-c</span> 24 <span class="at">-s</span> 0x003048 <span class="at">-l</span> 0x000378 main</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">340100001100170010400000000000000400000000000000</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">6301000012000e0029110000000000001800000000000000</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">8701000012000e0041110000000000003a00000000000000</span></span></code></pre></div>
-</div>
-</div>
-<p>In x86_64, symbol entry is represented by struct elf64_sym. To decode
-struct elf64_sym from raw hex memory, we use script
-hex_to_elf64_sym.py.</p>
-<div class="sourceCode" id="cb8"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> struct</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>FMT_ELF64_SYM <span class="op">=</span> <span class="st">&quot;=IBBHQQ&quot;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hex_to_elf64_sym(hex_str: <span class="bu">str</span>):</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> <span class="bu">bytes</span>.fromhex(hex_str)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    name, info, other, shndx, value, size <span class="op">=</span> struct.unpack(FMT_ELF64_SYM, data)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;name info other shndx value size&quot;</span>)</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="bu">hex</span>(name), <span class="bu">hex</span>(info), <span class="bu">hex</span>(other),</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>            <span class="bu">hex</span>(shndx), <span class="bu">hex</span>(value), <span class="bu">hex</span>(size))</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>hex_to_elf64_sym(sys.argv[<span class="dv">1</span>])</span></code></pre></div>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p>Decode the first line.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> hex_to_elf64_sym.py 340100001100170010400000000000000400000000000000</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">name</span>     info    other  shndx   value     size</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[</span><span class="st">&#39;0x134&#39;</span><span class="ex">,</span> <span class="st">&#39;0x11&#39;</span>, <span class="st">&#39;0x0&#39;</span>, <span class="st">&#39;0x17&#39;</span>, <span class="st">&#39;0x4010&#39;</span>, <span class="st">&#39;0x4&#39;</span>]</span></code></pre></div>
-<p>Decode the second line.</p>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> hex_to_elf64_sym.py 6301000012000e0029110000000000001800000000000000</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">name</span>     info    other  shndx  value     size</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[</span><span class="st">&#39;0x163&#39;</span><span class="ex">,</span> <span class="st">&#39;0x12&#39;</span>, <span class="st">&#39;0x0&#39;</span>, <span class="st">&#39;0xe&#39;</span>, <span class="st">&#39;0x1129&#39;</span>, <span class="st">&#39;0x18&#39;</span>]</span></code></pre></div>
-<p>Print string table .strtab.</p>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--string-dump</span><span class="op">=</span>.strtab main</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span>   134]  g_int</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>[   163]  <span class="er">sum</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span>   187]  main</span></code></pre></div>
-</div><div class="column" style="width:50%;">
-<p>Explain the outputs.</p>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">First Line</th>
-<th style="text-align: left;"></th>
-<th style="text-align: left;"></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">st_name</td>
-<td style="text-align: left;">0x134</td>
-<td style="text-align: left;">Index 0x134 in .strtab: g_int</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">st_info</td>
-<td style="text-align: left;">0x11</td>
-<td style="text-align: left;">Type object, global</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">st_other</td>
-<td style="text-align: left;">0x0</td>
-<td style="text-align: left;">Visibility default</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">st_shndx</td>
-<td style="text-align: left;">0x17</td>
-<td style="text-align: left;">Section 0x17 = 23 = .data</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">st_value</td>
-<td style="text-align: left;">0x4010</td>
-<td style="text-align: left;">Offset 0x4010</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">st_size</td>
-<td style="text-align: left;">0x4</td>
-<td style="text-align: left;">Size of 4 bytes</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Second Line</th>
-<th style="text-align: left;"></th>
-<th style="text-align: left;"></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">st_name</td>
-<td style="text-align: left;">0x163</td>
-<td style="text-align: left;">Index 0x136 in .strtab: sum</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">st_info</td>
-<td style="text-align: left;">0x11</td>
-<td style="text-align: left;">Type func, global</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">st_other</td>
-<td style="text-align: left;">0x0</td>
-<td style="text-align: left;">Visibility default</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">st_shndx</td>
-<td style="text-align: left;">0x17</td>
-<td style="text-align: left;">Section: 0xe = 14 = .text</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">st_value</td>
-<td style="text-align: left;">0x4010</td>
-<td style="text-align: left;">Offset 0x1129</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">st_size</td>
-<td style="text-align: left;">0x18</td>
-<td style="text-align: left;">Size of 24 bytes</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<h3 id="readelf-.symtab">1.2.3. readelf .symtab</h3>
-<p>The goal of decoding .symtab is to understand the format of the
-symbol table. For everyday work, we can simply view .symtab using
-readelf.</p>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--symbols</span> main</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Num:</span>    Value          Size Type    Bind   Vis      Ndx Name</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">23:</span> 0000000000004010     4 OBJECT  GLOBAL DEFAULT   23 g_int</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">27:</span> 0000000000001129    24 FUNC    GLOBAL DEFAULT   14 sum</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">32:</span> 0000000000001141    58 FUNC    GLOBAL DEFAULT   14 main</span></code></pre></div>
-</div><div class="column" style="width:50%;">
-<p>Explain the output:</p>
-<ul>
-<li>The symbol g_int represents a 4-byte variable in the .data section.
-Within .data, the variable is positioned at offset 0x4010 from the start
-address of the section.</li>
-<li>The symbol sum represents a function in the .text section. Within
-.text, the function is positioned at offset 0x1129 from the start
-address of the section.</li>
-</ul>
-</div>
-</div>
-<h2 id="dynamic-symbol-table">1.3. Dynamic Symbol Table</h2>
-<h3 id="section-.dynsym">1.3.1. Section .dynsym</h3>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p>The .dynsym section contains the dynamic symbol table. The address of
-symbols this section are resolved at runtime by the loader, which search
-through the dynamic lirbaries to locate the symbols.</p>
-<p>Relationships to other sections.</p>
-<ul>
-<li>Field st_index represents the symbol name, which points to index of
-an entry in the string table .dynstr.</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<div class="sourceCode" id="cb13"><pre
-class="sourceCode go"><code class="sourceCode go"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>┌────────────┐       ┌────────────┐</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>│   <span class="op">.</span>dynstr  │       │  <span class="op">.</span>dynsym   │</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>┼────────────┤       ┼────────────┤</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>│   index ◄──┼───────┼─ st_index  │</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>│            │       │            │</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>│   value    │       │  <span class="op">.....</span>     <span class="op">|</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>└────────────┘       └────────────┘</span></code></pre></div>
-</div>
-</div>
+<p>Will examine the static symbol table of the below program.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> g_int <span class="op">=</span> <span class="bn">0xcafebabe</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> argv<span class="op">)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> b <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> s <span class="op">=</span> sum<span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc main.c <span class="at">-o</span> main</span></code></pre></div>
+<h2 id="section-header">Section Header</h2>
+<p>The section header provides a list of sections and their details in
+the ELF file.</p>
 <div class="columns">
 <div class="column" style="width:60%;">
-<p>Use readelf to print dynamic symbols in file.</p>
-<div class="sourceCode" id="cb14"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--wide</span> <span class="at">--dyn-syms</span> /usr/bin/ls</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Num:</span>    Value          Size Type    Bind   Vis      Ndx Name</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">86:</span> 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND mempcpy@GLIBC_2.2.5 <span class="er">(</span><span class="ex">3</span><span class="kw">)</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">87:</span> 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND memmove@GLIBC_2.2.5 <span class="er">(</span><span class="ex">3</span><span class="kw">)</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>   <span class="ex">118:</span> 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND free@GLIBC_2.2.5 <span class="er">(</span><span class="ex">3</span><span class="kw">)</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>   <span class="ex">120:</span> 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND malloc@GLIBC_2.2.5 <span class="er">(</span><span class="ex">3</span><span class="kw">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--wide</span> <span class="at">--sections</span> main</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Section</span> Headers:</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">[Nr]</span> Name              Type            Address          Off    Size   ES Flg Lk Inf Al</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">...</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">[</span> 6] .dynsym           DYNSYM          <span class="er">00000000000003d8</span> <span class="ex">0003d8</span> 000090 18   A  7   1  8</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">[</span> 7] .dynstr           STRTAB          <span class="er">0000000000000468</span> <span class="ex">000468</span> 000088 00   A  0   0  1</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="ex">...</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">[12]</span> .plt              PROGBITS        0000000000001020 001020 000010 10  AX  0   0 16</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">[13]</span> .plt.got          PROGBITS        0000000000001030 001030 000010 10  AX  0   0 16</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="ex">[14]</span> .text             PROGBITS        0000000000001040 001040 00013b 00  AX  0   0 16</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="ex">...</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="ex">[22]</span> .got              PROGBITS        0000000000003fc0 002fc0 000040 08  WA  0   0  8</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="ex">[23]</span> .data             PROGBITS        0000000000004000 003000 000014 00  WA  0   0  8</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="ex">[24]</span> .bss              NOBITS          0000000000004014 003014 000004 00  WA  0   0  1</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="ex">...</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="ex">[26]</span> .symtab           SYMTAB          0000000000000000 003048 000378 18     27  18  8</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="ex">[27]</span> .strtab           STRTAB          0000000000000000 0033c0 0001d3 00      0   0  1</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="ex">[28]</span> .shstrtab         STRTAB          0000000000000000 003593 00010c 00      0   0  1</span></code></pre></div>
 </div><div class="column" style="width:40%;">
-<p><br></p>
 <p>Explain the output.</p>
 <ul>
-<li>Functions memcpy, memove, free, malloc are the functions defined in
-the external library libc.so, not in the program. So they appear in the
-dynamic symbol table for runtime linker to resolve at runtime.</li>
+<li><p>There are 28 sections.</p></li>
+<li><p>The .text section has index 14 (Nr). It contains the executable
+machine code (PROBITS). In the file, it starts at offset 0x001040 and
+has a size of 0x00013b bytes.</p></li>
+<li><p>The index of .symtab is 26 (Nr). It is a symbol table (SYMTAB).
+Within the file, it begins 0x003048 with a length of 0x000378
+bytes.</p></li>
+<li><p>The .strtab section, with index 27 (Nr), is a string table
+(STRTAB). It starts at offset 0x0033c0 and spans 0x0001d3
+bytes.</p></li>
 </ul>
 </div>
 </div>
-<h3 id="sections-.plt-.got">1.3.2. Sections .plt, .got</h3>
-<p>The .plt (procedure linkage table) section contains functions that
-helps program calls functions in dynamic libraries without knowing their
-actual memory addresses.<br />
-The .got (global offset table) section contains the memory addresses of
-functions located in dynamic libraries.</p>
+<h2 id="section-.strtab">Section .strtab</h2>
+<p>The .strtab section contains a list of null-terminated strings. Each
+string represents a symbol name.</p>
 <div class="columns">
-<div class="column" style="width:35%;">
-<p>Interaction between .plt and .got.</p>
-<p><strong>First call.</strong><br />
-When program calls puts, the call goes to puts@plt. Because the symbol
-is not resolved yet, the plt redirects to runtime linker to:</p>
+<div class="column" style="width:60%;">
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--string-dump</span><span class="op">=</span>.strtab main</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">String</span> dump of section <span class="st">&#39;.strtab&#39;</span>:</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">...</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">[</span>   134]  g_int</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="er">[</span>   <span class="er">163</span><span class="ex">]</span>  sum</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="ex">...</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">[</span>   187]  main</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="er">[</span>   <span class="er">1cd</span><span class="ex">]</span>  _init</span></code></pre></div>
+</div><div class="column" style="width:40%;">
+<p>Explain the output.</p>
 <ul>
-<li>Look up the address of puts in libc.so.</li>
-<li>Call puts once.</li>
-<li>Write the resolved address to .got.</li>
+<li><p>Each line shows a symbol name and its offset within the .strtab
+section.</p></li>
+<li><p>The string g_init is located at offset 0x134.</p></li>
+<li><p>The string sum is located at offset 0x163.</p></li>
+<li><p>The string main is located at offset 0x187.</p></li>
 </ul>
-<p><strong>Later calls.</strong><br />
-Function puts@put simply read the resolved address from .got and jump
-directly to the real puts function.</p>
-</div><div class="column" style="width:65%;">
-<div class="sourceCode" id="cb15"><pre
-class="sourceCode go"><code class="sourceCode go"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>                                            ┌──────────────────┐                                  </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>┌──────────┐    ┌──────────────────────┐    │   ┌───────────┐  │   ┌─────────────────────────────┐</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>│ main<span class="op">()</span>   │    │<span class="op">.</span>plt                  │    │   │<span class="op">.</span>got       │  │   │ runtime linker              │</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>│          │    <span class="op">|</span>──────────────────────<span class="op">|</span>    │   <span class="op">|</span>───────────<span class="op">|</span>  │   <span class="op">|</span>─────────────────────────────<span class="op">|</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>│   puts<span class="op">()</span>─┼────┼► puts@plt<span class="op">()</span>          │    │   │           │  └───┼─►_dl_runtime_resolve<span class="op">()</span>      │</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>│          │    │    find puts in <span class="op">.</span>got─┼────┼──►│           │      │    find puts                │</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>└──────────┘    │    <span class="cf">if</span> not found      │    │   │           │◄─────┼─── update puts addr to <span class="op">.</span>got │</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                │       let ld<span class="op">.</span>so find─┼────┘   └───────────┘      └─────────────────────────────┘</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                │    call puts         │                                                          </span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                └──────────────────────┘                                                          </span></code></pre></div>
 </div>
 </div>
+<h2 id="section-.symtab">Section .symtab</h2>
+<p>The .symtab section contains all symbols in the file.</p>
 <div class="columns">
-<div class="column" style="width:40%;">
-<p>Examine the .plt and .got.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> argv<span class="op">)</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    puts<span class="op">(</span><span class="st">&quot;hello&quot;</span><span class="op">);</span>    </span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Use ‘-fcf-protection=none’ to place puts@plt to .plt instead of
-.plt.sec.</p>
-<div class="sourceCode" id="cb17"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-fcf-protection</span><span class="op">=</span>none main.c <span class="at">-o</span> main</span></code></pre></div>
-<p>Trace the call flow: puts@plt() to puts().</p>
-<div class="sourceCode" id="cb18"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">start</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">puts@plt</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 2 at 0x555555555030</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">puts</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 3 at 0x7ffff7e08e50</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">continue</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 2, 0x0000555555555030 in puts@plt <span class="er">(</span><span class="kw">)</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">continue</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 3, __GI__IO_puts <span class="er">(</span><span class="va">str</span><span class="op">=</span>0x555555556004 <span class="st">&quot;hello&quot;</span><span class="kw">)</span></span></code></pre></div>
-</div><div class="column" style="width:60%;">
-<p>Check address of puts@plt(). It is function resides in .plt
-section.</p>
-<div class="sourceCode" id="cb19"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> address puts@plt</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Symbol</span> <span class="st">&quot;puts@plt&quot;</span> is at 0x555555555030 in a file compiled without debugging.</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> symbol 0x555555555030</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="ex">puts@plt</span> in section .plt of /root/demo/main</span></code></pre></div>
-<p>Disassemble puts@plt(). It jumps to address 0x555555557fd0 that is an
-entry in .got.</p>
-<div class="sourceCode" id="cb20"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span> 0x555555555030</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555030</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     jmp    <span class="pp">*</span>0x2f9a<span class="er">(</span><span class="ex">%rip</span><span class="kw">)</span>    <span class="co"># 0x555555557fd0 &lt;puts@got.plt&gt;</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555036</span> <span class="op">&lt;</span>+6<span class="op">&gt;</span>:     push   <span class="va">$0</span>x0</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555503b</span> <span class="op">&lt;</span>+11<span class="op">&gt;</span>:    jmp    0x555555555020</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> symbol 0x555555557fd0</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="ex">puts@got[plt]</span> in section .got of /root/demo/main</span></code></pre></div>
-<p>Examine the .got entry. It stores address of function puts() in
-libc.so.</p>
-<div class="sourceCode" id="cb21"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/a</span> 0x555555557fd0</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555557fd0</span> <span class="op">&lt;</span>puts@got.plt<span class="op">&gt;</span>:  0x7ffff7e08e50 <span class="op">&lt;</span>__GI__IO_puts<span class="op">&gt;</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> symbol 0x7ffff7e08e50</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="ex">puts</span> in section .text of /lib/x86_64-linux-gnu/libc.so.6</span></code></pre></div>
+<div class="column" style="width:60%;">
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> readelf <span class="ex">--wide</span> <span class="at">--symbols</span> main</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Symbol</span> table <span class="st">&#39;.symtab&#39;</span> contains 37 entries:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Num:</span>    Value          Size Type    Bind   Vis      Ndx Name</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">...</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">23:</span> 0000000000004010     4 OBJECT  GLOBAL DEFAULT   23 g_int</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">...</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">27:</span> 0000000000001129    24 FUNC    GLOBAL DEFAULT   14 sum</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">...</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">32:</span> 0000000000001141    58 FUNC    GLOBAL DEFAULT   14 main</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">...</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">36:</span> 0000000000001000     0 FUNC    GLOBAL HIDDEN    11 _init</span></code></pre></div>
+</div><div class="column" style="width:40%;">
+<p>Explain the output.</p>
+<ul>
+<li><p>The g_int symbol represents a variable (OBJECT), with size of 4
+bytes (Size). In the .data section (Ndx=23, section index), g_int
+located at offset 0x4010 (Value).</p></li>
+<li><p>The sum symbol is a function (FUNC). Within the .text section
+(Ndx=14), sum located at 0x1129 (Value).</p></li>
+<li><p>The main symbol is a function (FUNC). In .text (Ndx=14), main
+located at 0x1141.</p></li>
+</ul>
 </div>
 </div>
-<p>Illustrate the memory.</p>
-<div class="sourceCode" id="cb22"><pre
-class="sourceCode go"><code class="sourceCode go"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>                 file<span class="op">:</span> main                                    file<span class="op">:</span> main                              file<span class="op">:</span> libc<span class="op">.</span>so</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>              section<span class="op">:</span> <span class="op">.</span>plt                                 section<span class="op">:</span> <span class="op">.</span>got                           section<span class="op">:</span> <span class="op">.</span>text</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>             function<span class="op">:</span> puts@plt<span class="op">()</span>                                                                   function<span class="op">:</span> puts</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>┌────────────────────┬─────────────────────┐      ┌────────────────┬────────────────┐      ┌────────────────┬────────────────┐</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>│ address            │ value               │      │ address        │     value      │      │ address        │     value      │</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>┼────────────────────┼─────────────────────┤      ┼────────────────┼────────────────┤      ┼────────────────┼────────────────┤</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>│ <span class="bn">0x0000555555555030</span> │ jump  <span class="bn">0x555555557fd0</span>┼───┐  │                │                │  ┌───┼►<span class="bn">0x7ffff7e08e50</span> │ endbr64        │</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>│                    │                     │   │  │                │                │  │   │                │                │</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>│ <span class="bn">0x0000555555555036</span> │ push  $<span class="bn">0x0</span>          │   └──┼►<span class="bn">0x555555557fd0</span> │ <span class="bn">0x7ffff7e08e50</span>─┼──┘   │ <span class="bn">0x7ffff7e08e54</span> │ push   <span class="op">%</span>r14    │</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>│                    │                     │      │                │                │      │                │                │</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>│ <span class="bn">0x000055555555503b</span> │ jmp   <span class="bn">0x555555555020</span>│      │                │                │      │ <span class="bn">0x7ffff7e08e56</span> │ push   <span class="op">%</span>r13    │</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>└────────────────────┴─────────────────────┘      └────────────────┴────────────────┘      └────────────────┴────────────────┘</span></code></pre></div>
-<h1 id="gdb">2. GDB</h1>
-<h2 id="add-symbols">2.1. Add Symbols</h2>
+<h1 id="dynamic-symbol-table">Dynamic Symbol Table</h1>
+<p>The .dynsym section works in conjunction with .dynstr, .plt, .</p>
+<h1 id="gdb">GDB</h1>
+<h2 id="add-symbols">Add Symbols</h2>
 <div class="columns">
-<div class="column" style="width:40%;">
-<p>GDB supports adding additional symbol files, it is especially useful
-when debugging code loaded by mmap.</p>
+<div class="column" style="width:50%;">
+<p>GDB supports adding symbol table from file, it is useful when
+debugging code loaded by mmap.</p>
 <p>To add the symbols.</p>
-<div class="sourceCode" id="cb23"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">add-symbol-file</span> filename</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[-readnow</span><span class="kw">|</span><span class="ex">-readnever]</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[-o</span> offset]</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[textaddr]</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[-s</span> section addr…]</span></code></pre></div>
-<p>To debug functions defined object file, we load the symbols for the
-.text section — the section that holds the executable code.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">add-symbol-file</span> filename</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[-readnow</span><span class="kw">|</span><span class="ex">-readnever]</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[-o</span> offset]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[textaddr]</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">[-s</span> section addr…]</span></code></pre></div>
+<p>Parameters:</p>
 <ul>
-<li><em>textaddr</em>: memory address where file’s text section
-loaded.</li>
+<li><em>filename</em>: the file contains the symbol table.</li>
 </ul>
-</div><div class="column" style="width:60%;">
-<p>We can load the symbols for other sections as well, such as: .bss,
-.data to inspect the variables.</p>
+<p>Debug the .text section.</p>
 <ul>
-<li><em>section</em>: section to load.</li>
-<li><em>addr</em>: memory address where the section loaded.</li>
+<li><em>textaddr</em>: the memory address where .text of the file is
+loaded. It is required for debugging functions within .text.</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p>We can also add symbols for other sections, such as: .bss, .data,… by
+the below parameters.</p>
+<ul>
+<li><em>section</em>: section name.</li>
+<li><em>addr</em>: memory address where the section is loaded.</li>
 </ul>
 <p>Other options.</p>
 <ul>
@@ -603,185 +302,186 @@ loaded.</li>
 <li><em>offset</em>: offset to add to the start address of each section,
 except those for which the address was specified explicitly.</li>
 </ul>
-<p>To remove the symbols.</p>
-<div class="sourceCode" id="cb24"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">remove-symbol-file</span> filename</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">remove-symbol-file</span> <span class="at">-a</span> addr</span></code></pre></div>
+<p><br></p>
+<p>To remove symbols.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">remove-symbol-file</span> filename</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">remove-symbol-file</span> <span class="at">-a</span> addr</span></code></pre></div>
 </div>
 </div>
-<h3 id="add-symbols-to-mmap-regions">2.1.1. Add Symbols to mmap
-Regions</h3>
-<p>In the following steps, we will add symbols for memory regions loaded
-by mmap.</p>
+<h2 id="add-symbols-to-mmap-regions">Add Symbols to mmap Regions</h2>
+<p>In the below example, we will add symbols for memory regions that is
+loaded by mmap.</p>
 <div class="columns">
-<div class="column" style="width:35%;">
-<p>File math.c</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> number1 <span class="op">=</span> <span class="bn">0xCAFEBABE</span><span class="op">;</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> number2 <span class="op">=</span> <span class="bn">0xC1A0C1A0</span><span class="op">;</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sub<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">-</span> y<span class="op">;</span></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Build.</p>
-<div class="sourceCode" id="cb26"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-c</span> math.c <span class="at">-o</span> math.o</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-g</span> main.c <span class="at">-o</span> main</span></code></pre></div>
-</div><div class="column" style="width:65%;">
+<div class="column" style="width:60%;">
 <p>File main.c</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;sys/mman.h&gt;</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stddef.h&gt;</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;fcntl.h&gt;</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> fd <span class="op">=</span> open<span class="op">(</span><span class="st">&quot;math.o&quot;</span><span class="op">,</span> O_RDONLY<span class="op">);</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// load math.o to memory</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    mmap<span class="op">(</span></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>        NULL<span class="op">,</span> <span class="co">// let kernel choose start addr of region</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>        <span class="dv">4096</span><span class="op">,</span> <span class="co">// length of the region</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>        PROT_READ<span class="op">|</span>PROT_EXEC<span class="op">,</span> <span class="co">// protection mode</span></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>        MAP_PRIVATE<span class="op">,</span>         <span class="co">// visible mode</span></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>        fd<span class="op">,</span>                  <span class="co">// file to load</span></span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>        <span class="dv">0</span>                    <span class="co">// offset in file</span></span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;sys/mman.h&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stddef.h&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;fcntl.h&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> fd <span class="op">=</span> open<span class="op">(</span><span class="st">&quot;math.o&quot;</span><span class="op">,</span> O_RDONLY<span class="op">);</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// load math.o to memory</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    mmap<span class="op">(</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        NULL<span class="op">,</span> <span class="co">// let kernel choose start addr of region</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="dv">4096</span><span class="op">,</span> <span class="co">// length of the region</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        PROT_READ<span class="op">|</span>PROT_EXEC<span class="op">,</span> <span class="co">// protection mode</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        MAP_PRIVATE<span class="op">,</span>         <span class="co">// visible mode</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        fd<span class="op">,</span>                  <span class="co">// file to load</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="dv">0</span>                    <span class="co">// offset in file</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div><div class="column" style="width:40%;">
+<p>File math.c</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> number1 <span class="op">=</span> <span class="bn">0xCAFEBABE</span><span class="op">;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> number2 <span class="op">=</span> <span class="bn">0xC1A0C1A0</span><span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sub<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">-</span> y<span class="op">;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Build.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-c</span> math.c <span class="at">-o</span> math.o</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-g</span> main.c <span class="at">-o</span> main</span></code></pre></div>
 </div>
 </div>
 <div class="columns">
 <div class="column" style="width:60%;">
-<p>Examine the ELF file.</p>
-<div class="sourceCode" id="cb28"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--section-headers</span> <span class="at">--wide</span> math.o</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Nr]</span> Name     Type        Address          Off    Size   ES Flg Lk Inf Al</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> 1] .text    PROGBITS    <span class="er">0000000000000000</span> <span class="ex">000040</span> 00002e 00  AX  0   0  1</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> 2] .data    PROGBITS    <span class="er">0000000000000000</span> <span class="ex">000070</span> 000008 00  WA  0   0  4</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--symbols</span> math.o</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Num:</span>    Value          Size Type    Bind   Vis      Ndx Name</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">3:</span> 0000000000000000     4 OBJECT  GLOBAL DEFAULT    2 number1</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">4:</span> 0000000000000004     4 OBJECT  GLOBAL DEFAULT    2 number2</span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="ex">5:</span> 0000000000000000    24 FUNC    GLOBAL DEFAULT    1 sum</span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="ex">6:</span> 0000000000000018    22 FUNC    GLOBAL DEFAULT    1 sub</span></code></pre></div>
+<p>Sections in math.o.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--section-headers</span> <span class="at">--wide</span> math.o</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Nr]</span> Name     Type        Address          Off    Size   ES Flg Lk Inf Al</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> 1] .text    PROGBITS    <span class="er">0000000000000000</span> <span class="ex">000040</span> 00002e 00  AX  0   0  1</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> 2] .data    PROGBITS    <span class="er">0000000000000000</span> <span class="ex">000070</span> 000008 00  WA  0   0  4</span></code></pre></div>
+<p>Symbols in math.o.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--symbols</span> math.o</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Num:</span>    Value          Size Type    Bind   Vis      Ndx Name</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">3:</span> 0000000000000000     4 OBJECT  GLOBAL DEFAULT    2 number1</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">4:</span> 0000000000000004     4 OBJECT  GLOBAL DEFAULT    2 number2</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">5:</span> 0000000000000000    24 FUNC    GLOBAL DEFAULT    1 sum</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">6:</span> 0000000000000018    22 FUNC    GLOBAL DEFAULT    1 sub</span></code></pre></div>
 <ul>
-<li>The .text section begins at address 0x40.</li>
-<li>The .data section begins at address 0x70.</li>
-<li>In .text, the symbols sum and sub are located at offsets 0x00 and
-0x18 from the start of the section.</li>
-<li>In .data, the symbols number1 and number2 are located at offsets
-0x00 and 0x14 from the start of the section.</li>
+<li>Section .text locates at offset 0x40.</li>
+<li>Section .data locates at offset 0x70.</li>
+<li>Within .text, symbols sum, sub locates at offsets 0x00, 0x18.</li>
+<li>Within .data, symbols number1, number2 locates offsets 0x00,
+0x14.</li>
 </ul>
 </div><div class="column" style="width:40%;">
-<p>Illustrate the ELF.</p>
-<div class="sourceCode" id="cb29"><pre
-class="sourceCode go"><code class="sourceCode go"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> ELF File Header     <span class="op">|</span> <span class="bn">0x00</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Program Headers     <span class="op">|</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">.</span>text Section       <span class="op">|</span> <span class="bn">0x40</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> ├── sum<span class="op">()</span>           <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x00</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> └── sub<span class="op">()</span>           <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x18</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">.</span>data Section       <span class="op">|</span> <span class="bn">0x70</span></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> ├── number1         <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x00</span></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> └── number2         <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x04</span></span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Other Sections<span class="op">...</span>   <span class="op">|</span></span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Section Headers     <span class="op">|</span></span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span></code></pre></div>
+<p>Illustrate math.o.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode go"><code class="sourceCode go"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> ELF File Header     <span class="op">|</span> <span class="bn">0x00</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Program Headers     <span class="op">|</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">.</span>text Section       <span class="op">|</span> <span class="bn">0x40</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> ├── sum<span class="op">()</span>           <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x00</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> └── sub<span class="op">()</span>           <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x18</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">.</span>data Section       <span class="op">|</span> <span class="bn">0x70</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> ├── number1         <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x00</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> └── number2         <span class="op">|</span>      <span class="op">+</span> <span class="bn">0x04</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Other Sections<span class="op">...</span>   <span class="op">|</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Section Headers     <span class="op">|</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span></code></pre></div>
 </div>
 </div>
 <div class="columns">
 <div class="column" style="width:60%;">
-<p>Start program and examine memory.</p>
-<div class="sourceCode" id="cb30"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="fu">file</span> main</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">main.c:19</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span></code></pre></div>
-<p>Print the memory mappings.</p>
-<div class="sourceCode" id="cb31"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> proc mappings</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Start</span> Addr         End Addr   Size     Offset  Perms  objfile</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7ffff7ffa000</span>   0x7ffff7ffb000   0x1000   0x0     r-xp   math.o</span></code></pre></div>
-<p>The offsets of sections within the ELF file, and the offsets of
-symbols within their sections, remain the same in memory. So, once the
-start address of the file in memory is known, we can calculate the
-addresses of sections and symbols by adding their respective ELF
-offsets.</p>
-<p>In memory, file math.o is loaded at address 0x7ffff7ffa000. So,</p>
+<p>Start program.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="fu">file</span> main</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">main.c:19</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span></code></pre></div>
+<p>Print memory mappings.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> proc mappings</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Start</span> Addr         End Addr   Size     Offset  Perms  objfile</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7ffff7ffa000</span>   0x7ffff7ffb000   0x1000   0x0     r-xp   math.o</span></code></pre></div>
+<p>When math.o is loaded into memory, the offsets of sections and
+symbols remain the same as in the ELF file. Once the memory address of
+the file is known, the addresses of sections and symbols can be
+calculated by adding their ELF offsets.</p>
+<p>In memory, math.o is loaded at address 0x7ffff7ffa000. So, within
+math.o:</p>
 <ul>
-<li>Section .text of math.o started at 0x7ffff7ffa040.</li>
-<li>Section .data of math.o started at 0x7ffff7ffa070.</li>
+<li>.text locates at 0x7ffff7ffa040 (math.o base address + 0x40).</li>
+<li>.data locates at 0x7ffff7ffa070 (math.o base address + 0x70).</li>
 </ul>
 </div><div class="column" style="width:40%;">
-<p>Illustrate the Memory Mappings.</p>
-<div class="sourceCode" id="cb32"><pre
-class="sourceCode go"><code class="sourceCode go"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Other Regions<span class="op">...</span>    <span class="op">|</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> math<span class="op">.</span>o              <span class="op">|</span> <span class="bn">0x7ffff7ffa000</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   <span class="op">.</span>text             <span class="op">|</span> <span class="bn">0x7ffff7ffa040</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   ├── sum<span class="op">()</span>         <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x00</span></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   └── sub<span class="op">()</span>         <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x18</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   <span class="op">.</span>data             <span class="op">|</span> <span class="bn">0x7ffff7ffa070</span></span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   ├── number1       <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x00</span></span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   └── number2       <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x40</span></span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Other Regions<span class="op">...</span>    <span class="op">|</span></span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span></code></pre></div>
+<p>Illustrate memory.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode go"><code class="sourceCode go"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Other Regions<span class="op">...</span>    <span class="op">|</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> math<span class="op">.</span>o              <span class="op">|</span> <span class="bn">0x7ffff7ffa000</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   <span class="op">.</span>text             <span class="op">|</span> <span class="bn">0x7ffff7ffa040</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   ├── sum<span class="op">()</span>         <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x00</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   └── sub<span class="op">()</span>         <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x18</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                     <span class="op">|</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   <span class="op">.</span>data             <span class="op">|</span> <span class="bn">0x7ffff7ffa070</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   ├── number1       <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x00</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   └── number2       <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x40</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> Other Regions<span class="op">...</span>    <span class="op">|</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span></code></pre></div>
 </div>
 </div>
-<p>Tell GDB to load the symbols in math.o. The given section addresses
-are needed for GDB to put the symbols to correct places in memory.</p>
-<div class="sourceCode" id="cb33"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">add-symbol-file</span> math.o 0x7ffff7ffa040 <span class="at">-s</span> .data 0x7ffff7ffa070</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> files</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa040</span> <span class="at">-</span> 0x00007ffff7ffa06e is .text in /root/demo/math.o</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa070</span> <span class="at">-</span> 0x00007ffff7ffa078 is .data in /root/demo/math.o</span></code></pre></div>
+<p>We need to add symbols in .text and .data of math.o, so we provide
+memory address of these sections to GDB.</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">add-symbol-file</span> math.o 0x7ffff7ffa040 <span class="at">-s</span> .data 0x7ffff7ffa070</span></code></pre></div>
+<p>Check the loaded files and sections.</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> files</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa040</span> <span class="at">-</span> 0x00007ffff7ffa06e is .text in /root/demo/math.o</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa070</span> <span class="at">-</span> 0x00007ffff7ffa078 is .data in /root/demo/math.o</span></code></pre></div>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>Print address of symbols.</p>
-<div class="sourceCode" id="cb34"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> function sum</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa040</span>  sum</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> function sub</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa058</span>  sub</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> variable number1</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa070</span>  number1</span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> variable number2</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa074</span>  number2</span></code></pre></div>
+<p>Check the symbol addresses.</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> function sum</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa040</span>  sum</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> function sub</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa058</span>  sub</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> variable number1</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa070</span>  number1</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> variable number2</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa074</span>  number2</span></code></pre></div>
 </div><div class="column" style="width:50%;">
-<p>Call functions, print variables.</p>
-<div class="sourceCode" id="cb35"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">call</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span> <span class="fu">sum</span><span class="er">(</span><span class="ex">4,</span> 5<span class="kw">)</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="va">$3</span> = 9</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">call</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span> <span class="ex">sub</span><span class="er">(</span><span class="ex">4,</span> 5<span class="kw">)</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="va">$5</span> = <span class="at">-1</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print/x</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span><span class="ex">number1</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span> = 0xcafebabe</span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print/x</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span><span class="ex">number2</span></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="va">$2</span> = 0xc1a0c1a0</span></code></pre></div>
+<p>After loaded symbols, we can print and call them through symbol
+names.</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">call</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span> <span class="fu">sum</span><span class="er">(</span><span class="ex">4,</span> 5<span class="kw">)</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="va">$3</span> = 9</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">call</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span> <span class="ex">sub</span><span class="er">(</span><span class="ex">4,</span> 5<span class="kw">)</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="va">$5</span> = <span class="at">-1</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print/x</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span><span class="ex">number1</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span> = 0xcafebabe</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print/x</span> <span class="er">(</span><span class="ex">int</span><span class="kw">)</span><span class="ex">number2</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="va">$2</span> = 0xc1a0c1a0</span></code></pre></div>
 </div>
 </div>
 <footer class="footer text-muted">
