@@ -217,7 +217,7 @@ String dump of section '.dynstr':
   ...
 ```
 
-## Section rela.plt
+## Section .rela.plt
 rela.plt is a relocation table that tells the runtime linker how to find addresses for external symbols.
 
 :::::::::::::: {.columns}
