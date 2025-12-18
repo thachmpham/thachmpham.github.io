@@ -100,29 +100,28 @@
 <nav id="TOC" role="doc-toc">
 <ul>
 <li><a href="#stack" id="toc-stack"><span
-class="toc-section-number">1</span> 1. Stack</a>
+class="toc-section-number">1</span> Stack</a>
 <ul>
 <li><a href="#stack-pointer" id="toc-stack-pointer"><span
-class="toc-section-number">1.1</span> 1.1. Stack Pointer</a>
+class="toc-section-number">1.1</span> Stack Pointer</a>
 <ul>
 <li><a href="#push-pop" id="toc-push-pop"><span
-class="toc-section-number">1.1.1</span> 1.1.1. Push &amp; Pop</a></li>
+class="toc-section-number">1.1.1</span> Push &amp; Pop</a></li>
 <li><a href="#call-ret" id="toc-call-ret"><span
-class="toc-section-number">1.1.2</span> 1.1.2. Call &amp; Ret</a></li>
+class="toc-section-number">1.1.2</span> Call &amp; Ret</a></li>
 </ul></li>
 <li><a href="#base-pointer" id="toc-base-pointer"><span
-class="toc-section-number">1.2</span> 1.2. Base Pointer</a>
+class="toc-section-number">1.2</span> Base Pointer</a>
 <ul>
 <li><a href="#prolog-epilog" id="toc-prolog-epilog"><span
-class="toc-section-number">1.2.1</span> 1.2.1. Prolog &amp;
-Epilog</a></li>
+class="toc-section-number">1.2.1</span> Prolog &amp; Epilog</a></li>
 <li><a href="#arguments-local-variables"
 id="toc-arguments-local-variables"><span
-class="toc-section-number">1.2.2</span> 1.2.2. Arguments &amp; Local
+class="toc-section-number">1.2.2</span> Arguments &amp; Local
 Variables</a></li>
 </ul></li>
 <li><a href="#examine-stack-frame" id="toc-examine-stack-frame"><span
-class="toc-section-number">1.3</span> 1.3. Examine Stack Frame</a></li>
+class="toc-section-number">1.3</span> Examine Stack Frame</a></li>
 </ul></li>
 <li><a href="#gdb" id="toc-gdb"><span
 class="toc-section-number">2</span> GDB</a>
@@ -141,7 +140,7 @@ class="toc-section-number">2.5</span> Core Dump</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="stack"><span
-class="header-section-number">1</span> 1. Stack</h1>
+class="header-section-number">1</span> Stack</h1>
 <div class="columns">
 <div class="column" style="width:33%;">
 <p><strong>Definition</strong><br />
@@ -158,11 +157,11 @@ and the return address (or the next instruction).</p>
 </div>
 </div>
 <h2 data-number="1.1" id="stack-pointer"><span
-class="header-section-number">1.1</span> 1.1. Stack Pointer</h2>
+class="header-section-number">1.1</span> Stack Pointer</h2>
 <p>The stack pointer (rsp) always points to the current top of the
 stack. The push/pop, call/ret instructions will adjust %rsp.</p>
 <h3 data-number="1.1.1" id="push-pop"><span
-class="header-section-number">1.1.1</span> 1.1.1. Push &amp; Pop</h3>
+class="header-section-number">1.1.1</span> Push &amp; Pop</h3>
 <p>The push instruction put a value onto the stack. The pop instruction
 remove a value from the stack. Register rsp automatically moves to the
 top of the stack.</p>
@@ -236,7 +235,7 @@ class="sourceCode asm"><code class="sourceCode fasm"><span id="cb1-1"><a href="#
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>│<span class="bn">0x7fffffffe718</span> │ <span class="bn">0x00007fffffffe9bc</span>│        │<span class="bn">0x7fffffffe718</span> │ <span class="bn">0x00007fffffffe9bc</span>│        │<span class="bn">0x7fffffffe718</span> │ <span class="bn">0x00007fffffffe9bc</span>│</span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>└───────────────┴───────────────────┘        └───────────────┴───────────────────┘        └───────────────┴───────────────────┘</span></code></pre></div>
 <h3 data-number="1.1.2" id="call-ret"><span
-class="header-section-number">1.1.2</span> 1.1.2. Call &amp; Ret</h3>
+class="header-section-number">1.1.2</span> Call &amp; Ret</h3>
 <p>The call instruction pushes the address of the next instruction (rip)
 onto the stack then jump to the target function. This address is also
 called the return address.<br />
@@ -319,14 +318,13 @@ and jump to the sum function.</li>
 jump to this address.</li>
 </ul>
 <h2 data-number="1.2" id="base-pointer"><span
-class="header-section-number">1.2</span> 1.2. Base Pointer</h2>
+class="header-section-number">1.2</span> Base Pointer</h2>
 <p>The base pointer (rbp) stores the start address of the function stack
 frame. It remains fixed throughout the function, allowing compiler to
 use its stable position to generate offsets for local variables and
 parameter.</p>
 <h3 data-number="1.2.1" id="prolog-epilog"><span
-class="header-section-number">1.2.1</span> 1.2.1. Prolog &amp;
-Epilog</h3>
+class="header-section-number">1.2.1</span> Prolog &amp; Epilog</h3>
 <div class="columns">
 <div class="column" style="width:40%;">
 <p>When calling a new C/C++ function, prolog is the compiler-generated
@@ -375,7 +373,7 @@ class="sourceCode go"><code class="sourceCode go"><span id="cb16-1"><a href="#cb
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        │           │ ───────────► │           │ ──────────► │           │ ──────────► │           │</span>
 <span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        └───────────┘              └───────────┘             └───────────┘             └───────────┘</span></code></pre></div>
 <h3 data-number="1.2.2" id="arguments-local-variables"><span
-class="header-section-number">1.2.2</span> 1.2.2. Arguments &amp; Local
+class="header-section-number">1.2.2</span> Arguments &amp; Local
 Variables</h3>
 <p>Local variables locates on the stack for each function call. Their
 addresses are based on negative offsets from the base pointer rbp.</p>
@@ -422,7 +420,7 @@ class="sourceCode asm"><code class="sourceCode fasm"><span id="cb20-1"><a href="
 </div>
 </div>
 <h2 data-number="1.3" id="examine-stack-frame"><span
-class="header-section-number">1.3</span> 1.3. Examine Stack Frame</h2>
+class="header-section-number">1.3</span> Examine Stack Frame</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>The call instruction pushes the parent $rip onto the stack. Prolog

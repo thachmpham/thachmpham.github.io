@@ -2,7 +2,7 @@
 title: "Memory"
 ---
 
-# 1. Stack
+# Stack
 
 :::::::::::::: {.columns}
 ::: {.column width=33%}
@@ -26,10 +26,10 @@ Stores local variables and saved registers, such as the previous %rbp, and the r
 :::
 ::::::::::::::
 
-## 1.1. Stack Pointer
+## Stack Pointer
 The stack pointer (rsp) always points to the current top of the stack. The push/pop, call/ret instructions will adjust %rsp.
 
-### 1.1.1. Push & Pop
+### Push & Pop
 The push instruction put a value onto the stack. The pop instruction remove a value from the stack. Register rsp automatically moves to the top of the stack.
 
 :::::::::::::: {.columns}
@@ -122,7 +122,7 @@ Changes of the stack.
 └───────────────┴───────────────────┘        └───────────────┴───────────────────┘        └───────────────┴───────────────────┘
 ```
 
-### 1.1.2. Call & Ret
+### Call & Ret
 The call instruction pushes the address of the next instruction (rip) onto the stack then jump to the target function. This address is also called the return address.  
 The ret instruction pops the return address from the stack and jump to this address.
 
@@ -217,10 +217,10 @@ Changes of the stack.
 - The call instruction pushes $rip 0x0000000000401013 to the stack, and jump to the sum function.
 - The ret instruction pops 0x0000000000401013 from the stack, and then jump to this address.
 
-## 1.2. Base Pointer
+## Base Pointer
 The base pointer (rbp) stores the start address of the function stack frame. It remains fixed throughout the function, allowing compiler to use its stable position to generate offsets for local variables and parameter.
 
-### 1.2.1. Prolog & Epilog
+### Prolog & Epilog
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
@@ -281,7 +281,7 @@ $rbp ─┐ ├───────────┤              ├────
         └───────────┘              └───────────┘             └───────────┘             └───────────┘
 ```
 
-### 1.2.2. Arguments & Local Variables
+### Arguments & Local Variables
 
 Local variables locates on the stack for each function call. Their addresses are based on negative offsets from the base pointer rbp.
 
@@ -343,7 +343,7 @@ int child_func(int a, int b)
 :::
 ::::::::::::::
 
-## 1.3. Examine Stack Frame
+## Examine Stack Frame
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
