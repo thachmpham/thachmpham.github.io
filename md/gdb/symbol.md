@@ -1,5 +1,5 @@
 ---
-title: "Symbol Table"
+title: "Static & Dynamic Symbol Tables"
 ---
 
 
@@ -244,7 +244,6 @@ Explain the output.
 
 
 ## Sections .plt and .got
-### Runtime Linking
 The .plt section contains a small executable code to find addresses for external symbols. The .got section holds the external symbol addresses.
 
 ```go

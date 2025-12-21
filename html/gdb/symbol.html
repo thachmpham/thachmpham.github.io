@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Symbol Table</title>
+  <title>Static &amp; Dynamic Symbol Tables</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -95,7 +95,7 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Symbol Table</h1>
+<h1 class="title">Static &amp; Dynamic Symbol Tables</h1>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -122,12 +122,10 @@ class="toc-section-number">3.2</span> Section .rela.plt</a></li>
 id="toc-sections-.plt-and-.got"><span
 class="toc-section-number">3.3</span> Sections .plt and .got</a>
 <ul>
-<li><a href="#runtime-linking" id="toc-runtime-linking"><span
-class="toc-section-number">3.3.1</span> Runtime Linking</a></li>
 <li><a href="#before-first-call" id="toc-before-first-call"><span
-class="toc-section-number">3.3.2</span> Before First Call</a></li>
+class="toc-section-number">3.3.1</span> Before First Call</a></li>
 <li><a href="#after-first-call" id="toc-after-first-call"><span
-class="toc-section-number">3.3.3</span> After First Call</a></li>
+class="toc-section-number">3.3.2</span> After First Call</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#decode-symbol-table" id="toc-decode-symbol-table"><span
@@ -361,8 +359,6 @@ bytes.</p></li>
 </div>
 <h2 data-number="3.3" id="sections-.plt-and-.got"><span
 class="header-section-number">3.3</span> Sections .plt and .got</h2>
-<h3 data-number="3.3.1" id="runtime-linking"><span
-class="header-section-number">3.3.1</span> Runtime Linking</h3>
 <p>The .plt section contains a small executable code to find addresses
 for external symbols. The .got section holds the external symbol
 addresses.</p>
@@ -402,8 +398,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> environment LD_LIBRARY_PATH .</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="fu">file</span> main</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">start</span></span></code></pre></div>
-<h3 data-number="3.3.2" id="before-first-call"><span
-class="header-section-number">3.3.2</span> Before First Call</h3>
+<h3 data-number="3.3.1" id="before-first-call"><span
+class="header-section-number">3.3.1</span> Before First Call</h3>
 <p>In the main function, when we call puts, it goes to puts@plt.</p>
 <div class="sourceCode" id="cb13"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span> main</span>
@@ -469,8 +465,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555557fd8:</span> 0x0     0x0</span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555557fe8:</span> 0x0     0x0</span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555557ff8:</span> 0x0</span></code></pre></div>
-<h3 data-number="3.3.3" id="after-first-call"><span
-class="header-section-number">3.3.3</span> After First Call</h3>
+<h3 data-number="3.3.2" id="after-first-call"><span
+class="header-section-number">3.3.2</span> After First Call</h3>
 <p>Continue program, it will stop when libc.so loaded.</p>
 <div class="sourceCode" id="cb19"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">continue</span></span>

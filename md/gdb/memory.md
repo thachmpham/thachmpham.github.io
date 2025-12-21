@@ -1,5 +1,5 @@
 ---
-title: "Memory"
+title: "Viewing Process Memory in Raw"
 ---
 
 # Stack

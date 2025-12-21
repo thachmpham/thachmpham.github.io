@@ -135,5 +135,11 @@ generate_post gdb/symbol
 # generate_post systemd
 
 # ====  About
-# generate_post about
+pandoc --from markdown --to html \
+    --css /html/style/dark.css \
+    --include-in-header ${workspace}/bin/header.html \
+    --include-after-body ${workspace}/bin/footer_for_home.html \
+    --standalone \
+    --output ${workspace}/html/about.html \
+    ${workspace}/md/about.md
 

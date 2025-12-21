@@ -3,13 +3,13 @@ title:  "A Developer Notebook"
 subtitle: "*thachmpham.github.io*"
 ---
 
-## C/C++ GDB
+## Performance Engineering
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-- [Symbol Table](/html/gdb/symbol.html)
-- [Memory](/html/gdb/memory.html)
+- [Static & Dynamic Symbol Tables](/html/gdb/symbol.html)
+- [Viewing Process Memory in Raw](/html/gdb/memory.html)
 
 :::
 ::: {.column width=50%}
