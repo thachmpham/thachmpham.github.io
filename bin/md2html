@@ -138,7 +138,7 @@ generate_post gdb/symbol
 pandoc --from markdown --to html \
     --css /html/style/dark.css \
     --include-in-header ${workspace}/bin/header.html \
-    --include-after-body ${workspace}/bin/footer_for_home.html \
+    --include-after-body ${workspace}/bin/footer.html \
     --standalone \
     --output ${workspace}/html/about.html \
     ${workspace}/md/about.md
