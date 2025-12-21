@@ -1,5 +1,5 @@
 ---
-title: "Viewing Process Memory in Raw"
+title: "Viewing & Decoding Process Memory"
 ---
 
 # Stack
