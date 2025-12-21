@@ -1,5 +1,5 @@
 ---
-title: "Viewing & Decoding Process Memory"
+title: "Process Memory"
 ---
 
 # Stack

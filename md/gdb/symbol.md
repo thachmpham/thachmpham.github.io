@@ -1,5 +1,5 @@
 ---
-title: "Static & Dynamic Symbol Tables"
+title: "Symbol Table"
 ---
 
 
