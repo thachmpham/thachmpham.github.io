@@ -3,53 +3,7 @@ title: PERL
 ---
 
 
-### Split
-:::::::::::::: {.columns}
-::: {.column}
-
-| Pattern | |
-|-------------|-------------|
-| `-F<regex>` | Split on regex |
-| `-F:` | Split on `:` |
-| `-F'[:,]'` | Split on `:` or `,` |
-
-:::
-::: {.column}
-
-| Fields |  |
-|-------------|-------------|
-| `$F[0] $F[1]` | Fields 0, 1 |
-| `@F` | All fields |
-
-:::
-::::::::::::::
-
-| | |
-|-------------|-------------|
-| `-F: -e 'print "$F[0] $F[1]\n"'` | Split on `:`. Print fields 0, 1. |
-| `-F: -e 'print "@F\n"'` | Split on `:`. Print all fields. |
-
-<br>
-
-### Capuring Groups 
-| Extract Matches | |
-|-------------|-------------|
-| `-ne 'print "$1\n" if /name=(\w+)/'` | Extract 1st match |
-| `'print "$1 $2\n" if /name=(\w+) age=(\d+)/'` | Extract 1st, 2nd |
-
-<br>
-
-### Subtitude 
-| Match & Replace | |
-|-------------|-------------|
-| `-pe 's/foo/bar/'` | Replace first `foo` by `bar` |
-| `-pe 's/foo/bar/g'` | Replace all `foo` by `bar` |
-| `-pe 's/foo/bar/i'` | Ignore case insensitive |
-| `-pe 's/(foo) (bar)/$2 $1/'` | Capure groups. Swap `foo`, `bar` |
-
-<br>
-
-### Commands
+# Commands
 :::::::::::::: {.columns}
 ::: {.column}
 
@@ -69,9 +23,62 @@ title: PERL
 :::
 ::::::::::::::
 
-<br>
 
-### Regex
+# Split
+:::::::::::::: {.columns}
+::: {.column}
+
+| Pattern | |
+|-------------|-------------|
+| `-F<regex>` | Split on regex |
+| `-F:` | Split on `:` |
+| `-F'[:,]'` | Split on `:` or `,` |
+
+:::
+::: {.column}
+
+| Fields |  |
+|-------------|-------------|
+| `$F[0] $F[1]` | Fields 0, 1 |
+| `@F` | All fields |
+
+:::
+::: {.column}
+
+| Example | |
+|-------------|-------------|
+| `-F: -e 'print "$F[0] $F[1]\n"'` | Split on `:`. Print fields 0, 1. |
+| `-F: -e 'print "@F\n"'` | Split on `:`. Print all fields. |
+
+:::
+::::::::::::::
+
+
+:::::::::::::: {.columns}
+::: {.column}
+
+# Capuring Groups 
+| Extract Matches | |
+|-------------|-------------|
+| `-ne 'print "$1\n" if /name=(\w+)/'` | Extract 1st match |
+| `'print "$1 $2\n" if /name=(\w+) age=(\d+)/'` | Extract 1st, 2nd |
+
+:::
+::: {.column}
+
+# Subtitude 
+| Match & Replace | |
+|-------------|-------------|
+| `-pe 's/foo/bar/'` | Replace first `foo` by `bar` |
+| `-pe 's/foo/bar/g'` | Replace all `foo` by `bar` |
+| `-pe 's/foo/bar/i'` | Ignore case insensitive |
+| `-pe 's/(foo) (bar)/$2 $1/'` | Capure groups. Swap `foo`, `bar` |
+
+:::
+::::::::::::::
+
+
+# Regex
 :::::::::::::: {.columns}
 ::: {.column}
 
@@ -89,12 +96,6 @@ title: PERL
 | `^` | Begin of line |
 | `$` | End of line |
 | `\` | Escape next character |
-
-<br>
-
-| | Group |
-|-------------|-------------|
-| `(a|b)c` | Match ab, ac |
 
 :::
 ::: {.column}
@@ -114,13 +115,20 @@ title: PERL
 | `a*b` |  Longest a*b |
 | `a*?b` | Shortest a*b |
 
-<br>
+:::
+::: {.column}
 
 | | Boundary |
 |-------------|-------------|
 | `hello` | `.*hello.*`  |
 | `\bhello\b` | `hello`  |
 | `\Bhello\B` | `\whello\w` |
+
+<br>
+
+| | Group |
+|-------------|-------------|
+| `(a|b)c` | Match ab, ac |
 
 :::
 ::::::::::::::
@@ -129,6 +137,8 @@ title: PERL
 |-------------|-------------|-------------|-------------|
 | Positive | `car (?=run)` | Match `car` only if followed by `run` | `car run` |
 | Negative | `car (?!run)` | Match `car` only if not followed by `run` | `car stop` |
+
+<br>
 
 | | | Lookbehind | |
 |-------------|-------------|-------------|-------------|

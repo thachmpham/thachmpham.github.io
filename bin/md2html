@@ -40,8 +40,20 @@ pandoc --from markdown --to html \
     --output ${workspace}/index.html \
     ${workspace}/md/index.md
 
+# ====  generate about.html
+pandoc --from markdown --to html \
+    --css /html/style/dark.css \
+    --include-in-header ${workspace}/bin/header.html \
+    --include-after-body ${workspace}/bin/footer.html \
+    --standalone \
+    --output ${workspace}/html/about.html \
+    ${workspace}/md/about.md
+
 
 # ====  generate posts
+generate_post ref/grep
+generate_post ref/perl
+
 # ====  Virtual network interfaces
 # generate_post veth
 # generate_post vbridge
@@ -91,14 +103,14 @@ pandoc --from markdown --to html \
 # generate_post gdb-multithread
 
 # generate_post gdb/variable
-generate_post gdb/memory
+# generate_post gdb/memory
 # generate_post gdb/pretty-printer
 # generate_post gdb/breakpoint
 # generate_post gdb/catchpoint
 # generate_post gdb/watchpoint
 # generate_post gdb/gdbserver
 # generate_post gdb/tracepoint
-generate_post gdb/symbol
+# generate_post gdb/symbol
 # generate_post gdb/debuginfo
 # generate_post gdb/local_remote_binary
 # generate_post gdb/signal
@@ -134,12 +146,5 @@ generate_post gdb/symbol
 # generate_post fdisk
 # generate_post systemd
 
-# ====  About
-pandoc --from markdown --to html \
-    --css /html/style/dark.css \
-    --include-in-header ${workspace}/bin/header.html \
-    --include-after-body ${workspace}/bin/footer.html \
-    --standalone \
-    --output ${workspace}/html/about.html \
-    ${workspace}/md/about.md
+
 

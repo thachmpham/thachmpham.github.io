@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>GREP</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="/html/style/dark.css" />
+  <!-- <script src="../3pp/d3.v7.js"></script> -->
+  <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+          theme: 'dark',
+      });
+  </script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">GREP</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#commands" id="toc-commands"><span
+class="toc-section-number">1</span> Commands</a></li>
+<li><a href="#perl-regex" id="toc-perl-regex"><span
+class="toc-section-number">2</span> Perl Regex</a></li>
+</ul>
+</nav>
+<h1 data-number="1" id="commands"><span
+class="header-section-number">1</span> Commands</h1>
+<div class="columns">
+<div class="column">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Matching Control</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-i</code></td>
+<td>Ignore case</td>
+</tr>
+<tr class="even">
+<td><code>-w</code></td>
+<td>Whole word</td>
+</tr>
+<tr class="odd">
+<td><code>-o</code></td>
+<td>Print only matched parts</td>
+</tr>
+<tr class="even">
+<td><code>-m</code></td>
+<td>Max count</td>
+</tr>
+<tr class="odd">
+<td><code>-a</code></td>
+<td>Treat binary as text</td>
+</tr>
+<tr class="even">
+<td><code>-P</code></td>
+<td>Use perl regex</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Output Control</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-l</code></td>
+<td>List files</td>
+</tr>
+<tr class="even">
+<td><code>-h</code></td>
+<td>No file name</td>
+</tr>
+<tr class="odd">
+<td><code>-o</code></td>
+<td>Print only matched parts</td>
+</tr>
+<tr class="even">
+<td><code>-A N</code></td>
+<td>N lines after</td>
+</tr>
+<tr class="odd">
+<td><code>-B N</code></td>
+<td>N lines before</td>
+</tr>
+<tr class="even">
+<td><code>-C N</code></td>
+<td>N lines before, after</td>
+</tr>
+<tr class="odd">
+<td><code>--line-buffered</code></td>
+<td>Line buffering on output</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th>File Selection</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>--include="*.hpp" --include="*.cpp"</code></td>
+</tr>
+<tr class="even">
+<td><code>--exclude="*.log" --exclude="*.md"</code></td>
+</tr>
+<tr class="odd">
+<td><code>--exclude-dir="src"</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<h1 data-number="2" id="perl-regex"><span
+class="header-section-number">2</span> Perl Regex</h1>
+<div class="columns">
+<div class="column">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>.</code></td>
+<td>Any</td>
+</tr>
+<tr class="even">
+<td><code>\d</code></td>
+<td>Digit</td>
+</tr>
+<tr class="odd">
+<td><code>\D</code></td>
+<td>Negated of digit</td>
+</tr>
+<tr class="even">
+<td><code>\w</code></td>
+<td>Word <code>[0-9a-zA-Z_]</code></td>
+</tr>
+<tr class="odd">
+<td><code>\W</code></td>
+<td>Negated of word</td>
+</tr>
+<tr class="even">
+<td><code>\s</code></td>
+<td>Whitespace</td>
+</tr>
+<tr class="odd">
+<td><code>\s</code></td>
+<td>Negated of whitespace</td>
+</tr>
+<tr class="even">
+<td><code>[abc]</code></td>
+<td>Character class [a,b,c]</td>
+</tr>
+<tr class="odd">
+<td><code>^[abc]</code></td>
+<td>Negated of [a,b,c]</td>
+</tr>
+<tr class="even">
+<td><code>^</code></td>
+<td>Begin of line</td>
+</tr>
+<tr class="odd">
+<td><code>$</code></td>
+<td>End of line</td>
+</tr>
+<tr class="even">
+<td><code>\</code></td>
+<td>Escape next character</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Quantity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>*</code></td>
+<td>0-N</td>
+</tr>
+<tr class="even">
+<td><code>?</code></td>
+<td>0-1</td>
+</tr>
+<tr class="odd">
+<td><code>+</code></td>
+<td>1-N</td>
+</tr>
+<tr class="even">
+<td><code>a{2}</code></td>
+<td>aa</td>
+</tr>
+<tr class="odd">
+<td><code>a{2,4}</code></td>
+<td>aa - aaaa</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Greedy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>a*b</code></td>
+<td>Longest a*b</td>
+</tr>
+<tr class="even">
+<td><code>a*?b</code></td>
+<td>Shortest a*b</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>hello</code></td>
+<td><code>.*hello.*</code></td>
+</tr>
+<tr class="even">
+<td><code>\bhello\b</code></td>
+<td><code>hello</code></td>
+</tr>
+<tr class="odd">
+<td><code>\Bhello\B</code></td>
+<td><code>\whello\w</code></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Group</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>(a|b)c</code></td>
+<td>Match ab, ac</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th>Lookahead</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Positive</td>
+<td><code>car (?=run)</code></td>
+<td>Match <code>car</code> only if followed by <code>run</code></td>
+<td><code>car run</code></td>
+</tr>
+<tr class="even">
+<td>Negative</td>
+<td><code>car (?!run)</code></td>
+<td>Match <code>car</code> only if not followed by <code>run</code></td>
+<td><code>car stop</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th>Lookbehind</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Positive</td>
+<td><code>(?&lt;=red) car</code></td>
+<td>Match <code>car</code> only if preceded by <code>red</code></td>
+<td><code>red car</code></td>
+</tr>
+<tr class="even">
+<td>Negative</td>
+<td><code>(?&lt;!red) car</code></td>
+<td>Match <code>cat</code> only if not preceded by <code>red</code></td>
+<td><code>blue car</code></td>
+</tr>
+</tbody>
+</table>
+<footer class="footer text-muted">
+   <div align="center">      
+      <br>
+      <br>
+      <a href="/index.html"><b>Home</b></a>
+   </div>
+ </footer>
+</body>
+</html>
