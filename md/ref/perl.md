@@ -3,17 +3,17 @@ title: PERL
 ---
 
 
-# Commands
 :::::::::::::: {.columns}
-::: {.column}
+::: {.column width=30%}
+
+## Commands
 
 | | Input Control |
 |-------------|-------------|
 | `-e` | Execute command |
 | `-E` | Execute with features |
 
-:::
-::: {.column}
+<br>
 
 | | Output Control |
 |-------------|-------------|
@@ -21,12 +21,9 @@ title: PERL
 | `-n` | Not print automatically |
 
 :::
-::::::::::::::
+::: {.column width=30%}
 
-
-# Split
-:::::::::::::: {.columns}
-::: {.column}
+## Split
 
 | Pattern | |
 |-------------|-------------|
@@ -34,39 +31,24 @@ title: PERL
 | `-F:` | Split on `:` |
 | `-F'[:,]'` | Split on `:` or `,` |
 
-:::
-::: {.column}
+<br>
 
 | Fields |  |
 |-------------|-------------|
 | `$F[0] $F[1]` | Fields 0, 1 |
 | `@F` | All fields |
 
-:::
-::: {.column}
+Split on `:`. Print fields 0, 1.  
+`-F: -e 'print "$F[0] $F[1]\n"'`
 
-| Example | |
-|-------------|-------------|
-| `-F: -e 'print "$F[0] $F[1]\n"'` | Split on `:`. Print fields 0, 1. |
-| `-F: -e 'print "@F\n"'` | Split on `:`. Print all fields. |
+Split on `:`. Print all fields.  
+`-F: -e 'print "@F\n"'`
 
-:::
-::::::::::::::
-
-
-:::::::::::::: {.columns}
-::: {.column}
-
-# Capuring Groups 
-| Extract Matches | |
-|-------------|-------------|
-| `-ne 'print "$1\n" if /name=(\w+)/'` | Extract 1st match |
-| `'print "$1 $2\n" if /name=(\w+) age=(\d+)/'` | Extract 1st, 2nd |
 
 :::
-::: {.column}
+::: {.column width=30%}
 
-# Subtitude 
+## Subtitude 
 | Match & Replace | |
 |-------------|-------------|
 | `-pe 's/foo/bar/'` | Replace first `foo` by `bar` |
@@ -78,7 +60,38 @@ title: PERL
 ::::::::::::::
 
 
-# Regex
+:::::::::::::: {.columns}
+::: {.column}
+
+## Groups 
+
+| Extract Matches | |
+|-------------|-------------|
+| `-ne 'print "$1\n" if /name=(\w+)/'` | Extract 1st match |
+| `'print "$1 $2\n" if /name=(\w+) age=(\d+)/'` | Extract 1st, 2nd |
+
+:::
+::: {.column}
+
+## Look 
+
+| | | Lookahead | |
+|-------------|-------------|-------------|-------------|
+| Positive | `car (?=run)` | Match `car` only if followed by `run` | `car run` |
+| Negative | `car (?!run)` | Match `car` only if not followed by `run` | `car stop` |
+
+<br>
+
+| | | Lookbehind | |
+|-------------|-------------|-------------|-------------|
+| Positive | `(?<=red) car` | Match `car` only if preceded by `red` | `red car` |
+| Negative | `(?<!red) car` | Match `cat` only if not preceded by `red` | `blue car` |
+
+:::
+::::::::::::::
+
+## Wildcards
+
 :::::::::::::: {.columns}
 ::: {.column}
 
@@ -132,16 +145,3 @@ title: PERL
 
 :::
 ::::::::::::::
-
-| | | Lookahead | |
-|-------------|-------------|-------------|-------------|
-| Positive | `car (?=run)` | Match `car` only if followed by `run` | `car run` |
-| Negative | `car (?!run)` | Match `car` only if not followed by `run` | `car stop` |
-
-<br>
-
-| | | Lookbehind | |
-|-------------|-------------|-------------|-------------|
-| Positive | `(?<=red) car` | Match `car` only if preceded by `red` | `red car` |
-| Negative | `(?<!red) car` | Match `cat` only if not preceded by `red` | `blue car` |
-

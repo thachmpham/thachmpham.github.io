@@ -34,20 +34,9 @@
 <header id="title-block-header">
 <h1 class="title">PERL</h1>
 </header>
-<nav id="TOC" role="doc-toc">
-<ul>
-<li><a href="#commands" id="toc-commands"><span
-class="toc-section-number">1</span> Commands</a></li>
-<li><a href="#split" id="toc-split"><span
-class="toc-section-number">2</span> Split</a></li>
-<li><a href="#regex" id="toc-regex"><span
-class="toc-section-number">5</span> Regex</a></li>
-</ul>
-</nav>
-<h1 data-number="1" id="commands"><span
-class="header-section-number">1</span> Commands</h1>
 <div class="columns">
-<div class="column">
+<div class="column" style="width:30%;">
+<h2 id="commands">Commands</h2>
 <table>
 <thead>
 <tr class="header">
@@ -66,7 +55,7 @@ class="header-section-number">1</span> Commands</h1>
 </tr>
 </tbody>
 </table>
-</div><div class="column">
+<p><br></p>
 <table>
 <thead>
 <tr class="header">
@@ -85,12 +74,8 @@ class="header-section-number">1</span> Commands</h1>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<h1 data-number="2" id="split"><span
-class="header-section-number">2</span> Split</h1>
-<div class="columns">
-<div class="column">
+</div><div class="column" style="width:30%;">
+<h2 id="split">Split</h2>
 <table>
 <thead>
 <tr class="header">
@@ -113,7 +98,7 @@ class="header-section-number">2</span> Split</h1>
 </tr>
 </tbody>
 </table>
-</div><div class="column">
+<p><br></p>
 <table>
 <thead>
 <tr class="header">
@@ -132,52 +117,12 @@ class="header-section-number">2</span> Split</h1>
 </tr>
 </tbody>
 </table>
-</div><div class="column">
-<table>
-<thead>
-<tr class="header">
-<th>Example</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>-F: -e 'print "$F[0] $F[1]\n"'</code></td>
-<td>Split on <code>:</code>. Print fields 0, 1.</td>
-</tr>
-<tr class="even">
-<td><code>-F: -e 'print "@F\n"'</code></td>
-<td>Split on <code>:</code>. Print all fields.</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="columns">
-<div class="column">
-<h1 data-number="3" id="capuring-groups"><span
-class="header-section-number">3</span> Capuring Groups</h1>
-<table>
-<thead>
-<tr class="header">
-<th>Extract Matches</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>-ne 'print "$1\n" if /name=(\w+)/'</code></td>
-<td>Extract 1st match</td>
-</tr>
-<tr class="even">
-<td><code>'print "$1 $2\n" if /name=(\w+) age=(\d+)/'</code></td>
-<td>Extract 1st, 2nd</td>
-</tr>
-</tbody>
-</table>
-</div><div class="column">
-<h1 data-number="4" id="subtitude"><span
-class="header-section-number">4</span> Subtitude</h1>
+<p>Split on <code>:</code>. Print fields 0, 1.<br />
+<code>-F: -e 'print "$F[0] $F[1]\n"'</code></p>
+<p>Split on <code>:</code>. Print all fields.<br />
+<code>-F: -e 'print "@F\n"'</code></p>
+</div><div class="column" style="width:30%;">
+<h2 id="subtitude">Subtitude</h2>
 <table>
 <thead>
 <tr class="header">
@@ -206,8 +151,93 @@ class="header-section-number">4</span> Subtitude</h1>
 </table>
 </div>
 </div>
-<h1 data-number="5" id="regex"><span
-class="header-section-number">5</span> Regex</h1>
+<div class="columns">
+<div class="column">
+<h2 id="groups">Groups</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Extract Matches</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-ne 'print "$1\n" if /name=(\w+)/'</code></td>
+<td>Extract 1st match</td>
+</tr>
+<tr class="even">
+<td><code>'print "$1 $2\n" if /name=(\w+) age=(\d+)/'</code></td>
+<td>Extract 1st, 2nd</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<h2 id="look">Look</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th>Lookahead</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Positive</td>
+<td><code>car (?=run)</code></td>
+<td>Match <code>car</code> only if followed by <code>run</code></td>
+<td><code>car run</code></td>
+</tr>
+<tr class="even">
+<td>Negative</td>
+<td><code>car (?!run)</code></td>
+<td>Match <code>car</code> only if not followed by <code>run</code></td>
+<td><code>car stop</code></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th>Lookbehind</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Positive</td>
+<td><code>(?&lt;=red) car</code></td>
+<td>Match <code>car</code> only if preceded by <code>red</code></td>
+<td><code>red car</code></td>
+</tr>
+<tr class="even">
+<td>Negative</td>
+<td><code>(?&lt;!red) car</code></td>
+<td>Match <code>cat</code> only if not preceded by <code>red</code></td>
+<td><code>blue car</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<h2 id="wildcards">Wildcards</h2>
 <div class="columns">
 <div class="column">
 <table>
@@ -358,67 +388,6 @@ class="header-section-number">5</span> Regex</h1>
 </table>
 </div>
 </div>
-<table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th></th>
-<th></th>
-<th>Lookahead</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Positive</td>
-<td><code>car (?=run)</code></td>
-<td>Match <code>car</code> only if followed by <code>run</code></td>
-<td><code>car run</code></td>
-</tr>
-<tr class="even">
-<td>Negative</td>
-<td><code>car (?!run)</code></td>
-<td>Match <code>car</code> only if not followed by <code>run</code></td>
-<td><code>car stop</code></td>
-</tr>
-</tbody>
-</table>
-<p><br></p>
-<table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th></th>
-<th></th>
-<th>Lookbehind</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Positive</td>
-<td><code>(?&lt;=red) car</code></td>
-<td>Match <code>car</code> only if preceded by <code>red</code></td>
-<td><code>red car</code></td>
-</tr>
-<tr class="even">
-<td>Negative</td>
-<td><code>(?&lt;!red) car</code></td>
-<td>Match <code>cat</code> only if not preceded by <code>red</code></td>
-<td><code>blue car</code></td>
-</tr>
-</tbody>
-</table>
 <footer class="footer text-muted">
    <div align="center">      
       <br>

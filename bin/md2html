@@ -3,11 +3,11 @@
 # ====  global variables
 workspace=$(git rev-parse --show-toplevel)
 
-
 # ====  functions
-convert_markdown_to_html() {
-    local input_file=$1
-    local output_file=$2
+generate_post() {
+    local post_name="$1"
+    local input_file="${workspace}/md/${post_name}.md"
+    local output_file="${workspace}/html/${post_name}.html"
 
     pandoc --from markdown --to html \
         --css /html/style/dark.css \
@@ -22,13 +22,21 @@ convert_markdown_to_html() {
         ${input_file}
 }
 
-generate_post() {
-    local post_name=$1
-    convert_markdown_to_html    ${workspace}/md/${post_name}.md \
-                                ${workspace}/html/${post_name}.html
-}
+generate_post_notoc() {
+    local post_name="$1"
+    local input_file="${workspace}/md/${post_name}.md"
+    local output_file="${workspace}/html/${post_name}.html"
 
-# ====  main()   ==== #
+    pandoc --from markdown --to html \
+        --css /html/style/dark.css \
+        --include-in-header ${workspace}/bin/header.html \
+        --include-after-body ${workspace}/bin/footer.html \
+        --highlight-style zenburn \
+        --standalone \
+        --mathml \
+        --output=${output_file} \
+        ${input_file}
+}
 
 
 # ====  generate index.html
@@ -49,10 +57,12 @@ pandoc --from markdown --to html \
     --output ${workspace}/html/about.html \
     ${workspace}/md/about.md
 
-
 # ====  generate posts
-generate_post ref/grep
-generate_post ref/perl
+# ====  references
+generate_post_notoc ref/grep
+generate_post_notoc ref/perl
+generate_post_notoc ref/tcpdump
+generate_post_notoc ref/pcap-filter
 
 # ====  Virtual network interfaces
 # generate_post veth

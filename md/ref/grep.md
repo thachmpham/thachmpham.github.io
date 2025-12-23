@@ -3,7 +3,7 @@ title: GREP
 ---
 
 
-# Commands
+## Commands
 :::::::::::::: {.columns}
 ::: {.column}
 
@@ -41,10 +41,10 @@ title: GREP
 :::
 ::::::::::::::
 
-# Perl Regex
+## Perl Regex
 
 :::::::::::::: {.columns}
-::: {.column}
+::: {.column width=25%}
 
 | | Class |
 |-------------|-------------|
@@ -63,7 +63,7 @@ title: GREP
 
 
 :::
-::: {.column}
+::: {.column width=25%}
 
 | | Quantity |
 |-------------|-------------|
@@ -80,8 +80,7 @@ title: GREP
 | `a*b` |  Longest a*b |
 | `a*?b` | Shortest a*b |
 
-:::
-::: {.column}
+<br>
 
 | | Boundary |
 |-------------|-------------|
@@ -89,22 +88,28 @@ title: GREP
 | `\bhello\b` | `hello`  |
 | `\Bhello\B` | `\whello\w` |
 
-<br>
+:::
+::: {.column width=50%}
+
 
 | | Group |
 |-------------|-------------|
 | `(a|b)c` | Match ab, ac |
 
-:::
-::::::::::::::
+<br>
 
 | | | Lookahead | |
 |-------------|-------------|-------------|-------------|
 | Positive | `car (?=run)` | Match `car` only if followed by `run` | `car run` |
 | Negative | `car (?!run)` | Match `car` only if not followed by `run` | `car stop` |
 
+<br>
 
 | | | Lookbehind | |
 |-------------|-------------|-------------|-------------|
 | Positive | `(?<=red) car` | Match `car` only if preceded by `red` | `red car` |
 | Negative | `(?<!red) car` | Match `cat` only if not preceded by `red` | `blue car` |
+
+:::
+::::::::::::::
+
