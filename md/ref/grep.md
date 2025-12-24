@@ -3,7 +3,7 @@ title: GREP
 ---
 
 
-## Commands
+## Command Line Arguments
 :::::::::::::: {.columns}
 ::: {.column}
 
@@ -46,8 +46,8 @@ title: GREP
 :::::::::::::: {.columns}
 ::: {.column width=25%}
 
-| | Class |
-|-------------|-------------|
+| Wildcard |  |
+|:------------|-------------|
 | `.` | Any |
 | `\d` | Digit |
 | `\D` | Negated of digit |
@@ -57,33 +57,29 @@ title: GREP
 | `\s` | Negated of whitespace |
 | `[abc]`| Character class [a,b,c] |
 | `^[abc]` | Negated of [a,b,c]|
+| `(a|b)c` | Match ac, bc |
 | `^` | Begin of line |
 | `$` | End of line |
 | `\` | Escape next character |
 
-
 :::
 ::: {.column width=25%}
 
-| | Quantity |
-|-------------|-------------|
+| Quantity | |
+|:-------------|-------------|
 | `*` | 0-N |
 | `?` | 0-1 |
 | `+` | 1-N |
 | `a{2}` | aa |
 | `a{2,4}` | aa - aaaa |
 
-<br>
-
-| | Greedy |
-|-------------|-------------|
+| Greedy |  |
+|:------------|-------------|
 | `a*b` |  Longest a*b |
 | `a*?b` | Shortest a*b |
 
-<br>
-
-| | Boundary |
-|-------------|-------------|
+| Boundary |  |
+|:------------|-------------|
 | `hello` | `.*hello.*`  |
 | `\bhello\b` | `hello`  |
 | `\Bhello\B` | `\whello\w` |
@@ -91,22 +87,13 @@ title: GREP
 :::
 ::: {.column width=50%}
 
-
-| | Group |
-|-------------|-------------|
-| `(a|b)c` | Match ab, ac |
-
-<br>
-
-| | | Lookahead | |
-|-------------|-------------|-------------|-------------|
+| Lookahead | |  | |
+|:------------|-------------|-------------|-------------|
 | Positive | `car (?=run)` | Match `car` only if followed by `run` | `car run` |
 | Negative | `car (?!run)` | Match `car` only if not followed by `run` | `car stop` |
 
-<br>
-
-| | | Lookbehind | |
-|-------------|-------------|-------------|-------------|
+| Lookbehind | |  | |
+|:-----------|-------------|-------------|-------------|
 | Positive | `(?<=red) car` | Match `car` only if preceded by `red` | `red car` |
 | Negative | `(?<!red) car` | Match `cat` only if not preceded by `red` | `blue car` |
 

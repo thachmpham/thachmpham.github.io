@@ -97,48 +97,140 @@
 <header id="title-block-header">
 <h1 class="title">tcpdump</h1>
 </header>
-<h1 id="input-output">Input &amp; Output</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: left;">Input Control</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-D</code></td>
+<td style="text-align: left;">List interfaces</td>
+</tr>
+<tr class="even">
+<td><code>-i</code></td>
+<td style="text-align: left;">Input interface</td>
+</tr>
+<tr class="odd">
+<td><code>-r</code></td>
+<td style="text-align: left;">Read from file</td>
+</tr>
+<tr class="even">
+<td><code>-r</code></td>
+<td style="text-align: left;">Read from file</td>
+</tr>
+<tr class="odd">
+<td><code>-w</code></td>
+<td style="text-align: left;">Write to file</td>
+</tr>
+<tr class="even">
+<td><code>-c 5</code></td>
+<td style="text-align: left;">Exit after 5 packets</td>
+</tr>
+</tbody>
+</table>
+<p>::: ::::::::::::::</p>
+<h3 id="output-format">Output Format</h3>
 <div class="columns">
-<div class="column" style="width:30%;">
-<p>List interfaces.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-D</span></span></code></pre></div>
-<p>Capture.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-i</span> interface</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">-i</span> interface <span class="st">&#39;expr_string&#39;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">-i</span> interface <span class="at">-F</span> expr_file</span></code></pre></div>
-<p>Read from file.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-r</span> infile</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">-r</span> infile <span class="at">-c</span> N  <span class="co"># only N packets</span></span></code></pre></div>
-</div><div class="column" style="width:70%;">
-<p>Write to file.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-w</span> filename</span></code></pre></div>
-<p>stdout.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-l</span>  <span class="co"># flush on end of line</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">-U</span>  <span class="co"># flush on end of packet</span></span></code></pre></div>
-<p>grep &amp; awk.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tcpdump</span> <span class="at">-i</span> interface <span class="at">-l</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">--line-buffered</span> expr</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">tcpdump</span> <span class="at">-i</span> interface <span class="at">-l</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">--line-buffered</span> expr <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $3}&#39;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">tcpdump</span> <span class="at">-i</span> interface <span class="at">-l</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">--line-buffered</span> expr <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $3; fflush()}&#39;</span> <span class="kw">|</span> <span class="ex">python3</span> decode.py</span></code></pre></div>
-</div>
-</div>
-<h1 id="display-format">Display Format</h1>
-<div class="columns">
-<div class="column" style="width:60%;">
-<p>Hex and ascii.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-xx</span> <span class="co"># hex only</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">-XX</span> <span class="co"># hex and ascii</span></span></code></pre></div>
-<p>Display link layer header.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-e</span></span></code></pre></div>
+<div class="column">
+<ul>
+<li>Hex and ascii.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># hex only</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">-xx</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># hex and ascii</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">-XX</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Frame number.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">--number</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">-#</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 </div><div class="column">
-<p>Time.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-ttt</span>    <span class="co"># delta between frames</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">-tttt</span>   <span class="co"># date</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">-ttttt</span>  <span class="co"># delta since frame 1     </span></span></code></pre></div>
-<p>Display frame number.</p>
+<ul>
+<li>Link-level header.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">-e</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Time.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">-ttt</span>    <span class="co"># delta between frames</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">-tttt</span>   <span class="co"># date</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">-ttttt</span>  <span class="co"># delta since frame 1     </span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+</div>
+</div>
+<h3 id="redirect-output">Redirect Output</h3>
+<ul>
+<li>Redirect to stdout.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># flush on end of line  </span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">-l</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># flush on end of packet</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">-</span> U</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>grep &amp; awk.</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">tcpdump</span> <span class="at">-i</span> interface <span class="at">-l</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">--line-buffered</span> expr</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">tcpdump</span> <span class="at">-i</span> interface <span class="at">-l</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">--line-buffered</span> expr <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $3}&#39;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">tcpdump</span> <span class="at">-i</span> interface <span class="at">-l</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">--line-buffered</span> expr <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $3; fflush()}&#39;</span> <span class="kw">|</span> <span class="ex">python3</span> decode.py</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h3 id="filter-expression">Filter Expression</h3>
+<ul>
+<li>Expression syntax.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">man</span> pcap-filter</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Use expression.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">tcpdump</span> <span class="at">-r</span> infile <span class="st">&#39;expr_string&#39;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">tcpdump</span> <span class="at">-r</span> infile <span class="at">-F</span> expr_file</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Offset.</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;ether[0x30] == 0x63&#39;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;ether[0x30:2] == 0x6368&#39;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+</div><div class="column">
+<ul>
+<li>Length.</li>
+</ul>
 <div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">--number</span></span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;len == 58&#39;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;len != 58&#39;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 </div>
 </div>
+<h3 id="hex-format">Hex Format</h3>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode yml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="at">  </span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="at">         0    2    4    6    8    A    C    E    </span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">0x0000</span><span class="kw">:</span><span class="at">  0001 0203 0405 0607 0809 0a0b 0c0d 0e0f</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">0x0010</span><span class="kw">:</span><span class="at">  1011 1213 1415 1617 1819 1a1b 1c1d 1e1f</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">0x0020</span><span class="kw">:</span><span class="at">  2021 2223 2425 2627 2829 2a2b 2c2d 2e2f</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">0x0030</span><span class="kw">:</span><span class="at">  3031 3233 3435 3637 3839 3a3b 3c3d 3e3f</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span></span></code></pre></div>
 <footer class="footer text-muted">
    <div align="center">      
       <br>

@@ -35,200 +35,215 @@
 <h1 class="title">PERL</h1>
 </header>
 <div class="columns">
-<div class="column" style="width:30%;">
-<h2 id="commands">Commands</h2>
+<div class="column" style="width:25%;">
 <table>
 <thead>
 <tr class="header">
+<th style="text-align: left;">Wildcard</th>
 <th></th>
-<th>Input Control</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>-e</code></td>
-<td>Execute command</td>
+<td style="text-align: left;"><code>.</code></td>
+<td>Any</td>
 </tr>
 <tr class="even">
-<td><code>-E</code></td>
-<td>Execute with features</td>
+<td style="text-align: left;"><code>\d</code></td>
+<td>Digit</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>\D</code></td>
+<td>Negated of digit</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>\w</code></td>
+<td>Word <code>[0-9a-zA-Z_]</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>\W</code></td>
+<td>Negated of word</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>\s</code></td>
+<td>Whitespace</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>\s</code></td>
+<td>Negated of whitespace</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>[abc]</code></td>
+<td>Character class [a,b,c]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>^[abc]</code></td>
+<td>Negated of [a,b,c]</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>(a|b)c</code></td>
+<td>Match ac, bc</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>^</code></td>
+<td>Begin of line</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>$</code></td>
+<td>End of line</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>\</code></td>
+<td>Escape next character</td>
 </tr>
 </tbody>
 </table>
-<p><br></p>
+</div><div class="column" style="width:25%;">
 <table>
 <thead>
 <tr class="header">
+<th style="text-align: left;">Quantity</th>
 <th></th>
-<th>Output Control</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>-p</code></td>
-<td>Print all lines</td>
+<td style="text-align: left;"><code>*</code></td>
+<td>0-N</td>
 </tr>
 <tr class="even">
-<td><code>-n</code></td>
-<td>Not print automatically</td>
+<td style="text-align: left;"><code>?</code></td>
+<td>0-1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>+</code></td>
+<td>1-N</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>a{2}</code></td>
+<td>aa</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>a{2,4}</code></td>
+<td>aa - aaaa</td>
 </tr>
 </tbody>
 </table>
-</div><div class="column" style="width:30%;">
-<h2 id="split">Split</h2>
 <table>
 <thead>
 <tr class="header">
-<th>Pattern</th>
+<th style="text-align: left;">Greedy</th>
 <th></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>-F&lt;regex&gt;</code></td>
-<td>Split on regex</td>
+<td style="text-align: left;"><code>a*b</code></td>
+<td>Longest a*b</td>
 </tr>
 <tr class="even">
-<td><code>-F:</code></td>
-<td>Split on <code>:</code></td>
-</tr>
-<tr class="odd">
-<td><code>-F'[:,]'</code></td>
-<td>Split on <code>:</code> or <code>,</code></td>
+<td style="text-align: left;"><code>a*?b</code></td>
+<td>Shortest a*b</td>
 </tr>
 </tbody>
 </table>
-<p><br></p>
 <table>
 <thead>
 <tr class="header">
-<th>Fields</th>
+<th style="text-align: left;">Boundary</th>
 <th></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>$F[0] $F[1]</code></td>
-<td>Fields 0, 1</td>
+<td style="text-align: left;"><code>hello</code></td>
+<td><code>.*hello.*</code></td>
 </tr>
 <tr class="even">
-<td><code>@F</code></td>
-<td>All fields</td>
+<td style="text-align: left;"><code>\bhello\b</code></td>
+<td><code>hello</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>\Bhello\B</code></td>
+<td><code>\whello\w</code></td>
 </tr>
 </tbody>
 </table>
-<p>Split on <code>:</code>. Print fields 0, 1.<br />
-<code>-F: -e 'print "$F[0] $F[1]\n"'</code></p>
-<p>Split on <code>:</code>. Print all fields.<br />
-<code>-F: -e 'print "@F\n"'</code></p>
-</div><div class="column" style="width:30%;">
-<h2 id="subtitude">Subtitude</h2>
+</div><div class="column" style="width:50%;">
 <table>
 <thead>
 <tr class="header">
-<th>Match &amp; Replace</th>
+<th style="text-align: left;">Capturing Group</th>
 <th></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>-pe 's/foo/bar/'</code></td>
-<td>Replace first <code>foo</code> by <code>bar</code></td>
-</tr>
-<tr class="even">
-<td><code>-pe 's/foo/bar/g'</code></td>
-<td>Replace all <code>foo</code> by <code>bar</code></td>
-</tr>
-<tr class="odd">
-<td><code>-pe 's/foo/bar/i'</code></td>
-<td>Ignore case insensitive</td>
-</tr>
-<tr class="even">
-<td><code>-pe 's/(foo) (bar)/$2 $1/'</code></td>
-<td>Capure groups. Swap <code>foo</code>, <code>bar</code></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="columns">
-<div class="column">
-<h2 id="groups">Groups</h2>
-<table>
-<thead>
-<tr class="header">
-<th>Extract Matches</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>-ne 'print "$1\n" if /name=(\w+)/'</code></td>
+<td
+style="text-align: left;"><code>-ne 'print "$1\n" if /name=(\w+)/'</code></td>
 <td>Extract 1st match</td>
 </tr>
 <tr class="even">
-<td><code>'print "$1 $2\n" if /name=(\w+) age=(\d+)/'</code></td>
+<td
+style="text-align: left;"><code>'print "$1 $2\n" if /name=(\w+) age=(\d+)/'</code></td>
 <td>Extract 1st, 2nd</td>
 </tr>
 </tbody>
 </table>
-</div><div class="column">
-<h2 id="look">Look</h2>
 <table>
 <colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
+<col style="width: 26%" />
+<col style="width: 24%" />
+<col style="width: 24%" />
+<col style="width: 24%" />
 </colgroup>
 <thead>
 <tr class="header">
+<th style="text-align: left;">Lookahead</th>
 <th></th>
 <th></th>
-<th>Lookahead</th>
 <th></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Positive</td>
+<td style="text-align: left;">Positive</td>
 <td><code>car (?=run)</code></td>
 <td>Match <code>car</code> only if followed by <code>run</code></td>
 <td><code>car run</code></td>
 </tr>
 <tr class="even">
-<td>Negative</td>
+<td style="text-align: left;">Negative</td>
 <td><code>car (?!run)</code></td>
 <td>Match <code>car</code> only if not followed by <code>run</code></td>
 <td><code>car stop</code></td>
 </tr>
 </tbody>
 </table>
-<p><br></p>
 <table>
 <colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
+<col style="width: 26%" />
+<col style="width: 24%" />
+<col style="width: 24%" />
+<col style="width: 24%" />
 </colgroup>
 <thead>
 <tr class="header">
+<th style="text-align: left;">Lookbehind</th>
 <th></th>
 <th></th>
-<th>Lookbehind</th>
 <th></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Positive</td>
+<td style="text-align: left;">Positive</td>
 <td><code>(?&lt;=red) car</code></td>
 <td>Match <code>car</code> only if preceded by <code>red</code></td>
 <td><code>red car</code></td>
 </tr>
 <tr class="even">
-<td>Negative</td>
+<td style="text-align: left;">Negative</td>
 <td><code>(?&lt;!red) car</code></td>
 <td>Match <code>cat</code> only if not preceded by <code>red</code></td>
 <td><code>blue car</code></td>
@@ -237,152 +252,103 @@
 </table>
 </div>
 </div>
-<h2 id="wildcards">Wildcards</h2>
 <div class="columns">
-<div class="column">
+<div class="column" style="width:20%;">
 <table>
 <thead>
 <tr class="header">
 <th></th>
-<th>Class</th>
+<th style="text-align: left;">Command line arguments</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>.</code></td>
-<td>Any</td>
+<td><code>-e</code></td>
+<td style="text-align: left;">Execute command</td>
 </tr>
 <tr class="even">
-<td><code>\d</code></td>
-<td>Digit</td>
+<td><code>-E</code></td>
+<td style="text-align: left;">Execute with features</td>
 </tr>
 <tr class="odd">
-<td><code>\D</code></td>
-<td>Negated of digit</td>
+<td><code>-p</code></td>
+<td style="text-align: left;">Print all lines</td>
 </tr>
 <tr class="even">
-<td><code>\w</code></td>
-<td>Word <code>[0-9a-zA-Z_]</code></td>
-</tr>
-<tr class="odd">
-<td><code>\W</code></td>
-<td>Negated of word</td>
-</tr>
-<tr class="even">
-<td><code>\s</code></td>
-<td>Whitespace</td>
-</tr>
-<tr class="odd">
-<td><code>\s</code></td>
-<td>Negated of whitespace</td>
-</tr>
-<tr class="even">
-<td><code>[abc]</code></td>
-<td>Character class [a,b,c]</td>
-</tr>
-<tr class="odd">
-<td><code>^[abc]</code></td>
-<td>Negated of [a,b,c]</td>
-</tr>
-<tr class="even">
-<td><code>^</code></td>
-<td>Begin of line</td>
-</tr>
-<tr class="odd">
-<td><code>$</code></td>
-<td>End of line</td>
-</tr>
-<tr class="even">
-<td><code>\</code></td>
-<td>Escape next character</td>
+<td><code>-n</code></td>
+<td style="text-align: left;">Not print automatically</td>
 </tr>
 </tbody>
 </table>
-</div><div class="column">
+</div><div class="column" style="width:30%;">
 <table>
 <thead>
 <tr class="header">
+<th style="text-align: left;">Subtitude</th>
 <th></th>
-<th>Quantity</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>*</code></td>
-<td>0-N</td>
+<td style="text-align: left;"><code>-pe 's/foo/bar/'</code></td>
+<td>Replace first <code>foo</code> by <code>bar</code></td>
 </tr>
 <tr class="even">
-<td><code>?</code></td>
-<td>0-1</td>
+<td style="text-align: left;"><code>-pe 's/foo/bar/g'</code></td>
+<td>Replace all <code>foo</code> by <code>bar</code></td>
 </tr>
 <tr class="odd">
-<td><code>+</code></td>
-<td>1-N</td>
+<td style="text-align: left;"><code>-pe 's/foo/bar/i'</code></td>
+<td>Ignore case insensitive</td>
 </tr>
 <tr class="even">
-<td><code>a{2}</code></td>
-<td>aa</td>
-</tr>
-<tr class="odd">
-<td><code>a{2,4}</code></td>
-<td>aa - aaaa</td>
+<td
+style="text-align: left;"><code>-pe 's/(foo) (bar)/$2 $1/'</code></td>
+<td>Capure groups. Swap <code>foo</code>, <code>bar</code></td>
 </tr>
 </tbody>
 </table>
-<p><br></p>
+</div><div class="column" style="width:50%;">
 <table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
 <thead>
 <tr class="header">
+<th style="text-align: left;">Split &amp; Field</th>
 <th></th>
-<th>Greedy</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>a*b</code></td>
-<td>Longest a*b</td>
+<td style="text-align: left;"><code>-F&lt;regex&gt;</code></td>
+<td>Split on regex</td>
 </tr>
 <tr class="even">
-<td><code>a*?b</code></td>
-<td>Shortest a*b</td>
+<td style="text-align: left;"><code>-F:</code></td>
+<td>Split on <code>:</code></td>
 </tr>
-</tbody>
-</table>
-</div><div class="column">
-<table>
-<thead>
-<tr class="header">
-<th></th>
-<th>Boundary</th>
-</tr>
-</thead>
-<tbody>
 <tr class="odd">
-<td><code>hello</code></td>
-<td><code>.*hello.*</code></td>
+<td style="text-align: left;"><code>-F'[:,]'</code></td>
+<td>Split on <code>:</code> or <code>,</code></td>
 </tr>
 <tr class="even">
-<td><code>\bhello\b</code></td>
-<td><code>hello</code></td>
+<td style="text-align: left;"><code>$F[0] $F[1]</code></td>
+<td>Fields 0, 1</td>
 </tr>
 <tr class="odd">
-<td><code>\Bhello\B</code></td>
-<td><code>\whello\w</code></td>
+<td style="text-align: left;"><code>@F</code></td>
+<td>All fields</td>
 </tr>
-</tbody>
-</table>
-<p><br></p>
-<table>
-<thead>
-<tr class="header">
-<th></th>
-<th>Group</th>
+<tr class="even">
+<td
+style="text-align: left;"><code>-F: -e 'print "$F[0] $F[1]\n"'</code></td>
+<td>Split on <code>:</code> and print fields 0, 1.</td>
 </tr>
-</thead>
-<tbody>
 <tr class="odd">
-<td><code>(a|b)c</code></td>
-<td>Match ab, ac</td>
+<td style="text-align: left;"><code>-F: -e 'print "@F\n"'</code></td>
+<td>Split on <code>:</code> and print all fields.</td>
 </tr>
 </tbody>
 </table>

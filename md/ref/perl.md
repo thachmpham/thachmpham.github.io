@@ -3,100 +3,12 @@ title: PERL
 ---
 
 
-:::::::::::::: {.columns}
-::: {.column width=30%}
-
-## Commands
-
-| | Input Control |
-|-------------|-------------|
-| `-e` | Execute command |
-| `-E` | Execute with features |
-
-<br>
-
-| | Output Control |
-|-------------|-------------|
-| `-p` | Print all lines |
-| `-n` | Not print automatically |
-
-:::
-::: {.column width=30%}
-
-## Split
-
-| Pattern | |
-|-------------|-------------|
-| `-F<regex>` | Split on regex |
-| `-F:` | Split on `:` |
-| `-F'[:,]'` | Split on `:` or `,` |
-
-<br>
-
-| Fields |  |
-|-------------|-------------|
-| `$F[0] $F[1]` | Fields 0, 1 |
-| `@F` | All fields |
-
-Split on `:`. Print fields 0, 1.  
-`-F: -e 'print "$F[0] $F[1]\n"'`
-
-Split on `:`. Print all fields.  
-`-F: -e 'print "@F\n"'`
-
-
-:::
-::: {.column width=30%}
-
-## Subtitude 
-| Match & Replace | |
-|-------------|-------------|
-| `-pe 's/foo/bar/'` | Replace first `foo` by `bar` |
-| `-pe 's/foo/bar/g'` | Replace all `foo` by `bar` |
-| `-pe 's/foo/bar/i'` | Ignore case insensitive |
-| `-pe 's/(foo) (bar)/$2 $1/'` | Capure groups. Swap `foo`, `bar` |
-
-:::
-::::::::::::::
-
 
 :::::::::::::: {.columns}
-::: {.column}
+::: {.column width=25%}
 
-## Groups 
-
-| Extract Matches | |
-|-------------|-------------|
-| `-ne 'print "$1\n" if /name=(\w+)/'` | Extract 1st match |
-| `'print "$1 $2\n" if /name=(\w+) age=(\d+)/'` | Extract 1st, 2nd |
-
-:::
-::: {.column}
-
-## Look 
-
-| | | Lookahead | |
-|-------------|-------------|-------------|-------------|
-| Positive | `car (?=run)` | Match `car` only if followed by `run` | `car run` |
-| Negative | `car (?!run)` | Match `car` only if not followed by `run` | `car stop` |
-
-<br>
-
-| | | Lookbehind | |
-|-------------|-------------|-------------|-------------|
-| Positive | `(?<=red) car` | Match `car` only if preceded by `red` | `red car` |
-| Negative | `(?<!red) car` | Match `cat` only if not preceded by `red` | `blue car` |
-
-:::
-::::::::::::::
-
-## Wildcards
-
-:::::::::::::: {.columns}
-::: {.column}
-
-| | Class |
-|-------------|-------------|
+| Wildcard |  |
+|:------------|-------------|
 | `.` | Any |
 | `\d` | Digit |
 | `\D` | Negated of digit |
@@ -106,42 +18,88 @@ Split on `:`. Print all fields.
 | `\s` | Negated of whitespace |
 | `[abc]`| Character class [a,b,c] |
 | `^[abc]` | Negated of [a,b,c]|
+| `(a|b)c` | Match ac, bc |
 | `^` | Begin of line |
 | `$` | End of line |
 | `\` | Escape next character |
 
 :::
-::: {.column}
+::: {.column width=25%}
 
-| | Quantity |
-|-------------|-------------|
+| Quantity |  |
+|:------------|-------------|
 | `*` | 0-N |
 | `?` | 0-1 |
 | `+` | 1-N |
 | `a{2}` | aa |
 | `a{2,4}` | aa - aaaa |
 
-<br>
 
-| | Greedy |
-|-------------|-------------|
+| Greedy |  |
+|:-------------|-------------|
 | `a*b` |  Longest a*b |
 | `a*?b` | Shortest a*b |
 
-:::
-::: {.column}
 
-| | Boundary |
-|-------------|-------------|
+| Boundary |  |
+|:-------------|-------------|
 | `hello` | `.*hello.*`  |
 | `\bhello\b` | `hello`  |
 | `\Bhello\B` | `\whello\w` |
 
-<br>
+:::
+::: {.column width=50%}
 
-| | Group |
-|-------------|-------------|
-| `(a|b)c` | Match ab, ac |
+| Capturing Group | |
+|:-------------|-------------|
+| `-ne 'print "$1\n" if /name=(\w+)/'` | Extract 1st match |
+| `'print "$1 $2\n" if /name=(\w+) age=(\d+)/'` | Extract 1st, 2nd |
+
+| Lookahead | | | |
+|:-------------|-------------|-------------|-------------|
+| Positive | `car (?=run)` | Match `car` only if followed by `run` | `car run` |
+| Negative | `car (?!run)` | Match `car` only if not followed by `run` | `car stop` |
+
+| Lookbehind | |  | |
+|:-------------|-------------|-------------|-------------|
+| Positive | `(?<=red) car` | Match `car` only if preceded by `red` | `red car` |
+| Negative | `(?<!red) car` | Match `cat` only if not preceded by `red` | `blue car` |
+
+:::
+::::::::::::::
+
+:::::::::::::: {.columns}
+::: {.column width=20%}
+
+| | Command line arguments  |
+|-------------|:-------------|
+| `-e` | Execute command |
+| `-E` | Execute with features |
+| `-p` | Print all lines |
+| `-n` | Not print automatically |
+
+:::
+::: {.column width=30%}
+
+| Subtitude | |
+|:-------------|-------------|
+| `-pe 's/foo/bar/'` | Replace first `foo` by `bar` |
+| `-pe 's/foo/bar/g'` | Replace all `foo` by `bar` |
+| `-pe 's/foo/bar/i'` | Ignore case insensitive |
+| `-pe 's/(foo) (bar)/$2 $1/'` | Capure groups. Swap `foo`, `bar` |
+
+:::
+::: {.column width=50%}
+
+| Split & Field | |
+|:-------------|-------------|
+| `-F<regex>` | Split on regex |
+| `-F:` | Split on `:` |
+| `-F'[:,]'` | Split on `:` or `,` |
+| `$F[0] $F[1]` | Fields 0, 1 |
+| `@F` | All fields |
+| `-F: -e 'print "$F[0] $F[1]\n"'` | Split on `:` and print fields 0, 1. |
+| `-F: -e 'print "@F\n"'` | Split on `:` and print all fields. |
 
 :::
 ::::::::::::::

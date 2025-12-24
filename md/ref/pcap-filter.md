@@ -188,6 +188,7 @@ title: Pcap Filter
 | Msize        |  13b   |        |        |
 | Mtype        |  3b    | `ether[0x10] >> 5` |        |
 
+<br>
 
 | User | Name                | Purpose                          | Class      |
 |:----:|:--------------------|:---------------------------------|:----------:|
@@ -208,6 +209,7 @@ title: Pcap Filter
 | 14   | USER_TYPE_14        | Reserved for future use          | N/A        |
 | 15   | USER_TYPE_15        | Reserved for future use          | N/A        |
 
+<br>
 
 | User/Class   | Mtype  |  Name  |
 |-------:|:-----:|:--------------|
@@ -220,6 +222,7 @@ title: Pcap Filter
 | LINK_DISCOVER      | 0     | Link request          |
 | LINK_DISCOVER      | 1     | Link response         |
 
+<br>
 
 ```go
                      TIPC Neighbor Discovery Message

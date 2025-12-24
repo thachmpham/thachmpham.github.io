@@ -56,9 +56,6 @@ Good themes: plain, sketchy, sketchy-outline.
 ```yml
 !pragma teoz true
 hide footbox
-
-Alice -> Bob : hello
-& Bob -> Charlie : hi
 ```
 
 :::
