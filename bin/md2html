@@ -63,6 +63,7 @@ generate_post_notoc ref/grep
 generate_post_notoc ref/perl
 generate_post_notoc ref/tcpdump
 generate_post_notoc ref/pcap-filter
+generate_post_notoc ref/plantuml
 
 # ====  Virtual network interfaces
 # generate_post veth
