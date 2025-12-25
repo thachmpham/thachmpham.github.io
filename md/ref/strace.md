@@ -2,7 +2,7 @@
 title: "strace"
 ---
 
-## Filter
+### Filter
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
@@ -27,7 +27,7 @@ title: "strace"
 
 | Trace path      | Example      |
 |:----------------|:-------------|
-| `--trace-path=path` | `-trace-path=hello` |
+| `--trace-path=path` | `--trace-path=hello` |
 
 :::
 ::: {.column width=30%}
@@ -44,7 +44,7 @@ title: "strace"
 :::
 ::::::::::::::
 
-## Display
+### Display
 
 :::::::::::::: {.columns}
 ::: {.column width=60%}
@@ -55,12 +55,15 @@ title: "strace"
 | `--read=fd_set`       | `--read=0`    | Print arguments of read on fd 0 in hex + ascii |
 | `xx -s N`             | `-xx -s 32`   | Print arguments in hex, max length is 32 |
 
-| Decode Descriptor     | Example               | Explain |
-|:----------------------|:----------------------|:------------------------------------|
-| `--decode-fds`        |                       |                                     |
-| `--decode-fds=set`    | `--decode-fds=path`   | Print file path associated with fds |
-|                       | `--decode-fds=socket` | Print protocol associated with fds  |
-| `--decode-pids=set`   | `--decode-pids=comm`  | Print command names for pids        |
+| Decode Descriptor     | Abbrev | Explain |
+|:----------------------|:-------|:------------------------------------|
+| `--decode-fds`        |        |                                     |
+| `--decode-fds=set`    |        |                                     |
+| `--decode-fds=path`   | `-y`   | Print file path associated with fds |
+| `--decode-fds=all`    | `-yy`  | Print all info associated with fds  |
+|                       |        |                                     |
+| `--decode-pids=set`   |        |                                     |
+| `--decode-pids=comm`  | `-Y`   | Print command names for pids        |
 
 :::
 ::: {.column width=40%}
@@ -73,10 +76,17 @@ title: "strace"
 | `-o myfile -ff`                   | Follow child, output to myfile.pid |
 | `-o myfile -D`                    | strace and target process detached |
 
-| Backtrace              |
-|:-----------------------|
-| `--stack-trace=symbol` |
-| `--stack-trace=source` |
+| Backtrace              | Abbrev  |
+|:-----------------------|:--------|
+| `--stack-trace=symbol` | `-k`    |
+| `--stack-trace=source` | `-kk`   |
 
 :::
 ::::::::::::::
+
+
+### Real Cases
+
+| Service      | Patch                                                                        |
+|:-------------|:-----------------------------------------------------------------------------|
+| rsyslog | `ExecStart=strace -yy -o /tmp/rsyslog.strace -ff -D /usr/sbin/rsyslogd -n -iNONE` |

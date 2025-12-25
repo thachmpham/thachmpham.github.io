@@ -34,7 +34,7 @@
 <header id="title-block-header">
 <h1 class="title">strace</h1>
 </header>
-<h2 id="filter">Filter</h2>
+<h3 id="filter">Filter</h3>
 <div class="columns">
 <div class="column" style="width:40%;">
 <table>
@@ -105,7 +105,7 @@ style="text-align: left;"><code>-e trace=file -e trace='!write'</code></td>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;"><code>--trace-path=path</code></td>
-<td style="text-align: left;"><code>-trace-path=hello</code></td>
+<td style="text-align: left;"><code>--trace-path=hello</code></td>
 </tr>
 </tbody>
 </table>
@@ -145,7 +145,7 @@ style="text-align: left;"><code>successful, failed, unfinished</code></td>
 </table>
 </div>
 </div>
-<h2 id="display">Display</h2>
+<h3 id="display">Display</h3>
 <div class="columns">
 <div class="column" style="width:60%;">
 <table>
@@ -183,15 +183,10 @@ ascii</td>
 </tbody>
 </table>
 <table>
-<colgroup>
-<col style="width: 27%" />
-<col style="width: 27%" />
-<col style="width: 44%" />
-</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Decode Descriptor</th>
-<th style="text-align: left;">Example</th>
+<th style="text-align: left;">Abbrev</th>
 <th style="text-align: left;">Explain</th>
 </tr>
 </thead>
@@ -203,17 +198,32 @@ ascii</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>--decode-fds=set</code></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
 <td style="text-align: left;"><code>--decode-fds=path</code></td>
+<td style="text-align: left;"><code>-y</code></td>
 <td style="text-align: left;">Print file path associated with fds</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>--decode-fds=all</code></td>
+<td style="text-align: left;"><code>-yy</code></td>
+<td style="text-align: left;">Print all info associated with fds</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"></td>
-<td style="text-align: left;"><code>--decode-fds=socket</code></td>
-<td style="text-align: left;">Print protocol associated with fds</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>--decode-pids=set</code></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
 <td style="text-align: left;"><code>--decode-pids=comm</code></td>
+<td style="text-align: left;"><code>-Y</code></td>
 <td style="text-align: left;">Print command names for pids</td>
 </tr>
 </tbody>
@@ -258,19 +268,42 @@ style="text-align: left;"><code>-o myfile --output-separately</code></td>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Backtrace</th>
+<th style="text-align: left;">Abbrev</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;"><code>--stack-trace=symbol</code></td>
+<td style="text-align: left;"><code>-k</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>--stack-trace=source</code></td>
+<td style="text-align: left;"><code>-kk</code></td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
+<h3 id="real-cases">Real Cases</h3>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 84%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Service</th>
+<th style="text-align: left;">Patch</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rsyslog</td>
+<td
+style="text-align: left;"><code>ExecStart=strace -yy -o /tmp/rsyslog.strace -ff -D /usr/sbin/rsyslogd -n -iNONE</code></td>
+</tr>
+</tbody>
+</table>
 <footer class="footer text-muted">
    <div align="center">      
       <br>
