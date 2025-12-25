@@ -5,7 +5,7 @@ title:  'PlantUML'
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-## Docker
+### Docker
 
 Pull docker image.
 ```sh
@@ -20,7 +20,7 @@ $ docker run -d -p 8080:8080 plantuml/plantuml-server:jetty
 :::
 ::: {.column width=50%}
 
-## Jar
+### Jar
 
 Download jar.
 ```sh
@@ -36,7 +36,7 @@ $ java -jar plantuml-1.2025.10.jar hello.puml
 ::::::::::::::
 
 
-## Useful Options
+### Useful Options
 
 :::::::::::::: {.columns}
 ::: {.column}

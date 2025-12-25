@@ -3,7 +3,7 @@ title: GREP
 ---
 
 
-## Command Line Arguments
+### Command Line Arguments
 :::::::::::::: {.columns}
 ::: {.column}
 
@@ -41,7 +41,7 @@ title: GREP
 :::
 ::::::::::::::
 
-## Perl Regex
+### Perl Regex
 
 :::::::::::::: {.columns}
 ::: {.column width=25%}

@@ -99,20 +99,20 @@
 </header>
 <div class="columns">
 <div class="column" style="width:50%;">
-<h2 id="docker">Docker</h2>
+<h3 id="docker">Docker</h3>
 <p>Pull docker image.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker pull plantuml/plantuml-server:jetty</span></code></pre></div>
 <p>Run container.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker run <span class="at">-d</span> <span class="at">-p</span> 8080:8080 plantuml/plantuml-server:jetty  </span></code></pre></div>
 </div><div class="column" style="width:50%;">
-<h2 id="jar">Jar</h2>
+<h3 id="jar">Jar</h3>
 <p>Download jar.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> wget https://github.com/plantuml/plantuml/releases/download/v1.2025.10/plantuml-1.2025.10.jar</span></code></pre></div>
 <p>Generate image.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> java <span class="at">-jar</span> plantuml-1.2025.10.jar hello.puml</span></code></pre></div>
 </div>
 </div>
-<h2 id="useful-options">Useful Options</h2>
+<h3 id="useful-options">Useful Options</h3>
 <div class="columns">
 <div class="column">
 <p><a href="https://plantuml.com/theme">Theme</a>, <a
