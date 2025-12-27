@@ -7,24 +7,28 @@ title: "A Developer Notebook"
 :::::::::::::: {.columns}
 ::: {.column width=20%}
 
-| Text Processing |
-|:----------------:|
-| [grep](/html/ref/grep.html), [perl](/html/ref/perl.html) |
+| Tracing |
+|:---------------:|
+| [strace](/html/ref/strace.html) |
 
 | Network |
 |:----------------:|
 | [tcpdump](/html/ref/tcpdump.html), [pcap-filter](/html/ref/pcap-filter.html) |
 
-| Documentation |
+| System Information |
 |:----------------:|
-| [plantuml](/html/ref/plantuml.html) |
+| [lsof](/html/ref/lsof.html) |
 
 :::
 ::: {.column width=20%}
 
-| Trace |
-|:---------------:|
-| [strace](/html/ref/strace.html) |
+| Text Processing |
+|:----------------:|
+| [grep](/html/ref/grep.html), [perl](/html/ref/perl.html) |
+
+| Documentation |
+|:----------------:|
+| [plantuml](/html/ref/plantuml.html) |
 
 :::
 ::: {.column width=60%}
