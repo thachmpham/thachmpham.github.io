@@ -7,17 +7,11 @@ title: "A Developer Notebook"
 :::::::::::::: {.columns}
 ::: {.column width=20%}
 
-| Tracing |
+| Data Collection |
 |:---------------:|
 | [strace](/html/ref/strace.html) |
-
-| Network |
-|:----------------:|
-| [tcpdump](/html/ref/tcpdump.html), [pcap-filter](/html/ref/pcap-filter.html) |
-
-| System Information |
-|:----------------:|
 | [lsof](/html/ref/lsof.html) |
+| [tcpdump](/html/ref/tcpdump.html), [pcap-filter](/html/ref/pcap-filter.html) |
 
 :::
 ::: {.column width=20%}
