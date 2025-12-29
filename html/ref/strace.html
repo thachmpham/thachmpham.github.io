@@ -98,7 +98,7 @@ style="text-align: left;"><code>-e trace=file -e trace='!write'</code></td>
 <table>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Trace path</th>
+<th style="text-align: left;">Path</th>
 <th style="text-align: left;">Example</th>
 </tr>
 </thead>
@@ -106,6 +106,10 @@ style="text-align: left;"><code>-e trace=file -e trace='!write'</code></td>
 <tr class="odd">
 <td style="text-align: left;"><code>--trace-path=path</code></td>
 <td style="text-align: left;"><code>--trace-path=hello</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>-P</code></td>
+<td style="text-align: left;"><code>-P hello</code></td>
 </tr>
 </tbody>
 </table>
@@ -165,24 +169,40 @@ style="text-align: left;"><code>successful, failed, unfinished</code></td>
 <tr class="odd">
 <td style="text-align: left;"><code>--write=fd_set</code></td>
 <td style="text-align: left;"><code>--write=1</code></td>
-<td style="text-align: left;">Print arguments of write on fd 1 in hex +
+<td style="text-align: left;">Print data of write on fd 1 in hex +
 ascii</td>
 </tr>
 <tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>--write=all</code></td>
+<td style="text-align: left;">Print data of all writes in hex +
+ascii</td>
+</tr>
+<tr class="odd">
 <td style="text-align: left;"><code>--read=fd_set</code></td>
 <td style="text-align: left;"><code>--read=0</code></td>
-<td style="text-align: left;">Print arguments of read on fd 0 in hex +
+<td style="text-align: left;">Print data of read on fd 0 in hex +
+ascii</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>--read=all</code></td>
+<td style="text-align: left;">Print data of all reads in hex +
 ascii</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>xx -s N</code></td>
 <td style="text-align: left;"><code>-xx -s 32</code></td>
-<td style="text-align: left;">Print arguments in hex, max length is
-32</td>
+<td style="text-align: left;">Print data in hex, max length is 32</td>
 </tr>
 </tbody>
 </table>
 <table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 11%" />
+<col style="width: 54%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Decode Descriptor</th>
@@ -204,12 +224,12 @@ ascii</td>
 <tr class="odd">
 <td style="text-align: left;"><code>--decode-fds=path</code></td>
 <td style="text-align: left;"><code>-y</code></td>
-<td style="text-align: left;">Print file path associated with fds</td>
+<td style="text-align: left;">Decode file path associated with fds</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>--decode-fds=all</code></td>
 <td style="text-align: left;"><code>-yy</code></td>
-<td style="text-align: left;">Print all info associated with fds</td>
+<td style="text-align: left;">Decode all info associated with fds</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"></td>
@@ -224,7 +244,7 @@ ascii</td>
 <tr class="odd">
 <td style="text-align: left;"><code>--decode-pids=comm</code></td>
 <td style="text-align: left;"><code>-Y</code></td>
-<td style="text-align: left;">Print command names for pids</td>
+<td style="text-align: left;">Decode command names for pids</td>
 </tr>
 </tbody>
 </table>
@@ -301,6 +321,11 @@ style="text-align: left;"><code>-o myfile --output-separately</code></td>
 <td style="text-align: left;">rsyslog</td>
 <td
 style="text-align: left;"><code>ExecStart=strace -yy -o /tmp/rsyslog.strace -ff -D /usr/sbin/rsyslogd -n -iNONE</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">logger</td>
+<td
+style="text-align: left;"><code>strace -yy --write=all -e trace='/(read|write|send|recv).*' -f logger hello</code></td>
 </tr>
 </tbody>
 </table>
