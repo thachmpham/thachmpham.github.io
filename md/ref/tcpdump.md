@@ -44,7 +44,6 @@ title: tcpdump
 |:-------------|-------------|
 | `-l` | Flush on end of line  |
 | `-U` | flush on end of packet |
-| `-ttttt` | delta since frame 1 |
 
 :::
 ::: {.column width=80%}
