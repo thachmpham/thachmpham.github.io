@@ -55,17 +55,6 @@ $ grub-script-check -v /etc/default/grub
 $ grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
-:::
-::: {.column width=50%}
-
-
-:::
-::::::::::::::
-
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
 Install grub to a device.
 
 ```sh
@@ -76,11 +65,14 @@ $ grub-install /dev/sdb
 $ xxd -l 512 /dev/sdb
 ```
 
+:::
+::: {.column width=50%}
+
+Master Boot Record.
+
 - Master Boot Record (MBR) is the first 512 bytes of a disk.
 - grub-install writes boot code to MBR.
-- When power on, BIOS loads and execute the boot code to start the boot process.
-
-MBR Layout.
+- When power on, BIOS executes the boot code to start the boot process.
 
 | Offset | Size         | Purpose                                  |
 |:-------|:-------------|:-----------------------------------------|
@@ -89,11 +81,8 @@ MBR Layout.
 | 0x01fe  | 2   B        | Boot signature (0x55aa)                  |
 
 :::
-::: {.column width=50%}
-
-
-:::
 ::::::::::::::
+
 
 ### Reference
 - [GRUB Manual](https://www.gnu.org/software/grub/manual/grub/grub.html).

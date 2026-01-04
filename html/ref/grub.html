@@ -178,25 +178,20 @@ into RAM at booting:</p>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># apply change</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> grub-mkconfig <span class="at">-o</span> /boot/grub/grub.cfg</span></code></pre></div>
-</div><div class="column" style="width:50%;">
-
-</div>
-</div>
-<div class="columns">
-<div class="column" style="width:50%;">
 <p>Install grub to a device.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install grub</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> grub-install /dev/sdb</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># verify</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> xxd <span class="at">-l</span> 512 /dev/sdb</span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<p>Master Boot Record.</p>
 <ul>
 <li>Master Boot Record (MBR) is the first 512 bytes of a disk.</li>
 <li>grub-install writes boot code to MBR.</li>
-<li>When power on, BIOS loads and execute the boot code to start the
-boot process.</li>
+<li>When power on, BIOS executes the boot code to start the boot
+process.</li>
 </ul>
-<p>MBR Layout.</p>
 <table>
 <thead>
 <tr class="header">
@@ -223,8 +218,6 @@ boot process.</li>
 </tr>
 </tbody>
 </table>
-</div><div class="column" style="width:50%;">
-
 </div>
 </div>
 <h3 id="reference">Reference</h3>
