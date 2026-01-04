@@ -39,7 +39,7 @@ $ java -jar plantuml-1.2025.10.jar hello.puml
 ### Useful Options
 
 :::::::::::::: {.columns}
-::: {.column}
+::: {.column width=50%}
 
 [Theme](https://plantuml.com/theme), [Handwritten](https://plantuml.com/handwritten).
 ```yml
@@ -50,7 +50,7 @@ $ java -jar plantuml-1.2025.10.jar hello.puml
 Good themes: plain, sketchy, sketchy-outline.
 
 :::
-::: {.column}
+::: {.column width=50%}
 
 [Sequence Diagram](https://plantuml.com/sequence-diagram)
 ```yml

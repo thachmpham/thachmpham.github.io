@@ -76,14 +76,11 @@ $ grub-install /dev/sdb
 $ xxd -l 512 /dev/sdb
 ```
 
-:::
-::: {.column width=50%}
-
-Master Boot Record.
-
 - Master Boot Record (MBR) is the first 512 bytes of a disk.
 - grub-install writes boot code to MBR.
 - When power on, BIOS loads and execute the boot code to start the boot process.
+
+MBR Layout.
 
 | Offset | Size         | Purpose                                  |
 |:-------|:-------------|:-----------------------------------------|
@@ -91,6 +88,8 @@ Master Boot Record.
 | 0x01be  | 64  B        | Partition table (4 entries × 16B)        |
 | 0x01fe  | 2   B        | Boot signature (0x55aa)                  |
 
+:::
+::: {.column width=50%}
 
 
 :::
