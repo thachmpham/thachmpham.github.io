@@ -3,9 +3,9 @@ title: "GRUB"
 ---
 
 :::::::::::::: {.columns}
-::: {.column width=40%}
+::: {.column width=50%}
 
-Introduction
+Introduction.
 
 GRUB is a bootloader responsible for loading vmlinuz and initrd.img into RAM at booting:
 
@@ -13,9 +13,9 @@ GRUB is a bootloader responsible for loading vmlinuz and initrd.img into RAM at 
 - initrd.img contains tools and drivers to mount root filesystem.
 
 :::
-::: {.column width=30%}
+::: {.column width=50%}
 
-Configuration Files 
+Configuration files.
 
 - `/etc/default/grub`
     - User settings.
@@ -26,32 +26,74 @@ Configuration Files
     - Generated from /etc/default/grub.
 
 :::
-::: {.column width=30%}
-
-```go
-       /etc/default/grub    
-               │            
-grub-mkconfig │ update-grub
-               │            
-               ▼            
-       /boot/grub2/grub.cfg 
-```
-
-:::
 ::::::::::::::
 
+
+Parameters.
+
+| Parameters | Meaning | Examples |
+|:-----------|:-------|:--------|
+| GRUB_TIMEOUT          | Timeout for grub menu | -1, 0, 5                  |
+| GRUB_TIMEOUT_STYLE    | Menu style            | menu, countdown, hidden   |
+| GRUB_DEFAULT          | Default entry to boot | Index or ID of meny entry |
+| GRUB_CMDLINE_LINUX    | Command-line arguments to vmlinuz | console=ttyS0 |
+| GRUB_DISABLE_OS_PROBER| Generate menu entries for other OS | true, false |
+
+
 :::::::::::::: {.columns}
-::: {.column width=30%}
+::: {.column width=50%}
 
 Update configuration.
 ```sh
+# edit config
 $ vi /etc/default/grub
-$ update-grub
+
+# validate config
+$ grub-script-check -v /etc/default/grub
+
+# apply change
+$ grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 :::
-::: {.column width=70%}
+::: {.column width=50%}
 
 
 :::
 ::::::::::::::
+
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+Install grub to a device.
+
+```sh
+# install grub
+$ grub-install /dev/sdb
+
+# verify
+$ xxd -l 512 /dev/sdb
+```
+
+- Master Boot Record (MBR) is the first 512 bytes of a disk.
+- grub-install writes boot code to MBR.
+- When power on, BIOS loads and execute the boot code to start the boot process.
+
+:::
+::: {.column width=50%}
+
+MBR Layout.
+
+| Offset | Size         | Purpose                                  |
+|:-------|:-------------|:-----------------------------------------|
+| 0x0000  | 446 B        | Boot code                                |
+| 0x01be  | 64  B        | Partition table (4 entries × 16B)        |
+| 0x01fe  | 2   B        | Boot signature (0x55aa)                  |
+
+:::
+::::::::::::::
+
+### Reference
+- [GRUB Manual](https://www.gnu.org/software/grub/manual/grub/grub.html).
+- [Linux Kernel Parameters](https://www.kernel.org/doc/html/v4.14/admin-guide/kernel-parameters.html).

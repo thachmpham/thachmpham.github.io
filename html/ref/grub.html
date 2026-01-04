@@ -98,16 +98,16 @@
 <h1 class="title">GRUB</h1>
 </header>
 <div class="columns">
-<div class="column" style="width:40%;">
-<p>Introduction</p>
+<div class="column" style="width:50%;">
+<p>Introduction.</p>
 <p>GRUB is a bootloader responsible for loading vmlinuz and initrd.img
 into RAM at booting:</p>
 <ul>
 <li>vmlinuz is the linux kernel.</li>
 <li>initrd.img contains tools and drivers to mount root filesystem.</li>
 </ul>
-</div><div class="column" style="width:30%;">
-<p>Configuration Files</p>
+</div><div class="column" style="width:50%;">
+<p>Configuration files.</p>
 <ul>
 <li><code>/etc/default/grub</code>
 <ul>
@@ -123,24 +123,118 @@ into RAM at booting:</p>
 <li>Generated from /etc/default/grub.</li>
 </ul></li>
 </ul>
-</div><div class="column" style="width:30%;">
-<div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>       <span class="op">/</span>etc<span class="op">/</span><span class="cf">default</span><span class="op">/</span>grub    </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               │            </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>grub<span class="op">-</span>mkconfig │ update<span class="op">-</span>grub</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               │            </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>               ▼            </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>       <span class="op">/</span>boot<span class="op">/</span>grub2<span class="op">/</span>grub<span class="op">.</span>cfg </span></code></pre></div>
 </div>
 </div>
+<p>Parameters.</p>
+<table>
+<colgroup>
+<col style="width: 41%" />
+<col style="width: 27%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameters</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">GRUB_TIMEOUT</td>
+<td style="text-align: left;">Timeout for grub menu</td>
+<td style="text-align: left;">-1, 0, 5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GRUB_TIMEOUT_STYLE</td>
+<td style="text-align: left;">Menu style</td>
+<td style="text-align: left;">menu, countdown, hidden</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GRUB_DEFAULT</td>
+<td style="text-align: left;">Default entry to boot</td>
+<td style="text-align: left;">Index or ID of meny entry</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GRUB_CMDLINE_LINUX</td>
+<td style="text-align: left;">Command-line arguments to vmlinuz</td>
+<td style="text-align: left;">console=ttyS0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GRUB_DISABLE_OS_PROBER</td>
+<td style="text-align: left;">Generate menu entries for other OS</td>
+<td style="text-align: left;">true, false</td>
+</tr>
+</tbody>
+</table>
 <div class="columns">
-<div class="column" style="width:30%;">
+<div class="column" style="width:50%;">
 <p>Update configuration.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> vi /etc/default/grub</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> update-grub</span></code></pre></div>
-</div><div class="column" style="width:70%;">
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># edit config</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> vi /etc/default/grub</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># validate config</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> grub-script-check <span class="at">-v</span> /etc/default/grub</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># apply change</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> grub-mkconfig <span class="at">-o</span> /boot/grub/grub.cfg</span></code></pre></div>
+</div><div class="column" style="width:50%;">
 
 </div>
 </div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Install grub to a device.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install grub</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> grub-install /dev/sdb</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># verify</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> xxd <span class="at">-l</span> 512 /dev/sdb</span></code></pre></div>
+<ul>
+<li>Master Boot Record (MBR) is the first 512 bytes of a disk.</li>
+<li>grub-install writes boot code to MBR.</li>
+<li>When power on, BIOS loads and execute the boot code to start the
+boot process.</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p>MBR Layout.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Offset</th>
+<th style="text-align: left;">Size</th>
+<th style="text-align: left;">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0x0000</td>
+<td style="text-align: left;">446 B</td>
+<td style="text-align: left;">Boot code</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0x01be</td>
+<td style="text-align: left;">64 B</td>
+<td style="text-align: left;">Partition table (4 entries × 16B)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0x01fe</td>
+<td style="text-align: left;">2 B</td>
+<td style="text-align: left;">Boot signature (0x55aa)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<h3 id="reference">Reference</h3>
+<ul>
+<li><a
+href="https://www.gnu.org/software/grub/manual/grub/grub.html">GRUB
+Manual</a>.</li>
+<li><a
+href="https://www.kernel.org/doc/html/v4.14/admin-guide/kernel-parameters.html">Linux
+Kernel Parameters</a>.</li>
+</ul>
 <footer class="footer text-muted">
    <div align="center">      
       <br>
