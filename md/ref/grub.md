@@ -102,7 +102,7 @@ $ xxd -l 512 /dev/sdb
 Master Boot Record.
 
 - Master Boot Record (MBR) is the first 512 bytes of a disk.
-- grub-install writes boot code to MBR.
+- Command grub-install writes boot code to MBR.
 - When power on, BIOS executes the boot code to start the boot process.
 
 | Offset | Size         | Purpose                                  |
@@ -115,6 +115,6 @@ Master Boot Record.
 ::::::::::::::
 
 
-### Reference
+## Reference
 - [GRUB Manual](https://www.gnu.org/software/grub/manual/grub/grub.html).
 - [Linux Kernel Parameters](https://www.kernel.org/doc/html/v4.14/admin-guide/kernel-parameters.html).
