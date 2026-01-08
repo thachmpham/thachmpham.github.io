@@ -33,6 +33,7 @@ title: "A Developer Notebook"
 | Booting |
 |:----------------:|
 | [grub](/html/ref/grub.html) |
+| [pxe](/html/ref/pxe.html) |
 
 :::
 ::::::::::::::
