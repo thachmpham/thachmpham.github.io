@@ -66,8 +66,9 @@ pandoc --from markdown --to html \
 # generate_post_notoc ref/plantuml
 # generate_post_notoc ref/strace
 # generate_post_notoc ref/lsof
-generate_post_notoc ref/grub
-generate_post_notoc ref/pxe
+# generate_post_notoc ref/grub
+# generate_post_notoc ref/pxe
+generate_post_notoc ref/nfs
 
 # ====  Virtual network interfaces
 # generate_post veth

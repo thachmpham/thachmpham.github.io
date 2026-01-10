@@ -20,9 +20,6 @@ title: "A Developer Notebook"
 |:----------------:|
 | [grep](/html/ref/grep.html), [perl](/html/ref/perl.html) |
 
-:::
-::: {.column width=25%}
-
 | Documentation |
 |:----------------:|
 | [plantuml](/html/ref/plantuml.html) |
@@ -32,8 +29,14 @@ title: "A Developer Notebook"
 
 | Booting |
 |:----------------:|
-| [grub](/html/ref/grub.html) |
-| [pxe](/html/ref/pxe.html) |
+| [grub](/html/ref/grub.html), [pxe](/html/ref/pxe.html) |
+
+:::
+::: {.column width=25%}
+
+| Distributed Systems|
+|:----------------:|
+| [nfs](/html/ref/nfs.html) |
 
 :::
 ::::::::::::::
