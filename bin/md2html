@@ -66,7 +66,13 @@ cd ${workspace}
     git ls-files --others --exclude-standard -- md/
 } | sort -u | while IFS= read -r file; do
     echo $file
-    generate_post_notoc "$(readlink -f "$file")"
+    
+    if [[ "$file" == */ref/* ]]; then
+        generate_post_notoc "$(readlink -f "$file")"
+    else
+        generate_post "$(readlink -f "$file")"
+    fi
+    
 done
 
 # find "${workspace}/md/ref" -name "*.md" -exec bash -c 'generate_post_notoc $1' _ {} \;

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>OpenSAF AMF Healthcheck</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #cccccc; background-color: #303030; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ffcfaf; } /* Alert */
+    code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bn { color: #dca3a3; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #f0dfaf; } /* ControlFlow */
+    code span.ch { color: #dca3a3; } /* Char */
+    code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+    code span.co { color: #7f9f7f; } /* Comment */
+    code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+    code span.do { color: #7f9f7f; } /* Documentation */
+    code span.dt { color: #dfdfbf; } /* DataType */
+    code span.dv { color: #dcdccc; } /* DecVal */
+    code span.er { color: #c3bf9f; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #c0bed1; } /* Float */
+    code span.fu { color: #efef8f; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+    code span.kw { color: #f0dfaf; } /* Keyword */
+    code span.op { color: #f0efd0; } /* Operator */
+    code span.ot { color: #efef8f; } /* Other */
+    code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+    code span.sc { color: #dca3a3; } /* SpecialChar */
+    code span.ss { color: #cc9393; } /* SpecialString */
+    code span.st { color: #cc9393; } /* String */
+    code span.va { } /* Variable */
+    code span.vs { color: #cc9393; } /* VerbatimString */
+    code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="/html/style/dark.css" />
+  <!-- <script src="../3pp/d3.v7.js"></script> -->
+  <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+          theme: 'dark',
+      });
+  </script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">OpenSAF AMF Healthcheck</h1>
+</header>
+<h1 id="introduction">1. Introduction</h1>
+<p>OpenSAF includes a healthcheck mechanism to monitor the health of
+processes, detect failures, and initiate recovery actions such as
+restarting processes or failing over to another node. This ensures high
+availability and enhances fault tolerance within the system.</p>
+<p>Key classes:</p>
+<ul>
+<li><code>SaAmfHealthcheckType</code></li>
+<li><code>SaAmfHealthcheck</code></li>
+</ul>
+<p>Key Attributes:</p>
+<ul>
+<li><code>safHealthcheckKey</code></li>
+<li><code>saAmfHctDefPeriod</code>, <code>saAmfHealthcheckPeriod</code>:
+The time interval at which the AMF sends a health check ping to the
+program. If there is no response within this period, AMF considers the
+program unresponsive and triggers a restart.</li>
+<li><code>saAmfHctDefMaxDuration</code>,
+<code>saAmfHealthcheckMaxDuration</code></li>
+</ul>
+<h1 id="lab">2. Lab</h1>
+<p>In the <a href="../html/opensaf-amf-sa-aware.html">previous post</a>,
+we implemented an AMF SA-aware program. Today, we will integrate a
+healthcheck into the program.</p>
+<h2 id="healthcheck-imm-object">2.1. Healthcheck IMM Object</h2>
+<ul>
+<li>Create healthcheck imm object.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> immcfg <span class="at">-c</span> SaAmfHealthcheck <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfHealthcheckPeriod=5000000000 <span class="dt">\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> saAmfHealthcheckMaxDuration=3000000000 <span class="dt">\</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    safHealthcheckKey=demo,safComp=demo,safSu=SC-1,safSg=demo,safApp=demo</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># immcfg -c SaAmfHealthcheckType \</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     -a saAmfHctDefPeriod=10000000000 \</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#     -a saAmfHctDefMaxDuration=5000000000 \</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     safHealthcheckKey=demo,safVersion=1,safCompType=demo</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># the time unit is nanosecond</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="start-healthcheck">2.2. Start Healthcheck</h2>
+<ul>
+<li>Edit file main.c.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> healthcheckCallback<span class="op">(</span>SaInvocationT invocation<span class="op">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> SaNameT <span class="op">*</span>compName<span class="op">,</span> SaAmfHealthcheckKeyT <span class="op">*</span>key<span class="op">);</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> healthcheckCount <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span> argv<span class="op">)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    callbacks<span class="op">.</span>saAmfHealthcheckCallback <span class="op">=</span> healthcheckCallback<span class="op">;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    saAmfInitialize_o4<span class="op">(&amp;</span>amfHandler<span class="op">,</span> <span class="op">&amp;</span>callbacks<span class="op">,</span> <span class="op">&amp;</span>apiVersion<span class="op">);</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// start healthcheck</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    saAmfHealthcheckStart<span class="op">(</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        amfHandler<span class="op">,</span> <span class="op">&amp;</span>name<span class="op">,</span> <span class="op">&amp;</span>healthcheckKey<span class="op">,</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        SA_AMF_HEALTHCHECK_AMF_INVOKED<span class="op">,</span> SA_AMF_COMPONENT_RESTART<span class="op">);</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> healthcheckCallback<span class="op">(</span>SaInvocationT invocation<span class="op">,</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> SaNameT <span class="op">*</span>compName<span class="op">,</span> SaAmfHealthcheckKeyT <span class="op">*</span>key<span class="op">)</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    trace<span class="op">(</span><span class="st">&quot;count = </span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> healthcheckCount<span class="op">);</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    healthcheckCount <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    saAmfResponse_4<span class="op">(</span>amfHandler<span class="op">,</span> invocation<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> SA_AIS_OK<span class="op">);</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h2 id="start-service-unit">2.3. Start Service Unit</h2>
+<ul>
+<li>Instantiate service unit.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> amf-adm unlock-in safSu=SC-1,safSg=demo,safApp=demo</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># syslog</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">2024-12-26T10:50:00.608935-05:00</span> SC-1 osafamfnd<span class="pp">[</span><span class="ss">15994</span><span class="pp">]</span>: NO <span class="st">&#39;safSu=SC-1,safSg=demo,safApp=demo&#39;</span> Presence State UNINSTANTIATED =<span class="op">&gt;</span> INSTANTIATING</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">2024-12-26T10:50:00.613154-05:00</span> SC-1 demo<span class="pp">[</span><span class="ss">17859</span><span class="pp">]</span>: main: start</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">2024-12-26T10:50:00.614284-05:00</span> SC-1 osafamfnd<span class="pp">[</span><span class="ss">15994</span><span class="pp">]</span>: NO <span class="st">&#39;safSu=SC-1,safSg=demo,safApp=demo&#39;</span> Presence State INSTANTIATING =<span class="op">&gt;</span> INSTANTIATED</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">2024-12-26T10:50:00.614606-05:00</span> SC-1 demo<span class="pp">[</span><span class="ss">17859</span><span class="pp">]</span>: main: receive poll event</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">2024-12-26T10:50:00.614704-05:00</span> SC-1 demo<span class="pp">[</span><span class="ss">17859</span><span class="pp">]</span>: healthcheckCallback: count = 0</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">2024-12-26T10:50:10.663296-05:00</span> SC-1 demo<span class="pp">[</span><span class="ss">17859</span><span class="pp">]</span>: main: receive poll event</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="ex">2024-12-26T10:50:10.663724-05:00</span> SC-1 demo<span class="pp">[</span><span class="ss">17859</span><span class="pp">]</span>: healthcheckCallback: count = 1</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ex">2024-12-26T10:50:20.761590-05:00</span> SC-1 demo<span class="pp">[</span><span class="ss">17859</span><span class="pp">]</span>: main: receive poll event</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="ex">2024-12-26T10:50:20.761904-05:00</span> SC-1 demo<span class="pp">[</span><span class="ss">17859</span><span class="pp">]</span>: healthcheckCallback: count = 2</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<ul>
+<li>Unlock service unit.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> amf-adm unlock safSu=SC-1,safSg=demo,safApp=demo</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># syslog</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">2024-12-26T10:51:55.920498-05:00</span> SC-1 osafamfnd<span class="pp">[</span><span class="ss">15994</span><span class="pp">]</span>: NO Assigning <span class="st">&#39;safSi=demo,safApp=demo&#39;</span> ACTIVE to <span class="st">&#39;safSu=SC-1,safSg=demo,safApp=demo&#39;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">2024-12-26T10:51:55.920990-05:00</span> SC-1 demo<span class="pp">[</span><span class="ss">17859</span><span class="pp">]</span>: main: receive poll event</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">2024-12-26T10:51:55.921097-05:00</span> SC-1 demo<span class="pp">[</span><span class="ss">17859</span><span class="pp">]</span>: csiSetCallback: </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">2024-12-26T10:51:55.921154-05:00</span> SC-1 osafamfnd<span class="pp">[</span><span class="ss">15994</span><span class="pp">]</span>: NO Assigned <span class="st">&#39;safSi=demo,safApp=demo&#39;</span> ACTIVE to <span class="st">&#39;safSu=SC-1,safSg=demo,safApp=demo&#39;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
+<h1 id="references">References</h1>
+<ul>
+<li>https://opensaf.sourceforge.io/documentation.html</li>
+</ul>
+<footer class="footer text-muted">
+   <div align="center">      
+      <br>
+      <br>
+      <a href="/index.html"><b>Home</b></a>
+   </div>
+ </footer>
+</body>
+</html>
