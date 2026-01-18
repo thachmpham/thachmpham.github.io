@@ -97,8 +97,22 @@
 <header id="title-block-header">
 <h1 class="title">Preboot eXecution Environment</h1>
 </header>
-<h2 id="lab">Lab</h2>
-<h3 id="server">Server</h3>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#lab" id="toc-lab"><span
+class="toc-section-number">0.1</span> Lab</a>
+<ul>
+<li><a href="#server" id="toc-server"><span
+class="toc-section-number">0.1.1</span> Server</a></li>
+</ul></li>
+<li><a href="#references" id="toc-references"><span
+class="toc-section-number">0.2</span> References</a></li>
+</ul>
+</nav>
+<h2 data-number="0.1" id="lab"><span
+class="header-section-number">0.1</span> Lab</h2>
+<h3 data-number="0.1.1" id="server"><span
+class="header-section-number">0.1.1</span> Server</h3>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Install dnsmasq</p>
@@ -135,7 +149,8 @@
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># append vga=788 initrd=ubuntu-installer/amd64/initrd.gz --- quiet</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">append</span> vga=788 initrd=ubuntu-installer/amd64/initrd.gz <span class="at">---</span> console=ttyS0,19200 earlyprint=serial,ttyS0,19200    </span></code></pre></div>
 <p><br></p>
-<h3 id="client">Client</h3>
+<h3 data-number="0.1.2" id="client"><span
+class="header-section-number">0.1.2</span> Client</h3>
 <p>Start VM with PXE.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> virt-install <span class="at">--name</span><span class="op">=</span>vm1 <span class="dt">\</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--ram</span><span class="op">=</span>2048 <span class="dt">\</span></span>
@@ -146,7 +161,8 @@
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--nographic</span></span></code></pre></div>
 </div>
 </div>
-<h2 id="references">References</h2>
+<h2 data-number="0.2" id="references"><span
+class="header-section-number">0.2</span> References</h2>
 <ul>
 <li><a
 href="https://wiki.syslinux.org/wiki/index.php?title=PXELINUX">PXELINUX

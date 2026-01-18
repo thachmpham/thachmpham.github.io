@@ -11,7 +11,7 @@ title: "A Developer Notebook"
 [strace](/html/ref/strace.html), [lsof](/html/ref/lsof.html),  
 [tcpdump](/html/ref/tcpdump.html), [pcap-filter](/html/ref/pcap-filter.html)
 
-**Text Processing**  
+**Log Processing**  
 [grep](/html/ref/grep.html), [perl](/html/ref/perl.html)
 
 **Documentation**  
@@ -21,15 +21,15 @@ title: "A Developer Notebook"
 :::
 ::: {.column width=25%}
 
-**Linux Booting**  
+**Booting**  
 [grub](/html/ref/grub.html), [pxe](/html/ref/pxe.html)
 
-**Distributed System**  
+**System**  
 [nfs](/html/ref/nfs.html)
 
-**Virtual Network Interface**  
-[veth](/html/ref/nwif/veth.html), [vbridge](/html/ref/nwif/vbridge.html),
-[vdummy](/html/ref/nwif/vdummy.html), [bond](/html/ref/nwif/bond.html), 
+**Network Interface**  
+[veth](/html/ref/veth.html), [vbridge](/html/ref/vbridge.html),  
+[bond](/html/ref/bond.html), [vdummy](/html/ref/dummy.html),
 
 
 :::
