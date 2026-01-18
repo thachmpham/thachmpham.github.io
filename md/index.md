@@ -35,7 +35,7 @@ Documentation
 
 GDB
 
-
+- [break](/html/ref/gdb/break.html)
 
 * * * * *
 
@@ -66,7 +66,7 @@ Adminstration
 
 * * * * *
 
-Network Interface
+Virtual Network Interfaces
 
 - [veth](/html/ref/veth.html), [vbridge](/html/ref/vbridge.html),
 [bond](/html/ref/vbond.html), [vdummy](/html/ref/vdummy.html)
@@ -83,7 +83,7 @@ OpenSAF
 - [install](/html/ref/opensaf/install.html), [1sc](/html/ref/opensaf/1sc.html), [2sc](/html/ref/opensaf/2sc.html)
 [imm](/html/ref/opensaf/imm.html), [log](/html/ref/opensaf/log.html), [smf](/html/ref/opensaf/smf.html)
 - [sa-aware](/html/ref/opensaf/sa-aware.html), [non-saware](/html/ref/opensaf/non-saware.html), [healthcheck](/html/ref/opensaf/healthcheck.html)
-- [error-detection](/html/ref/opensaf/error-detection.html)
+- [recovery](/html/ref/opensaf/recovery.html)
 
 
 * * * * *
