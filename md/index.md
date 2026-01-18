@@ -8,16 +8,21 @@ title: "A Developer Notebook"
 ::: {.column width=25%}
 
 * * * * * 
-[strace](/html/ref/strace.html), [lsof](/html/ref/lsof.html),
-[tcpdump](/html/ref/tcpdump.html), [pcap-filter](/html/ref/pcap-filter.html)
+[strace](/html/ref/strace.html),
+[lsof](/html/ref/lsof.html),
+[tcpdump](/html/ref/tcpdump.html),
+[pcap-filter](/html/ref/pcap-filter.html)
 
 * * * * *
  
-[grep](/html/ref/grep.html), [perl](/html/ref/perl.html)
+[grep](/html/ref/grep.html),
+[perl](/html/ref/perl.html),
+[awk](/html/ref/awk.html)
 
 * * * * *
 
-[plantuml](/html/ref/plantuml.html)
+[plantuml](/html/ref/plantuml.html),
+[graphviz](/html/ref/graphviz.html)
 
 * * * * *
 
@@ -26,16 +31,23 @@ title: "A Developer Notebook"
 
 * * * * *
 
-[grub](/html/ref/grub.html), [pxe](/html/ref/pxe.html)
+[grub](/html/ref/grub.html),
+[pxe](/html/ref/pxe.html)
 
 * * * * *
 
-[nfs](/html/ref/nfs.html)
+[arp](/html/ref/arp.html),
+[ip-routing](/html/ref/ip-routing.html),
+[drbd](/html/ref/drbd.html),
+[nfs](/html/ref/nfs.html),
+[ldap](/html/ref/ldap.html)
 
 * * * * *
 
-[veth](/html/ref/veth.html), [vbridge](/html/ref/vbridge.html),
-[bond](/html/ref/vbond.html), [vdummy](/html/ref/vdummy.html),
+[veth](/html/ref/veth.html),
+[vbridge](/html/ref/vbridge.html),
+[bond](/html/ref/vbond.html),
+[vdummy](/html/ref/vdummy.html)
 
 * * * * *
 
