@@ -5,7 +5,7 @@ title: "A Developer Notebook"
 ### Swiss Army Knife
 
 :::::::::::::: {.columns}
-::: {.column width=20%}
+::: {.column width=25%}
 
 * * * * *
 
@@ -26,7 +26,7 @@ title: "A Developer Notebook"
 | [PlantUML](/html/ref/plantuml.html) |
 
 :::
-::: {.column width=20%}
+::: {.column width=25%}
 
 * * * * *
 
@@ -35,7 +35,7 @@ title: "A Developer Notebook"
 | [break](/html/ref/gdb/break.html) |
 
 :::
-::: {.column width=20%}
+::: {.column width=25%}
 
 * * * * *
 
@@ -49,27 +49,27 @@ title: "A Developer Notebook"
 | [ARP](/html/ref/arp.html), [IP Routing](/html/ref/ip-routing.html), [TIPC](/html/ref/tipc.html) |
 | [vIP](/html/ref/vip.html), [DRBD](/html/ref/drbd.html), [NFS](/html/ref/nfs.html), [LDAP](/html/ref/ldap.html) |
 
+| Virtual Network Interfaces |
+|:--------------------------:|
+| [vETH](/html/ref/veth.html), [vBridge](/html/ref/vbridge.html), [Bond](/html/ref/vbond.html), [Dummy](/html/ref/vdummy.html) |
+
 :::
-::: {.column width=20%}
+::: {.column width=25%}
 
 * * * * *
 
 | OpenSAF |
 |:-------:|
-| [Install](/html/ref/opensaf/install.html), [1 SC](/html/ref/opensaf/1sc.html), [2 SCs](/html/ref/opensaf/2sc.html) |
-| [IMM](/html/ref/opensaf/imm.html), [LOG](/html/ref/opensaf/log.html), [SMF](/html/ref/opensaf/smf.html) |
-| [SA-Aware](/html/ref/opensaf/sa-aware.html), [Non SA-Aware](/html/ref/opensaf/non-saware.html), [Healthcheck](/html/ref/opensaf/healthcheck.html) |
+| [Build and Install](/html/ref/opensaf/install.html) |
+| [Single-Node Cluster](/html/ref/opensaf/1sc.html) |
+| [Two-Node Cluster](/html/ref/opensaf/2sc.html) |
+| [Information Model Management](/html/ref/opensaf/imm.html) | 
+| [Log Service](/html/ref/opensaf/log.html) |
+| [Software Management Framework](/html/ref/opensaf/smf.html) |
+| [SA-Aware](/html/ref/opensaf/sa-aware.html) |
+| [Non SA-Aware](/html/ref/opensaf/non-saware.html) |
+| [Healthcheck](/html/ref/opensaf/healthcheck.html) |
 | [Error Detection](/html/ref/opensaf/recovery.html) |
-
-
-:::
-::: {.column width=20%}
-
-* * * * *
-
-| Virtual Network Interfaces |
-|:--------------------------:|
-| [vETH](/html/ref/veth.html), [vBridge](/html/ref/vbridge.html), [Bond](/html/ref/vbond.html), [Dummy](/html/ref/vdummy.html) |
 
 :::
 ::::::::::::::
