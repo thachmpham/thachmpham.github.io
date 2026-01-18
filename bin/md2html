@@ -164,4 +164,4 @@ pandoc --from markdown --to html \
 # generate_post fdisk
 # generate_post systemd
 
-find "${workspace}/md/ref" -name "*.md" -exec bash -c 'generate_post $1' _ {} \;
+find "${workspace}/md/ref" -name "*.md" -exec bash -c 'generate_post_notoc $1' _ {} \;

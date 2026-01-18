@@ -97,31 +97,22 @@
 <header id="title-block-header">
 <h1 class="title">PlantUML</h1>
 </header>
-<nav id="TOC" role="doc-toc">
-<ul>
-<li><a href="#useful-options" id="toc-useful-options"><span
-class="toc-section-number">0.0.3</span> Useful Options</a></li>
-</ul>
-</nav>
 <div class="columns">
 <div class="column" style="width:50%;">
-<h3 data-number="0.0.1" id="docker"><span
-class="header-section-number">0.0.1</span> Docker</h3>
+<h3 id="docker">Docker</h3>
 <p>Pull docker image.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker pull plantuml/plantuml-server:jetty</span></code></pre></div>
 <p>Run container.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker run <span class="at">-d</span> <span class="at">-p</span> 8080:8080 plantuml/plantuml-server:jetty  </span></code></pre></div>
 </div><div class="column" style="width:50%;">
-<h3 data-number="0.0.2" id="jar"><span
-class="header-section-number">0.0.2</span> Jar</h3>
+<h3 id="jar">Jar</h3>
 <p>Download jar.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> wget https://github.com/plantuml/plantuml/releases/download/v1.2025.10/plantuml-1.2025.10.jar</span></code></pre></div>
 <p>Generate image.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> java <span class="at">-jar</span> plantuml-1.2025.10.jar hello.puml</span></code></pre></div>
 </div>
 </div>
-<h3 data-number="0.0.3" id="useful-options"><span
-class="header-section-number">0.0.3</span> Useful Options</h3>
+<h3 id="useful-options">Useful Options</h3>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><a href="https://plantuml.com/theme">Theme</a>, <a

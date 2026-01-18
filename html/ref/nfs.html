@@ -97,20 +97,10 @@
 <header id="title-block-header">
 <h1 class="title">Network File System</h1>
 </header>
-<nav id="TOC" role="doc-toc">
-<ul>
-<li><a href="#lab" id="toc-lab"><span
-class="toc-section-number">0.1</span> Lab</a></li>
-<li><a href="#reference" id="toc-reference"><span
-class="toc-section-number">0.2</span> Reference</a></li>
-</ul>
-</nav>
-<h2 data-number="0.1" id="lab"><span
-class="header-section-number">0.1</span> Lab</h2>
+<h2 id="lab">Lab</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<h3 data-number="0.1.1" id="server"><span
-class="header-section-number">0.1.1</span> Server</h3>
+<h3 id="server">Server</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> apt install nfs-kernel-server</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> systemctl start nfs-kernel-server.service</span></code></pre></div>
 <p>Edit /etc/exports</p>
@@ -119,20 +109,17 @@ class="header-section-number">0.1.1</span> Server</h3>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> exportfs <span class="at">-a</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> exportfs <span class="at">-v</span></span></code></pre></div>
 </div><div class="column" style="width:50%;">
-<h3 data-number="0.1.2" id="client"><span
-class="header-section-number">0.1.2</span> Client</h3>
+<h3 id="client">Client</h3>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> install nfs-common</span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> /mnt/scratch</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mount</span> localhost:/scratch /mnt/scratch</span></code></pre></div>
-<h3 data-number="0.1.3" id="useful-commands"><span
-class="header-section-number">0.1.3</span> Useful Commands</h3>
+<h3 id="useful-commands">Useful Commands</h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> exportfs <span class="at">-v</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> exportfs <span class="at">-ua</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> showmount <span class="at">-e</span> localhost</span></code></pre></div>
 </div>
 </div>
-<h2 data-number="0.2" id="reference"><span
-class="header-section-number">0.2</span> Reference</h2>
+<h2 id="reference">Reference</h2>
 <ul>
 <li><a href="https://linux.die.net/man/8/exportfs">exportfs
 manual</a></li>

@@ -97,37 +97,7 @@
 <header id="title-block-header">
 <h1 class="title">Virtual Bridge Interface</h1>
 </header>
-<nav id="TOC" role="doc-toc">
-<ul>
-<li><a href="#introduction" id="toc-introduction"><span
-class="toc-section-number">1</span> 1. Introduction</a></li>
-<li><a href="#labs" id="toc-labs"><span
-class="toc-section-number">2</span> 2. Labs</a>
-<ul>
-<li><a href="#connect-namespaces" id="toc-connect-namespaces"><span
-class="toc-section-number">2.1</span> 2.1. Connect Namespaces</a></li>
-<li><a href="#connect-docker-containers"
-id="toc-connect-docker-containers"><span
-class="toc-section-number">2.2</span> 2.2. Connect Docker
-Containers</a></li>
-<li><a href="#split-network-with-vlan."
-id="toc-split-network-with-vlan."><span
-class="toc-section-number">2.3</span> 3.3. Split Network with VLAN.</a>
-<ul>
-<li><a href="#setup-connected-network."
-id="toc-setup-connected-network."><span
-class="toc-section-number">2.3.1</span> 3.3.1. Setup Connected
-Network.</a></li>
-<li><a href="#split-network." id="toc-split-network."><span
-class="toc-section-number">2.3.2</span> 3.3.2. Split Network.</a></li>
-</ul></li>
-</ul></li>
-<li><a href="#references" id="toc-references"><span
-class="toc-section-number">3</span> References</a></li>
-</ul>
-</nav>
-<h1 data-number="1" id="introduction"><span
-class="header-section-number">1</span> 1. Introduction</h1>
+<h1 id="introduction">1. Introduction</h1>
 <p>A virtual bridge connects multiple network interfaces together,
 allowing them to communicate with each other as if they were on the same
 network.</p>
@@ -167,10 +137,8 @@ flowchart TD
     veth2 <---> veth1
     veth1 <---> virbr0
 </pre>
-<h1 data-number="2" id="labs"><span
-class="header-section-number">2</span> 2. Labs</h1>
-<h2 data-number="2.1" id="connect-namespaces"><span
-class="header-section-number">2.1</span> 2.1. Connect Namespaces</h2>
+<h1 id="labs">2. Labs</h1>
+<h2 id="connect-namespaces">2.1. Connect Namespaces</h2>
 <ul>
 <li>Create namespaces: ns1, ns2.</li>
 <li>Create veth pairs: veth1-vethbr1, veth2-vethbr2.</li>
@@ -229,9 +197,7 @@ flowchart TD
 <span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns1 ping 192.168.0.20</span>
 <span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns2 ping 192.168.0.10</span>
 <span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 data-number="2.2" id="connect-docker-containers"><span
-class="header-section-number">2.2</span> 2.2. Connect Docker
-Containers</h2>
+<h2 id="connect-docker-containers">2.2. Connect Docker Containers</h2>
 <ul>
 <li>Create containers: container1, container2.</li>
 <li>Create veth pairs: veth1-vethbr1, veth2-vethbr2.</li>
@@ -291,11 +257,8 @@ flowchart TD
 <span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker exec container1 ping 192.168.0.20</span>
 <span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker exec container2 ping 192.168.0.10</span>
 <span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h2 data-number="2.3" id="split-network-with-vlan."><span
-class="header-section-number">2.3</span> 3.3. Split Network with
-VLAN.</h2>
-<h4 data-number="2.3.0.1" id="agenda"><span
-class="header-section-number">2.3.0.1</span> Agenda</h4>
+<h2 id="split-network-with-vlan.">3.3. Split Network with VLAN.</h2>
+<h4 id="agenda">Agenda</h4>
 <ul>
 <li>Setup connected network.
 <ul>
@@ -315,9 +278,7 @@ other.</li>
 vethbr1, vethbr2 and vise versa.</li>
 </ul></li>
 </ul>
-<h3 data-number="2.3.1" id="setup-connected-network."><span
-class="header-section-number">2.3.1</span> 3.3.1. Setup Connected
-Network.</h3>
+<h3 id="setup-connected-network.">3.3.1. Setup Connected Network.</h3>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># create namepsaces</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns add ns1</span>
@@ -403,8 +364,7 @@ flowchart TD
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns1 ping <span class="at">-c</span> 1 192.168.0.30</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">64</span> bytes from 192.168.0.30: icmp_seq=1 ttl=64 time=0.119 ms</span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h3 data-number="2.3.2" id="split-network."><span
-class="header-section-number">2.3.2</span> 3.3.2. Split Network.</h3>
+<h3 id="split-network.">3.3.2. Split Network.</h3>
 <pre class="mermaid">
 flowchart TD
     subgraph ns1
@@ -475,8 +435,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ip netns exec ns1 ping <span class="at">-c</span> 1 192.168.0.30</span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span> packets transmitted, 0 received, 100% packet loss, time 0ms</span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<h1 data-number="3" id="references"><span
-class="header-section-number">3</span> References</h1>
+<h1 id="references">References</h1>
 <ul>
 <li>https://man7.org/linux/man-pages/man8/ip-link.8.html</li>
 <li>https://man7.org/linux/man-pages/man8/ip-netns.8.html</li>
