@@ -1,45 +1,47 @@
 #! /usr/bin/bash
 
-# ====  global variables
-workspace=$(git rev-parse --show-toplevel)
-
 # ====  functions
 generate_post() {
-    local post_name="$1"
-    local input_file="${workspace}/md/${post_name}.md"
-    local output_file="${workspace}/html/${post_name}.html"
+    local input="$1"
+    local output="$(perl -pe 's{/md/}{/html/}; s{\.md$}{.html}' <<< $input)"
+    local topdir="$(perl -pe 's{/md/.*$}{}' <<< $input)"
 
     pandoc --from markdown --to html \
         --css /html/style/dark.css \
-        --include-in-header ${workspace}/bin/header.html \
-        --include-after-body ${workspace}/bin/footer.html \
+        --include-in-header ${topdir}/bin/header.html \
+        --include-after-body ${topdir}/bin/footer.html \
         --highlight-style zenburn \
         --table-of-contents \
         --standalone \
         --mathml \
         --number-sections \
-        --output=${output_file} \
-        ${input_file}
+        --output=${output} \
+        ${input}
 }
 
 generate_post_notoc() {
-    local post_name="$1"
-    local input_file="${workspace}/md/${post_name}.md"
-    local output_file="${workspace}/html/${post_name}.html"
+    local input="$1"
+    local output="$(perl -pe 's{/md/}{/html/}; s{\.md$}{.html}' <<< $input)"
+    local topdir="$(perl -pe 's{/md/.*$}{}' <<< $input)"
 
     pandoc --from markdown --to html \
         --css /html/style/dark.css \
-        --include-in-header ${workspace}/bin/header.html \
-        --include-after-body ${workspace}/bin/footer.html \
+        --include-in-header ${topdir}/bin/header.html \
+        --include-after-body ${topdir}/bin/footer.html \
         --highlight-style zenburn \
         --standalone \
         --mathml \
-        --output=${output_file} \
-        ${input_file}
+        --output=${output} \
+        ${input}
 }
 
+export -f generate_post
+export -f generate_post_notoc
 
-# ====  generate index.html
+
+workspace=$(git rev-parse --show-toplevel)
+
+# ====  index
 pandoc --from markdown --to html \
     --css /html/style/dark.css \
     --include-in-header ${workspace}/bin/header.html \
@@ -48,7 +50,7 @@ pandoc --from markdown --to html \
     --output ${workspace}/index.html \
     ${workspace}/md/index.md
 
-# ====  generate about.html
+# ====  about
 pandoc --from markdown --to html \
     --css /html/style/dark.css \
     --include-in-header ${workspace}/bin/header.html \
@@ -162,5 +164,4 @@ pandoc --from markdown --to html \
 # generate_post fdisk
 # generate_post systemd
 
-
-
+find "${workspace}/md/ref" -name "*.md" -exec bash -c 'generate_post $1' _ {} \;
