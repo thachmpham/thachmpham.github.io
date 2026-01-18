@@ -367,7 +367,7 @@ Hardware assisted breakpoint 5 at 0x7ffff7ffa060
 (gdb) continue
 Breakpoint 5, 0x00007ffff7ffa060 in sub ()
 
-(gdb) bt
+(gdb) backtrace
 #0  0x00007ffff7ffa060 in sub ()
 #1  0x000055555555521d in main () at main.c:30
 

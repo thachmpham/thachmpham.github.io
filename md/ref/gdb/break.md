@@ -164,7 +164,7 @@ int main()
 }
 ```
 
-Build.
+Run.
 ```sh
 $ gcc -c math.c -o math.o
 $ gcc -g main.c -o main
@@ -190,7 +190,6 @@ Inspect process memory.
 ```sh
 (gdb) break main.c:27
 (gdb) run
-
 (gdb) info proc mappings
       Start Addr           End Addr       Size     Offset  Perms  objfile
   0x7ffff7ffa000     0x7ffff7ffb000     0x1000        0x0  r-xp   math.o
@@ -199,42 +198,28 @@ Inspect process memory.
 Illustrate math.o and process memory.
 ```go
 +---------------------+
-| ELF Header          | 0x0000
-+---------------------+
-| Program Header      |
-+---------------------+
-| .text section       | 0x0040
-|  + sum()            |         + 0x0000
-|  + sub()            |         + 0x0018
-+---------------------+
 |       ........      |
 +---------------------+
-| Section Header      |
+| .text               | 0x0040
+|  + sum()            |         + 0x0000
+|  + sub()            |         + 0x0018
 +---------------------+
 ```
 
 ```go
 +---------------------+
-| /root/demo/main     | 0x0000000000400000
-| + main()            | 0x000000000040072c
+|       ........      |
 +---------------------+
-| ........            |
-|                     |
-+---------------------+
-| /root/demo/math.o   | 0x0000fffff7ff5000
-|   .text             | 0x0000fffff7ff5040
-|   ├── sum()         |                     + 0x0000
-|   └── sub()         |                     + 0x0018
-+---------------------+
-| ........            |
-|                     |
+| math.o              | 0xfffff7ff5000
+|   .text             | 0xfffff7ff5040
+|   ├── sum()         |         + 0x0000
+|   └── sub()         |         + 0x0018
 +---------------------+
 ```
 
 Add symbols and hbreak.
 ```sh
 (gdb) add-symbol-file math.o 0x7ffff7ffa040
-
 (gdb) info function sub
 0x00007ffff7ffa058  sub
 
@@ -244,12 +229,9 @@ Hardware assisted breakpoint 5 at 0x7ffff7ffa060
 (gdb) continue
 Breakpoint 5, 0x00007ffff7ffa060 in sub ()
 
-(gdb) bt
+(gdb) backtrace
 #0  0x00007ffff7ffa060 in sub ()
 #1  0x000055555555521d in main () at main.c:30
-
-(gdb) continue
-isum=9, isub=1
 ```
 
 :::
