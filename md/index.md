@@ -41,7 +41,9 @@ title: "A Developer Notebook"
 [ip-routing](/html/ref/ip-routing.html),
 [drbd](/html/ref/drbd.html),
 [nfs](/html/ref/nfs.html),
-[ldap](/html/ref/ldap.html)
+[ldap](/html/ref/ldap.html),
+[tipc](/html/ref/tipc.html),
+[vip](/html/ref/vip.html)
 
 * * * * *
 

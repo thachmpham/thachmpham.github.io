@@ -38,7 +38,6 @@ generate_post_notoc() {
 export -f generate_post
 export -f generate_post_notoc
 
-
 workspace=$(git rev-parse --show-toplevel)
 
 # ====  index
@@ -59,109 +58,15 @@ pandoc --from markdown --to html \
     --output ${workspace}/html/about.html \
     ${workspace}/md/about.md
 
-# ====  generate posts
-# ====  references
-# generate_post_notoc ref/grep
-# generate_post_notoc ref/perl
-# generate_post_notoc ref/tcpdump
-# generate_post_notoc ref/pcap-filter
-# generate_post_notoc ref/plantuml
-# generate_post_notoc ref/strace
-# generate_post_notoc ref/lsof
-# generate_post_notoc ref/grub
-# generate_post_notoc ref/pxe
-# generate_post_notoc ref/nfs
+# ====  posts
+cd ${workspace}
 
-# ====  Virtual network interfaces
-# generate_post veth
-# generate_post vbridge
-# generate_post vdummy-interface
-# generate_post vbond-interface
+{
+    git diff --name-only -- md/
+    git ls-files --others --exclude-standard -- md/
+} | sort -u | while IFS= read -r file; do
+    echo $file
+    generate_post_notoc "$(readlink -f "$file")"
+done
 
-
-# ====  Networking
-# generate_post arp
-# generate_post ip-routing
-# generate_post dhcp
-# generate_post tipc
-# generate_post vip
-
-
-# ====  Infrastructure
-# generate_post pxe
-# generate_post ldap
-# generate_post drbd
-
-
-# ====  OpenSAF
-# generate_post opensaf-install
-# generate_post opensaf-1sc
-# generate_post opensaf-2sc
-# generate_post opensaf-imm
-# generate_post opensaf-smf
-# generate_post opensaf-log
-# generate_post opensaf-amf-non-sa-aware
-# generate_post opensaf-amf-sa-aware
-# generate_post opensaf-healthcheck
-# generate_post opensaf-amf-error-detection
-
-
-# ====  GDB
-# generate_post gdb-program-started-by-script
-# generate_post gdb-program-started-by-systemd
-# generate_post gdb-ha-program
-# generate_post gdb-find
-# generate_post gdb-call
-# generate_post gdb-dump-restore
-# generate_post gdb-stl
-# generate_post elf
-# generate_post virtual-addr-elf-offset
-# generate_post gdb-write-pp
-# generate_post asm-callstack
-# generate_post gdb-multithread
-
-# generate_post gdb/variable
-# generate_post gdb/memory
-# generate_post gdb/pretty-printer
-# generate_post gdb/breakpoint
-# generate_post gdb/catchpoint
-# generate_post gdb/watchpoint
-# generate_post gdb/gdbserver
-# generate_post gdb/tracepoint
-# generate_post gdb/symbol
-# generate_post gdb/debuginfo
-# generate_post gdb/local_remote_binary
-# generate_post gdb/signal
-
-
-# ====  BASHDB
-# generate_post bashdbs
-
-
-# ====  Linux Kernel
-# generate_post kernel_build
-# generate_post kernel_debug_gdb
-# generate_post kernel_user_to_kernel
-
-
-# ====  Hack
-# generate_post ld_preload
-# generate_post tipc_eagain
-
-
-# ====  Cheatsheets
-# generate_post plantuml
-# generate_post graphviz
-# generate_post docker
-# generate_post firewall
-# generate_post gdb
-# generate_post tcpdump
-# generate_post pcap-filter
-# generate_post awk
-# generate_post grep
-# generate_post perl
-# generate_post kvm
-# generate_post fdisk
-# generate_post systemd
-
-find "${workspace}/md/ref" -name "*.md" -exec bash -c 'generate_post_notoc $1' _ {} \;
+# find "${workspace}/md/ref" -name "*.md" -exec bash -c 'generate_post_notoc $1' _ {} \;
