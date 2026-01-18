@@ -20,8 +20,8 @@ title: "GBD: Break"
 
 |           | Explicit Location       |             |
 |:----------|:------------------------|:------------|
-| -source   | `break -source hello.c sum`| sum in hello.c |
-| -qualified| `break -qualified sum `    | match sum, not A::sum |
+| -source   | `break -source hello.c sum`| Function sum in hello.c |
+| -qualified| `break -qualified sum `    | Match sum, not A::sum |
 
 :::
 ::: {.column}
