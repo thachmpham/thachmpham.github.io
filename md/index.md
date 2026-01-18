@@ -11,20 +11,23 @@ title: "A Developer Notebook"
 
 Log Collection
 
-- [strace](/html/ref/strace.html), [lsof](/html/ref/lsof.html), 
-[tcpdump](/html/ref/tcpdump.html), [pcap-filter](/html/ref/pcap-filter.html)
+[strace](/html/ref/strace.html),
+[lsof](/html/ref/lsof.html),
+[tcpdump](/html/ref/tcpdump.html),
+[pcap-filter](/html/ref/pcap-filter.html)
 
 * * * * *
 
 Log Processing
 
-- [grep](/html/ref/grep.html), [perl](/html/ref/perl.html)
+[grep](/html/ref/grep.html),
+[perl](/html/ref/perl.html)
 
 * * * * *
 
 Documentation
 
-- [plantuml](/html/ref/plantuml.html)
+[PlantUML](/html/ref/plantuml.html)
 
 * * * * *
 
@@ -35,7 +38,7 @@ Documentation
 
 GDB
 
-- [break](/html/ref/gdb/break.html)
+[break](/html/ref/gdb/break.html)
 
 * * * * *
 
@@ -47,29 +50,39 @@ GDB
 
 Booting
 
-- [grub](/html/ref/grub.html), [pxe](/html/ref/pxe.html), [systemd](/html/ref/systemd.html)
+[GRUB](/html/ref/grub.html),
+[PXE](/html/ref/pxe.html),
+[SystemD](/html/ref/systemd.html)
 
 * * * * *
 
 Protocols
 
-- [arp](/html/ref/arp.html), [ip-routing](/html/ref/ip-routing.html),
-[tipc](/html/ref/tipc.html), [vip](/html/ref/vip.html)
-- [drbd](/html/ref/drbd.html), [nfs](/html/ref/nfs.html), [ldap](/html/ref/ldap.html)
+[ARP](/html/ref/arp.html),
+[IP Routing](/html/ref/ip-routing.html),
+[TIPC](/html/ref/tipc.html),
+[vIP](/html/ref/vip.html),
+[DRBD](/html/ref/drbd.html),
+[NFS](/html/ref/nfs.html),
+[LDAP](/html/ref/ldap.html)
 
 
 * * * * *
 
 Adminstration
 
-- [fdisk](/html/ref/fdisk.html), [firewall](/html/ref/firewall.html), [kvm](/html/ref/kvm.html)
+[FDisk](/html/ref/fdisk.html),
+[Firewall](/html/ref/firewall.html),
+[KVM](/html/ref/kvm.html)
 
 * * * * *
 
 Virtual Network Interfaces
 
-- [veth](/html/ref/veth.html), [vbridge](/html/ref/vbridge.html),
-[bond](/html/ref/vbond.html), [vdummy](/html/ref/vdummy.html)
+[vETH](/html/ref/veth.html),
+[vBridge](/html/ref/vbridge.html),
+[Bond](/html/ref/vbond.html),
+[Dummy](/html/ref/vdummy.html)
 
 * * * * *
 
@@ -80,10 +93,16 @@ Virtual Network Interfaces
 
 OpenSAF
 
-- [install](/html/ref/opensaf/install.html), [1sc](/html/ref/opensaf/1sc.html), [2sc](/html/ref/opensaf/2sc.html)
-[imm](/html/ref/opensaf/imm.html), [log](/html/ref/opensaf/log.html), [smf](/html/ref/opensaf/smf.html)
-- [sa-aware](/html/ref/opensaf/sa-aware.html), [non-saware](/html/ref/opensaf/non-saware.html), [healthcheck](/html/ref/opensaf/healthcheck.html)
-- [recovery](/html/ref/opensaf/recovery.html)
+[Install](/html/ref/opensaf/install.html),
+[1 SC](/html/ref/opensaf/1sc.html),
+[2 SCs](/html/ref/opensaf/2sc.html)
+[IMM](/html/ref/opensaf/imm.html),
+[LOG](/html/ref/opensaf/log.html),
+[SMF](/html/ref/opensaf/smf.html),
+[SA-Aware](/html/ref/opensaf/sa-aware.html),
+[Non SA-Aware](/html/ref/opensaf/non-saware.html),
+[Healthcheck](/html/ref/opensaf/healthcheck.html),
+[Error Detection](/html/ref/opensaf/recovery.html)
 
 
 * * * * *
