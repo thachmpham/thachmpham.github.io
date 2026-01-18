@@ -26,7 +26,7 @@ Hardware Breakpoint.
 :::
 ::::::::::::::
 
-### break
+## break
 
 :::::::::::::: {.columns}
 ::: {.column}
@@ -104,9 +104,11 @@ end
 ::::::::::::::
 
 
-### hbreak
+## hbreak
 
-**Sample: Set hardward breakpoint at a function in a mmap region.**
+* * * * *
+
+Set hbreak at a function in a mmap region.
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
@@ -236,6 +238,8 @@ Breakpoint 5, 0x00007ffff7ffa060 in sub ()
 
 :::
 ::::::::::::::
+
+* * * * *
 
 ### Reference
 - [GDB Internal, Breakpoint Handling](https://sourceware.org/gdb/wiki/Internals/Breakpoint%20Handling)
