@@ -267,12 +267,7 @@ $ readelf --section-headers --wide math.o
 
 Find the offsets of the sum and sub functions. The output shows sum at 0x0000 and sub at 0x0020, these are relative offsets to the start of the .text section.
 ```sh
-$ readelf --symbols math.o
-Symbol table '.symtab' contains 5 entries:
-   Num:    Value          Size Type    Bind   Vis      Ndx Name     
-     3: 0000000000000000    24 FUNC    GLOBAL DEFAULT    1 sum
-     4: 0000000000000018    22 FUNC    GLOBAL DEFAULT    1 sub
-  
+
 ```
 
 Illustration of the math.o structure.
