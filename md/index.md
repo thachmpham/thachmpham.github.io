@@ -54,6 +54,13 @@ title: "A Developer Notebook"
 :::
 ::: {.column width=25%}
 
+* * * * *
+
+[fdisk](/html/ref/fdisk.html),
+[firewall](/html/ref/firewall.html),
+[kvm](/html/ref/kvm.html)
+
+* * * * *
 
 :::
 ::: {.column width=25%}
