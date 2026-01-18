@@ -32,7 +32,8 @@ title: "A Developer Notebook"
 * * * * *
 
 [grub](/html/ref/grub.html),
-[pxe](/html/ref/pxe.html)
+[pxe](/html/ref/pxe.html),
+[systemd](/html/ref/systemd.html)
 
 * * * * *
 
