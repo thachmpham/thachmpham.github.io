@@ -5,7 +5,7 @@ title: "A Developer Notebook"
 ### Swiss Army Knife
 
 :::::::::::::: {.columns}
-::: {.column width=25%}
+::: {.column width=20%}
 
 * * * * *
 
@@ -26,7 +26,7 @@ title: "A Developer Notebook"
 | [PlantUML](/html/ref/plantuml.html) |
 
 :::
-::: {.column width=25%}
+::: {.column width=20%}
 
 * * * * *
 
@@ -35,7 +35,7 @@ title: "A Developer Notebook"
 | [break](/html/ref/gdb/break.html) |
 
 :::
-::: {.column width=25%}
+::: {.column width=30%}
 
 * * * * *
 
@@ -54,7 +54,7 @@ title: "A Developer Notebook"
 | [vETH](/html/ref/veth.html), [vBridge](/html/ref/vbridge.html), [Bond](/html/ref/vbond.html), [Dummy](/html/ref/vdummy.html) |
 
 :::
-::: {.column width=25%}
+::: {.column width=30%}
 
 * * * * *
 
