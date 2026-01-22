@@ -3,7 +3,7 @@ title: "Preboot eXecution Environment"
 ---
 
 
-## Lab
+## Lab: PXE Ubuntu Netboot
 ### Server
 
 :::::::::::::: {.columns}
@@ -61,9 +61,8 @@ label install
 	menu label ^Install
 	menu default
 	kernel ubuntu-installer/amd64/linux
-	    
     # append vga=788 initrd=ubuntu-installer/amd64/initrd.gz --- quiet
-    append vga=788 initrd=ubuntu-installer/amd64/initrd.gz --- console=ttyS0,19200 earlyprint=serial,ttyS0,19200 	
+    append initrd=ubuntu-installer/amd64/initrd.gz --- console=ttyS0,19200 earlyprint=serial,ttyS0,19200 	
 ```
 
 <br>
@@ -83,9 +82,35 @@ $ virt-install --name=vm1 \
 :::
 ::::::::::::::
 
+* * * * * 
 
+## Lab: PXE NFS Root Filesystem
+### Server
+Copy linux kernel and initrd to ftpd directory.
+```sh
+$ cp vmlinuz-5.15.0-164-generic /var/ftpd
+$ cp initrd.img-5.15.0-164-generic /var/ftpd
+```
 
+Edit /var/ftpd/ubuntu-installer/amd64/boot-screens/txt.cfg
+```sh
+label install
+	menu label ^Install
+	menu default
+	kernel vmlinuz-5.15.0-164-generic
+    append initrd=initrd.img-5.15.0-164-generic root=/dev/nfs nfsroot=192.168.0.1:/var/nfs --- console=ttyS0,19200 earlyprint=serial,ttyS0,19200
+```
 
+Edit /etc/exports.
+```sh
+/var/nfs *(rw, sync, no_subtree_check, no_root_squash)
+```
+
+Export nfs directory.
+```sh
+$ export -a
+$ export -v
+```
 
 ## References
 - [PXELINUX wiki](https://wiki.syslinux.org/wiki/index.php?title=PXELINUX).
