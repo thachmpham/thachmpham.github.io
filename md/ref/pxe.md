@@ -3,11 +3,25 @@ title: "Preboot eXecution Environment"
 ---
 
 
-## Lab: PXE Ubuntu Netboot
-### Server
+## Lab 01: PXE Ubuntu Netboot
+
+
+
+
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
+
+Server:
+
+- PXE server provides Ubuntu Netboot.
+
+Client:
+
+- Boot from PXE.
+- Install Ubuntu to hard disk.
+
+### 1. Server
 
 Install dnsmasq
 ```sh
@@ -35,6 +49,9 @@ Start server.
 $ systemctl start dnsmasq
 ```
 
+:::
+::: {.column width=50%}
+
 Setup boot directory.
 ```sh
 $ mkdir /var/ftpd
@@ -44,10 +61,7 @@ $ wget http://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd6
 $ tar xf netboot.tar.gz
 ```
 
-:::
-::: {.column width=50%}
-
-**Workaround**: Install Ubuntu over serial console.
+**Workaround**: Enable serial console.
 
 Prepend to /var/ftpd/pxelinux.cfg/default
 ```sh
@@ -65,10 +79,8 @@ label install
     append initrd=ubuntu-installer/amd64/initrd.gz --- console=ttyS0,19200 earlyprint=serial,ttyS0,19200 	
 ```
 
-<br>
+### 2. Client
 
-### Client
-Start VM with PXE.
 ```sh
 $ virt-install --name=vm1 \
     --ram=2048 \
@@ -84,8 +96,27 @@ $ virt-install --name=vm1 \
 
 * * * * * 
 
-## Lab: PXE NFS Root Filesystem
-### Server
+<br>
+
+
+## Lab 02: NFS Root Filesystem
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+Continue of lab 01.
+
+Server:
+
+- PXE server provides linux kernel.
+- Provide NFS root filesystem.
+
+Client
+
+- Boot from PXE.
+
+### 1. Server
+
 Copy linux kernel and initrd to ftpd directory.
 ```sh
 $ cp vmlinuz-5.15.0-164-generic /var/ftpd
@@ -101,6 +132,16 @@ label install
     append initrd=initrd.img-5.15.0-164-generic root=/dev/nfs nfsroot=192.168.0.1:/var/nfs --- console=ttyS0,19200 earlyprint=serial,ttyS0,19200
 ```
 
+:::
+::: {.column width=50%}
+
+Prepare root filesystem.
+
+- Built root filesystem with [builtroot](https://buildroot.org/).
+- Mount and copy all files in root filesystem to /var/nfs.
+
+Setup NFS server.
+
 Edit /etc/exports.
 ```sh
 /var/nfs *(rw, sync, no_subtree_check, no_root_squash)
@@ -112,7 +153,27 @@ $ export -a
 $ export -v
 ```
 
+### 2. Client
+
+```sh
+$ virt-install --name=vm1 \
+    --ram=2048 \
+    --disk size=16 \
+    --pxe --boot network,menu=on \
+    --network bridge=br0 \
+    --os-variant ubuntu18.04 \
+    --nographic
+```
+
+:::
+::::::::::::::
+
+* * * * *
+
+<br>
+
 ## References
-- [PXELINUX wiki](https://wiki.syslinux.org/wiki/index.php?title=PXELINUX).
+- [PXELINUX](https://wiki.syslinux.org/wiki/index.php?title=PXELINUX).
 - [Ubuntu network installer](https://ubuntu.com/download/alternative-downloads#network-installer).
 - [Ubuntu netboot images](https://cdimage.ubuntu.com/netboot/).
+- [NFS Root Filesystem](https://www.kernel.org/doc/Documentation/filesystems/nfs/nfsroot.txt).

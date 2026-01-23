@@ -97,10 +97,19 @@
 <header id="title-block-header">
 <h1 class="title">Preboot eXecution Environment</h1>
 </header>
-<h2 id="lab-pxe-ubuntu-netboot">Lab: PXE Ubuntu Netboot</h2>
-<h3 id="server">Server</h3>
+<h2 id="lab-01-pxe-ubuntu-netboot">Lab 01: PXE Ubuntu Netboot</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
+<p>Server:</p>
+<ul>
+<li>PXE server provides Ubuntu Netboot.</li>
+</ul>
+<p>Client:</p>
+<ul>
+<li>Boot from PXE.</li>
+<li>Install Ubuntu to hard disk.</li>
+</ul>
+<h3 id="server">1. Server</h3>
 <p>Install dnsmasq</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> apt install dnsmasq</span></code></pre></div>
 <p>Setup interface.</p>
@@ -115,14 +124,14 @@
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">tftp-root=/var/ftpd</span></span></code></pre></div>
 <p>Start server.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> systemctl start dnsmasq</span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <p>Setup boot directory.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mkdir /var/ftpd</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd /var/ftpd</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> wget http://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/netboot.tar.gz</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tar xf netboot.tar.gz</span></code></pre></div>
-</div><div class="column" style="width:50%;">
-<p><strong>Workaround</strong>: Install Ubuntu over serial console.</p>
+<p><strong>Workaround</strong>: Enable serial console.</p>
 <p>Prepend to /var/ftpd/pxelinux.cfg/default</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">console</span> 0</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">serial</span> 0 19200 0</span></code></pre></div>
@@ -133,9 +142,7 @@
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">kernel</span> ubuntu-installer/amd64/linux</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># append vga=788 initrd=ubuntu-installer/amd64/initrd.gz --- quiet</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">append</span> initrd=ubuntu-installer/amd64/initrd.gz <span class="at">---</span> console=ttyS0,19200 earlyprint=serial,ttyS0,19200    </span></code></pre></div>
-<p><br></p>
-<h3 id="client">Client</h3>
-<p>Start VM with PXE.</p>
+<h3 id="client">2. Client</h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> virt-install <span class="at">--name</span><span class="op">=</span>vm1 <span class="dt">\</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--ram</span><span class="op">=</span>2048 <span class="dt">\</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--disk</span> size=16 <span class="dt">\</span></span>
@@ -146,8 +153,21 @@
 </div>
 </div>
 <hr />
-<h2 id="lab-pxe-nfs-root-filesystem">Lab: PXE NFS Root Filesystem</h2>
-<h3 id="server-1">Server</h3>
+<p><br></p>
+<h2 id="lab-02-nfs-root-filesystem">Lab 02: NFS Root Filesystem</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Continue of lab 01.</p>
+<p>Server:</p>
+<ul>
+<li>PXE server provides linux kernel.</li>
+<li>Provide NFS root filesystem.</li>
+</ul>
+<p>Client</p>
+<ul>
+<li>Boot from PXE.</li>
+</ul>
+<h3 id="server-1">1. Server</h3>
 <p>Copy linux kernel and initrd to ftpd directory.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cp vmlinuz-5.15.0-164-generic /var/ftpd</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cp initrd.img-5.15.0-164-generic /var/ftpd</span></code></pre></div>
@@ -158,6 +178,14 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">menu</span> default</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">kernel</span> vmlinuz-5.15.0-164-generic</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">append</span> initrd=initrd.img-5.15.0-164-generic root=/dev/nfs nfsroot=192.168.0.1:/var/nfs <span class="at">---</span> console=ttyS0,19200 earlyprint=serial,ttyS0,19200</span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<p>Prepare root filesystem.</p>
+<ul>
+<li>Built root filesystem with <a
+href="https://buildroot.org/">builtroot</a>.</li>
+<li>Mount and copy all files in root filesystem to /var/nfs.</li>
+</ul>
+<p>Setup NFS server.</p>
 <p>Edit /etc/exports.</p>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/var/nfs</span> <span class="pp">*(</span>rw, sync, no_subtree_check, no_root_squash<span class="pp">)</span></span></code></pre></div>
@@ -165,16 +193,31 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#
 <div class="sourceCode" id="cb12"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> export <span class="at">-a</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> export <span class="at">-v</span></span></code></pre></div>
+<h3 id="client-1">2. Client</h3>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> virt-install <span class="at">--name</span><span class="op">=</span>vm1 <span class="dt">\</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--ram</span><span class="op">=</span>2048 <span class="dt">\</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--disk</span> size=16 <span class="dt">\</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--pxe</span> <span class="at">--boot</span> network,menu=on <span class="dt">\</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--network</span> bridge=br0 <span class="dt">\</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--os-variant</span> ubuntu18.04 <span class="dt">\</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--nographic</span></span></code></pre></div>
+</div>
+</div>
+<hr />
+<p><br></p>
 <h2 id="references">References</h2>
 <ul>
 <li><a
-href="https://wiki.syslinux.org/wiki/index.php?title=PXELINUX">PXELINUX
-wiki</a>.</li>
+href="https://wiki.syslinux.org/wiki/index.php?title=PXELINUX">PXELINUX</a>.</li>
 <li><a
 href="https://ubuntu.com/download/alternative-downloads#network-installer">Ubuntu
 network installer</a>.</li>
 <li><a href="https://cdimage.ubuntu.com/netboot/">Ubuntu netboot
 images</a>.</li>
+<li><a
+href="https://www.kernel.org/doc/Documentation/filesystems/nfs/nfsroot.txt">NFS
+Root Filesystem</a>.</li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">      
