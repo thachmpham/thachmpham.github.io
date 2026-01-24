@@ -206,6 +206,78 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#
 </div>
 <hr />
 <p><br></p>
+<h2 id="boot-process">Boot Process</h2>
+<p>Server Log.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> journalctl <span class="at">-f</span> <span class="at">-u</span> dnsmasq</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Jan</span> 23 08:02:42 pc dnsmasq-dhcp<span class="pp">[</span><span class="ss">5179</span><span class="pp">]</span>: DHCPDISCOVER<span class="er">(</span><span class="ex">br0</span><span class="kw">)</span> <span class="ex">52:54:00:63:77:ac</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Jan</span> 23 08:02:42 pc dnsmasq-dhcp<span class="pp">[</span><span class="ss">5179</span><span class="pp">]</span>: DHCPOFFER<span class="er">(</span><span class="ex">br0</span><span class="kw">)</span> <span class="ex">192.168.0.50</span> 52:54:00:63:77:ac</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Jan</span> 23 08:02:45 pc dnsmasq-dhcp<span class="pp">[</span><span class="ss">5179</span><span class="pp">]</span>: DHCPREQUEST<span class="er">(</span><span class="ex">br0</span><span class="kw">)</span> <span class="ex">192.168.0.50</span> 52:54:00:63:77:ac</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Jan</span> 23 08:02:45 pc dnsmasq-dhcp<span class="pp">[</span><span class="ss">5179</span><span class="pp">]</span>: DHCPACK<span class="er">(</span><span class="ex">br0</span><span class="kw">)</span> <span class="ex">192.168.0.50</span> 52:54:00:63:77:ac</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Jan</span> 23 08:02:46 pc dnsmasq-tftp<span class="pp">[</span><span class="ss">5179</span><span class="pp">]</span>: sent /var/ftpd/pxelinux.0 to 192.168.0.50</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Jan</span> 23 08:02:46 pc dnsmasq-tftp<span class="pp">[</span><span class="ss">5179</span><span class="pp">]</span>: sent /var/ftpd/ldlinux.c32 to 192.168.0.50</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Jan</span> 23 08:02:46 pc dnsmasq-tftp<span class="pp">[</span><span class="ss">5179</span><span class="pp">]</span>: sent /var/ftpd/pxelinux.cfg/default to 192.168.0.50</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Jan</span> 23 08:02:47 pc dnsmasq-tftp<span class="pp">[</span><span class="ss">5179</span><span class="pp">]</span>: sent /var/ftpd/ubuntu-installer/amd64/boot-screens/stdmenu.cfg to 192.168.0.50</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="ex">Jan</span> 23 08:02:47 pc dnsmasq-tftp<span class="pp">[</span><span class="ss">5179</span><span class="pp">]</span>: sent /var/ftpd/ubuntu-installer/amd64/boot-screens/txt.cfg to 192.168.0.50</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Jan</span> 23 08:02:47 pc dnsmasq-tftp<span class="pp">[</span><span class="ss">5179</span><span class="pp">]</span>: sent /var/ftpd/ubuntu-installer/amd64/boot-screens/stdmenu.cfg to 192.168.0.50</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Jan</span> 23 08:02:47 pc dnsmasq-tftp<span class="pp">[</span><span class="ss">5179</span><span class="pp">]</span>: sent /var/ftpd/ubuntu-installer/amd64/boot-screens/adtxt.cfg to 192.168.0.50</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="ex">Jan</span> 23 08:02:47 pc dnsmasq-tftp<span class="pp">[</span><span class="ss">5179</span><span class="pp">]</span>: sent /var/ftpd/ubuntu-installer/amd64/boot-screens/rqtxt.cfg to 192.168.0.50</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="ex">Jan</span> 23 08:03:00 pc dnsmasq-tftp<span class="pp">[</span><span class="ss">5179</span><span class="pp">]</span>: sent /var/ftpd/vmlinuz-5.15.0-164-generic to 192.168.0.50</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="ex">Jan</span> 23 08:04:59 pc dnsmasq-tftp<span class="pp">[</span><span class="ss">5179</span><span class="pp">]</span>: sent /var/ftpd/initrd.img-5.15.0-164-generic to 192.168.0.50</span></code></pre></div>
+<div class="columns">
+<div class="column" style="width:60%;">
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 72%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">File</th>
+<th style="text-align: left;">Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pxelinux.0</td>
+<td style="text-align: left;">PXE bootloader. Loads config, kernel,
+initrd.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pxelinux.cfg/default</td>
+<td style="text-align: left;">Configuration and boot menu.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">vmlinuz</td>
+<td style="text-align: left;">Linux kernel.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">initrd.img</td>
+<td style="text-align: left;">Initial RAM disk. Temporary rootfs in RAM
+to load drivers and mount real rootfs.</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:40%;">
+<pre class="mermaid">
+sequenceDiagram
+    Client ->> Server: DHCPDISCOVER
+    Server ->> Client: DHCPOFFER    
+    Client ->> Server: DHCPREQUEST
+    Server ->> Client: DHCPACK
+    Server ->> Client: pxelinux.0
+    Server ->> Client: pxelinux.cfg/default
+    Server ->> Client: vmlinuz
+    Server ->> Client: initrd.img
+</pre>
+</div>
+</div>
+<hr />
+<p><br></p>
 <h2 id="references">References</h2>
 <ul>
 <li><a

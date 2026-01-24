@@ -5,10 +5,6 @@ title: "Preboot eXecution Environment"
 
 ## Lab 01: PXE Ubuntu Netboot
 
-
-
-
-
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
@@ -164,6 +160,66 @@ $ virt-install --name=vm1 \
     --os-variant ubuntu18.04 \
     --nographic
 ```
+
+:::
+::::::::::::::
+
+* * * * *
+
+<br>
+
+
+## Boot Process
+
+Server Log.
+```sh
+$ journalctl -f -u dnsmasq
+```
+
+```sh
+Jan 23 08:02:42 pc dnsmasq-dhcp[5179]: DHCPDISCOVER(br0) 52:54:00:63:77:ac
+Jan 23 08:02:42 pc dnsmasq-dhcp[5179]: DHCPOFFER(br0) 192.168.0.50 52:54:00:63:77:ac
+Jan 23 08:02:45 pc dnsmasq-dhcp[5179]: DHCPREQUEST(br0) 192.168.0.50 52:54:00:63:77:ac
+Jan 23 08:02:45 pc dnsmasq-dhcp[5179]: DHCPACK(br0) 192.168.0.50 52:54:00:63:77:ac
+
+Jan 23 08:02:46 pc dnsmasq-tftp[5179]: sent /var/ftpd/pxelinux.0 to 192.168.0.50
+Jan 23 08:02:46 pc dnsmasq-tftp[5179]: sent /var/ftpd/ldlinux.c32 to 192.168.0.50
+
+Jan 23 08:02:46 pc dnsmasq-tftp[5179]: sent /var/ftpd/pxelinux.cfg/default to 192.168.0.50
+Jan 23 08:02:47 pc dnsmasq-tftp[5179]: sent /var/ftpd/ubuntu-installer/amd64/boot-screens/stdmenu.cfg to 192.168.0.50
+Jan 23 08:02:47 pc dnsmasq-tftp[5179]: sent /var/ftpd/ubuntu-installer/amd64/boot-screens/txt.cfg to 192.168.0.50
+Jan 23 08:02:47 pc dnsmasq-tftp[5179]: sent /var/ftpd/ubuntu-installer/amd64/boot-screens/stdmenu.cfg to 192.168.0.50
+Jan 23 08:02:47 pc dnsmasq-tftp[5179]: sent /var/ftpd/ubuntu-installer/amd64/boot-screens/adtxt.cfg to 192.168.0.50
+Jan 23 08:02:47 pc dnsmasq-tftp[5179]: sent /var/ftpd/ubuntu-installer/amd64/boot-screens/rqtxt.cfg to 192.168.0.50
+
+Jan 23 08:03:00 pc dnsmasq-tftp[5179]: sent /var/ftpd/vmlinuz-5.15.0-164-generic to 192.168.0.50
+Jan 23 08:04:59 pc dnsmasq-tftp[5179]: sent /var/ftpd/initrd.img-5.15.0-164-generic to 192.168.0.50
+```
+
+:::::::::::::: {.columns}
+::: {.column width=60%}
+
+| File | Usage          |
+|:-----|:---------------|
+| pxelinux.0            | PXE bootloader. Loads config, kernel, initrd.|
+| pxelinux.cfg/default  | Configuration and boot menu.  |
+| vmlinuz               | Linux kernel.  |
+| initrd.img            | Initial RAM disk. Temporary rootfs in RAM to load drivers and mount real rootfs. |
+
+:::
+::: {.column width=40%}
+
+<pre class="mermaid">
+sequenceDiagram
+    Client ->> Server: DHCPDISCOVER
+    Server ->> Client: DHCPOFFER    
+    Client ->> Server: DHCPREQUEST
+    Server ->> Client: DHCPACK
+    Server ->> Client: pxelinux.0
+    Server ->> Client: pxelinux.cfg/default
+    Server ->> Client: vmlinuz
+    Server ->> Client: initrd.img
+</pre>
 
 :::
 ::::::::::::::
