@@ -3,6 +3,80 @@ title: "Diameter Protocol"
 ---
 
 
+## Theory
+
+* * * * * 
+
+:::::::::::::: {.columns}
+::: {.column width=30%}
+
+Diameter is an AAA protocol, mainly used in telecom.
+
+Authentication
+
+- Verify the user identity: username/password, certificate.
+- Output: accept, reject.
+
+Authorization
+
+- Determine permissions for user.
+- Output: permissions, access rules.
+
+Accounting
+
+- Track resource usages for billing: call duration, data volume.
+- Output: charging records.
+
+:::
+::: {.column width=30%}
+
+Diameter follows two-layer structure.
+
+Base Protocol Layer - Infrastructure.
+
+- Peer discovery & capability negotiation (CER, CEA).
+- Connection management and keepalive (DWR, DWA).
+- Message routing (realm, host, application-id).
+
+Application Layer - Business Logic.
+
+- Online charing (CCR, CCA).
+- Offline charing (ACR, ACA).
+- Gx Policy control (RAR, RAA).
+
+<br>
+
+Message Format
+
+A diameter message contains a header and a payload.  
+The payload is a list of attribute–value pairs (AVPs).
+
+:::
+::: {.column width=30%}
+
+A diameter node can act as a client, server or agent.
+
+Client
+
+- User device sends radio, IP signaling, not diameter.
+- Diameter client node receives the signal and translate to diameter requests.
+- Send diameter requests to server.
+
+Server
+
+- Handle diameter requests and reply answers.
+
+Agent
+
+- Forward messages.
+
+<br>
+
+Diameter uses TCP or SCTP as transport protocol.
+
+:::
+::::::::::::::
+
 ## Lab 01: Erlang Diameter 
 
 * * * * *

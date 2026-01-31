@@ -97,6 +97,65 @@
 <header id="title-block-header">
 <h1 class="title">Diameter Protocol</h1>
 </header>
+<h2 id="theory">Theory</h2>
+<hr />
+<div class="columns">
+<div class="column" style="width:30%;">
+<p>Diameter is an AAA protocol, mainly used in telecom.</p>
+<p>Authentication</p>
+<ul>
+<li>Verify the user identity: username/password, certificate.</li>
+<li>Output: accept, reject.</li>
+</ul>
+<p>Authorization</p>
+<ul>
+<li>Determine permissions for user.</li>
+<li>Output: permissions, access rules.</li>
+</ul>
+<p>Accounting</p>
+<ul>
+<li>Track resource usages for billing: call duration, data volume.</li>
+<li>Output: charging records.</li>
+</ul>
+</div><div class="column" style="width:30%;">
+<p>Diameter follows two-layer structure.</p>
+<p>Base Protocol Layer - Infrastructure.</p>
+<ul>
+<li>Peer discovery &amp; capability negotiation (CER, CEA).</li>
+<li>Connection management and keepalive (DWR, DWA).</li>
+<li>Message routing (realm, host, application-id).</li>
+</ul>
+<p>Application Layer - Business Logic.</p>
+<ul>
+<li>Online charing (CCR, CCA).</li>
+<li>Offline charing (ACR, ACA).</li>
+<li>Gx Policy control (RAR, RAA).</li>
+</ul>
+<p><br></p>
+<p>Message Format</p>
+<p>A diameter message contains a header and a payload.<br />
+The payload is a list of attribute–value pairs (AVPs).</p>
+</div><div class="column" style="width:30%;">
+<p>A diameter node can act as a client, server or agent.</p>
+<p>Client</p>
+<ul>
+<li>User device sends radio, IP signaling, not diameter.</li>
+<li>Diameter client node receives the signal and translate to diameter
+requests.</li>
+<li>Send diameter requests to server.</li>
+</ul>
+<p>Server</p>
+<ul>
+<li>Handle diameter requests and reply answers.</li>
+</ul>
+<p>Agent</p>
+<ul>
+<li>Forward messages.</li>
+</ul>
+<p><br></p>
+<p>Diameter uses TCP or SCTP as transport protocol.</p>
+</div>
+</div>
 <h2 id="lab-01-erlang-diameter">Lab 01: Erlang Diameter</h2>
 <hr />
 <div class="columns">
