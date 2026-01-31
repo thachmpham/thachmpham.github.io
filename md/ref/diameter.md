@@ -56,10 +56,10 @@ The payload is a list of attribute–value pairs (AVPs).
 
 A diameter node can act as a client, server or agent.
 
-Client
+Diameter Client Node
 
-- User device sends radio, IP signaling, not diameter.
-- Diameter client node receives the signal and translate to diameter requests.
+- Receive radio signals from user devices.
+- Convert signals to diameter requests.
 - Send diameter requests to server.
 
 Server
@@ -183,8 +183,10 @@ Sample: [hello.pcap](https://github.com/thachmpham/samples/blob/main/pcap/diamet
 
 * * * * *
 
+<br>
 
 ## References
-- [Erlang Diameter API](https://www.erlang.org/doc/apps/diameter/api-reference.html).
 - [RFC 6733](https://datatracker.ietf.org/doc/html/rfc6733).
-- Diameter New Generation AAA Protocol, Design, Practice and Application. Hassen, Sebastien, Jean, Jouni.
+- [Erlang Diameter API](https://www.erlang.org/doc/apps/diameter/api-reference.html).
+- [Erlang Diameter Example Github](https://github.com/erlang/otp/tree/master/lib/diameter/examples).
+- [Diameter New Generation AAA Protocol, Design, Practice and Application.](https://www.wiley.com/en-us/Diameter%3A+New+Generation+AAA+Protocol+-+Design%2C+Practice%2C+and+Applications-p-9781118875834).

@@ -137,11 +137,10 @@
 The payload is a list of attribute–value pairs (AVPs).</p>
 </div><div class="column" style="width:30%;">
 <p>A diameter node can act as a client, server or agent.</p>
-<p>Client</p>
+<p>Diameter Client Node</p>
 <ul>
-<li>User device sends radio, IP signaling, not diameter.</li>
-<li>Diameter client node receives the signal and translate to diameter
-requests.</li>
+<li>Receive radio signals from user devices.</li>
+<li>Convert signals to diameter requests.</li>
 <li>Send diameter requests to server.</li>
 </ul>
 <p>Server</p>
@@ -233,15 +232,20 @@ href="https://github.com/thachmpham/samples/blob/main/pcap/diameter/hello.pcap">
 <a
 href="https://github.com/thachmpham/samples/blob/main/pcap/diameter/hello.txt">hello.txt</a>.</p>
 <hr />
+<p><br></p>
 <h2 id="references">References</h2>
 <ul>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc6733">RFC
+6733</a>.</li>
 <li><a
 href="https://www.erlang.org/doc/apps/diameter/api-reference.html">Erlang
 Diameter API</a>.</li>
-<li><a href="https://datatracker.ietf.org/doc/html/rfc6733">RFC
-6733</a>.</li>
-<li>Diameter New Generation AAA Protocol, Design, Practice and
-Application. Hassen, Sebastien, Jean, Jouni.</li>
+<li><a
+href="https://github.com/erlang/otp/tree/master/lib/diameter/examples">Erlang
+Diameter Example Github</a>.</li>
+<li><a
+href="https://www.wiley.com/en-us/Diameter%3A+New+Generation+AAA+Protocol+-+Design%2C+Practice%2C+and+Applications-p-9781118875834">Diameter
+New Generation AAA Protocol, Design, Practice and Application.</a>.</li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">      
