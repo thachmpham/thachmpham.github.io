@@ -175,9 +175,11 @@ $ tshark -r hello.pcap -Y 'diameter'
 12 34.161076648  127.0.0.1 → 127.0.0.1  DIAMETER 214 cmd=Accounting Answer(271)             flags=-P-- appl=Diameter Common Messages(0) h2h=acb06dc5 e2e=acb06dc5 | 
 14 48.667674359  127.0.0.1 → 127.0.0.1  DIAMETER 146 cmd=Disconnect-Peer Request(282)       flags=R--- appl=Diameter Common Messages(0) h2h=acb06dc6 e2e=acb06dc6 | 
 15 48.668208006  127.0.0.1 → 127.0.0.1  DIAMETER 146 cmd=Disconnect-Peer Answer(282)        flags=---- appl=Diameter Common Messages(0) h2h=acb06dc6 e2e=acb06dc6 |
+
+$ tshark -r hello.pcap -O 'diameter' -Y diameter > hello.txt
 ```
 
-Sample: [hello.pcap](https://github.com/thachmpham/samples/blob/main/pcap/diameter/hello.pcap).
+Sample: [hello.pcap](https://github.com/thachmpham/samples/blob/main/pcap/diameter/hello.pcap), [hello.txt](https://github.com/thachmpham/samples/blob/main/pcap/diameter/hello.txt).
 
 * * * * *
 
