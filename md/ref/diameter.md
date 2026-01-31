@@ -7,6 +7,9 @@ title: "Diameter Protocol"
 
 * * * * *
 
+:::::::::::::: {.columns}
+::: {.column}
+
 Install erlang and explore diameter example code.
 ```sh
 $ apt install -y erlang
@@ -21,6 +24,9 @@ $ dpkg -L erlang-examples
 /usr/lib/erlang/lib/diameter-2.2.4/examples/code/client.erl
 ```
 
+:::
+::: {.column}
+
 Build example.
 
 ```sh
@@ -30,7 +36,14 @@ $ erlc *.erl
 # build .erl file to .beam
 ```
 
+:::
+::::::::::::::
+
+:::::::::::::: {.columns}
+::: {.column}
+
 Server.
+
 ```sh
 $ cd /usr/lib/erlang/lib/diameter-2.2.4/examples/code
 
@@ -46,6 +59,9 @@ $ lsof -n -i :3868
 COMMAND    PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
 beam.smp 11825 root   17u  IPv4  91515      0t0  TCP 127.0.0.1:3868 (LISTEN)
 ```
+
+:::
+::: {.column}
 
 Client
 ```sh
@@ -65,6 +81,9 @@ $ erl -pa .
        'Session-Id' => <<"client;1831359964;1;nonode@nohost">>}]}
 ```
 
+:::
+::::::::::::::
+
 Capture pcap: [acr_aca.pcap](https://github.com/thachmpham/samples/blob/main/pcap/diameter/acr_aca.pcap).
 ```sh
 $ tcpdump -i lo 'tcp port 3868' -w acr_aca.pcap
@@ -82,4 +101,4 @@ $ tshark -r acr_aca.pcap -O diameter 'tcp.len > 0'
 ## References
 - [Erlang Diameter API](https://www.erlang.org/doc/apps/diameter/api-reference.html).
 - [RFC 6733](https://datatracker.ietf.org/doc/html/rfc6733).
-- Diameter: New Generation AAA Protocol, Design, Practice and Application, Hassen, Sebastien, Jean, Jouni.
+- Diameter New Generation AAA Protocol, Design, Practice and Application. Hassen, Sebastien, Jean, Jouni.

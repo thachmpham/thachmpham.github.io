@@ -99,6 +99,8 @@
 </header>
 <h2 id="lab-01-erlang-otp-diameter">Lab 01: Erlang OTP Diameter</h2>
 <hr />
+<div class="columns">
+<div class="column">
 <p>Install erlang and explore diameter example code.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> apt install <span class="at">-y</span> erlang</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -110,11 +112,16 @@
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dpkg <span class="at">-L</span> erlang-examples</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">/usr/lib/erlang/lib/diameter-2.2.4/examples/code/server.erl</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ex">/usr/lib/erlang/lib/diameter-2.2.4/examples/code/client.erl</span></span></code></pre></div>
+</div><div class="column">
 <p>Build example.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd /usr/lib/erlang/lib/diameter-2.2.4/examples/code/</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> erlc <span class="pp">*</span>.erl</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># build .erl file to .beam</span></span></code></pre></div>
+</div>
+</div>
+<div class="columns">
+<div class="column">
 <p>Server.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd /usr/lib/erlang/lib/diameter-2.2.4/examples/code</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -126,6 +133,7 @@
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> lsof <span class="at">-n</span> <span class="at">-i</span> :3868</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">COMMAND</span>    PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">beam.smp</span> 11825 root   17u  IPv4  91515      0t0  TCP 127.0.0.1:3868 <span class="er">(</span><span class="ex">LISTEN</span><span class="kw">)</span></span></code></pre></div>
+</div><div class="column">
 <p>Client</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd /usr/lib/erlang/lib/diameter-2.2.4/examples/code</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -141,6 +149,8 @@
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>       <span class="st">&#39;Origin-Host&#39;</span> =<span class="op">&gt;</span> <span class="op">&lt;&lt;&quot;server.example.com&quot;&gt;&gt;</span>,</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="st">       &#39;Origin-Realm&#39; =&gt; &lt;&lt;&quot;example.com&quot;&gt;&gt;,&#39;Result-Code&#39; =&gt; 2001,</span></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="st">       &#39;Session-Id&#39; =&gt; &lt;&lt;&quot;client;1831359964;1;nonode@nohost&quot;&gt;&gt;}]}</span></span></code></pre></div>
+</div>
+</div>
 <p>Capture pcap: <a
 href="https://github.com/thachmpham/samples/blob/main/pcap/diameter/acr_aca.pcap">acr_aca.pcap</a>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tcpdump <span class="at">-i</span> lo <span class="st">&#39;tcp port 3868&#39;</span> <span class="at">-w</span> acr_aca.pcap</span>
@@ -158,8 +168,8 @@ href="https://www.erlang.org/doc/apps/diameter/api-reference.html">Erlang
 Diameter API</a>.</li>
 <li><a href="https://datatracker.ietf.org/doc/html/rfc6733">RFC
 6733</a>.</li>
-<li>Diameter: New Generation AAA Protocol, Design, Practice and
-Application, Hassen, Sebastien, Jean, Jouni.</li>
+<li>Diameter New Generation AAA Protocol, Design, Practice and
+Application. Hassen, Sebastien, Jean, Jouni.</li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">      
