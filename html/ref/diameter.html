@@ -97,44 +97,45 @@
 <header id="title-block-header">
 <h1 class="title">Diameter Protocol</h1>
 </header>
-<h2 id="lab-01-erlang-otp-diameter">Lab 01: Erlang OTP Diameter</h2>
+<h2 id="lab-01-erlang-diameter">Lab 01: Erlang Diameter</h2>
 <hr />
 <div class="columns">
 <div class="column">
-<p>Install erlang and explore diameter example code.</p>
+<p>Step 1: Install erlang.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> apt install <span class="at">-y</span> erlang</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dpkg <span class="at">-l</span> <span class="kw">|</span> <span class="fu">grep</span> erlang</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">erlang</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">erlang-diameter</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">erlang-examples</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dpkg <span class="at">-L</span> erlang-examples</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">/usr/lib/erlang/lib/diameter-2.2.4/examples/code/server.erl</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ex">/usr/lib/erlang/lib/diameter-2.2.4/examples/code/client.erl</span></span></code></pre></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">erlang-examples</span></span></code></pre></div>
 </div><div class="column">
-<p>Build example.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd /usr/lib/erlang/lib/diameter-2.2.4/examples/code/</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> erlc <span class="pp">*</span>.erl</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># build .erl file to .beam</span></span></code></pre></div>
+<p>Step 2: Build diameter example code.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dpkg <span class="at">-L</span> erlang-examples</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/usr/lib/erlang/lib/diameter-2.2.4/examples/code/server.erl</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">/usr/lib/erlang/lib/diameter-2.2.4/examples/code/client.erl</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd /usr/lib/erlang/lib/diameter-2.2.4/examples/code/</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> erlc <span class="pp">*</span>.erl</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># build .erl file to .beam</span></span></code></pre></div>
 </div>
 </div>
 <div class="columns">
 <div class="column">
-<p>Server.</p>
+<p>Step 3: Start server.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd /usr/lib/erlang/lib/diameter-2.2.4/examples/code</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> erl <span class="at">-pa</span> .</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> application:start<span class="kw">(</span><span class="ex">diameter</span><span class="kw">)</span><span class="bu">.</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> server:start<span class="kw">()</span><span class="bu">.</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> server:listen<span class="kw">(</span><span class="ex">tcp</span><span class="kw">)</span><span class="bu">.</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># server listening at 127.0.0.1:3868</span></span></code></pre></div>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># server listening at 127.0.0.1:3868</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> lsof <span class="at">-n</span> <span class="at">-i</span> :3868</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">COMMAND</span>    PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">beam.smp</span> 11825 root   17u  IPv4  91515      0t0  TCP 127.0.0.1:3868 <span class="er">(</span><span class="ex">LISTEN</span><span class="kw">)</span></span></code></pre></div>
 </div><div class="column">
-<p>Client</p>
+<p>Step 4: Start server.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd /usr/lib/erlang/lib/diameter-2.2.4/examples/code</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> erl <span class="at">-pa</span> .</span>
@@ -151,15 +152,16 @@
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="st">       &#39;Session-Id&#39; =&gt; &lt;&lt;&quot;client;1831359964;1;nonode@nohost&quot;&gt;&gt;}]}</span></span></code></pre></div>
 </div>
 </div>
-<p>Capture pcap: <a
-href="https://github.com/thachmpham/samples/blob/main/pcap/diameter/acr_aca.pcap">acr_aca.pcap</a>.</p>
+<p>Step 5: Capture pcap.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tcpdump <span class="at">-i</span> lo <span class="st">&#39;tcp port 3868&#39;</span> <span class="at">-w</span> acr_aca.pcap</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tshark <span class="at">-r</span> acr_aca.pcap <span class="st">&#39;tcp.len &gt; 0&#39;</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1</span>   0.000000    127.0.0.1 → 127.0.0.1    DIAMETER 222 cmd=Accounting Request<span class="er">(</span><span class="ex">271</span><span class="kw">)</span> <span class="va">flags</span><span class="op">=</span>RP-- <span class="va">appl</span><span class="op">=</span>Diameter <span class="ex">Common</span> Messages<span class="er">(</span><span class="ex">0</span><span class="kw">)</span> <span class="va">h2h</span><span class="op">=</span>a497849b <span class="va">e2e</span><span class="op">=</span>a497849b </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">3</span>   0.000301    127.0.0.1 → 127.0.0.1    DIAMETER 214 cmd=Accounting Answer<span class="er">(</span><span class="ex">271</span><span class="kw">)</span> <span class="va">flags</span><span class="op">=</span>-P-- <span class="va">appl</span><span class="op">=</span>Diameter <span class="ex">Common</span> Messages<span class="er">(</span><span class="ex">0</span><span class="kw">)</span> <span class="va">h2h</span><span class="op">=</span>a497849b <span class="va">e2e</span><span class="op">=</span>a497849b</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">3</span>   0.000301    127.0.0.1 → 127.0.0.1    DIAMETER 214 cmd=Accounting Answer<span class="er">(</span><span class="ex">271</span><span class="kw">)</span>  <span class="va">flags</span><span class="op">=</span>-P-- <span class="va">appl</span><span class="op">=</span>Diameter <span class="ex">Common</span> Messages<span class="er">(</span><span class="ex">0</span><span class="kw">)</span> <span class="va">h2h</span><span class="op">=</span>a497849b <span class="va">e2e</span><span class="op">=</span>a497849b</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tshark <span class="at">-r</span> acr_aca.pcap <span class="at">-O</span> diameter <span class="st">&#39;tcp.len &gt; 0&#39;</span></span></code></pre></div>
+<p>Sample: <a
+href="https://github.com/thachmpham/samples/blob/main/pcap/diameter/acr_aca.pcap">acr_aca.pcap</a>.</p>
 <hr />
 <h2 id="references">References</h2>
 <ul>
