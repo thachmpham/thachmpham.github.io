@@ -154,6 +154,8 @@ $ erl -pa .
        'Origin-Host' => <<"server.example.com">>,
        'Origin-Realm' => <<"example.com">>,'Result-Code' => 2001,
        'Session-Id' => <<"client;1831359964;1;nonode@nohost">>}]}
+
+> client:stop().
 ```
 
 :::
@@ -161,15 +163,21 @@ $ erl -pa .
 
 Step 5: Capture pcap.
 ```sh
-$ tcpdump -i lo 'tcp port 3868' -w acr_aca.pcap
+# tcpdump -i lo -w hello.pcap 'tcp port 3868' --print
+$ tshark -i lo -w hello.pcap -f "tcp port 3868" -P -l
 
-$ tshark -r acr_aca.pcap 'tcp.len > 0'
-    1   0.000000    127.0.0.1 → 127.0.0.1    DIAMETER 222 cmd=Accounting Request(271) flags=RP-- appl=Diameter Common Messages(0) h2h=a497849b e2e=a497849b 
-    3   0.000301    127.0.0.1 → 127.0.0.1    DIAMETER 214 cmd=Accounting Answer(271)  flags=-P-- appl=Diameter Common Messages(0) h2h=a497849b e2e=a497849b
-
-$ tshark -r acr_aca.pcap -O diameter 'tcp.len > 0'
+$ tshark -r hello.pcap -Y 'diameter'
+4   0.001318243  127.0.0.1 → 127.0.0.1  DIAMETER 190 cmd=Capabilities-Exchange Request(257) flags=R--- appl=Diameter Common Messages(0) h2h=acb06dc3 e2e=acb06dc3 | 
+6   0.002841007  127.0.0.1 → 127.0.0.1  DIAMETER 202 cmd=Capabilities-Exchange Answer(257)  flags=---- appl=Diameter Common Messages(0) h2h=acb06dc3 e2e=acb06dc3 | 
+8  28.409234033  127.0.0.1 → 127.0.0.1  DIAMETER 134 cmd=Device-Watchdog Request(280)       flags=R--- appl=Diameter Common Messages(0) h2h=acb06dc4 e2e=acb06dc4 | 
+9  28.410384934  127.0.0.1 → 127.0.0.1  DIAMETER 146 cmd=Device-Watchdog Answer(280)        flags=---- appl=Diameter Common Messages(0) h2h=acb06dc4 e2e=acb06dc4 | 
+11 34.159011885  127.0.0.1 → 127.0.0.1  DIAMETER 222 cmd=Accounting Request(271)            flags=RP-- appl=Diameter Common Messages(0) h2h=acb06dc5 e2e=acb06dc5 | 
+12 34.161076648  127.0.0.1 → 127.0.0.1  DIAMETER 214 cmd=Accounting Answer(271)             flags=-P-- appl=Diameter Common Messages(0) h2h=acb06dc5 e2e=acb06dc5 | 
+14 48.667674359  127.0.0.1 → 127.0.0.1  DIAMETER 146 cmd=Disconnect-Peer Request(282)       flags=R--- appl=Diameter Common Messages(0) h2h=acb06dc6 e2e=acb06dc6 | 
+15 48.668208006  127.0.0.1 → 127.0.0.1  DIAMETER 146 cmd=Disconnect-Peer Answer(282)        flags=---- appl=Diameter Common Messages(0) h2h=acb06dc6 e2e=acb06dc6 |
 ```
-Sample: [acr_aca.pcap](https://github.com/thachmpham/samples/blob/main/pcap/diameter/acr_aca.pcap).
+
+Sample: [hello.pcap](https://github.com/thachmpham/samples/blob/main/pcap/diameter/hello.pcap).
 
 * * * * *
 
