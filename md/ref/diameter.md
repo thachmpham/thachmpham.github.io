@@ -77,3 +77,9 @@ $ tshark -r acr_aca.pcap -O diameter 'tcp.len > 0'
 ```
 
 * * * * *
+
+
+## References
+- [Erlang Diameter API](https://www.erlang.org/doc/apps/diameter/api-reference.html).
+- [RFC 6733](https://datatracker.ietf.org/doc/html/rfc6733).
+- Diameter: New Generation AAA Protocol, Design, Practice and Application, Hassen, Sebastien, Jean, Jouni.
