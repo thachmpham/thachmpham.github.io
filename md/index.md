@@ -48,6 +48,7 @@ Protocols
 - [drbd](/html/ref/drbd.html)
 - [nfs](/html/ref/nfs.html)
 - [ldap](/html/ref/ldap.html)
+- [diameter](/html/ref/diameter.html)
 
 :::
 ::: {.column}
