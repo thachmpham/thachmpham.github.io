@@ -5,71 +5,91 @@ title: "A Developer Notebook"
 ### Swiss Army Knife
 
 :::::::::::::: {.columns}
-::: {.column width=20%}
+::: {.column}
 
-* * * * *
+Log Collection
 
-| Log Collection  |
-|:---------------:|
-| [strace](/html/ref/strace.html)   |
-| [lsof](/html/ref/lsof.html)       |
-| [tcpdump](/html/ref/tcpdump.html), [pcap-filter](/html/ref/pcap-filter.html) |
+- [strace](/html/ref/strace.html)
+- [lsof](/html/ref/lsof.html)
+- [tcpdump](/html/ref/tcpdump.html)
+- [pcap filter](/html/ref/pcap-filter.html)
 
+<br>
 
-| Log Processing |
-|:--------------:|
-| [grep](/html/ref/grep.html), [perl](/html/ref/perl.html) |
+Log Processing
 
+- [grep](/html/ref/grep.html)
+- [perl](/html/ref/perl.html)
 
-| Documentation |
-|:-------------:|
-| [PlantUML](/html/ref/plantuml.html) |
+<br>
 
-:::
-::: {.column width=20%}
+Documentation
 
-* * * * *
-
-|   GDB      |
-|:----------:|
-| [break](/html/ref/gdb/break.html) |
+- [plantuml](/html/ref/plantuml.html) 
 
 :::
-::: {.column width=30%}
+::: {.column}
 
-* * * * *
+GDB
 
-| Linux |
-|:-----:|
-| [GRUB](/html/ref/grub.html), [PXE](/html/ref/pxe.html), [SYSTEMD](/html/ref/systemd.html) |
-| [Fdisk](/html/ref/fdisk.html), [Firewall](/html/ref/firewall.html), [KVM](/html/ref/kvm.html) |
+- [breakpoint](/html/ref/gdb/break.html)
 
-| Protocols |
-|:---------:|
-| [ARP](/html/ref/arp.html), [IP Routing](/html/ref/ip-routing.html), [TIPC](/html/ref/tipc.html) |
-| [vIP](/html/ref/vip.html), [DRBD](/html/ref/drbd.html), [NFS](/html/ref/nfs.html), [LDAP](/html/ref/ldap.html) |
-
-| Virtual Network Interfaces |
-|:--------------------------:|
-| [vETH](/html/ref/veth.html), [vBridge](/html/ref/vbridge.html), [Bond](/html/ref/vbond.html), [Dummy](/html/ref/vdummy.html) |
+<br>
 
 :::
-::: {.column width=30%}
+::: {.column}
 
-* * * * *
+Protocols
 
-| OpenSAF |
-|:-------:|
-| [Build and Install](/html/ref/opensaf/install.html) |
-| [Single-Node Cluster](/html/ref/opensaf/1sc.html) |
-| [Two-Node Cluster](/html/ref/opensaf/2sc.html) |
-| [Information Model Management](/html/ref/opensaf/imm.html) | 
-| [Log Service](/html/ref/opensaf/log.html) |
-| [Software Management Framework](/html/ref/opensaf/smf.html) |
-| [SA-Aware](/html/ref/opensaf/sa-aware.html) |
-| [Non SA-Aware](/html/ref/opensaf/non-saware.html) |
-| [Healthcheck](/html/ref/opensaf/healthcheck.html) |
-| [Error Detection](/html/ref/opensaf/recovery.html) |
+- [arp](/html/ref/arp.html)
+- [ip routing](/html/ref/ip-routing.html)
+- [tipc](/html/ref/tipc.html)
+- [virtual ip](/html/ref/vip.html)
+- [drbd](/html/ref/drbd.html)
+- [nfs](/html/ref/nfs.html)
+- [ldap](/html/ref/ldap.html)
+
+:::
+::: {.column}
+
+Booting
+
+- [grub](/html/ref/grub.html)
+- [pxe](/html/ref/pxe.html)
+
+<br>
+
+Adminstration
+
+- [systemd](/html/ref/systemd.html)
+- [fdisk](/html/ref/fdisk.html)
+- [firewall](/html/ref/firewall.html)
+- [kvm](/html/ref/kvm.html)
+
+<br>
+
+Network Interfaces
+
+- [veth](/html/ref/veth.html)
+- [bridge](/html/ref/vbridge.html)
+- [bond](/html/ref/vbond.html)
+- [dummy](/html/ref/vdummy.html)
+
+:::
+::: {.column}
+
+OpenSAF
+
+- [build install](/html/ref/opensaf/install.html)
+- [single-node cluster](/html/ref/opensaf/1sc.html)
+- [two-node cluster](/html/ref/opensaf/2sc.html)
+- [imm](/html/ref/opensaf/imm.html)
+- [log](/html/ref/opensaf/log.html)
+- [smf](/html/ref/opensaf/smf.html)
+- [sa-aware application](/html/ref/opensaf/sa-aware.html)
+- [non-sa-aware application](/html/ref/opensaf/non-saware.html)
+- [healthcheck](/html/ref/opensaf/healthcheck.html)
+- [error detection](/html/ref/opensaf/recovery.html)
 
 :::
 ::::::::::::::
