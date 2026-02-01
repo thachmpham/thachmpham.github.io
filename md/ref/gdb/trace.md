@@ -3,7 +3,7 @@ title: "GDB Tracepoint"
 ---
 
 ## Set Tracepoint
-Observe the program without interrupting it.
+Observe the program without interrupting.
 ```sh
   trace [PROBE_MODIFIER] [LOCATION] [thread THREADNUM]
     [-force-condition] [if CONDITION]
