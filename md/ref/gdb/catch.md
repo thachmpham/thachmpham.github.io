@@ -41,7 +41,7 @@ title: "GDB Catchpoint"
 ### Keep Child Process Under GDB.
 
 :::::::::::::: {.columns}
-::: {.column}
+::: {.column width=40%}
 
 ```sh
 #include <unistd.h>
@@ -55,7 +55,7 @@ int main()
 ```
 
 :::
-::: {.column}
+::: {.column width=60%}
 
 ```sh
 (gdb) set detach-on-fork off
@@ -79,7 +79,7 @@ Catchpoint 1 (forked process 4097), arch_fork (ctid=0x7ffff7d85a10)
 ### Debug Program Started By A Script.
 
 :::::::::::::: {.columns}
-::: {.column}
+::: {.column width=40%}
 
 ```sh
 # run.sh
@@ -89,7 +89,7 @@ ls /home
 ```
 
 :::
-::: {.column}
+::: {.column width=60%}
 
 ```sh
 $ gdb --args bash run.sh
@@ -115,7 +115,7 @@ Thread 2.1 "ls" hit Catchpoint 1 (exec'd /usr/bin/ls')
 
 ### Automatically Print Backtrace On Crash.
 :::::::::::::: {.columns}
-::: {.column}
+::: {.column width=40%}
 
 ```c
 void crash()
@@ -131,7 +131,7 @@ int main()
 ```
 
 :::
-::: {.column width=50%}
+::: {.column width=60%}
 
 ```sh
 (gdb) catch signal SIGSEGV
