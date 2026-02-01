@@ -1,9 +1,9 @@
 ---
-title: "GDB: Watchpoints"
+title: "GDB Watchpoint"
 ---
 
 
-## Expression Watchpoints
+## Expression Watchpoint
 Stop when the value of the expression changes.
 ```sh
   watch expression
