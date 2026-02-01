@@ -34,6 +34,8 @@ int main()
 ::: {.column width=50%}
 
 ```python
+(gdb) start
+
 (gdb) p &a
 $1 = (int *) 0xffffffffec94
 (gdb) p &b
@@ -53,7 +55,6 @@ Hardware watchpoint 2: p
 Old value = (int *) 0xffffffffec94
 New value = (int *) 0xffffffffec90
 main () at demo.c:8
-  
 ```
 
 :::
@@ -83,6 +84,8 @@ int main()
 ::: {.column width=40%}
 
 ```python
+(gdb) start
+
 (gdb) watch *p
 Hardware watchpoint 2: *p
 
