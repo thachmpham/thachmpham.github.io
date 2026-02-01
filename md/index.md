@@ -33,6 +33,7 @@ Documentation
 GDB
 
 - [breakpoint](/html/ref/gdb/break.html)
+- [catchpoint](/html/ref/gdb/catch.html)
 
 <br>
 
