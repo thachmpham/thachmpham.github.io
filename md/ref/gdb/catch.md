@@ -48,19 +48,19 @@ title: "GDB Catchpoint"
 int main()
 {
     fork();
-    while (1)
-    {
-    }
+    while (1) {}
 }
+```
+
+```sh
+(gdb) set detach-on-fork off
+(gdb) catch fork
 ```
 
 :::
 ::: {.column width=60%}
 
 ```sh
-(gdb) set detach-on-fork off
-(gdb) catch fork
-
 (gdb) run
 Catchpoint 1 (forked process 4097), arch_fork (ctid=0x7ffff7d85a10)
 
@@ -88,16 +88,18 @@ ls /home
 # -----
 ```
 
-:::
-::: {.column width=60%}
-
 ```sh
 $ gdb --args bash run.sh
 
 (gdb) set detach-on-fork off
 (gdb) set follow-fork-mode child
 (gdb) catch exec
+```
 
+:::
+::: {.column width=60%}
+
+```sh
 (gdb) run
 [New inferior 2 (process 5911)]
 process 5911 is executing new program: /usr/bin/ls
