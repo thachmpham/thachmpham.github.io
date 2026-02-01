@@ -1,32 +1,56 @@
 ---
-title: "GDB Catchpoints"
+title: "GDB Catchpoint"
 ---
 
-### Fork
+## Usages
+
+:::::::::::::: {.columns}
+::: {.column}
+
+| Fork |  |
+|:-------------|:-------------|
+| `catch fork`                | Stop execution on fork |
+| `set detach-on-fork on`     | Detach child from gdb (default). |
+| `set detach-on-fork off`    | Keep both parent, child under gdb. |
+| `show detach-on-fork`       |           |
+| `set follow-fork-mode parent` | Switch gdb to parent (default) |
+| `set follow-fork-mode child`  | Switch gdb to child |
+| `show follow-fork-mode`       |         |
+
+:::
+::: {.column}
+
+| Exec |  |
+|:-------------|:-------------|
+| `catch exec`                | Stop execution on exec |
+| `set follow-exec-mode same` | Keep gdb on the current process |
+| `set follow-exec-mode new`  | Switch gdb to the new process |
+| `show follow-exec-mode`     |   |
+
+| Signal |  |
+|:-------------|:-------------|
+| `catch signal SIGSEGV`      | Stop execution on SIGSEGV |
+| `catch signal all`          | Stop execution on all signals |
+
+:::
+::::::::::::::
+
+
+## Tricks
+
+### Keep Child Process Under GDB.
 
 :::::::::::::: {.columns}
 ::: {.column}
 
 ```sh
-catch fork
-catch vfork
-set detach-on-fork [on|off]
-set follow-fork-mode [parent|child]
-show detach-on-fork
-show follow-fork-mode
-```
-
-:::
-::: {.column}
-
-Trick: Keep child process attached.
-
-```sh
 #include <unistd.h>
 int main()
 {
-  fork();
-  while (1) {}
+    fork();
+    while (1)
+    {
+    }
 }
 ```
 
@@ -39,8 +63,10 @@ int main()
 
 (gdb) run
 Catchpoint 1 (forked process 4097), arch_fork (ctid=0x7ffff7d85a10)
-(gdb) n
+
+(gdb) next
 [New inferior 2 (process 4097)]
+
 (gdb) info inferiors 
   Num  Description       Connection           Executable        
 * 1    process 4094      1 (native)           /root/demo/demo   
@@ -50,21 +76,11 @@ Catchpoint 1 (forked process 4097), arch_fork (ctid=0x7ffff7d85a10)
 :::
 ::::::::::::::
 
-### Exec
+### Debug Program Started By A Script.
 
 :::::::::::::: {.columns}
 ::: {.column}
 
-```sh
-catch exec
-set follow-exec-mode [new|same]
-show follow-exec-mode
-```
-
-:::
-::: {.column}
-
-Trick: Debug program started by a script.
 ```sh
 # run.sh
 # -----
@@ -77,6 +93,7 @@ ls /home
 
 ```sh
 $ gdb --args bash run.sh
+
 (gdb) set detach-on-fork off
 (gdb) set follow-fork-mode child
 (gdb) catch exec
@@ -86,6 +103,7 @@ $ gdb --args bash run.sh
 process 5911 is executing new program: /usr/bin/ls
 [Switching to process 5911]
 Thread 2.1 "ls" hit Catchpoint 1 (exec'd /usr/bin/ls')
+
 (gdb) info inferiors 
   Num  Description       Connection           Executable        
   1    process 5909      1 (native)           /usr/bin/bash     
@@ -95,31 +113,20 @@ Thread 2.1 "ls" hit Catchpoint 1 (exec'd /usr/bin/ls')
 :::
 ::::::::::::::
 
-### Signal
+### Automatically Print Backtrace On Crash.
 :::::::::::::: {.columns}
-::: {.column width=30%}
-
-One reason that catch signal can be more useful than handle is that you can attach commands and conditions to the catchpoint.
-```sh
-catch signal [signal… | ‘all’]
-kill -l
-```
-
-:::
-::: {.column width=30%}
-
-Trick: Automatically print backtrace when crash.
+::: {.column}
 
 ```c
 void crash()
 {
-  int *p = 0;
-  *p = 42;
+    int *p = 0;
+    *p = 42;
 }
 
 int main()
 {
-  crash();
+    crash();
 }
 ```
 
