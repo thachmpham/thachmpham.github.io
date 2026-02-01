@@ -23,6 +23,7 @@ title: tcpdump
 | `-XX` | Hex + ascii |
 | `-#` | Display frame number |
 | `-e` | Display link header |
+| `--print` | Print to stdout even if writting to file |
 
 :::
 ::: {.column}
