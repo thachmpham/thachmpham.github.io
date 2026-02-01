@@ -1,8 +1,8 @@
 ---
-title: "GDB: Tracepoints"
+title: "GDB Tracepoint"
 ---
 
-## Set Tracepoints
+## Set Tracepoint
 Observe the program without interrupting it.
 ```sh
   trace [PROBE_MODIFIER] [LOCATION] [thread THREADNUM]
@@ -156,7 +156,6 @@ Collect trace.
 (gdb) tstatus
 Trace stopped by a tstop.
 Collected 24 trace frames.
-  
 ```
 
 :::
@@ -206,7 +205,6 @@ Convenience variables.
   (int) $trace_line
   (char []) $trace_file
   (char []) $trace_func
-  
 ```
 
 :::
@@ -242,7 +240,6 @@ Found trace frame 3, tracepoint 2
 Data collected at tracepoint 2, trace frame 3:
 i = 17
 s = 153
-  
 ```
 
 :::
@@ -291,7 +288,6 @@ Found trace frame 0, tracepoint 1
 Data collected at tracepoint 1, trace frame 0:
 i = 16
 s = 136
-  
 ```
 
 :::

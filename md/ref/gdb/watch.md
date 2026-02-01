@@ -6,7 +6,7 @@ title: "GDB Watchpoint"
 ## Expression Watchpoint
 Stop when the value of the expression changes.
 ```sh
-  watch expression
+watch expression
 ```
 
 - `expression`: a variable, an address cast to an data type, a C/C++ expression.
@@ -27,7 +27,6 @@ int main()
   p = &b; //hit
   return 0;
 }
-  
 ```
 
 :::
@@ -77,7 +76,6 @@ int main()
   p = &b; //hit: *p = b = 2
   return 0;
 }
-  
 ```
 
 :::
@@ -112,7 +110,6 @@ Hardware watchpoint 2: *p
 Old value = 100
 New value = 2
 main () at demo.c:10  
-  
 ```
 
 :::
@@ -124,7 +121,7 @@ main () at demo.c:10
 ## Memory Watchpoints
 Stop when the memory referred to by the expression changes.
 ```sh
-  watch -location expression
+watch -location expression
 ```
 
 - `-location, -l`: watch the memory referred to by the expression. The memory address is fixed at the moment the watchpoint is set. Stop when contents at that address change.
@@ -146,7 +143,6 @@ int main()
   a = 100;// hit
   return 0;
 }
-  
 ```
 
 :::
@@ -166,7 +162,6 @@ Hardware watchpoint 2: -location *p
 Old value = 10
 New value = 100
 main () at demo.c:10
-  
 ```
 
 :::
@@ -185,7 +180,6 @@ int main()
   n += 1;   // hit
   return 0;
 }
-  
 ```
 
 :::
@@ -205,7 +199,6 @@ Hardware watchpoint 2: *((int *) 0xffffffffec9c)
 Old value = 3
 New value = 4
 main () at demo.c:5
-  
 ```
 
 :::
@@ -225,7 +218,7 @@ main () at demo.c:5
 
 Stop when the expression is read.
 ```sh
-  rwatch [-l|-location] expression
+rwatch [-l|-location] expression
 ```
 
 <br>
@@ -233,7 +226,7 @@ Stop when the expression is read.
 ## Read-Write Watchpoints
 Stop when the expression is either read or written.
 ```sh
-  awatch [-l|-location] expression
+awatch [-l|-location] expression
 ```
 
 <br>

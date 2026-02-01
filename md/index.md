@@ -35,6 +35,7 @@ GDB
 - [breakpoint](/html/ref/gdb/break.html)
 - [catchpoint](/html/ref/gdb/catch.html)
 - [watchpoint](/html/ref/gdb/watch.html)
+- [tracepoint](/html/ref/gdb/trace.html)
 
 <br>
 
