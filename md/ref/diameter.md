@@ -40,9 +40,9 @@ Base Protocol Layer - Infrastructure.
 
 Application Layer - Business Logic.
 
-- Online charing (CCR, CCA).
-- Offline charing (ACR, ACA).
-- Gx Policy control (RAR, RAA).
+- Online charing (Rf, CCR, CCA).
+- Offline charing (Ro, ACR, ACA).
+- Gx Policy control (Gx, RAR, RAA).
 
 <br>
 

@@ -31,14 +31,6 @@ $ dhclient <network_interface>
 - Setup namespaces `ns1`, `ns2` as DHCP clients.
 - From `ns1`, `ns2`, send DHCP requests to the server.
 
-<script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({
-        look: 'handDrawn',
-        theme: 'neutral',
-    });
-</script>
-
 <pre class="mermaid">
 flowchart LR
     subgraph host

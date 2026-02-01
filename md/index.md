@@ -43,6 +43,7 @@ Protocols
 
 - [arp](/html/ref/arp.html)
 - [ip routing](/html/ref/ip-routing.html)
+- [dhcp](/html/ref/dhcp.html)
 - [tipc](/html/ref/tipc.html)
 - [virtual ip](/html/ref/vip.html)
 - [drbd](/html/ref/drbd.html)
