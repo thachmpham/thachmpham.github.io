@@ -42,15 +42,6 @@ $ ip link set <interface-name> type bond mode <bond_mode>
 - Create a bond interface: bond0
 - Add dummy1, dummy2 to bond0.
 
-
-<script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({
-        look: 'handDrawn',
-        theme: 'neutral',
-    });
-</script>
-
 <pre class="mermaid">
 flowchart LR
     subgraph "bond interface"

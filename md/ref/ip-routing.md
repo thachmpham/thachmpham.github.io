@@ -31,14 +31,6 @@ $ ip route
 ## 2.1. Destination Directly Connected.
 If the destination IP address matches a network directly connected to the router, the packet is delivered directly over that network link.
 
-<script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({
-        look: 'handDrawn',
-        theme: 'neutral',
-    });
-</script>
-
 <pre class="mermaid">
 flowchart LR
     subgraph ns1[namespace ns1]

@@ -1,12 +1,3 @@
-<script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({
-        look: 'handDrawn',
-        theme: 'neutral',
-    });
-</script>
-
-
 ---
 title:  'OpenSAF AMF'
 subtitle: '**Convert A Linux Program To High Availability**'

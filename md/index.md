@@ -89,7 +89,7 @@ OpenSAF
 - [log](/html/ref/opensaf/log.html)
 - [smf](/html/ref/opensaf/smf.html)
 - [sa-aware application](/html/ref/opensaf/sa-aware.html)
-- [non-sa-aware application](/html/ref/opensaf/non-saware.html)
+- [non-sa-aware application](/html/ref/opensaf/non-sa-ware.html)
 - [healthcheck](/html/ref/opensaf/healthcheck.html)
 - [error detection](/html/ref/opensaf/recovery.html)
 

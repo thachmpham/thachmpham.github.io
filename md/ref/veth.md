@@ -23,14 +23,6 @@ $ ip link add <p1-name> type veth peer name <p2-name>
 - Connect them by a veth pair: veth1-veth2.
 - Check the connection with ping.
 
-<script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({
-        look: 'handDrawn',
-        theme: 'neutral',
-    });
-</script>
-
 <pre class="mermaid">
 flowchart LR
     subgraph ns1
