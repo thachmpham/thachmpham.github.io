@@ -129,34 +129,25 @@
 </tr>
 </tbody>
 </table>
-</div><div class="column">
 <table>
 <thead>
 <tr class="header">
-<th style="text-align: left;">printk</th>
+<th style="text-align: left;">API</th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td
-style="text-align: left;"><code>cat /proc/sys/kernel/printk</code></td>
-<td style="text-align: left;">Show log level</td>
+<td style="text-align: left;"><code>module_init</code></td>
+<td style="text-align: left;">Specify entry function</td>
 </tr>
 <tr class="even">
-<td
-style="text-align: left;"><code>echo 8 &gt; /proc/sys/kernel/printk</code></td>
-<td style="text-align: left;">Set log level</td>
+<td style="text-align: left;"><code>module_exit</code></td>
+<td style="text-align: left;">Specify exit function</td>
 </tr>
 <tr class="odd">
-<td
-style="text-align: left;"><code>echo "4 4 1 7 " &gt; /proc/sys/kernel/printk</code></td>
-<td style="text-align: left;">Set log level</td>
-</tr>
-<tr class="even">
-<td
-style="text-align: left;"><code>/etc/sysctl.conf, kernel.printk, sysctl -p</code></td>
-<td style="text-align: left;">Set permanent level</td>
+<td style="text-align: left;"><code>module_param</code></td>
+<td style="text-align: left;">Module parameter</td>
 </tr>
 </tbody>
 </table>
@@ -207,6 +198,37 @@ style="text-align: left;"><code>/etc/sysctl.conf, kernel.printk, sysctl -p</code
 </tr>
 </tbody>
 </table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">printk configuration</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td
+style="text-align: left;"><code>cat /proc/sys/kernel/printk</code></td>
+<td style="text-align: left;">Show log level</td>
+</tr>
+<tr class="even">
+<td
+style="text-align: left;"><code>echo 8 &gt; /proc/sys/kernel/printk</code></td>
+<td style="text-align: left;">Set log level</td>
+</tr>
+<tr class="odd">
+<td
+style="text-align: left;"><code>echo "4 4 1 7 " &gt; /proc/sys/kernel/printk</code></td>
+<td style="text-align: left;">Set log level</td>
+</tr>
+<tr class="even">
+<td
+style="text-align: left;"><code>/etc/sysctl.conf, kernel.printk, sysctl -p</code></td>
+<td style="text-align: left;">Set permanent level</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <hr />
@@ -247,19 +269,76 @@ style="text-align: left;"><code>/etc/sysctl.conf, kernel.printk, sysctl -p</code
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ex">clean:</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="va">$(</span><span class="ex">MAKE</span><span class="va">)</span> <span class="at">-C</span> <span class="va">$(</span><span class="ex">KDIR</span><span class="va">)</span> M=<span class="va">$(</span><span class="ex">PWD</span><span class="va">)</span> clean</span></code></pre></div>
-<p>Build.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make V=1</span></code></pre></div>
 <p>Play.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> modinfo hello.ko</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> insmod hello.ko</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> lsmod</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> rmmod hello</span></code></pre></div>
-<p>Log.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dmesg <span class="at">-wt</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hello_init</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hello_exit</span></span></code></pre></div>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> rmmod hello</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dmesg</span></code></pre></div>
 </div>
 </div>
+<hr />
+<p><br></p>
+<h3 id="lab-2-module-parameters">Lab 2: Module Parameters</h3>
+<div class="columns">
+<div class="column">
+<p>hello.c</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;linux/module.h&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">char</span> <span class="op">*</span>name <span class="op">=</span> <span class="st">&quot;alex&quot;</span><span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">int</span> age <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>module_param<span class="op">(</span>name<span class="op">,</span> charp<span class="op">,</span> S_IRUGO<span class="op">);</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>module_param<span class="op">(</span>age<span class="op">,</span> <span class="dt">int</span><span class="op">,</span> S_IRUGO<span class="op">);</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">int</span> __init hello_init<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    printk<span class="op">(</span><span class="st">&quot;hello_init name=</span><span class="sc">%s</span><span class="st">, age=</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> name<span class="op">,</span> age<span class="op">);</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">void</span> __exit hello_exit<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    printk<span class="op">(</span><span class="st">&quot;hello_exit</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>module_init<span class="op">(</span>hello_init<span class="op">);</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>module_exit<span class="op">(</span>hello_exit<span class="op">);</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>MODULE_LICENSE<span class="op">(</span><span class="st">&quot;GPL&quot;</span><span class="op">);</span></span></code></pre></div>
+</div><div class="column">
+<p>Makefile</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">obj-m</span> += hello.o</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">KDIR</span> := /lib/modules/<span class="va">$(</span><span class="ex">shell</span> uname <span class="at">-r</span><span class="va">)</span>/build</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">PWD</span>  := <span class="va">$(</span><span class="ex">shell</span> pwd<span class="va">)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">all:</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">$(</span><span class="ex">MAKE</span><span class="va">)</span> <span class="at">-C</span> <span class="va">$(</span><span class="ex">KDIR</span><span class="va">)</span> M=<span class="va">$(</span><span class="ex">PWD</span><span class="va">)</span> modules</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="ex">clean:</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="va">$(</span><span class="ex">MAKE</span><span class="va">)</span> <span class="at">-C</span> <span class="va">$(</span><span class="ex">KDIR</span><span class="va">)</span> M=<span class="va">$(</span><span class="ex">PWD</span><span class="va">)</span> clean</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make V=1</span></code></pre></div>
+<p>Play.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> insmod hello.ko</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> rmmod hello</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> insmod hello.ko name=bob age=30 </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dmesg</span></code></pre></div>
+</div>
+</div>
+<hr />
+<p><br></p>
+<h2 id="references">References</h2>
+<ul>
+<li><a
+href="https://docs.kernel.org/core-api/printk-basics.html">printk</a>.</li>
+<li><a href="https://github.com/d0u9/Linux-Device-Driver">Linux Device
+Driver</a>.</li>
+<li><a href="https://sysprog21.github.io/lkmpg">Linux Kernel Module
+Programming Guide</a>.</li>
+</ul>
 <footer class="footer text-muted">
    <div align="center">      
       <br>
