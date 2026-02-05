@@ -40,3 +40,79 @@ title: Linux Kernel Module
 
 :::
 ::::::::::::::
+
+* * * * *
+
+<br>
+
+### Lab 1: Hello World
+
+:::::::::::::: {.columns}
+::: {.column}
+
+Environment.
+```sh
+$ apt install linux-headers-`uname -r`
+$ apt install build-essential kmod
+```
+
+hello.c
+```c
+#include <linux/module.h>
+
+static int __init hello_init(void)
+{
+	printk("hello_init\n");
+	return 0;
+}
+
+static void __exit hello_exit(void)
+{
+	printk("hello_exit\n");
+}
+
+module_init(hello_init);
+module_exit(hello_exit);
+
+MODULE_LICENSE("GPL");
+```
+
+:::
+::: {.column}
+
+Makefile
+```sh
+obj-m += hello.o
+
+KDIR := /lib/modules/$(shell uname -r)/build
+PWD  := $(shell pwd)
+
+all:
+	$(MAKE) -C $(KDIR) M=$(PWD) modules
+
+clean:
+	$(MAKE) -C $(KDIR) M=$(PWD) clean
+```
+
+Build.
+```sh
+$ make V=1
+```
+
+Play.
+```sh
+$ modinfo hello.ko
+$ insmod hello.ko
+$ lsmod
+$ rmmod hello
+```
+
+Log.
+```sh
+$ dmesg -wt
+hello_init
+hello_exit
+```
+
+:::
+::::::::::::::
