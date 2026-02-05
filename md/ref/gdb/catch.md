@@ -35,9 +35,9 @@ subtitle: "Stop on a program event"
 :::
 ::::::::::::::
 
-<br>
-
 * * * * *
+
+<br>
 
 ### Tip 1: Keep Child Process Under Control.
 
@@ -78,6 +78,8 @@ Catchpoint 1 (forked process 4097), arch_fork (ctid=0x7ffff7d85a10)
 ::::::::::::::
 
 * * * * *
+
+<br>
 
 ### Tip 2: Debug Program Launched Script.
 
@@ -120,6 +122,8 @@ Thread 2.1 "ls" hit Catchpoint 1 (exec'd /usr/bin/ls')
 
 * * * * *
 
+<br>
+
 ### Tip 3: Auto Print Backtrace On Crash.
 :::::::::::::: {.columns}
 ::: {.column width=40%}
@@ -156,3 +160,7 @@ Program terminated with signal SIGSEGV, Segmentation fault.
 
 :::
 ::::::::::::::
+
+* * * * *
+
+<br>

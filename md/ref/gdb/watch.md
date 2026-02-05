@@ -4,7 +4,7 @@ subtitle: "Stop when value of an expression changes"
 ---
 
 
-| Command               | Explain                                            |
+| Command               | Meaning                                            |
 |:----------------------|:---------------------------------------------------|
 | `watch p`             | Consider p as expression. Watch value of the expression.  |
 | `watch *p`            | Consider *p as expression. Watch value of the expression. |
@@ -14,9 +14,9 @@ subtitle: "Stop when value of an expression changes"
 | `rwatch p` | Stop when p is read (read watchpoint). |
 | `awatch p` | Stop when p is either read or written (read-write watchpoint) . |
 
-<br>
-
 * * * * *
+
+<br>
 
 ### Sample 1: watch p
 
@@ -61,6 +61,8 @@ main () at demo.c:8
 ::::::::::::::
 
 * * * * *
+
+<br>
 
 ### Sample 2: watch *p
 
@@ -120,6 +122,7 @@ main () at demo.c:10
 
 * * * * *
 
+<br>
 
 ### Sample 3: Memory Watchpoint
 
@@ -169,6 +172,8 @@ main () at demo.c:10
 
 * * * * *
 
+<br>
+
 
 ### Sample 4: Watch Absolute Memory.
 
@@ -208,3 +213,4 @@ main () at demo.c:5
   
 * * * * *
 
+<br>

@@ -1,5 +1,6 @@
 ---
 title: "GBD Breakpoints"
+subtitle: "Stop at a location"
 ---
 
 :::::::::::::: {.columns}
@@ -25,6 +26,10 @@ Hardware Breakpoint.
 
 :::
 ::::::::::::::
+
+* * * * *
+
+<br>
 
 ## break
 
@@ -103,10 +108,12 @@ end
 :::
 ::::::::::::::
 
+* * * * *
+
+<br>
+
 
 ## hbreak
-
-* * * * *
 
 Set hbreak at a function in a mmap region.
 
@@ -240,6 +247,8 @@ Breakpoint 5, 0x00007ffff7ffa060 in sub ()
 ::::::::::::::
 
 * * * * *
+
+<br>
 
 ### Reference
 - [GDB Internal, Breakpoint Handling](https://sourceware.org/gdb/wiki/Internals/Breakpoint%20Handling)

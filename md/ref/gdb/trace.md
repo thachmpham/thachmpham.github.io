@@ -1,77 +1,76 @@
 ---
 title: "GDB Tracepoint"
+subtitle: "Observe program without interrupting"
 ---
 
-## Set Tracepoint
-Observe the program without interrupting.
-```sh
-  trace [PROBE_MODIFIER] [LOCATION] [thread THREADNUM]
-    [-force-condition] [if CONDITION]
-```
-
-- *force-condition*: defined even if condition invalid for current locations.
-
-
 :::::::::::::: {.columns}
-::: {.column width=50%}
+::: {.column}
 
-Set actions to be taken at a trace.
-```sh
-  actions [tracepoint]
-  > collect
-  > while-stepping
-  > end
-  
-```
-
-:::
-::: {.column width=50%}
-
-Set data item to collect.
-```sh
-  collect expressions...
-```
-
-- *expressions*: variables, registers, $regs, $args, $locals, $_sdata.
-
-:::
-::::::::::::::
-
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-Set stepping commands.
-```sh
-  > while-stepping N
-    > collect ...
-    > end
-```
-
-- *N*: step N instructions after the tracepoint, can collect data in each step.
-
-:::
-::: {.column width=50%}
-
-Set passcount.
-
-```sh
-  passcount count [tracepoint]
-```
-
-- *count*: stop trace when passed 'count' times.
-
-:::
-::::::::::::::
+| Setup Trace |           |
+|:----------- |:--------------------------|
+| `trace demo.c:10` | Set tracepoint at demo.c line 10. |
+| `actions`         | Set actions for current tracepoint. |
+| `actions 3`       | Set actions for tracepoint 3. |
+| `while-stepping 8`| Step 8 instructions, collect data each step |
+| `collect exp`     | Data to collect when trace hit: variables, registers, etc. |
+| `passcount 5 3`   | Stop after tracepoint 3 hit 5 times |
+| `info tracepoints`   | Show tracepoint list |
 
 <br>
 
-Sample: Setup a tracepoint. Trace only work within remote mode, so need a gdbserver.
+| Collect Trace |           |
+|:------------------|:--------------------------|
+| `tstart` | Start trace collection |
+| `tstop`  | Stop trace collection |
+| `tstatus`| Status of collection |
 
+<br>
+
+| Manage Data |           |
+|:------------------|:--------------------------|
+| `tsave -r filename` | Save data to server |
+| `tsave filename` | Save data to client |
+| `target tfile filename` | Load trace data |
+
+:::
+::: {.column}
+
+| Analyze data |           |
+|:------------------|:--------------------------|
+| `tfind start` | Frame 0 |
+| `tfind n` | Frame n |
+| `tfind` | Next frame |
+| `tfind -` | Previous frame |
+| `tfind end` | Back to live debug |
+| `tfind tracepoint` | Filter by tracepoint |
+| `tfind line` | Filter by line |
+| `tfind pc` |  |
+| `tfind range ` |  |
+| `tfind outside` |  |
+| `tdump` | Print collected data |
+
+<br>
+
+| Convenience variable |           |
+|:------------------|:--------------------------|
+| `(int) $trace_frame` | |
+| `(int) $tracepoint` | |
+| `(int) $trace_line` | |
+| `(char []) $trace_file` | |
+| `(char []) $trace_func` | |
+
+:::
+::::::::::::::
+
+* * * * *
+
+<br>
+
+### Sample
 :::::::::::::: {.columns}
-::: {.column width=40%}
+::: {.column width=50%}
 
-```c
+```c {.numberLines}
 #include <unistd.h>
 
 int main()
@@ -85,25 +84,22 @@ int main()
     sleep(3);
   }
 }
-  
 ```
 
+Trace only work in remote mode, so start program under gdbserver.
 ```sh
-
-gdbserver --multi :12345
-  
+$ gdbserver --multi :12345
 ```
-
-:::
-::: {.column width=60%}
 
 ```sh
 (gdb) target extended-remote :12345
 (gdb) set remote exec-file demo
 (gdb) file demo
 (gdb) start
+```
 
-
+Setup tracepoint.
+```sh
 (gdb) trace demo.c:10
 (gdb) actions
 > collect i, s
@@ -115,37 +111,7 @@ gdbserver --multi :12345
 
 
 (gdb) info tracepoints
-  
 ```
-
-:::
-::::::::::::::
-
-<br>
-
-
-## Collect Traces
-
-:::::::::::::: {.columns}
-::: {.column width=40%}
-
-Start trace.
-```sh
-  tstart
-```
-
-Stop trace.
-```sh
-  tstop
-```
-
-Show status.
-```sh
-  tstatus
-```
-
-:::
-::: {.column width=60%}
 
 Collect trace.
 ```sh
@@ -156,55 +122,6 @@ Collect trace.
 (gdb) tstatus
 Trace stopped by a tstop.
 Collected 24 trace frames.
-```
-
-:::
-::::::::::::::
-
-<br>
-
-
-## Analyze Traces
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-Select trace frame by index.
-```sh
-  tfind start # frame 0
-  tfind n     # frame n
-  tfind       # next frame
-  tfind -     # prev frame
-  
-```
-
-Select trace frame by filter.
-```sh
-  tfind tracepoint 
-  tfind line         
-  tfind pc         
-  tfind range       
-  tfind outside
-  
-```
-
-Leave trace frame, back to live debug.
-```sh
-  tfind end
-```
-
-Print collected data.
-```sh
-  tdump
-```
-
-Convenience variables.
-```sh
-  (int) $trace_frame
-  (int) $tracepoint
-  (int) $trace_line
-  (char []) $trace_file
-  (char []) $trace_func
 ```
 
 :::
@@ -242,40 +159,12 @@ i = 17
 s = 153
 ```
 
-:::
-::::::::::::::
-
-
-## Save Trace Data
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-Save trace data in client.
-```sh
-  tsave filename
-```
-
-Save trace data in server.
-```sh
-  tsave -r filename
-```
-
-- *-r*: remote.
-
-Load trace data.
-```sh
-  target tfile filename
-```
-
-:::
-::: {.column width=50%}
-
-Sample: Save and load trace data.
+Save collected data.
 ```sh
 (gdb) tsave demo.trace
 ```
 
+Load trace data.
 ```sh
 (gdb) file demo
 (gdb) target tfile demo.trace
@@ -292,3 +181,7 @@ s = 136
 
 :::
 ::::::::::::::
+
+* * * * *
+
+<br>
