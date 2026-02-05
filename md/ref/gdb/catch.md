@@ -1,8 +1,8 @@
 ---
 title: "GDB Catchpoint"
+subtitle: "Stop on a program event"
 ---
 
-## Usages
 
 :::::::::::::: {.columns}
 ::: {.column}
@@ -35,10 +35,11 @@ title: "GDB Catchpoint"
 :::
 ::::::::::::::
 
+<br>
 
-## Tricks
+* * * * *
 
-### Keep Child Process Under GDB.
+### Tip 1: Keep Child Process Under Control.
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
@@ -76,7 +77,9 @@ Catchpoint 1 (forked process 4097), arch_fork (ctid=0x7ffff7d85a10)
 :::
 ::::::::::::::
 
-### Debug Program Started By A Script.
+* * * * *
+
+### Tip 2: Debug Program Launched Script.
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
@@ -115,7 +118,9 @@ Thread 2.1 "ls" hit Catchpoint 1 (exec'd /usr/bin/ls')
 :::
 ::::::::::::::
 
-### Automatically Print Backtrace On Crash.
+* * * * *
+
+### Tip 3: Auto Print Backtrace On Crash.
 :::::::::::::: {.columns}
 ::: {.column width=40%}
 
