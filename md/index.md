@@ -54,6 +54,12 @@ Protocols
 - [ldap](/html/ref/ldap.html)
 - [diameter](/html/ref/diameter.html)
 
+<br>
+
+Linux Kernel
+
+- [module](/html/ref/kernel/module.html)
+
 :::
 ::: {.column}
 

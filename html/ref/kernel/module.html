@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Linux Kernel Module</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="/html/style/dark.css" />
+  <!-- <script src="../3pp/d3.v7.js"></script> -->
+  <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+          theme: 'dark',
+      });
+  </script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Linux Kernel Module</h1>
+</header>
+<div class="columns">
+<div class="column">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Module</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>lsmod</code></td>
+<td style="text-align: left;">List module</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>modinfo ip_tables</code></td>
+<td style="text-align: left;">Module info</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>modinfo ip_tables.ko</code></td>
+<td style="text-align: left;">Module info</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>insmod hello.ko</code></td>
+<td style="text-align: left;">Insert module</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>rmmod hello</code></td>
+<td style="text-align: left;">Remove module</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">printk</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td
+style="text-align: left;"><code>cat /proc/sys/kernel/printk</code></td>
+<td style="text-align: left;">Show log level</td>
+</tr>
+<tr class="even">
+<td
+style="text-align: left;"><code>echo 8 &gt; /proc/sys/kernel/printk</code></td>
+<td style="text-align: left;">Set log level</td>
+</tr>
+<tr class="odd">
+<td
+style="text-align: left;"><code>echo "4 4 1 7 " &gt; /proc/sys/kernel/printk</code></td>
+<td style="text-align: left;">Set log level</td>
+</tr>
+<tr class="even">
+<td
+style="text-align: left;"><code>/etc/sysctl.conf, kernel.printk, sysctl -p</code></td>
+<td style="text-align: left;">Set permanent level</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">dmesg</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>dmesg</code></td>
+<td style="text-align: left;">Print kernel logs in buffer</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>dmesg -l alert</code></td>
+<td style="text-align: left;">Print only alert logs</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>dmesg -l 1</code></td>
+<td style="text-align: left;">Print only alert logs</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>dmesg -l alert,err</code></td>
+<td style="text-align: left;">Print only alert, err logs</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>dmesg -w</code></td>
+<td style="text-align: left;">Follow realtime logs</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>dmesg -n alert</code></td>
+<td style="text-align: left;">Set log level</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>dmesg -n 1</code></td>
+<td style="text-align: left;">Set log level</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>dmesg -c</code></td>
+<td style="text-align: left;">Read and clear buffer</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>dmesg -C</code></td>
+<td style="text-align: left;">Clear buffer</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<footer class="footer text-muted">
+   <div align="center">      
+      <br>
+      <br>
+      <a href="/index.html"><b>Home</b></a>
+   </div>
+ </footer>
+</body>
+</html>
