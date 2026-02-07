@@ -30,7 +30,7 @@ title: "Character Device Driver"
 |:--------|----------|
 | Major number | Kernel driver ID, who responsible for devices |
 | Minor number | ID of devices within a driver |
-| IOCTL | API for user apps to query, configure a driver |
+| IOCTL | API for users to query, configure a driver |
 
 :::
 ::: {.column}
