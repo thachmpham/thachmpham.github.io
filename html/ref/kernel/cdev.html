@@ -407,6 +407,140 @@ ioctl_ioctl().</li>
 </div>
 <hr />
 <p><br></p>
+<h2 id="lab-3-mmap">Lab 3: MMAP</h2>
+<h3 id="run-2">Run</h3>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> Linux-Device-Driver/eg_23_simple</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> insmod simple.ko</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find major number</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat /proc/devices</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="ex">237</span> simple</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create device files</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mknod /dev/simple0 c 237 0</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mknod /dev/simple1 c 237 1</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> chmod 666 /dev/simple<span class="pp">*</span></span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> Linux-Device-Driver/eg_23_simple/test</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./remap.out</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dmesg</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm_start:</span> 0x7fd01b9c5000, vm_end: 0x7fd01b9cb000</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="ex">,</span> len: 0x6000, vm_pgoff: 0x11e150<span class="er">(</span><span class="ex">0x11e150000</span><span class="kw">)</span><span class="ex">,</span> ops=000000009da6972b</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="ex">vma_open</span> <span class="at">--</span> vm_start: 0x7fd01b9c5000, vm_end: 0x7fd01b9cb000</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="ex">,</span> len: 0x6000, vm_pgoff: 0x11e150<span class="er">(</span><span class="ex">0x11e150000</span><span class="kw">)</span><span class="ex">,</span> ops=0000000023e1a403</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="ex">pfn</span> = 0, last page refc when close = 1</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="ex">vma_close</span> <span class="at">--</span> vm_start: 0x7fd01b9c5000, vm_end: 0x7fd01b9cb000</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="ex">,</span> len: 0x6000, vm_pgoff: 0x11e150<span class="er">(</span><span class="ex">0x11e150000</span><span class="kw">)</span><span class="ex">,</span> ops=0000000023e1a403</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./fault.out</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dmesg</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vma_open</span> <span class="at">--</span> vm_start: 0x7fc1b8c56000, vm_end: 0x7fc1b8c5c000</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="ex">,</span> len: 0x6000, vm_pgoff: 0x1<span class="er">(</span><span class="ex">0x1000</span><span class="kw">)</span><span class="ex">,</span> ops=0000000035d509e0</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="ex">pfn</span> = 0, last page refc when close = 1</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="ex">vma_close</span> <span class="at">--</span> vm_start: 0x7fc1b8c56000, vm_end: 0x7fc1b8c5c000</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="ex">,</span> len: 0x6000, vm_pgoff: 0x1<span class="er">(</span><span class="ex">0x1000</span><span class="kw">)</span><span class="ex">,</span> ops=0000000035d509e0</span></code></pre></div>
+</div>
+</div>
+<h3 id="code-2">Code</h3>
+<div class="columns">
+<div class="column">
+<p>Setup file_operations.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> file_operations simple_remap_ops <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>open    <span class="op">=</span> simple_open<span class="op">,</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>mmap    <span class="op">=</span> simple_remap_mmap<span class="op">,</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> simple_remap_mmap<span class="op">(</span><span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">,</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>            <span class="kw">struct</span> vm_area_struct <span class="op">*</span>vma<span class="op">)</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    pr_debug<span class="op">(</span><span class="st">&quot;vm_start:_&quot;</span><span class="op">,</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>         vma<span class="op">-&gt;</span>vm_start<span class="op">,</span> vma<span class="op">-&gt;</span>vm_end<span class="op">,</span> len<span class="op">,</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>         vma<span class="op">-&gt;</span>vm_pgoff<span class="op">,</span> vma<span class="op">-&gt;</span>vm_pgoff <span class="op">&lt;&lt;</span> PAGE_SHIFT<span class="op">,</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>         vma<span class="op">-&gt;</span>vm_ops<span class="op">);</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    vma<span class="op">-&gt;</span>vm_ops <span class="op">=</span> <span class="op">&amp;</span>simple_remap_vm_ops<span class="op">;</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    simple_vma_open<span class="op">(</span>vma<span class="op">);</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Setup virtual memory operations.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> vm_operations_struct simple_remap_vm_ops <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>open <span class="op">=</span>  simple_vma_open<span class="op">,</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>close <span class="op">=</span> simple_vma_close<span class="op">,</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> simple_vma_open<span class="op">(</span><span class="kw">struct</span> vm_area_struct <span class="op">*</span>vma<span class="op">)</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span> len <span class="op">=</span> vma<span class="op">-&gt;</span>vm_end <span class="op">-</span> vma<span class="op">-&gt;</span>vm_start<span class="op">;</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    pr_debug<span class="op">(</span><span class="st">&quot;vma_open_&quot;</span><span class="op">,</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>         vma<span class="op">-&gt;</span>vm_start<span class="op">,</span> vma<span class="op">-&gt;</span>vm_end<span class="op">,</span> len<span class="op">,</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>         vma<span class="op">-&gt;</span>vm_pgoff<span class="op">,</span> vma<span class="op">-&gt;</span>vm_pgoff <span class="op">&lt;&lt;</span> PAGE_SHIFT<span class="op">,</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>         vma<span class="op">-&gt;</span>vm_ops<span class="op">);</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> simple_vma_close<span class="op">(</span><span class="kw">struct</span> vm_area_struct <span class="op">*</span>vma<span class="op">)</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    pr_debug<span class="op">(</span><span class="st">&quot;vma_close_&quot;</span><span class="op">,</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>         vma<span class="op">-&gt;</span>vm_start<span class="op">,</span> vma<span class="op">-&gt;</span>vm_end<span class="op">,</span> len<span class="op">,</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>         vma<span class="op">-&gt;</span>vm_pgoff<span class="op">,</span> vma<span class="op">-&gt;</span>vm_pgoff <span class="op">&lt;&lt;</span> PAGE_SHIFT<span class="op">,</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>         vma<span class="op">-&gt;</span>vm_ops<span class="op">);</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div><div class="column">
+<p>Test: Users call mmap.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>fd <span class="op">=</span> open<span class="op">(</span><span class="st">&quot;/dev/simple0&quot;</span><span class="op">,</span> _<span class="op">);</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>mmap<span class="op">(</span>NULL<span class="op">,</span> _<span class="op">,</span> fd<span class="op">,</span> _<span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode go"><code class="sourceCode go"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>     ┌──────────────┐                                  </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>     │     cdev     │                                  </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>     ├──────────────┤                                  </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>     │ <span class="op">/</span>dev<span class="op">/</span>simple0 │                                  </span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>     │ major<span class="op">=</span><span class="dv">237</span>    │                                  </span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>     │ minor<span class="op">=</span><span class="dv">0</span>      │                                  </span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>     └─────┬────────┘                                  </span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>           │cdev_init                                  </span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>           │                                           </span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>           ▼                                           </span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>   ┌─────────────────┐                                 </span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>   │ file_operations │                                 </span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>   ├─────────────────│                                 </span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>┌──┼──── <span class="op">.</span>mmap       │                                 </span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>│  └─────────────────┘                                 </span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>│                             ┌────────────────────┐   </span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>│                             │    kernel module   │   </span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>│ ┌─────────────────────┐     │────────────────────│   </span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>│ │    kernel module    │     │ simple_vma_open<span class="op">()</span>  │   </span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>│ │─────────────────────┤     │                    │◄─┐</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>└─► simple_remap_mmap<span class="op">()</span> │     │ simple_vma_close<span class="op">()</span> │  │</span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>  └─────────┬───────────┘     └────────────────────┘  │</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>            │                                         │</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>            ▼                                         │</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>    ┌────────────────┐      ┌──────────────────────┐  │</span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>    │ vm_area_struct │      │ vm_operations_struct │  │</span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>    │────────────────│      │──────────────────────│  │</span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>    │   <span class="op">.</span>vm_ops ─────┼─────►│       <span class="op">.</span>open          ┼──┘</span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>    └────────────────┘      │       <span class="op">.</span><span class="bu">close</span>         │   </span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>                            └──────────────────────┘   </span></code></pre></div>
+<ul>
+<li>When users call mmap on /dev/simple0, kernel calls
+simple_remap_mmap().</li>
+<li>simple_remap_mmap() calls simple_vma_open() and create a
+vm_operations_struct.</li>
+<li>In vm_operations_struct:
+<ul>
+<li>.open points to simple_vma_open().</li>
+<li>.close points to simple_vma_close().</li>
+</ul></li>
+<li>When users call munmap on /dev/simple0, kernel calls
+simple_vma_close().</li>
+</ul>
+</div>
+</div>
 <h2 id="references">References</h2>
 <ul>
 <li><a href="https://github.com/d0u9/Linux-Device-Driver">Linux Device
