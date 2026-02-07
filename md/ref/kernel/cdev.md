@@ -56,48 +56,40 @@ erDiagram
 
 ## Lab 1: Scull Basic
 
+### Run
+
 :::::::::::::: {.columns}
 ::: {.column}
 
-### Build
 ```sh
 $ git clone https://github.com/d0u9/Linux-Device-Driver.git
 $ cd Linux-Device-Driver/eg_03_scull_basic
 $ make
 ```
 
-
-### Run
-
 ```sh
 $ insmod scull.ko
 ```
 
-Find major number.
 ```sh
+# find major number.
 $ cat /proc/devices
 237 scull
 ```
 
-Create device files.
 ```sh
+# create device files.
 $ mknod /dev/scull0 c 237 0
 $ mknod /dev/scull1 c 237 1
 $ mknod /dev/scull2 c 237 2
-```
-
-Set permissions.
-```sh
 $ chmod 666 /dev/scull[0-2]
 ```
 
 :::
 ::: {.column}
 
-Test.
 ```sh
 $ echo "hello" > /dev/scull0
-hello
 
 $ dmesg
 scull_open() is invoked
@@ -184,3 +176,116 @@ unregister_chrdev_region(from=devno, count=3);
 * * * * *
 
 <br>
+
+
+## Lab 2: IOCTL
+
+### Run
+
+:::::::::::::: {.columns}
+::: {.column}
+
+```sh
+$ cd Linux-Device-Driver/eg_07_ioctl
+$ make
+```
+
+```sh
+$ insmod ioctl.ko
+```
+
+```sh
+# find major number.
+$ cat /proc/devices
+237 ioctl
+```
+
+```sh
+# create device files.
+$ mknod /dev/ioctl c 237 0
+$ chmod 666 /dev/ioctl
+```
+
+:::
+::: {.column}
+
+```sh
+$ cd Linux-Device-Driver/eg_07_ioctl/test
+$ make
+```
+
+```sh
+$ ./ioctl_test.out
+retval = 0
+
+$ dmesg
+ioctl_open() is invoked
+ioctl_ioctl() is invoked
+ioctl -> cmd: set print message
+```
+
+:::
+::::::::::::::
+
+### Code
+
+:::::::::::::: {.columns}
+::: {.column}
+
+Define IOCTL commands.
+```c
+#include <ioctl.h>
+
+#define IOCTL_DEV_NR	    1
+#define IOCTL_IOC_MAGIC		'd'
+
+#define IOCTL_RESET         _IO(IOCTL_IOC_MAGIC, 0)
+#define IOCTL_HOWMANY       _IOWR(IOCTL_IOC_MAGIC, 1, int)
+#define IOCTL_MESSAGE		_IOW(IOCTL_IOC_MAGIC, 2, int)
+```
+
+Setup file_operations.
+```c
+static struct file_operations fops = {
+	.unlocked_ioctl = ioctl_ioctl,
+};
+
+long ioctl_ioctl(struct file *filp, unsigned int cmd,
+            unsigned long arg)
+{
+    switch (cmd) {
+    case IOCTL_RESET:
+		pr_debug("ioctl -> cmd: reset\n");		
+		break;
+	case IOCTL_HOWMANY:
+		pr_debug("ioctl -> cmd: set howmany\n");		
+		break;
+	case IOCTL_MESSAGE:
+		pr_debug("ioctl -> cmd: set print message\n");
+		break;	
+	}
+}
+```
+
+:::
+::: {.column}
+
+Test: Send IOCTL requests.
+```c
+int fd = open("/dev/ioctl", O_RDONLY);
+ioctl(fd, IOCTL_HOWMANY, _);
+ioctl(fd, IOCTL_MESSAGE, _);
+ioctl(fd, IOCTL_RESET, _);
+```
+
+
+:::
+::::::::::::::
+
+* * * * *
+
+<br>
+
+
+## References
+- [Linux Device Driver](https://github.com/d0u9/Linux-Device-Driver).

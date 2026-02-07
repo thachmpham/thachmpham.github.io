@@ -203,92 +203,166 @@ erDiagram
 <hr />
 <p><br></p>
 <h2 id="lab-1-scull-basic">Lab 1: Scull Basic</h2>
+<h3 id="run">Run</h3>
 <div class="columns">
 <div class="column">
-<h3 id="build">Build</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git clone https://github.com/d0u9/Linux-Device-Driver.git</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd Linux-Device-Driver/eg_03_scull_basic</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make</span></code></pre></div>
-<h3 id="run">Run</h3>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> insmod scull.ko</span></code></pre></div>
-<p>Find major number.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat /proc/devices</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">237</span> scull</span></code></pre></div>
-<p>Create device files.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mknod /dev/scull0 c 237 0</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mknod /dev/scull1 c 237 1</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mknod /dev/scull2 c 237 2</span></code></pre></div>
-<p>Set permissions.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> chmod 666 /dev/scull<span class="pp">[</span><span class="ss">0</span><span class="pp">-</span><span class="ss">2</span><span class="pp">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find major number.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat /proc/devices</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">237</span> scull</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create device files.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mknod /dev/scull0 c 237 0</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mknod /dev/scull1 c 237 1</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mknod /dev/scull2 c 237 2</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> chmod 666 /dev/scull<span class="pp">[</span><span class="ss">0</span><span class="pp">-</span><span class="ss">2</span><span class="pp">]</span></span></code></pre></div>
 </div><div class="column">
-<p>Test.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> echo <span class="st">&quot;hello&quot;</span> <span class="op">&gt;</span> /dev/scull0</span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> echo <span class="st">&quot;hello&quot;</span> <span class="op">&gt;</span> /dev/scull0</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dmesg</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_open()</span> <span class="ex">is</span> invoked</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_trim()</span> <span class="ex">is</span> invoked</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_write()</span> <span class="ex">is</span> invoked</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="ex">WR</span> pos = 6, block = 0, offset = 0, write 6 bytes</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_release()</span> <span class="ex">is</span> invoked</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat /dev/scull0</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hello</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dmesg</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_open()</span> <span class="ex">is</span> invoked</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_trim()</span> <span class="ex">is</span> invoked</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_write()</span> <span class="ex">is</span> invoked</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ex">WR</span> pos = 6, block = 0, offset = 0, write 6 bytes</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_release()</span> <span class="ex">is</span> invoked</span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat /dev/scull0</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hello</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dmesg</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_open()</span> <span class="ex">is</span> invoked</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_read()</span> <span class="ex">is</span> invoked</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">RD</span> pos = 6, block = 0, offset = 0, read 6 bytes</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_read()</span> <span class="ex">is</span> invoked</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="ex">RD</span> pos = 6, block = 0, offset = 6, read 131072 bytes</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_release()</span> <span class="ex">is</span> invoked</span></code></pre></div>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_read()</span> <span class="ex">is</span> invoked</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ex">RD</span> pos = 6, block = 0, offset = 0, read 6 bytes</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_read()</span> <span class="ex">is</span> invoked</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">RD</span> pos = 6, block = 0, offset = 6, read 131072 bytes</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">scull_release()</span> <span class="ex">is</span> invoked</span></code></pre></div>
 </div>
 </div>
 <h3 id="code">Code</h3>
 <div class="columns">
 <div class="column">
 <p>Setup file_operations.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> file_operations scull_fops <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>owner   <span class="op">=</span> _<span class="op">,</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>open    <span class="op">=</span> scull_open<span class="op">,</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>read    <span class="op">=</span> scull_read<span class="op">,</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>write   <span class="op">=</span> scull_write<span class="op">,</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>release <span class="op">=</span> scull_release<span class="op">,</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> scull_open<span class="op">(</span><span class="kw">struct</span> inode <span class="op">*</span>inode<span class="op">,</span> <span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">)</span> <span class="op">{}</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> scull_release<span class="op">(</span><span class="kw">struct</span> inode <span class="op">*</span>inode<span class="op">,</span> <span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">)</span> <span class="op">{}</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="dt">ssize_t</span> scull_read<span class="op">(</span><span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">,</span> <span class="dt">char</span> __user <span class="op">*</span>buff<span class="op">,</span> _<span class="op">)</span> <span class="op">{}</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="dt">ssize_t</span> scull_write<span class="op">(</span><span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> __user <span class="op">*</span>buff<span class="op">,</span> _ <span class="op">)</span> <span class="op">{}</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> file_operations scull_fops <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>owner   <span class="op">=</span> _<span class="op">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>open    <span class="op">=</span> scull_open<span class="op">,</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>read    <span class="op">=</span> scull_read<span class="op">,</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>write   <span class="op">=</span> scull_write<span class="op">,</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>release <span class="op">=</span> scull_release<span class="op">,</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> scull_open<span class="op">(</span><span class="kw">struct</span> inode <span class="op">*</span>inode<span class="op">,</span> <span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">)</span> <span class="op">{}</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> scull_release<span class="op">(</span><span class="kw">struct</span> inode <span class="op">*</span>inode<span class="op">,</span> <span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">)</span> <span class="op">{}</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="dt">ssize_t</span> scull_read<span class="op">(</span><span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">,</span> <span class="dt">char</span> __user <span class="op">*</span>buff<span class="op">,</span> _<span class="op">)</span> <span class="op">{}</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="dt">ssize_t</span> scull_write<span class="op">(</span><span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> __user <span class="op">*</span>buff<span class="op">,</span> _ <span class="op">)</span> <span class="op">{}</span></span></code></pre></div>
 </div><div class="column">
 <p>Setup char devices.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// register number of devices that driver can handle</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>alloc_chrdev_region<span class="op">(</span>_<span class="op">,</span> _<span class="op">,</span> dev_count<span class="op">=</span><span class="dv">3</span><span class="op">,</span> name<span class="op">=</span><span class="st">&quot;scull&quot;</span><span class="op">);</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">// create devices with associated file_operations, </span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">// major_number, minor_number</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> dev_count<span class="op">;</span> i<span class="op">++)</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// init a char device</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    cdev_init<span class="op">(</span>cdev<span class="op">,</span> <span class="op">&amp;</span>scull_fops<span class="op">);</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// make device id from major, minor numbers</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    devno <span class="op">=</span> MKDEV<span class="op">(</span>major_number<span class="op">,</span> minor_number<span class="op">);</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// add device to system</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    cdev_add<span class="op">(</span>cdev<span class="op">,</span> devno<span class="op">,</span> _<span class="op">);</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// register number of devices that driver can handle</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>alloc_chrdev_region<span class="op">(</span>_<span class="op">,</span> _<span class="op">,</span> dev_count<span class="op">=</span><span class="dv">3</span><span class="op">,</span> name<span class="op">=</span><span class="st">&quot;scull&quot;</span><span class="op">);</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">// create devices with associated file_operations, </span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">// major_number, minor_number</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> dev_count<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// init a char device</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    cdev_init<span class="op">(</span>cdev<span class="op">,</span> <span class="op">&amp;</span>scull_fops<span class="op">);</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// make device id from major, minor numbers</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    devno <span class="op">=</span> MKDEV<span class="op">(</span>major_number<span class="op">,</span> minor_number<span class="op">);</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// add device to system</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    cdev_add<span class="op">(</span>cdev<span class="op">,</span> devno<span class="op">,</span> _<span class="op">);</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Clean on exit.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> dev_count<span class="op">;</span> i<span class="op">++)</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    cdev_del<span class="op">(</span>cdev<span class="op">);</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>devno <span class="op">=</span> MKDEV<span class="op">(</span>major_number<span class="op">,</span> minor_number<span class="op">);</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>unregister_chrdev_region<span class="op">(</span>from<span class="op">=</span>devno<span class="op">,</span> count<span class="op">=</span><span class="dv">3</span><span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> dev_count<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    cdev_del<span class="op">(</span>cdev<span class="op">);</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>devno <span class="op">=</span> MKDEV<span class="op">(</span>major_number<span class="op">,</span> minor_number<span class="op">);</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>unregister_chrdev_region<span class="op">(</span>from<span class="op">=</span>devno<span class="op">,</span> count<span class="op">=</span><span class="dv">3</span><span class="op">);</span></span></code></pre></div>
 </div>
 </div>
 <hr />
 <p><br></p>
+<h2 id="lab-2-ioctl">Lab 2: IOCTL</h2>
+<h3 id="run-1">Run</h3>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd Linux-Device-Driver/eg_07_ioctl</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> insmod ioctl.ko</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find major number.</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat /proc/devices</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">237</span> ioctl</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create device files.</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mknod /dev/ioctl c 237 0</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> chmod 666 /dev/ioctl</span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd Linux-Device-Driver/eg_07_ioctl/test</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./ioctl_test.out</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">retval</span> = 0</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dmesg</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ioctl_open()</span> <span class="ex">is</span> invoked</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ioctl_ioctl()</span> <span class="ex">is</span> invoked</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="ex">ioctl</span> <span class="at">-</span><span class="op">&gt;</span> cmd: set print message</span></code></pre></div>
+</div>
+</div>
+<h3 id="code-1">Code</h3>
+<div class="columns">
+<div class="column">
+<p>Define IOCTL commands.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;ioctl.h&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_DEV_NR        </span><span class="dv">1</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_IOC_MAGIC     </span><span class="ch">&#39;d&#39;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_RESET         _IO</span><span class="op">(</span><span class="pp">IOCTL_IOC_MAGIC</span><span class="op">,</span><span class="pp"> </span><span class="dv">0</span><span class="op">)</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_HOWMANY       _IOWR</span><span class="op">(</span><span class="pp">IOCTL_IOC_MAGIC</span><span class="op">,</span><span class="pp"> </span><span class="dv">1</span><span class="op">,</span><span class="pp"> </span><span class="dt">int</span><span class="op">)</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_MESSAGE       _IOW</span><span class="op">(</span><span class="pp">IOCTL_IOC_MAGIC</span><span class="op">,</span><span class="pp"> </span><span class="dv">2</span><span class="op">,</span><span class="pp"> </span><span class="dt">int</span><span class="op">)</span></span></code></pre></div>
+<p>Setup file_operations.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="kw">struct</span> file_operations fops <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>unlocked_ioctl <span class="op">=</span> ioctl_ioctl<span class="op">,</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> ioctl_ioctl<span class="op">(</span><span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">,</span> <span class="dt">unsigned</span> <span class="dt">int</span> cmd<span class="op">,</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>            <span class="dt">unsigned</span> <span class="dt">long</span> arg<span class="op">)</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> <span class="op">(</span>cmd<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> IOCTL_RESET<span class="op">:</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        pr_debug<span class="op">(</span><span class="st">&quot;ioctl -&gt; cmd: reset</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>      </span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> IOCTL_HOWMANY<span class="op">:</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        pr_debug<span class="op">(</span><span class="st">&quot;ioctl -&gt; cmd: set howmany</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>        </span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> IOCTL_MESSAGE<span class="op">:</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        pr_debug<span class="op">(</span><span class="st">&quot;ioctl -&gt; cmd: set print message</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span>  </span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div><div class="column">
+<p>Test: Send IOCTL requests.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> fd <span class="op">=</span> open<span class="op">(</span><span class="st">&quot;/dev/ioctl&quot;</span><span class="op">,</span> O_RDONLY<span class="op">);</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>ioctl<span class="op">(</span>fd<span class="op">,</span> IOCTL_HOWMANY<span class="op">,</span> _<span class="op">);</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>ioctl<span class="op">(</span>fd<span class="op">,</span> IOCTL_MESSAGE<span class="op">,</span> _<span class="op">);</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ioctl<span class="op">(</span>fd<span class="op">,</span> IOCTL_RESET<span class="op">,</span> _<span class="op">);</span></span></code></pre></div>
+</div>
+</div>
+<hr />
+<p><br></p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://github.com/d0u9/Linux-Device-Driver">Linux Device
+Driver</a>.</li>
+</ul>
 <footer class="footer text-muted">
    <div align="center">      
       <br>
