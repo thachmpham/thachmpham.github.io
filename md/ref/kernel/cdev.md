@@ -137,9 +137,6 @@ ssize_t scull_read(struct file *filp, char __user *buff, _) {}
 ssize_t scull_write(struct file *filp, const char __user *buff, _ ) {}
 ```
 
-:::
-::: {.column}
-
 Setup char devices.
 ```c
 // register number of devices that driver can handle
@@ -160,6 +157,9 @@ for(int i = 0; i < dev_count; i++)
 }
 ```
 
+:::
+::: {.column}
+
 Clean on exit.
 ```c
 for(int i = 0; i < dev_count; i++)
@@ -170,6 +170,31 @@ for(int i = 0; i < dev_count; i++)
 devno = MKDEV(major_number, minor_number);
 unregister_chrdev_region(from=devno, count=3);
 ```
+
+Illustrate.
+```go
+┌─────────────┐      ┌─────────────┐
+│   cdev      │      │   cdev      │
+├─────────────┤      ├─────────────┤
+│ /dev/scull0 │      │ /dev/scull1 │
+│ major=237   │      │ major=237   │
+│ minor=0     │      │ minor=1     │
+└─────┬───────┘      └──────┬──────┘
+      │cdev_init            │cdev_init
+      │					 	│
+      │  ┌───────────────┐  │  ┌────────────────┐
+      └─►│file_operations│◄─┘  │ kernel module  │
+         ├───────────────┤     │────────────────│
+         │   .open       │     │ scull_open()   │
+         │   .read       ├────►│ scull_read()   │
+         │   .write      │     │ scull_write()  │
+         │   .release    │     │ scull_release()│
+         └───────────────┘     └────────────────┘
+```
+
+- When users open /dev/scull0, kernel will call scull_open().
+- When users read /dev/scull0, kernel will call scull_read().
+- The same with /dev/scull1.
 
 :::
 ::::::::::::::
@@ -271,7 +296,7 @@ long ioctl_ioctl(struct file *filp, unsigned int cmd,
 :::
 ::: {.column}
 
-Test: Send requests.
+Test: Users call ioctl.
 ```c
 int fd = open("/dev/ioctl", O_RDONLY);
 ioctl(fd, IOCTL_HOWMANY, _);
@@ -279,6 +304,26 @@ ioctl(fd, IOCTL_MESSAGE, _);
 ioctl(fd, IOCTL_RESET, _);
 ```
 
+Illustrate.
+```go
+  ┌────────────┐                        
+  │ cdev       │                        
+  ├────────────┤                        
+  │ /dev/ioctl │                        
+  │ major=237  │                        
+  │ minor=0    │                        
+  └─────┬──────┘                        
+        │cdev_init                      
+        │                               
+        ▼                               
+┌─────────────────┐    ┌───────────────┐
+│ file_operations │    │ kernel module │
+│─────────────────│    │───────────────│
+│ .unlocked_ioctl ├───►│ ioctl_ioctl() │
+└─────────────────┘    └───────────────┘
+```
+
+- When users call ioctl on /dev/ioctl, kernel will call ioctl_ioctl().
 
 :::
 ::::::::::::::

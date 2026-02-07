@@ -259,7 +259,6 @@ erDiagram
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> scull_release<span class="op">(</span><span class="kw">struct</span> inode <span class="op">*</span>inode<span class="op">,</span> <span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">)</span> <span class="op">{}</span></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="dt">ssize_t</span> scull_read<span class="op">(</span><span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">,</span> <span class="dt">char</span> __user <span class="op">*</span>buff<span class="op">,</span> _<span class="op">)</span> <span class="op">{}</span></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="dt">ssize_t</span> scull_write<span class="op">(</span><span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> __user <span class="op">*</span>buff<span class="op">,</span> _ <span class="op">)</span> <span class="op">{}</span></span></code></pre></div>
-</div><div class="column">
 <p>Setup char devices.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// register number of devices that driver can handle</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>alloc_chrdev_region<span class="op">(</span>_<span class="op">,</span> _<span class="op">,</span> dev_count<span class="op">=</span><span class="dv">3</span><span class="op">,</span> name<span class="op">=</span><span class="st">&quot;scull&quot;</span><span class="op">);</span></span>
@@ -277,6 +276,7 @@ erDiagram
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// add device to system</span></span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    cdev_add<span class="op">(</span>cdev<span class="op">,</span> devno<span class="op">,</span> _<span class="op">);</span></span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div><div class="column">
 <p>Clean on exit.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> dev_count<span class="op">;</span> i<span class="op">++)</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
@@ -285,6 +285,30 @@ erDiagram
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>devno <span class="op">=</span> MKDEV<span class="op">(</span>major_number<span class="op">,</span> minor_number<span class="op">);</span></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>unregister_chrdev_region<span class="op">(</span>from<span class="op">=</span>devno<span class="op">,</span> count<span class="op">=</span><span class="dv">3</span><span class="op">);</span></span></code></pre></div>
+<p>Illustrate.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode go"><code class="sourceCode go"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>┌─────────────┐      ┌─────────────┐</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>│   cdev      │      │   cdev      │</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>├─────────────┤      ├─────────────┤</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>│ <span class="op">/</span>dev<span class="op">/</span>scull0 │      │ <span class="op">/</span>dev<span class="op">/</span>scull1 │</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>│ major<span class="op">=</span><span class="dv">237</span>   │      │ major<span class="op">=</span><span class="dv">237</span>   │</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>│ minor<span class="op">=</span><span class="dv">0</span>     │      │ minor<span class="op">=</span><span class="dv">1</span>     │</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>└─────┬───────┘      └──────┬──────┘</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>      │cdev_init            │cdev_init</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>      │                     │</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>      │  ┌───────────────┐  │  ┌────────────────┐</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>      └─►│file_operations│◄─┘  │ kernel module  │</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>         ├───────────────┤     │────────────────│</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>         │   <span class="op">.</span>open       │     │ scull_open<span class="op">()</span>   │</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>         │   <span class="op">.</span>read       ├────►│ scull_read<span class="op">()</span>   │</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>         │   <span class="op">.</span>write      │     │ scull_write<span class="op">()</span>  │</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>         │   <span class="op">.</span>release    │     │ scull_release<span class="op">()</span>│</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>         └───────────────┘     └────────────────┘</span></code></pre></div>
+<ul>
+<li>When users open /dev/scull0, kernel will call scull_open().</li>
+<li>When users read /dev/scull0, kernel will call scull_read().</li>
+<li>The same with /dev/scull1.</li>
+</ul>
 </div>
 </div>
 <hr />
@@ -293,71 +317,92 @@ erDiagram
 <h3 id="run-1">Run</h3>
 <div class="columns">
 <div class="column">
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd Linux-Device-Driver/eg_07_ioctl</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make</span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> insmod ioctl.ko</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd Linux-Device-Driver/eg_07_ioctl</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make</span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find major number.</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat /proc/devices</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">237</span> ioctl</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> insmod ioctl.ko</span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create device files.</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mknod /dev/ioctl c 237 0</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> chmod 666 /dev/ioctl</span></code></pre></div>
-</div><div class="column">
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find major number.</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat /proc/devices</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">237</span> ioctl</span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd Linux-Device-Driver/eg_07_ioctl/test</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create device files.</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mknod /dev/ioctl c 237 0</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> chmod 666 /dev/ioctl</span></code></pre></div>
+</div><div class="column">
 <div class="sourceCode" id="cb15"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./ioctl_test.out</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">retval</span> = 0</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dmesg</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ioctl_open()</span> <span class="ex">is</span> invoked</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ioctl_ioctl()</span> <span class="ex">is</span> invoked</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="ex">ioctl</span> <span class="at">-</span><span class="op">&gt;</span> cmd: set print message</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd Linux-Device-Driver/eg_07_ioctl/test</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./ioctl_test.out</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">retval</span> = 0</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dmesg</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ioctl_open()</span> <span class="ex">is</span> invoked</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ioctl_ioctl()</span> <span class="ex">is</span> invoked</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="ex">ioctl</span> <span class="at">-</span><span class="op">&gt;</span> cmd: set print message</span></code></pre></div>
 </div>
 </div>
 <h3 id="code-1">Code</h3>
 <div class="columns">
 <div class="column">
 <p>Define IOCTL commands.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;ioctl.h&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_DEV_NR        </span><span class="dv">1</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_IOC_MAGIC     </span><span class="ch">&#39;d&#39;</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_RESET         _IO</span><span class="op">(</span><span class="pp">IOCTL_IOC_MAGIC</span><span class="op">,</span><span class="pp"> </span><span class="dv">0</span><span class="op">)</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_HOWMANY       _IOWR</span><span class="op">(</span><span class="pp">IOCTL_IOC_MAGIC</span><span class="op">,</span><span class="pp"> </span><span class="dv">1</span><span class="op">,</span><span class="pp"> </span><span class="dt">int</span><span class="op">)</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_MESSAGE       _IOW</span><span class="op">(</span><span class="pp">IOCTL_IOC_MAGIC</span><span class="op">,</span><span class="pp"> </span><span class="dv">2</span><span class="op">,</span><span class="pp"> </span><span class="dt">int</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;ioctl.h&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_DEV_NR        </span><span class="dv">1</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_IOC_MAGIC     </span><span class="ch">&#39;d&#39;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_RESET         _IO</span><span class="op">(</span><span class="pp">IOCTL_IOC_MAGIC</span><span class="op">,</span><span class="pp"> </span><span class="dv">0</span><span class="op">)</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_HOWMANY       _IOWR</span><span class="op">(</span><span class="pp">IOCTL_IOC_MAGIC</span><span class="op">,</span><span class="pp"> </span><span class="dv">1</span><span class="op">,</span><span class="pp"> </span><span class="dt">int</span><span class="op">)</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IOCTL_MESSAGE       _IOW</span><span class="op">(</span><span class="pp">IOCTL_IOC_MAGIC</span><span class="op">,</span><span class="pp"> </span><span class="dv">2</span><span class="op">,</span><span class="pp"> </span><span class="dt">int</span><span class="op">)</span></span></code></pre></div>
 <p>Setup file_operations.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="kw">struct</span> file_operations fops <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>unlocked_ioctl <span class="op">=</span> ioctl_ioctl<span class="op">,</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> ioctl_ioctl<span class="op">(</span><span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">,</span> <span class="dt">unsigned</span> <span class="dt">int</span> cmd<span class="op">,</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>            <span class="dt">unsigned</span> <span class="dt">long</span> arg<span class="op">)</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> <span class="op">(</span>cmd<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> IOCTL_RESET<span class="op">:</span></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        pr_debug<span class="op">(</span><span class="st">&quot;ioctl -&gt; cmd: reset</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>      </span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> IOCTL_HOWMANY<span class="op">:</span></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        pr_debug<span class="op">(</span><span class="st">&quot;ioctl -&gt; cmd: set howmany</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>        </span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> IOCTL_MESSAGE<span class="op">:</span></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        pr_debug<span class="op">(</span><span class="st">&quot;ioctl -&gt; cmd: set print message</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span>  </span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="kw">struct</span> file_operations fops <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>unlocked_ioctl <span class="op">=</span> ioctl_ioctl<span class="op">,</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> ioctl_ioctl<span class="op">(</span><span class="kw">struct</span> file <span class="op">*</span>filp<span class="op">,</span> <span class="dt">unsigned</span> <span class="dt">int</span> cmd<span class="op">,</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>            <span class="dt">unsigned</span> <span class="dt">long</span> arg<span class="op">)</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> <span class="op">(</span>cmd<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> IOCTL_RESET<span class="op">:</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        pr_debug<span class="op">(</span><span class="st">&quot;ioctl -&gt; cmd: reset</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>      </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> IOCTL_HOWMANY<span class="op">:</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        pr_debug<span class="op">(</span><span class="st">&quot;ioctl -&gt; cmd: set howmany</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>        </span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> IOCTL_MESSAGE<span class="op">:</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>        pr_debug<span class="op">(</span><span class="st">&quot;ioctl -&gt; cmd: set print message</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span>  </span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </div><div class="column">
-<p>Test: Send requests.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> fd <span class="op">=</span> open<span class="op">(</span><span class="st">&quot;/dev/ioctl&quot;</span><span class="op">,</span> O_RDONLY<span class="op">);</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>ioctl<span class="op">(</span>fd<span class="op">,</span> IOCTL_HOWMANY<span class="op">,</span> _<span class="op">);</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>ioctl<span class="op">(</span>fd<span class="op">,</span> IOCTL_MESSAGE<span class="op">,</span> _<span class="op">);</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ioctl<span class="op">(</span>fd<span class="op">,</span> IOCTL_RESET<span class="op">,</span> _<span class="op">);</span></span></code></pre></div>
+<p>Test: Users call ioctl.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> fd <span class="op">=</span> open<span class="op">(</span><span class="st">&quot;/dev/ioctl&quot;</span><span class="op">,</span> O_RDONLY<span class="op">);</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>ioctl<span class="op">(</span>fd<span class="op">,</span> IOCTL_HOWMANY<span class="op">,</span> _<span class="op">);</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>ioctl<span class="op">(</span>fd<span class="op">,</span> IOCTL_MESSAGE<span class="op">,</span> _<span class="op">);</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>ioctl<span class="op">(</span>fd<span class="op">,</span> IOCTL_RESET<span class="op">,</span> _<span class="op">);</span></span></code></pre></div>
+<p>Illustrate.</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode go"><code class="sourceCode go"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>  ┌────────────┐                        </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  │ cdev       │                        </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  ├────────────┤                        </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  │ <span class="op">/</span>dev<span class="op">/</span>ioctl │                        </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  │ major<span class="op">=</span><span class="dv">237</span>  │                        </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  │ minor<span class="op">=</span><span class="dv">0</span>    │                        </span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  └─────┬──────┘                        </span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>        │cdev_init                      </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>        │                               </span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>        ▼                               </span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>┌─────────────────┐    ┌───────────────┐</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>│ file_operations │    │ kernel module │</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>│─────────────────│    │───────────────│</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>│ <span class="op">.</span>unlocked_ioctl ├───►│ ioctl_ioctl<span class="op">()</span> │</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>└─────────────────┘    └───────────────┘</span></code></pre></div>
+<ul>
+<li>When users call ioctl on /dev/ioctl, kernel will call
+ioctl_ioctl().</li>
+</ul>
 </div>
 </div>
 <hr />
