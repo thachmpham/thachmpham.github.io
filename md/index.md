@@ -58,7 +58,7 @@ Protocols
 
 Linux Kernel
 
-- [module](/html/ref/kernel/module.html)
+- [kernel module](/html/ref/kernel/module.html)
 - [character device](/html/ref/kernel/cdev.html)
 
 :::

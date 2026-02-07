@@ -37,12 +37,18 @@ title: Linux Kernel Module
 :::
 ::: {.column}
 
-| printk configuration |         |
+| printk |         |
 |:--------|:--------|
 | `cat /proc/sys/kernel/printk` | Show log level |
 | `echo 8 > /proc/sys/kernel/printk` | Set log level |
 | `echo "4 4 1 7 " > /proc/sys/kernel/printk` | Set log level |
 | `/etc/sysctl.conf, kernel.printk, sysctl -p` | Set permanent level |
+
+<br>
+
+| Term    |         |
+|:--------|:--------|
+| `/proc` | Special files for modules to export info to users |
 
 :::
 ::::::::::::::

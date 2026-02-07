@@ -30,6 +30,7 @@ title: "Character Device Driver"
 |:--------|----------|
 | Major number | Kernel driver ID, who responsible for devices |
 | Minor number | ID of devices within a driver |
+| IOCTL | API for user apps to query, configure a driver |
 
 :::
 ::: {.column}
@@ -270,7 +271,7 @@ long ioctl_ioctl(struct file *filp, unsigned int cmd,
 :::
 ::: {.column}
 
-Test: Send IOCTL requests.
+Test: Send requests.
 ```c
 int fd = open("/dev/ioctl", O_RDONLY);
 ioctl(fd, IOCTL_HOWMANY, _);
