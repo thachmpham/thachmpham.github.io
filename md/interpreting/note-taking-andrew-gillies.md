@@ -4,22 +4,35 @@ subtitle: "Andrew Gillies"
 ---
 
 ## Speech Analysis
-### Practice: Mind Map
+
+:::::::::::::: {.columns}
+::: {.column}
+
+**Practice 1: Mind Map**
 
 - Download transcripts.
 - Mind map for the main ideas.
 
-### Practice: Transcript Summary
+:::
+::: {.column}
+
+**Practice 2: Section Summary**
 
 - Download transcripts.
 - Two-column table.
-    - Transcript in column 1.
-    - One-line summary per section in column 2.
+    - Column 1: Transcript.
+    - Column 2: One-line summary per section.
 
-### Practice: Speech Summary
+:::
+::: {.column}
+
+**Practice 3: Speech Summary**
 
 - Listen to a speech.
     - How many points.
     - Note one word per point.
 - Read transcript.
-    - Highlight sentences sum up the whole section.
+    - Highlight sentences sum up section.
+
+:::
+::::::::::::::
