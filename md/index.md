@@ -106,7 +106,8 @@ OpenSAF
 :::
 ::::::::::::::
 
+<br>
 
 ### Consequetive Interpreting
-
+- [Note-Taking for Consecutive Interpreting, Andrew Gillies](/html/interpreting/note-taking-andrew-gillies.html)
 
