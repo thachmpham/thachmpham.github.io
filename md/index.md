@@ -2,7 +2,7 @@
 title: "A Developer Notebook"
 ---
 
-### Swiss Army Knife
+### Software Troubleshooting
 
 :::::::::::::: {.columns}
 ::: {.column}
@@ -105,3 +105,8 @@ OpenSAF
 
 :::
 ::::::::::::::
+
+
+### Consequetive Interpreting
+
+

@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#!/usr/bin/env bash
 
 # ====  global variables
 workspace=$(git rev-parse --show-toplevel)
