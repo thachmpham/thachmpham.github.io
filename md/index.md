@@ -37,6 +37,7 @@ GDB
 - [watchpoint](/html/ref/gdb/watch.html)
 - [tracepoint](/html/ref/gdb/trace.html)
 - [process memory](/html/ref/gdb/memory.html)
+- [remote debug](/html/ref/gdb/remote_debug.html)
 
 <br>
 

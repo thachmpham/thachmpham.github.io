@@ -39,7 +39,7 @@ subtitle: "Stop on a program event"
 
 <br>
 
-### Tip 1: Keep Child Process Under Control.
+### Keep Child Process Under GDB Control.
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
@@ -81,7 +81,7 @@ Catchpoint 1 (forked process 4097), arch_fork (ctid=0x7ffff7d85a10)
 
 <br>
 
-### Tip 2: Debug Program Launched Script.
+### Debug Program Launched Script.
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
@@ -124,7 +124,7 @@ Thread 2.1 "ls" hit Catchpoint 1 (exec'd /usr/bin/ls')
 
 <br>
 
-### Tip 3: Auto Print Backtrace On Crash.
+### Auto Print Backtrace On Crash.
 :::::::::::::: {.columns}
 ::: {.column width=40%}
 
