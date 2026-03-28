@@ -19,14 +19,6 @@ List sections using objdump.
   objdump --section-headers binary
 ```
 
-List sections using gdb.
-```sh
-  maint info [-all-objects] sections [filters]
-```
-
-- *-all-objects*: info of all object files.
-- *filters*: section name, flag.
-
 <br>
 
 Sample: Build binary with debuginfo.

@@ -39,6 +39,8 @@ GDB
 - [process memory](/html/ref/gdb/memory.html)
 - [remote debug](/html/ref/gdb/remote_debug.html)
 - [symbol table](/html/ref/gdb/symbol.html)
+- [pretty printer](/html/ref/gdb/pretty_printer.html)
+- [debug info](/html/ref/gdb/debuginfo.html)
 
 <br>
 
