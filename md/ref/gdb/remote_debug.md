@@ -198,7 +198,7 @@ start() {
 :::::::::::::: {.columns}
 ::: {.column}
 
-Start gdb
+- Start gdb.
 ```sh
 $ gdb
 (gdb) set tcp auto-retry on

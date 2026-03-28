@@ -75,7 +75,7 @@ struct in_addr
 :::
 ::::::::::::::
 
-Sample: Implement printer for struct in_addr.
+## 3.1 Printer for in_addr.
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -148,11 +148,6 @@ $1 = 192.168.1.1.
 
 :::
 ::::::::::::::
-
-
-
-
-
 
 
 # References 
