@@ -36,6 +36,7 @@ GDB
 - [catchpoint](/html/ref/gdb/catch.html)
 - [watchpoint](/html/ref/gdb/watch.html)
 - [tracepoint](/html/ref/gdb/trace.html)
+- [process memory](/html/ref/gdb/memory.html)
 
 <br>
 
