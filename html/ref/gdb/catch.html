@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>GDB Catchpoint</title>
   <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -21,8 +24,9 @@
       vertical-align: middle;
     }
     /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +37,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -102,39 +106,39 @@
 <div class="column">
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Fork</th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>catch fork</code></td>
 <td style="text-align: left;">Stop execution on fork</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>set detach-on-fork on</code></td>
 <td style="text-align: left;">Detach child from gdb (default).</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>set detach-on-fork off</code></td>
 <td style="text-align: left;">Keep both parent, child under gdb.</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>show detach-on-fork</code></td>
 <td style="text-align: left;"></td>
 </tr>
-<tr class="odd">
+<tr>
 <td
 style="text-align: left;"><code>set follow-fork-mode parent</code></td>
 <td style="text-align: left;">Switch gdb to parent (default)</td>
 </tr>
-<tr class="even">
+<tr>
 <td
 style="text-align: left;"><code>set follow-fork-mode child</code></td>
 <td style="text-align: left;">Switch gdb to child</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>show follow-fork-mode</code></td>
 <td style="text-align: left;"></td>
 </tr>
@@ -143,26 +147,26 @@ style="text-align: left;"><code>set follow-fork-mode child</code></td>
 </div><div class="column">
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Exec</th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>catch exec</code></td>
 <td style="text-align: left;">Stop execution on exec</td>
 </tr>
-<tr class="even">
+<tr>
 <td
 style="text-align: left;"><code>set follow-exec-mode same</code></td>
 <td style="text-align: left;">Keep gdb on the current process</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>set follow-exec-mode new</code></td>
 <td style="text-align: left;">Switch gdb to the new process</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>show follow-exec-mode</code></td>
 <td style="text-align: left;"></td>
 </tr>
@@ -170,17 +174,17 @@ style="text-align: left;"><code>set follow-exec-mode same</code></td>
 </table>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Signal</th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>catch signal SIGSEGV</code></td>
 <td style="text-align: left;">Stop execution on SIGSEGV</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>catch signal all</code></td>
 <td style="text-align: left;">Stop execution on all signals</td>
 </tr>
@@ -190,8 +194,8 @@ style="text-align: left;"><code>set follow-exec-mode same</code></td>
 </div>
 <hr />
 <p><br></p>
-<h3 id="tip-1-keep-child-process-under-control.">Tip 1: Keep Child
-Process Under Control.</h3>
+<h3 id="keep-child-process-under-gdb-control.">Keep Child Process Under
+GDB Control.</h3>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;unistd.h&gt;</span></span>
@@ -217,8 +221,8 @@ Process Under Control.</h3>
 </div>
 <hr />
 <p><br></p>
-<h3 id="tip-2-debug-program-launched-script.">Tip 2: Debug Program
-Launched Script.</h3>
+<h3 id="debug-program-launched-script.">Debug Program Launched
+Script.</h3>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run.sh</span></span>
@@ -245,8 +249,8 @@ Launched Script.</h3>
 </div>
 <hr />
 <p><br></p>
-<h3 id="tip-3-auto-print-backtrace-on-crash.">Tip 3: Auto Print
-Backtrace On Crash.</h3>
+<h3 id="auto-print-backtrace-on-crash.">Auto Print Backtrace On
+Crash.</h3>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> crash<span class="op">()</span></span>
