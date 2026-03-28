@@ -3,7 +3,6 @@ title: "Symbol Table"
 ---
 
 
-# Symbol Table
 A symbol represents a function, a global variable, and other named entity. The symbol table is a section that maps symbols to their addresses. Two typical symbol tables are the .symtab and .dynsym sections.
 
 :::::::::::::: {.columns}
@@ -30,7 +29,7 @@ The .dynsym section.
 <br>
 
 
-# Static Symbol Table
+# 1. Static Symbol Table
 The .symtab section is associated with the section header and the .strtab section.
 
 - Section header: provides list of sections in the file. Each symbol resides in one section.
@@ -61,7 +60,7 @@ $ gcc main.c -o main
 ```
 
 
-## Section Header
+## 1.1. Section Header
 The section header provides a list of sections and their details in the ELF file.
 
 :::::::::::::: {.columns}
@@ -104,7 +103,7 @@ Explain the output.
 :::
 ::::::::::::::
 
-## Section .strtab
+## 1.2. Section .strtab
 The .strtab section is a string table that contains null-terminated strings. Each string represents a symbol name.
 
 :::::::::::::: {.columns}
@@ -140,7 +139,7 @@ Explain the output.
 ::::::::::::::
 
 
-## Section .symtab
+## 1.3. Section .symtab
 The .symtab section contains all symbols in the file.
 
 :::::::::::::: {.columns}
@@ -175,7 +174,7 @@ Explain the output.
 ::::::::::::::
 
 
-# Dynamic Symbol Table
+# 2. Dynamic Symbol Table
 External symbol is a symbol whose address cannot be determined at compile time, but must be resolved at runtime.
 
 .dynsym is the section that contains the list of external symbols. The .dynsym section works together with the .dynstr, .plt, .rela.plt, .got sections.
@@ -206,7 +205,7 @@ Use '-fcf-protection=none' to place puts@plt to .plt instead of .plt.sec.
 $ gcc -fcf-protection=none main.c -o main
 ```
 
-## Section .dynsym
+## 2.1. Section .dynsym
 The .dynsym section is a string table that contains null-terminated strings. Each string represents a external symbol name.
 
 ```sh
@@ -217,7 +216,7 @@ String dump of section '.dynstr':
   ...
 ```
 
-## Section .rela.plt
+## 2.2. Section .rela.plt
 rela.plt is a relocation table that tells the runtime linker how to find addresses for external symbols.
 
 :::::::::::::: {.columns}
@@ -243,7 +242,7 @@ Explain the output.
 ::::::::::::::
 
 
-## Sections .plt and .got
+## 2.3. Sections .plt and .got
 The .plt section contains a small executable code to find addresses for external symbols. The .got section holds the external symbol addresses.
 
 ```go
@@ -285,7 +284,8 @@ Start program.
 (gdb) start
 ```
 
-### Before First Call
+### 2.3.1. Before First Call  
+
 In the main function, when we call puts, it goes to puts@plt.
 ```sh
 (gdb) disassemble main
@@ -360,7 +360,7 @@ Examine .got.
 ```
 
 
-### After First Call
+### 2.3.2. After First Call
 Continue program, it will stop when libc.so loaded.
 ```sh
 (gdb) continue
@@ -410,8 +410,8 @@ Illustrate the call flow.
 └────────────────────┴─────────────────────┘      └────────────────┴────────────────┘      └────────────────┴────────────────┘
 ```
 
-# Decode Symbol Table
-## Struct Elf64_Sym
+# 3. Decode Symbol Table
+## 3.1. Struct Elf64_Sym
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -473,7 +473,7 @@ def hex_to_elf64_sym(hex_str: str):
 hex_to_elf64_sym(sys.argv[1])
 ```
 
-## Decode .symtab
+## 3.2. Decode .symtab
 
 We will extract and decode .symtab of the below program.
 
@@ -585,8 +585,8 @@ Explain the outputs.
 ::::::::::::::
 
 
-# GDB
-## Add Symbols
+# 4. GDB
+## 4.1. Add Symbols
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
@@ -632,7 +632,7 @@ Other options.
 :::
 ::::::::::::::
 
-## Add Symbols to mmap Regions
+## 4.2. Add Symbols to mmap Regions
 In the below example, we will add symbols for memory regions that is loaded by mmap.
 
 :::::::::::::: {.columns}

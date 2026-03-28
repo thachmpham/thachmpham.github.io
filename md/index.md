@@ -38,6 +38,7 @@ GDB
 - [tracepoint](/html/ref/gdb/trace.html)
 - [process memory](/html/ref/gdb/memory.html)
 - [remote debug](/html/ref/gdb/remote_debug.html)
+- [symbol table](/html/ref/gdb/symbol.html)
 
 <br>
 
