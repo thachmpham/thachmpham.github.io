@@ -3,7 +3,7 @@ title: "GDB: Pretty Printers"
 ---
 
 
-## Stdc++ Printer
+# 1. STDC++ Printer
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 The pretty printer for C++ STL containers is usually installed into system together with g++ and can be found at the below path.
@@ -43,9 +43,7 @@ python
 end
 ```
 
-<br>
-
-## Manage Printers
+# 2. Manage Printers
 Enable, disable and show pretty printers info.
 ```sh
   enable pretty-printer [object-regexp [name-regexp]]
@@ -53,9 +51,7 @@ Enable, disable and show pretty printers info.
   info pretty-printer [object-regexp [name-regexp]]
 ```
 
-<br>
-
-## Writing a Printer
+# 3. Writing a Printer
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
@@ -84,7 +80,7 @@ Sample: Implement printer for struct in_addr.
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-Step 1. Printer.
+1: Printer.
 
 ```python
 import gdb
@@ -100,10 +96,7 @@ class InAddrPrinter:
     return s
 ```
 
-:::
-::: {.column width=50%}
-
-Step 2. Lookup function.
+2: Lookup function.
 
 ```python
 import gdb
@@ -115,10 +108,7 @@ def in_addr_lookup(val):
   return None
 ```
 
-:::
-::::::::::::::
-
-Step 3. Register lookup function (*file: in_addr_printer.py*).
+3: Register lookup function (*file: in_addr_printer.py*).
 ```python
 from gdb.printing import register_pretty_printer
 
@@ -126,10 +116,10 @@ register_pretty_printer(
   obj=None, printer=in_addr_lookup, replace=True)
 ```
 
-:::::::::::::: {.columns}
+:::
 ::: {.column width=50%}
 
-Step 4. Test.
+4: Test.
 
 ```c
 #include <arpa/inet.h>
@@ -144,12 +134,7 @@ int main()
 }
 ```
 
-:::
-::: {.column width=50%}
-
 ```sh
-
-
 (gdb) source in_addr_printer.py
 
 (gdb) info pretty-printer 
@@ -164,29 +149,12 @@ $1 = 192.168.1.1.
 :::
 ::::::::::::::
 
-<br>
 
-## Explore APIs
-The related APIs to implement pretty printers.
-```python
-(gdb) pi
->>> import gdb
->>> from gdb.printing import register_pretty_printer
->>> help(register_pretty_printer)
-'''
-Register pretty-printer PRINTER with OBJ.
-Arguments:
-    obj: Either an objfile, progspace, or None (in which case the printer
-        is registered globally).
-    printer: Either a function of one argument (old way) or any object
-        which has attributes: name, enabled, __call__.
-    replace: If True replace any existing copy of the printer.
-        Otherwise if the printer already exists raise an exception.
-'''
-```
 
-<br>
 
-## References
+
+
+
+# References 
 - [github/binutils-gdb/python/lib](https://github.com/bminor/binutils-gdb/tree/master/gdb/python/lib/gdb)
 - [github.com/gcc/libstdc++-v3/python](https://github.com/gcc-mirror/gcc/tree/master/libstdc%2B%2B-v3/python/libstdcxx)
