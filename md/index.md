@@ -113,6 +113,9 @@ OpenSAF
 
 <br>
 
+### Case Studies
+- [rsyslog](/html/std/rsyslog.html)
+
 ### Consequetive Interpreting
 - [Note-Taking for Consecutive Interpreting, Andrew Gillies](/html/interpreting/note-taking-andrew-gillies.html)
 
