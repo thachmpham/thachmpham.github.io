@@ -110,6 +110,12 @@ class="toc-section-number">2.1</span> Memory to C Struct</a>
 <li><a href="#struct-lstn_t" id="toc-struct-lstn_t"><span
 class="toc-section-number">2.1.1</span> struct lstn_t</a></li>
 </ul></li>
+<li><a href="#ipc" id="toc-ipc"><span
+class="toc-section-number">2.2</span> IPC</a>
+<ul>
+<li><a href="#logger-to-rsyslogd" id="toc-logger-to-rsyslogd"><span
+class="toc-section-number">2.2.1</span> logger to rsyslogd</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -307,6 +313,139 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a h
 <span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a><span class="co"># pRuleset             0x0</span></span></code></pre></div>
 </div>
 </div>
+<h2 data-number="2.2" id="ipc"><span
+class="header-section-number">2.2</span> IPC</h2>
+<h3 data-number="2.2.1" id="logger-to-rsyslogd"><span
+class="header-section-number">2.2.1</span> logger to rsyslogd</h3>
+<p>Start rsyslogd without debug log.</p>
+<ul>
+<li>File /etc/rsyslog.conf</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="va">$DebugLevel</span> 0</span></code></pre></div>
+<ul>
+<li>Start rsyslogd.</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> rsyslog/tools/rsyslogd</span></code></pre></div>
+<ul>
+<li>strace logger.</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> strace <span class="at">-e</span> trace=network <span class="at">--write</span><span class="op">=</span>all <span class="at">--read</span><span class="op">=</span>all <span class="at">-yy</span> <span class="at">-f</span> logger hello</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">socket</span><span class="er">(</span><span class="ex">AF_UNIX,</span> SOCK_DGRAM, 0<span class="kw">)</span>          <span class="ex">=</span> <span class="dv">3</span><span class="op">&lt;</span>UNIX:<span class="pp">[</span><span class="ss">30664</span><span class="pp">]</span><span class="op">&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ex">connect</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>UNIX:<span class="pp">[</span><span class="ss">30664</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="ex">{sa_family=AF_UNIX,</span> sun_path=<span class="st">&quot;/dev/log&quot;</span>}, 110<span class="kw">)</span> <span class="ex">=</span> 0</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">sendmsg</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>UNIX:[30664-<span class="op">&gt;</span>30189]<span class="op">&gt;</span>, <span class="ex">{msg_name=NULL,</span> msg_namelen=0, msg_iov=[{iov_base=<span class="st">&quot;&lt;13&gt;Mar 31 13:59:51 root: &quot;</span>, iov_len=26}, {iov_base=<span class="st">&quot;hello&quot;</span>, iov_len=5}], msg_iovlen=2, msg_controllen=0, msg_flags=0}, MSG_NOSIGNAL<span class="kw">)</span> <span class="ex">=</span> 31</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">*</span> 26 bytes in buffer 0</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a> <span class="kw">|</span> <span class="ex">00000</span>  3c 31 33 3e 4d 61 72 20  33 31 20 31 33 3a 35 39  <span class="op">&lt;</span>13<span class="op">&gt;</span>Mar 31 13:59 <span class="kw">|</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a> <span class="kw">|</span> <span class="ex">00010</span>  3a 35 31 20 72 6f 6f 74  3a 20                    :51 root:        <span class="kw">|</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a> <span class="ex">*</span> 5 bytes in buffer 1</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a> <span class="kw">|</span> <span class="ex">00000</span>  68 65 6c 6c 6f                                    hello            <span class="kw">|</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="ex">+++</span> exited with 0 +++</span></code></pre></div>
+<ul>
+<li>strace rsyslogd.</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> strace <span class="at">-yy</span> <span class="at">-f</span> <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> rsyslogd<span class="kw">`</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  6925] recvmsg<span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>UNIX:<span class="pp">[</span><span class="ss">48529,</span><span class="st">&quot;/dev/log&quot;</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="ex">{msg_name=NULL,</span> msg_namelen=0, msg_iov=[{iov_base=<span class="st">&quot;&lt;13&gt;Mar 31 14:43:57 root: hello&quot;</span>, iov_len=8096}], msg_iovlen=1, msg_control=[{cmsg_len=32, cmsg_level=SOL_SOCKET, cmsg_type=SO_TIMESTAMP_OLD, cmsg_data={tv_sec=1774968237, tv_usec=352869}}, {cmsg_len=28, cmsg_level=SOL_SOCKET, cmsg_type=SCM_CREDENTIALS, cmsg_data={pid=7229, uid=0, gid=0}}], msg_controllen=64, msg_flags=0}, MSG_DONTWAIT<span class="kw">)</span> <span class="ex">=</span> 31</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  6936] write<span class="er">(</span><span class="dv">2</span><span class="op">&lt;</span>/var/log/syslog<span class="op">&gt;</span>, <span class="st">&quot;Mar 31 14:43:57 pc root: hello\n&quot;</span><span class="ex">,</span> 31<span class="kw">)</span> <span class="ex">=</span> 31</span></code></pre></div>
+<ul>
+<li>Debug rsyslogd with gdb.</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> rsyslogd<span class="kw">`</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">catch</span> syscall recvmsg</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Catchpoint</span> 1 <span class="er">(</span><span class="ex">syscall</span> <span class="st">&#39;recvmsg&#39;</span> <span class="pp">[</span><span class="ss">47</span><span class="pp">]</span><span class="kw">)</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">catch</span> syscall write</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Catchpoint</span> 2 <span class="er">(</span><span class="ex">syscall</span> <span class="st">&#39;write&#39;</span> <span class="pp">[</span><span class="ss">1</span><span class="pp">]</span><span class="kw">)</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">c</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span></code></pre></div>
+<ul>
+<li>rsyslogd handles incomming messages.</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">[Switching</span> to Thread 0x7fa065194640 <span class="er">(</span><span class="ex">LWP</span> 6925<span class="kw">)</span><span class="ex">]</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 2 <span class="st">&quot;in:imuxsock&quot;</span> hit Catchpoint 1 <span class="er">(</span><span class="ex">call</span> to syscall recvmsg<span class="kw">)</span><span class="ex">,</span> __recvmsg_syscall <span class="er">(</span><span class="va">flags</span><span class="op">=</span>64, <span class="va">msg</span><span class="op">=</span>0x7fa0651907e0, <span class="va">fd</span><span class="op">=</span>3<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/recvmsg.c:27</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> threads</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Id</span>   Target Id                                        Frame </span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">1</span>    Thread 0x7fa0652c4780 <span class="er">(</span><span class="ex">LWP</span> 6924<span class="kw">)</span> <span class="st">&quot;rsyslogd&quot;</span>      pselect64_syscall <span class="er">(</span><span class="va">sigmask</span><span class="op">=</span>0x7ffe614c8e50, <span class="va">timeout</span><span class="op">=&lt;</span>optimized <span class="ex">out</span><span class="op">&gt;</span>, exceptfds=0x0, writefds=0x0, readfds=0x0, nfds=0<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/pselect.c:34</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 2    Thread 0x7fa065194640 <span class="er">(</span><span class="ex">LWP</span> 6925<span class="kw">)</span> <span class="st">&quot;in:imuxsock&quot;</span>   __recvmsg_syscall <span class="er">(</span><span class="va">flags</span><span class="op">=</span>64, <span class="va">msg</span><span class="op">=</span>0x7fa0651907e0, <span class="va">fd</span><span class="op">=</span>3<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/recvmsg.c:27</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">3</span>    Thread 0x7fa064d93640 <span class="er">(</span><span class="ex">LWP</span> 6926<span class="kw">)</span> <span class="st">&quot;in:imklog&quot;</span>     __GI___libc_read <span class="er">(</span><span class="va">nbytes</span><span class="op">=</span>8096, <span class="va">buf</span><span class="op">=</span>0x7fa064d72ce0, <span class="va">fd</span><span class="op">=</span>5<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/read.c:26</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">4</span>    Thread 0x7fa064992640 <span class="er">(</span><span class="ex">LWP</span> 6936<span class="kw">)</span> <span class="st">&quot;rs:main Q:Reg&quot;</span> __futex_abstimed_wait_common64 <span class="er">(</span><span class="va">private</span><span class="op">=</span>0, <span class="va">cancel</span><span class="op">=</span>true, <span class="va">abstime</span><span class="op">=</span>0x0, <span class="va">op</span><span class="op">=</span>393, <span class="va">expected</span><span class="op">=</span>0, <span class="va">futex_word</span><span class="op">=</span>0x5619e6c60a0c<span class="kw">)</span> <span class="ex">at</span> ./nptl/futex-internal.c:57</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">bt</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#0  __recvmsg_syscall (flags=64, msg=0x7fa0651907e0, fd=3) at ../sysdeps/unix/sysv/linux/recvmsg.c:27</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#1  __libc_recvmsg (fd=3, msg=msg@entry=0x7fa0651907e0, flags=flags@entry=64) at ../sysdeps/unix/sysv/linux/recvmsg.c:41</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#2  0x00007fa0652bcce1 in readSocket (pLstn=0x5619e6c39480) at imuxsock.c:1105</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#3  0x00007fa0652be013 in runInput (pThrd=&lt;optimized out&gt;) at imuxsock.c:1548</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co">#4  0x00005619c2df059a in thrdStarter (arg=0x5619e6c5a890) at ../threads.c:243</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">#5  0x00007fa06535dac3 in start_thread (arg=&lt;optimized out&gt;) at ./nptl/pthread_create.c:442</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co">#6  0x00007fa0653ef8d0 in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:81</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">c</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span></code></pre></div>
+<ul>
+<li>rsyslogd write messages to log file.</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">[Switching</span> to Thread 0x7fa064992640 <span class="er">(</span><span class="ex">LWP</span> 6936<span class="kw">)</span><span class="ex">]</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 4 <span class="st">&quot;rs:main Q:Reg&quot;</span> hit Catchpoint 2 <span class="er">(</span><span class="ex">call</span> to syscall write<span class="kw">)</span><span class="ex">,</span> __GI___libc_write <span class="er">(</span><span class="va">nbytes</span><span class="op">=</span>31, <span class="va">buf</span><span class="op">=</span>0x7fa05c001200, <span class="va">fd</span><span class="op">=</span>2<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/write.c:26</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> threads</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Id</span>   Target Id                                        Frame </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">1</span>    Thread 0x7fa0652c4780 <span class="er">(</span><span class="ex">LWP</span> 6924<span class="kw">)</span> <span class="st">&quot;rsyslogd&quot;</span>      pselect64_syscall <span class="er">(</span><span class="va">sigmask</span><span class="op">=</span>0x7ffe614c8e50, <span class="va">timeout</span><span class="op">=&lt;</span>optimized <span class="ex">out</span><span class="op">&gt;</span>, exceptfds=0x0, writefds=0x0, readfds=0x0, nfds=0<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/pselect.c:34</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="ex">2</span>    Thread 0x7fa065194640 <span class="er">(</span><span class="ex">LWP</span> 6925<span class="kw">)</span> <span class="st">&quot;in:imuxsock&quot;</span>   0x00007fa0653e1c4f in __GI___poll <span class="er">(</span><span class="va">fds</span><span class="op">=</span>fds@entry=0x7fa060000b90, <span class="va">nfds</span><span class="op">=</span>1, <span class="va">timeout</span><span class="op">=</span>timeout@entry=-1<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/poll.c:29</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">3</span>    Thread 0x7fa064d93640 <span class="er">(</span><span class="ex">LWP</span> 6926<span class="kw">)</span> <span class="st">&quot;in:imklog&quot;</span>     __GI___libc_read <span class="er">(</span><span class="va">nbytes</span><span class="op">=</span>8096, <span class="va">buf</span><span class="op">=</span>0x7fa064d72ce0, <span class="va">fd</span><span class="op">=</span>5<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/read.c:26</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 4    Thread 0x7fa064992640 <span class="er">(</span><span class="ex">LWP</span> 6936<span class="kw">)</span> <span class="st">&quot;rs:main Q:Reg&quot;</span> __GI___libc_write <span class="er">(</span><span class="va">nbytes</span><span class="op">=</span>31, <span class="va">buf</span><span class="op">=</span>0x7fa05c001200, <span class="va">fd</span><span class="op">=</span>2<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/write.c:26</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">bt</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co">#0  __GI___libc_write (nbytes=31, buf=0x7fa05c001200, fd=2) at ../sysdeps/unix/sysv/linux/write.c:26</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">#1  __GI___libc_write (fd=2, buf=buf@entry=0x7fa05c001200, nbytes=nbytes@entry=31) at ../sysdeps/unix/sysv/linux/write.c:24</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">#2  0x00005619c2dd1de1 in doWriteCall (pLenBuf=&lt;synthetic pointer&gt;, pBuf=&lt;optimized out&gt;, pThis=0x7fa05c000f10) at stream.c:1464</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co">#3  strmPhysWrite (pThis=pThis@entry=0x7fa05c000f10, pBuf=&lt;optimized out&gt;, lenBuf=&lt;optimized out&gt;) at stream.c:1770</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co">#4  0x00005619c2dd2491 in doWriteInternal (pThis=pThis@entry=0x7fa05c000f10, pBuf=&lt;optimized out&gt;, lenBuf=&lt;optimized out&gt;, bFlush=0, bFlush@entry=1) at stream.c:1531</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co">#5  0x00005619c2dd28e4 in strmSchedWrite (bFlushZip=1, lenBuf=&lt;optimized out&gt;, pBuf=&lt;optimized out&gt;, pThis=0x7fa05c000f10) at stream.c:1604</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="co">#6  0x00005619c2dd2f9a in strmFlush (pThis=0x7fa05c000f10) at stream.c:1933</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="co">#7  0x00005619c2d95658 in commitTransaction (pWrkrData=&lt;optimized out&gt;, pParams=0x7fa05c000b90, nParams=1) at omfile.c:1078</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="co">#8  0x00005619c2ded0e2 in actionCallCommitTransaction (nparams=&lt;optimized out&gt;, iparams=&lt;optimized out&gt;, pWti=&lt;optimized out&gt;, pThis=&lt;optimized out&gt;) at ../action.c:1283</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="co">#9  doTransaction (nparams=1, iparams=0x7fa05c000b90, pWti=0x5619e6c60970, pThis=0x5619e6c52f10) at ../action.c:1327</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="co">#10 actionTryCommit (nparams=1, iparams=0x7fa05c000b90, pWti=0x5619e6c60970, pThis=0x5619e6c52f10) at ../action.c:1369</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="co">#11 actionTryCommit (pThis=0x5619e6c52f10, pWti=0x5619e6c60970, iparams=0x7fa05c000b90, nparams=1) at ../action.c:1361</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="co">#12 0x00005619c2ded69f in actionCommit (pThis=pThis@entry=0x5619e6c52f10, pWti=pWti@entry=0x5619e6c60970) at ../action.c:1543</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="co">#13 0x00005619c2deefcc in actionCommitAllDirect (pWti=pWti@entry=0x5619e6c60970) at ../action.c:1632</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a><span class="co">#14 0x00005619c2de6053 in processBatch (pBatch=0x5619e6c609a8, pWti=0x5619e6c60970) at ruleset.c:675</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="co">#15 0x00005619c2d8afa4 in msgConsumer (notNeeded=&lt;optimized out&gt;, pBatch=0x5619e6c609a8, pWti=0x5619e6c60970) at rsyslogd.c:694</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="co">#16 0x00005619c2ddfa5f in ConsumerReg (pThis=0x5619e6c58980, pWti=0x5619e6c60970) at queue.c:2164</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="co">#17 0x00005619c2dda859 in wtiWorker (pThis=pThis@entry=0x5619e6c60970) at wti.c:428</span></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a><span class="co">#18 0x00005619c2dd7b85 in wtpWorker (arg=0x5619e6c60970) at wtp.c:435</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="co">#19 0x00007fa06535dac3 in start_thread (arg=&lt;optimized out&gt;) at ./nptl/pthread_create.c:442</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="co">#20 0x00007fa0653ef8d0 in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:81</span></span></code></pre></div>
+<ul>
+<li>Illustrate.
+<pre class="mermaid">
+sequenceDiagram
+  participant logger
+  participant pipe@{"type": "queue"} as /dev/log
+
+  box DarkBlue rsyslogd
+  participant uxsock as in:imuxsock
+  participant rsmain as rs:main
+  end
+
+  participant logfile as /var/log/syslog
+
+  logger ->> pipe: hello
+  pipe ->> uxsock: hello
+  uxsock ->> rsmain: hello
+  rsmain ->> logfile: hello
+</pre></li>
+</ul>
 <footer class="footer text-muted">
    <div align="center">      
       <br>

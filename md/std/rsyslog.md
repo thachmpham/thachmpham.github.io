@@ -213,3 +213,135 @@ for k, v in record._asdict().items():
 
 :::
 ::::::::::::::
+
+
+## IPC
+### logger to rsyslogd
+Start rsyslogd without debug log.
+
+- File /etc/rsyslog.conf
+```sh
+$DebugLevel 0
+```
+
+- Start rsyslogd.
+```sh
+$ rsyslog/tools/rsyslogd
+```
+
+- strace logger.
+```sh
+$ strace -e trace=network --write=all --read=all -yy -f logger hello
+
+socket(AF_UNIX, SOCK_DGRAM, 0)          = 3<UNIX:[30664]>
+connect(3<UNIX:[30664]>, {sa_family=AF_UNIX, sun_path="/dev/log"}, 110) = 0
+sendmsg(3<UNIX:[30664->30189]>, {msg_name=NULL, msg_namelen=0, msg_iov=[{iov_base="<13>Mar 31 13:59:51 root: ", iov_len=26}, {iov_base="hello", iov_len=5}], msg_iovlen=2, msg_controllen=0, msg_flags=0}, MSG_NOSIGNAL) = 31
+ * 26 bytes in buffer 0
+ | 00000  3c 31 33 3e 4d 61 72 20  33 31 20 31 33 3a 35 39  <13>Mar 31 13:59 |
+ | 00010  3a 35 31 20 72 6f 6f 74  3a 20                    :51 root:        |
+ * 5 bytes in buffer 1
+ | 00000  68 65 6c 6c 6f                                    hello            |
++++ exited with 0 +++
+```
+
+- strace rsyslogd.
+```sh
+$ strace -yy -f -p `pidof rsyslogd`
+
+[pid  6925] recvmsg(3<UNIX:[48529,"/dev/log"]>, {msg_name=NULL, msg_namelen=0, msg_iov=[{iov_base="<13>Mar 31 14:43:57 root: hello", iov_len=8096}], msg_iovlen=1, msg_control=[{cmsg_len=32, cmsg_level=SOL_SOCKET, cmsg_type=SO_TIMESTAMP_OLD, cmsg_data={tv_sec=1774968237, tv_usec=352869}}, {cmsg_len=28, cmsg_level=SOL_SOCKET, cmsg_type=SCM_CREDENTIALS, cmsg_data={pid=7229, uid=0, gid=0}}], msg_controllen=64, msg_flags=0}, MSG_DONTWAIT) = 31
+[pid  6936] write(2</var/log/syslog>, "Mar 31 14:43:57 pc root: hello\n", 31) = 31
+```
+
+- Debug rsyslogd with gdb.
+```sh
+$ gdb -p `pidof rsyslogd`
+
+(gdb) catch syscall recvmsg
+Catchpoint 1 (syscall 'recvmsg' [47])
+
+(gdb) catch syscall write
+Catchpoint 2 (syscall 'write' [1])
+
+(gdb) c
+Continuing.
+```
+
+- rsyslogd handles incomming messages.
+```sh
+[Switching to Thread 0x7fa065194640 (LWP 6925)]
+Thread 2 "in:imuxsock" hit Catchpoint 1 (call to syscall recvmsg), __recvmsg_syscall (flags=64, msg=0x7fa0651907e0, fd=3) at ../sysdeps/unix/sysv/linux/recvmsg.c:27
+
+(gdb) info threads
+  Id   Target Id                                        Frame 
+  1    Thread 0x7fa0652c4780 (LWP 6924) "rsyslogd"      pselect64_syscall (sigmask=0x7ffe614c8e50, timeout=<optimized out>, exceptfds=0x0, writefds=0x0, readfds=0x0, nfds=0) at ../sysdeps/unix/sysv/linux/pselect.c:34
+* 2    Thread 0x7fa065194640 (LWP 6925) "in:imuxsock"   __recvmsg_syscall (flags=64, msg=0x7fa0651907e0, fd=3) at ../sysdeps/unix/sysv/linux/recvmsg.c:27
+  3    Thread 0x7fa064d93640 (LWP 6926) "in:imklog"     __GI___libc_read (nbytes=8096, buf=0x7fa064d72ce0, fd=5) at ../sysdeps/unix/sysv/linux/read.c:26
+  4    Thread 0x7fa064992640 (LWP 6936) "rs:main Q:Reg" __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0x5619e6c60a0c) at ./nptl/futex-internal.c:57
+
+(gdb) bt
+#0  __recvmsg_syscall (flags=64, msg=0x7fa0651907e0, fd=3) at ../sysdeps/unix/sysv/linux/recvmsg.c:27
+#1  __libc_recvmsg (fd=3, msg=msg@entry=0x7fa0651907e0, flags=flags@entry=64) at ../sysdeps/unix/sysv/linux/recvmsg.c:41
+#2  0x00007fa0652bcce1 in readSocket (pLstn=0x5619e6c39480) at imuxsock.c:1105
+#3  0x00007fa0652be013 in runInput (pThrd=<optimized out>) at imuxsock.c:1548
+#4  0x00005619c2df059a in thrdStarter (arg=0x5619e6c5a890) at ../threads.c:243
+#5  0x00007fa06535dac3 in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:442
+#6  0x00007fa0653ef8d0 in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:81
+
+(gdb) c
+Continuing.
+```
+
+- rsyslogd write messages to log file.
+```sh
+[Switching to Thread 0x7fa064992640 (LWP 6936)]
+Thread 4 "rs:main Q:Reg" hit Catchpoint 2 (call to syscall write), __GI___libc_write (nbytes=31, buf=0x7fa05c001200, fd=2) at ../sysdeps/unix/sysv/linux/write.c:26
+
+(gdb) info threads
+  Id   Target Id                                        Frame 
+  1    Thread 0x7fa0652c4780 (LWP 6924) "rsyslogd"      pselect64_syscall (sigmask=0x7ffe614c8e50, timeout=<optimized out>, exceptfds=0x0, writefds=0x0, readfds=0x0, nfds=0) at ../sysdeps/unix/sysv/linux/pselect.c:34
+  2    Thread 0x7fa065194640 (LWP 6925) "in:imuxsock"   0x00007fa0653e1c4f in __GI___poll (fds=fds@entry=0x7fa060000b90, nfds=1, timeout=timeout@entry=-1) at ../sysdeps/unix/sysv/linux/poll.c:29
+  3    Thread 0x7fa064d93640 (LWP 6926) "in:imklog"     __GI___libc_read (nbytes=8096, buf=0x7fa064d72ce0, fd=5) at ../sysdeps/unix/sysv/linux/read.c:26
+* 4    Thread 0x7fa064992640 (LWP 6936) "rs:main Q:Reg" __GI___libc_write (nbytes=31, buf=0x7fa05c001200, fd=2) at ../sysdeps/unix/sysv/linux/write.c:26
+
+(gdb) bt
+#0  __GI___libc_write (nbytes=31, buf=0x7fa05c001200, fd=2) at ../sysdeps/unix/sysv/linux/write.c:26
+#1  __GI___libc_write (fd=2, buf=buf@entry=0x7fa05c001200, nbytes=nbytes@entry=31) at ../sysdeps/unix/sysv/linux/write.c:24
+#2  0x00005619c2dd1de1 in doWriteCall (pLenBuf=<synthetic pointer>, pBuf=<optimized out>, pThis=0x7fa05c000f10) at stream.c:1464
+#3  strmPhysWrite (pThis=pThis@entry=0x7fa05c000f10, pBuf=<optimized out>, lenBuf=<optimized out>) at stream.c:1770
+#4  0x00005619c2dd2491 in doWriteInternal (pThis=pThis@entry=0x7fa05c000f10, pBuf=<optimized out>, lenBuf=<optimized out>, bFlush=0, bFlush@entry=1) at stream.c:1531
+#5  0x00005619c2dd28e4 in strmSchedWrite (bFlushZip=1, lenBuf=<optimized out>, pBuf=<optimized out>, pThis=0x7fa05c000f10) at stream.c:1604
+#6  0x00005619c2dd2f9a in strmFlush (pThis=0x7fa05c000f10) at stream.c:1933
+#7  0x00005619c2d95658 in commitTransaction (pWrkrData=<optimized out>, pParams=0x7fa05c000b90, nParams=1) at omfile.c:1078
+#8  0x00005619c2ded0e2 in actionCallCommitTransaction (nparams=<optimized out>, iparams=<optimized out>, pWti=<optimized out>, pThis=<optimized out>) at ../action.c:1283
+#9  doTransaction (nparams=1, iparams=0x7fa05c000b90, pWti=0x5619e6c60970, pThis=0x5619e6c52f10) at ../action.c:1327
+#10 actionTryCommit (nparams=1, iparams=0x7fa05c000b90, pWti=0x5619e6c60970, pThis=0x5619e6c52f10) at ../action.c:1369
+#11 actionTryCommit (pThis=0x5619e6c52f10, pWti=0x5619e6c60970, iparams=0x7fa05c000b90, nparams=1) at ../action.c:1361
+#12 0x00005619c2ded69f in actionCommit (pThis=pThis@entry=0x5619e6c52f10, pWti=pWti@entry=0x5619e6c60970) at ../action.c:1543
+#13 0x00005619c2deefcc in actionCommitAllDirect (pWti=pWti@entry=0x5619e6c60970) at ../action.c:1632
+#14 0x00005619c2de6053 in processBatch (pBatch=0x5619e6c609a8, pWti=0x5619e6c60970) at ruleset.c:675
+#15 0x00005619c2d8afa4 in msgConsumer (notNeeded=<optimized out>, pBatch=0x5619e6c609a8, pWti=0x5619e6c60970) at rsyslogd.c:694
+#16 0x00005619c2ddfa5f in ConsumerReg (pThis=0x5619e6c58980, pWti=0x5619e6c60970) at queue.c:2164
+#17 0x00005619c2dda859 in wtiWorker (pThis=pThis@entry=0x5619e6c60970) at wti.c:428
+#18 0x00005619c2dd7b85 in wtpWorker (arg=0x5619e6c60970) at wtp.c:435
+#19 0x00007fa06535dac3 in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:442
+#20 0x00007fa0653ef8d0 in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:81
+```
+
+- Illustrate.
+<pre class="mermaid">
+sequenceDiagram
+    participant logger
+    participant pipe@{"type": "queue"} as /dev/log
+    
+    box DarkBlue rsyslogd
+    participant uxsock as in:imuxsock
+    participant rsmain as rs:main
+    end
+
+    participant logfile as /var/log/syslog
+
+    logger ->> pipe: hello
+    pipe ->> uxsock: hello
+    uxsock ->> rsmain: hello
+    rsmain ->> logfile: hello
+</pre>
