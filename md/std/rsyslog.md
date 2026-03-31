@@ -6,8 +6,7 @@ title: "rsyslog"
 - Install dependencies.
 ```sh
 $ apt install -y build-essential pkg-config libestr-dev libfastjson-dev zlib1g-dev \
-uuid-dev libgcrypt20-dev liblogging-stdlog-dev libhiredis-dev \
-uuid-dev liblogging-stdlog-dev flex bison libcurl4-openssl-dev
+libgcrypt20-dev liblogging-stdlog-dev libhiredis-dev uuid-dev flex bison libcurl4-openssl-dev
 ```
 
 - Download source code.
