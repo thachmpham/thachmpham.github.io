@@ -3,6 +3,10 @@ title: "rsyslog"
 ---
 
 # Build & Run
+
+:::::::::::::: {.columns}
+::: {.column}
+
 - Install dependencies.
 ```sh
 $ apt install -y build-essential pkg-config libestr-dev libfastjson-dev zlib1g-dev \
@@ -22,6 +26,9 @@ $ ./configure --enable-debug
 $ make
 ```
 
+:::
+::: {.column}
+
 - Run without install.
 ```sh
 $ rsyslog/tools/rsyslogd
@@ -33,6 +40,49 @@ $ make install
 $ /usr/local/sbin/rsyslogd
 ```
 
+:::
+::::::::::::::
+
+# Features
+## TCP Syslog Reception
+:::::::::::::: {.columns}
+::: {.column}
+
+1. Edit /etc/rsyslog.conf
+```sh
+# provides TCP syslog reception
+module(load="imtcp")
+input(type="imtcp" port="514")
+```
+
+2. Start rsyslogd.
+```sh
+$ rsyslog/tools/rsyslogd
+```
+
+:::
+::: {.column}
+
+3. Check lsof.
+```sh
+$ lsof -P -p `pidof rsyslogd`
+
+rsyslogd 1988 syslog    5u     IPv4              30991      0t0        TCP *:514 (LISTEN)
+rsyslogd 1988 syslog    7u     IPv6              30992      0t0        TCP *:514 (LISTEN)
+```
+
+4. Simulate client.
+```sh
+$ logger --tcp --server 127.0.0.1 --port 514 hello
+```
+
+5. Capture pcap, output: [rsyslog_tcp.pcap](https://github.com/thachmpham/samples/blob/main/pcap/rsyslog/rsyslog_tcp.pcap).
+```sh
+$ tcpdump -i lo "port 514" -w rsyslog_tcp.pcap
+```
+
+:::
+::::::::::::::
 
 # Reverse Engineering
 ## Memory to C Struct

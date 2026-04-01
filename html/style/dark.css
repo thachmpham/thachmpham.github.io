@@ -83,10 +83,16 @@ h6 {
     font-weight: normal;
 }
 
-ol, ul {
+ul {
     padding-left: 1.7em;
     margin-top: 1em;
     list-style-type: disc;
+}
+
+ol {
+    padding-left: 1.7em;
+    margin-top: 1em;
+    list-style-type: decimal;
 }
 
 li > ol, li > ul {

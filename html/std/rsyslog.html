@@ -101,26 +101,34 @@
 <ul>
 <li><a href="#build-run" id="toc-build-run"><span
 class="toc-section-number">1</span> Build &amp; Run</a></li>
+<li><a href="#features" id="toc-features"><span
+class="toc-section-number">2</span> Features</a>
+<ul>
+<li><a href="#tcp-syslog-reception" id="toc-tcp-syslog-reception"><span
+class="toc-section-number">2.1</span> TCP Syslog Reception</a></li>
+</ul></li>
 <li><a href="#reverse-engineering" id="toc-reverse-engineering"><span
-class="toc-section-number">2</span> Reverse Engineering</a>
+class="toc-section-number">3</span> Reverse Engineering</a>
 <ul>
 <li><a href="#memory-to-c-struct" id="toc-memory-to-c-struct"><span
-class="toc-section-number">2.1</span> Memory to C Struct</a>
+class="toc-section-number">3.1</span> Memory to C Struct</a>
 <ul>
 <li><a href="#struct-lstn_t" id="toc-struct-lstn_t"><span
-class="toc-section-number">2.1.1</span> struct lstn_t</a></li>
+class="toc-section-number">3.1.1</span> struct lstn_t</a></li>
 </ul></li>
 <li><a href="#ipc" id="toc-ipc"><span
-class="toc-section-number">2.2</span> IPC</a>
+class="toc-section-number">3.2</span> IPC</a>
 <ul>
 <li><a href="#logger-to-rsyslogd" id="toc-logger-to-rsyslogd"><span
-class="toc-section-number">2.2.1</span> logger to rsyslogd</a></li>
+class="toc-section-number">3.2.1</span> logger to rsyslogd</a></li>
 </ul></li>
 </ul></li>
 </ul>
 </nav>
 <h1 data-number="1" id="build-run"><span
 class="header-section-number">1</span> Build &amp; Run</h1>
+<div class="columns">
+<div class="column">
 <ul>
 <li>Install dependencies.</li>
 </ul>
@@ -137,6 +145,7 @@ class="header-section-number">1</span> Build &amp; Run</h1>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd rsyslog</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./configure <span class="at">--enable-debug</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make</span></code></pre></div>
+</div><div class="column">
 <ul>
 <li>Run without install.</li>
 </ul>
@@ -146,285 +155,326 @@ class="header-section-number">1</span> Build &amp; Run</h1>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make install</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> /usr/local/sbin/rsyslogd</span></code></pre></div>
-<h1 data-number="2" id="reverse-engineering"><span
-class="header-section-number">2</span> Reverse Engineering</h1>
-<h2 data-number="2.1" id="memory-to-c-struct"><span
-class="header-section-number">2.1</span> Memory to C Struct</h2>
-<h3 data-number="2.1.1" id="struct-lstn_t"><span
-class="header-section-number">2.1.1</span> struct lstn_t</h3>
+</div>
+</div>
+<h1 data-number="2" id="features"><span
+class="header-section-number">2</span> Features</h1>
+<h2 data-number="2.1" id="tcp-syslog-reception"><span
+class="header-section-number">2.1</span> TCP Syslog Reception</h2>
+<div class="columns">
+<div class="column">
+<ol type="1">
+<li>Edit /etc/rsyslog.conf</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># provides TCP syslog reception</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span><span class="er">(</span><span class="va">load</span><span class="op">=</span><span class="st">&quot;imtcp&quot;</span><span class="kw">)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">input</span><span class="er">(</span><span class="va">type</span><span class="op">=</span><span class="st">&quot;imtcp&quot;</span> <span class="va">port</span><span class="op">=</span><span class="st">&quot;514&quot;</span><span class="kw">)</span></span></code></pre></div>
+<ol start="2" type="1">
+<li>Start rsyslogd.</li>
+</ol>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> rsyslog/tools/rsyslogd</span></code></pre></div>
+</div><div class="column">
+<ol start="3" type="1">
+<li>Check lsof.</li>
+</ol>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> lsof <span class="at">-P</span> <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> rsyslogd<span class="kw">`</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">rsyslogd</span> 1988 syslog    5u     IPv4              30991      0t0        TCP <span class="pp">*</span>:514 <span class="er">(</span><span class="ex">LISTEN</span><span class="kw">)</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">rsyslogd</span> 1988 syslog    7u     IPv6              30992      0t0        TCP <span class="pp">*</span>:514 <span class="er">(</span><span class="ex">LISTEN</span><span class="kw">)</span></span></code></pre></div>
+<ol start="4" type="1">
+<li>Simulate client.</li>
+</ol>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> logger <span class="at">--tcp</span> <span class="at">--server</span> 127.0.0.1 <span class="at">--port</span> 514 hello</span></code></pre></div>
+<ol start="5" type="1">
+<li>Capture pcap, output: <a
+href="https://github.com/thachmpham/samples/blob/main/pcap/rsyslog/rsyslog_tcp.pcap">rsyslog_tcp.pcap</a>.</li>
+</ol>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tcpdump <span class="at">-i</span> lo <span class="st">&quot;port 514&quot;</span> <span class="at">-w</span> rsyslog_tcp.pcap</span></code></pre></div>
+</div>
+</div>
+<h1 data-number="3" id="reverse-engineering"><span
+class="header-section-number">3</span> Reverse Engineering</h1>
+<h2 data-number="3.1" id="memory-to-c-struct"><span
+class="header-section-number">3.1</span> Memory to C Struct</h2>
+<h3 data-number="3.1.1" id="struct-lstn_t"><span
+class="header-section-number">3.1.1</span> struct lstn_t</h3>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
 <li>Check the memory with GDB.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">readSocket</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1 at 0x7f11fdd37bf0: file imuxsock.c, line 1051.</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">c</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 2 <span class="st">&quot;in:imuxsock&quot;</span> hit Breakpoint 1, readSocket <span class="er">(</span><span class="va">pLstn</span><span class="op">=</span>0x556bca210480<span class="kw">)</span> <span class="ex">at</span> imuxsock.c:1051</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">ptype</span> lstn_t</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span> = struct lstn_s {</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">uchar</span> <span class="pp">*</span>sockName<span class="kw">;</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">prop_t</span> <span class="pp">*</span>hostName<span class="kw">;</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">int</span> fd<span class="kw">;</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">int</span> flags<span class="kw">;</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="ex">int</span> flowCtl<span class="kw">;</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="ex">unsigned</span> int ratelimitInterval<span class="kw">;</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="ex">unsigned</span> int ratelimitBurst<span class="kw">;</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="ex">ratelimit_t</span> <span class="pp">*</span>dflt_ratelimiter<span class="kw">;</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="ex">intTiny</span> ratelimitSev<span class="kw">;</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="ex">struct</span> hashtable <span class="pp">*</span>ht<span class="kw">;</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bParseHost<span class="kw">;</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bCreatePath<span class="kw">;</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bUseCreds<span class="kw">;</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bAnnotate<span class="kw">;</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bParseTrusted<span class="kw">;</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bWritePid<span class="kw">;</span></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bDiscardOwnMsgs<span class="kw">;</span></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bUseSysTimeStamp<span class="kw">;</span></span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bUnlink<span class="kw">;</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bUseSpecialParser<span class="kw">;</span></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="ex">ruleset_t</span> <span class="pp">*</span>pRuleset<span class="kw">;</span></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">p</span> sizeof<span class="er">(</span><span class="ex">lstn_t</span><span class="kw">)</span></span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="va">$3</span> = 88</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">p</span> pLstn</span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span> = <span class="er">(</span><span class="ex">lstn_t</span> <span class="pp">*</span><span class="kw">)</span> <span class="ex">0x556bca210480</span></span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">p</span> <span class="pp">*</span>pLstn</span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="va">$2</span> = {sockName = 0x7f11fdd3b394 <span class="st">&quot;/dev/log&quot;</span>, hostName = 0x0, fd = 3, flags = 4, flowCtl = 0, ratelimitInterval = 0, ratelimitBurst = 200, dflt_ratelimiter = 0x556bca2232e0, ratelimitSev = 1 <span class="st">&#39;\001&#39;</span>, ht = 0x0, bParseHost = <span class="at">-1</span> <span class="st">&#39;\377&#39;</span>, bCreatePath = 0 <span class="st">&#39;\000&#39;</span>, bUseCreds = 1 <span class="st">&#39;\001&#39;</span>, bAnnotate = 0 <span class="st">&#39;\000&#39;</span>, bParseTrusted = 0 <span class="st">&#39;\000&#39;</span>, bWritePid = 0 <span class="st">&#39;\000&#39;</span>, bDiscardOwnMsgs = 0 <span class="st">&#39;\000&#39;</span>, bUseSysTimeStamp = 1 <span class="st">&#39;\001&#39;</span>, bUnlink = 1 <span class="st">&#39;\001&#39;</span>, bUseSpecialParser = 1 <span class="st">&#39;\001&#39;</span>, pRuleset = 0x0}</span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/88bx</span> 0x556bca210480</span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca210480:</span> 0x94    0xb3    0xd3    0xfd    0x11    0x7f    0x00    0x00</span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca210488:</span> 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca210490:</span> 0x03    0x00    0x00    0x00    0x04    0x00    0x00    0x00</span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca210498:</span> 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca2104a0:</span> 0xc8    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca2104a8:</span> 0xe0    0x32    0x22    0xca    0x6b    0x55    0x00    0x00</span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca2104b0:</span> 0x01    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca2104b8:</span> 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca2104c0:</span> 0xff    0x00    0x01    0x00    0x00    0x00    0x00    0x01</span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca2104c8:</span> 0x01    0x01    0x00    0x00    0x00    0x00    0x00    0x00</span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca2104d0:</span> 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">dump</span> memory mem.hex 0x556bca210480 0x556bca210480+88</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">readSocket</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1 at 0x7f11fdd37bf0: file imuxsock.c, line 1051.</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">c</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 2 <span class="st">&quot;in:imuxsock&quot;</span> hit Breakpoint 1, readSocket <span class="er">(</span><span class="va">pLstn</span><span class="op">=</span>0x556bca210480<span class="kw">)</span> <span class="ex">at</span> imuxsock.c:1051</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">ptype</span> lstn_t</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span> = struct lstn_s {</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">uchar</span> <span class="pp">*</span>sockName<span class="kw">;</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">prop_t</span> <span class="pp">*</span>hostName<span class="kw">;</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">int</span> fd<span class="kw">;</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">int</span> flags<span class="kw">;</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="ex">int</span> flowCtl<span class="kw">;</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="ex">unsigned</span> int ratelimitInterval<span class="kw">;</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="ex">unsigned</span> int ratelimitBurst<span class="kw">;</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="ex">ratelimit_t</span> <span class="pp">*</span>dflt_ratelimiter<span class="kw">;</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="ex">intTiny</span> ratelimitSev<span class="kw">;</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="ex">struct</span> hashtable <span class="pp">*</span>ht<span class="kw">;</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bParseHost<span class="kw">;</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bCreatePath<span class="kw">;</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bUseCreds<span class="kw">;</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bAnnotate<span class="kw">;</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bParseTrusted<span class="kw">;</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bWritePid<span class="kw">;</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bDiscardOwnMsgs<span class="kw">;</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bUseSysTimeStamp<span class="kw">;</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bUnlink<span class="kw">;</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbool</span> bUseSpecialParser<span class="kw">;</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>    <span class="ex">ruleset_t</span> <span class="pp">*</span>pRuleset<span class="kw">;</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">p</span> sizeof<span class="er">(</span><span class="ex">lstn_t</span><span class="kw">)</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="va">$3</span> = 88</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">p</span> pLstn</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span> = <span class="er">(</span><span class="ex">lstn_t</span> <span class="pp">*</span><span class="kw">)</span> <span class="ex">0x556bca210480</span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">p</span> <span class="pp">*</span>pLstn</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a><span class="va">$2</span> = {sockName = 0x7f11fdd3b394 <span class="st">&quot;/dev/log&quot;</span>, hostName = 0x0, fd = 3, flags = 4, flowCtl = 0, ratelimitInterval = 0, ratelimitBurst = 200, dflt_ratelimiter = 0x556bca2232e0, ratelimitSev = 1 <span class="st">&#39;\001&#39;</span>, ht = 0x0, bParseHost = <span class="at">-1</span> <span class="st">&#39;\377&#39;</span>, bCreatePath = 0 <span class="st">&#39;\000&#39;</span>, bUseCreds = 1 <span class="st">&#39;\001&#39;</span>, bAnnotate = 0 <span class="st">&#39;\000&#39;</span>, bParseTrusted = 0 <span class="st">&#39;\000&#39;</span>, bWritePid = 0 <span class="st">&#39;\000&#39;</span>, bDiscardOwnMsgs = 0 <span class="st">&#39;\000&#39;</span>, bUseSysTimeStamp = 1 <span class="st">&#39;\001&#39;</span>, bUnlink = 1 <span class="st">&#39;\001&#39;</span>, bUseSpecialParser = 1 <span class="st">&#39;\001&#39;</span>, pRuleset = 0x0}</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/88bx</span> 0x556bca210480</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca210480:</span> 0x94    0xb3    0xd3    0xfd    0x11    0x7f    0x00    0x00</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca210488:</span> 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca210490:</span> 0x03    0x00    0x00    0x00    0x04    0x00    0x00    0x00</span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca210498:</span> 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca2104a0:</span> 0xc8    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca2104a8:</span> 0xe0    0x32    0x22    0xca    0x6b    0x55    0x00    0x00</span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca2104b0:</span> 0x01    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca2104b8:</span> 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca2104c0:</span> 0xff    0x00    0x01    0x00    0x00    0x00    0x00    0x01</span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca2104c8:</span> 0x01    0x01    0x00    0x00    0x00    0x00    0x00    0x00</span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a><span class="ex">0x556bca2104d0:</span> 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00</span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">dump</span> memory mem.hex 0x556bca210480 0x556bca210480+88</span></code></pre></div>
 <ul>
 <li>Decode memory manually.</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> xxd <span class="ex">-c8</span> mem.hex</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">00000000:</span> 94b3 d3fd 117f 0000  ........</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">00000008:</span> 0000 0000 0000 0000  ........</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">00000010:</span> 0300 0000 0400 0000  ........</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">00000018:</span> 0000 0000 0000 0000  ........</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">00000020:</span> c800 0000 0000 0000  ........</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">00000028:</span> e032 22ca 6b55 0000  .2<span class="st">&quot;.kU..</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="st">00000030: 0100 0000 0000 0000  ........</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="st">00000038: 0000 0000 0000 0000  ........</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="st">00000040: ff00 0100 0000 0001  ........</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="st">00000048: 0101 0000 0000 0000  ........</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="st">00000050: 0000 0000 0000 0000  ........</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dv">94</span><span class="er">b3</span> d3fd <span class="dv">117</span><span class="er">f</span> <span class="bn">0000</span>  sockName</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span>  hostName</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bn">0300</span> <span class="bn">0000</span> <span class="bn">0400</span> <span class="bn">0000</span>  fd <span class="op">(</span><span class="dv">4</span><span class="er">B</span><span class="op">),</span> flag <span class="op">(</span><span class="dv">4</span><span class="er">B</span><span class="op">)</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span>  flowCtl<span class="op">,</span> ratelimitInterval</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>c800 <span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span>  ratelimitBurst <span class="op">(</span><span class="dv">4</span><span class="er">B</span><span class="op">),</span> padding <span class="op">(</span><span class="dv">4</span><span class="er">B</span><span class="op">)</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>e032 <span class="dv">22</span><span class="er">ca</span> <span class="dv">6</span><span class="er">b55</span> <span class="bn">0000</span>  dflt_ratelimiter</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bn">0100</span> <span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span>  ratelimitSev</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span>  ht</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>ff00 <span class="bn">0100</span> <span class="bn">0000</span> <span class="bn">0001</span>  b<span class="op">...</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="bn">0101</span> <span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span>  b<span class="op">...</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span>  pRuleSet</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> xxd <span class="ex">-c8</span> mem.hex</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">00000000:</span> 94b3 d3fd 117f 0000  ........</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">00000008:</span> 0000 0000 0000 0000  ........</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="ex">00000010:</span> 0300 0000 0400 0000  ........</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ex">00000018:</span> 0000 0000 0000 0000  ........</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="ex">00000020:</span> c800 0000 0000 0000  ........</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="ex">00000028:</span> e032 22ca 6b55 0000  .2<span class="st">&quot;.kU..</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="st">00000030: 0100 0000 0000 0000  ........</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="st">00000038: 0000 0000 0000 0000  ........</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="st">00000040: ff00 0100 0000 0001  ........</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="st">00000048: 0101 0000 0000 0000  ........</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="st">00000050: 0000 0000 0000 0000  ........</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode go"><code class="sourceCode go"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="dv">94</span><span class="er">b3</span> d3fd <span class="dv">117</span><span class="er">f</span> <span class="bn">0000</span>  sockName</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span>  hostName</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bn">0300</span> <span class="bn">0000</span> <span class="bn">0400</span> <span class="bn">0000</span>  fd <span class="op">(</span><span class="dv">4</span><span class="er">B</span><span class="op">),</span> flag <span class="op">(</span><span class="dv">4</span><span class="er">B</span><span class="op">)</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span>  flowCtl<span class="op">,</span> ratelimitInterval</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>c800 <span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span>  ratelimitBurst <span class="op">(</span><span class="dv">4</span><span class="er">B</span><span class="op">),</span> padding <span class="op">(</span><span class="dv">4</span><span class="er">B</span><span class="op">)</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>e032 <span class="dv">22</span><span class="er">ca</span> <span class="dv">6</span><span class="er">b55</span> <span class="bn">0000</span>  dflt_ratelimiter</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="bn">0100</span> <span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span>  ratelimitSev</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span>  ht</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>ff00 <span class="bn">0100</span> <span class="bn">0000</span> <span class="bn">0001</span>  b<span class="op">...</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="bn">0101</span> <span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span>  b<span class="op">...</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span> <span class="bn">0000</span>  pRuleSet</span></code></pre></div>
 </div><div class="column" style="width:50%;">
 <ul>
 <li>Decode with python struct.</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> lstn_s <span class="op">{</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    uchar <span class="op">*</span>sockName<span class="op">;</span>    <span class="co">// P</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    prop_t <span class="op">*</span>hostName<span class="op">;</span>   <span class="co">// P</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> fd<span class="op">;</span>             <span class="co">// i</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> flags<span class="op">;</span>          <span class="co">// i</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> flowCtl<span class="op">;</span>        <span class="co">// i</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> ratelimitInterval<span class="op">;</span> <span class="co">// I</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> ratelimitBurst<span class="op">;</span>    <span class="co">// I</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    ratelimit_t <span class="op">*</span>dflt_ratelimiter<span class="op">;</span>  <span class="co">// P</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    intTiny ratelimitSev<span class="op">;</span>           <span class="co">// c</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> hashtable <span class="op">*</span>ht<span class="op">;</span>           <span class="co">// P</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    sbool bParseHost<span class="op">;</span>       <span class="co">// c</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    sbool bCreatePath<span class="op">;</span>      <span class="co">// c</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    sbool bUseCreds<span class="op">;</span>        <span class="co">// c</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    sbool bAnnotate<span class="op">;</span>        <span class="co">// c</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    sbool bParseTrusted<span class="op">;</span>    <span class="co">// c</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    sbool bWritePid<span class="op">;</span>        <span class="co">// c</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    sbool bDiscardOwnMsgs<span class="op">;</span>  <span class="co">// c</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    sbool bUseSysTimeStamp<span class="op">;</span> <span class="co">// c</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    sbool bUnlink<span class="op">;</span>          <span class="co">// c</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    sbool bUseSpecialParser<span class="op">;</span><span class="co">// c</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    ruleset_t <span class="op">*</span>pRuleset<span class="op">;</span>    <span class="co">// P</span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="co">// fmt = PPiiiIIPcPccccccccccP</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> struct</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> namedtuple</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> <span class="bu">open</span>(<span class="st">&#39;mem.hex&#39;</span>, <span class="st">&#39;rb&#39;</span>).read()</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>fmt <span class="op">=</span> <span class="st">&#39;PPiiiIIPcPccccccccccP&#39;</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(struct.calcsize(fmt))     <span class="co"># 88</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> struct.unpack(fmt, raw)</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>lstn_s <span class="op">=</span> namedtuple(<span class="st">&#39;lstn_s&#39;</span>,</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;sockName hostName fd flags flowCtl </span><span class="ch">\</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="st">ratelimitInterval ratelimitBurst dflt_ratelimiter ratelimitSev ht </span><span class="ch">\</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="st">bParseHost bCreatePath bUseCreds bAnnotate bParseTrusted </span><span class="ch">\</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="st">bWritePid bDiscardOwnMsgs bUseSysTimeStamp bUnlink bUseSpecialParser </span><span class="ch">\</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="st">pRuleset&#39;</span>)</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>record <span class="op">=</span> lstn_s._make(data)</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k, v <span class="kw">in</span> record._asdict().items():</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>k<span class="sc">:20}</span><span class="ss"> </span><span class="sc">{</span>v<span class="sc">.</span><span class="bu">hex</span>() <span class="cf">if</span> <span class="bu">isinstance</span>(v,(<span class="bu">bytes</span>,<span class="bu">bytearray</span>)) <span class="cf">else</span> <span class="ss">f&#39;</span><span class="sc">{</span>v<span class="sc">:#x}</span><span class="ss">&#39;</span><span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co"># sockName             0x7f11fdd3b394</span></span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="co"># hostName             0x0</span></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co"># fd                   0x3</span></span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="co"># flags                0x4</span></span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co"># flowCtl              0x0</span></span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="co"># ratelimitInterval    0x0</span></span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a><span class="co"># ratelimitBurst       0xc8</span></span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="co"># dflt_ratelimiter     0x556bca2232e0</span></span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="co"># ratelimitSev         01</span></span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="co"># ht                   0x0</span></span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="co"># bParseHost           ff</span></span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="co"># bCreatePath          00</span></span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="co"># bUseCreds            01</span></span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="co"># bAnnotate            00</span></span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="co"># bParseTrusted        00</span></span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a><span class="co"># bWritePid            00</span></span>
-<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a><span class="co"># bDiscardOwnMsgs      00</span></span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a><span class="co"># bUseSysTimeStamp     01</span></span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="co"># bUnlink              01</span></span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a><span class="co"># bUseSpecialParser    01</span></span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a><span class="co"># pRuleset             0x0</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> lstn_s <span class="op">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    uchar <span class="op">*</span>sockName<span class="op">;</span>    <span class="co">// P</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    prop_t <span class="op">*</span>hostName<span class="op">;</span>   <span class="co">// P</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> fd<span class="op">;</span>             <span class="co">// i</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> flags<span class="op">;</span>          <span class="co">// i</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> flowCtl<span class="op">;</span>        <span class="co">// i</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> ratelimitInterval<span class="op">;</span> <span class="co">// I</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> ratelimitBurst<span class="op">;</span>    <span class="co">// I</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    ratelimit_t <span class="op">*</span>dflt_ratelimiter<span class="op">;</span>  <span class="co">// P</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    intTiny ratelimitSev<span class="op">;</span>           <span class="co">// c</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> hashtable <span class="op">*</span>ht<span class="op">;</span>           <span class="co">// P</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    sbool bParseHost<span class="op">;</span>       <span class="co">// c</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    sbool bCreatePath<span class="op">;</span>      <span class="co">// c</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    sbool bUseCreds<span class="op">;</span>        <span class="co">// c</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    sbool bAnnotate<span class="op">;</span>        <span class="co">// c</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    sbool bParseTrusted<span class="op">;</span>    <span class="co">// c</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    sbool bWritePid<span class="op">;</span>        <span class="co">// c</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    sbool bDiscardOwnMsgs<span class="op">;</span>  <span class="co">// c</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    sbool bUseSysTimeStamp<span class="op">;</span> <span class="co">// c</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    sbool bUnlink<span class="op">;</span>          <span class="co">// c</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    sbool bUseSpecialParser<span class="op">;</span><span class="co">// c</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    ruleset_t <span class="op">*</span>pRuleset<span class="op">;</span>    <span class="co">// P</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="co">// fmt = PPiiiIIPcPccccccccccP</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> struct</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> namedtuple</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> <span class="bu">open</span>(<span class="st">&#39;mem.hex&#39;</span>, <span class="st">&#39;rb&#39;</span>).read()</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>fmt <span class="op">=</span> <span class="st">&#39;PPiiiIIPcPccccccccccP&#39;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(struct.calcsize(fmt))     <span class="co"># 88</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> struct.unpack(fmt, raw)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>lstn_s <span class="op">=</span> namedtuple(<span class="st">&#39;lstn_s&#39;</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;sockName hostName fd flags flowCtl </span><span class="ch">\</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="st">ratelimitInterval ratelimitBurst dflt_ratelimiter ratelimitSev ht </span><span class="ch">\</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="st">bParseHost bCreatePath bUseCreds bAnnotate bParseTrusted </span><span class="ch">\</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="st">bWritePid bDiscardOwnMsgs bUseSysTimeStamp bUnlink bUseSpecialParser </span><span class="ch">\</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="st">pRuleset&#39;</span>)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>record <span class="op">=</span> lstn_s._make(data)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k, v <span class="kw">in</span> record._asdict().items():</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>k<span class="sc">:20}</span><span class="ss"> </span><span class="sc">{</span>v<span class="sc">.</span><span class="bu">hex</span>() <span class="cf">if</span> <span class="bu">isinstance</span>(v,(<span class="bu">bytes</span>,<span class="bu">bytearray</span>)) <span class="cf">else</span> <span class="ss">f&#39;</span><span class="sc">{</span>v<span class="sc">:#x}</span><span class="ss">&#39;</span><span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="co"># sockName             0x7f11fdd3b394</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="co"># hostName             0x0</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="co"># fd                   0x3</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="co"># flags                0x4</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="co"># flowCtl              0x0</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="co"># ratelimitInterval    0x0</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="co"># ratelimitBurst       0xc8</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="co"># dflt_ratelimiter     0x556bca2232e0</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="co"># ratelimitSev         01</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="co"># ht                   0x0</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="co"># bParseHost           ff</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="co"># bCreatePath          00</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="co"># bUseCreds            01</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a><span class="co"># bAnnotate            00</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a><span class="co"># bParseTrusted        00</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a><span class="co"># bWritePid            00</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a><span class="co"># bDiscardOwnMsgs      00</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a><span class="co"># bUseSysTimeStamp     01</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a><span class="co"># bUnlink              01</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a><span class="co"># bUseSpecialParser    01</span></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a><span class="co"># pRuleset             0x0</span></span></code></pre></div>
 </div>
 </div>
-<h2 data-number="2.2" id="ipc"><span
-class="header-section-number">2.2</span> IPC</h2>
-<h3 data-number="2.2.1" id="logger-to-rsyslogd"><span
-class="header-section-number">2.2.1</span> logger to rsyslogd</h3>
+<h2 data-number="3.2" id="ipc"><span
+class="header-section-number">3.2</span> IPC</h2>
+<h3 data-number="3.2.1" id="logger-to-rsyslogd"><span
+class="header-section-number">3.2.1</span> logger to rsyslogd</h3>
 <p>Start rsyslogd without debug log.</p>
 <ul>
 <li>File /etc/rsyslog.conf</li>
 </ul>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="va">$DebugLevel</span> 0</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="va">$DebugLevel</span> 0</span></code></pre></div>
 <ul>
 <li>Start rsyslogd.</li>
 </ul>
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> rsyslog/tools/rsyslogd</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> rsyslog/tools/rsyslogd</span></code></pre></div>
 <ul>
 <li>strace logger.</li>
 </ul>
-<div class="sourceCode" id="cb13"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> strace <span class="at">-e</span> trace=network <span class="at">--write</span><span class="op">=</span>all <span class="at">--read</span><span class="op">=</span>all <span class="at">-yy</span> <span class="at">-f</span> logger hello</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">socket</span><span class="er">(</span><span class="ex">AF_UNIX,</span> SOCK_DGRAM, 0<span class="kw">)</span>          <span class="ex">=</span> <span class="dv">3</span><span class="op">&lt;</span>UNIX:<span class="pp">[</span><span class="ss">30664</span><span class="pp">]</span><span class="op">&gt;</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ex">connect</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>UNIX:<span class="pp">[</span><span class="ss">30664</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="ex">{sa_family=AF_UNIX,</span> sun_path=<span class="st">&quot;/dev/log&quot;</span>}, 110<span class="kw">)</span> <span class="ex">=</span> 0</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">sendmsg</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>UNIX:[30664-<span class="op">&gt;</span>30189]<span class="op">&gt;</span>, <span class="ex">{msg_name=NULL,</span> msg_namelen=0, msg_iov=[{iov_base=<span class="st">&quot;&lt;13&gt;Mar 31 13:59:51 root: &quot;</span>, iov_len=26}, {iov_base=<span class="st">&quot;hello&quot;</span>, iov_len=5}], msg_iovlen=2, msg_controllen=0, msg_flags=0}, MSG_NOSIGNAL<span class="kw">)</span> <span class="ex">=</span> 31</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">*</span> 26 bytes in buffer 0</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a> <span class="kw">|</span> <span class="ex">00000</span>  3c 31 33 3e 4d 61 72 20  33 31 20 31 33 3a 35 39  <span class="op">&lt;</span>13<span class="op">&gt;</span>Mar 31 13:59 <span class="kw">|</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a> <span class="kw">|</span> <span class="ex">00010</span>  3a 35 31 20 72 6f 6f 74  3a 20                    :51 root:        <span class="kw">|</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a> <span class="ex">*</span> 5 bytes in buffer 1</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a> <span class="kw">|</span> <span class="ex">00000</span>  68 65 6c 6c 6f                                    hello            <span class="kw">|</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="ex">+++</span> exited with 0 +++</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> strace <span class="at">-e</span> trace=network <span class="at">--write</span><span class="op">=</span>all <span class="at">--read</span><span class="op">=</span>all <span class="at">-yy</span> <span class="at">-f</span> logger hello</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">socket</span><span class="er">(</span><span class="ex">AF_UNIX,</span> SOCK_DGRAM, 0<span class="kw">)</span>          <span class="ex">=</span> <span class="dv">3</span><span class="op">&lt;</span>UNIX:<span class="pp">[</span><span class="ss">30664</span><span class="pp">]</span><span class="op">&gt;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="ex">connect</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>UNIX:<span class="pp">[</span><span class="ss">30664</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="ex">{sa_family=AF_UNIX,</span> sun_path=<span class="st">&quot;/dev/log&quot;</span>}, 110<span class="kw">)</span> <span class="ex">=</span> 0</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="ex">sendmsg</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>UNIX:[30664-<span class="op">&gt;</span>30189]<span class="op">&gt;</span>, <span class="ex">{msg_name=NULL,</span> msg_namelen=0, msg_iov=[{iov_base=<span class="st">&quot;&lt;13&gt;Mar 31 13:59:51 root: &quot;</span>, iov_len=26}, {iov_base=<span class="st">&quot;hello&quot;</span>, iov_len=5}], msg_iovlen=2, msg_controllen=0, msg_flags=0}, MSG_NOSIGNAL<span class="kw">)</span> <span class="ex">=</span> 31</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">*</span> 26 bytes in buffer 0</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a> <span class="kw">|</span> <span class="ex">00000</span>  3c 31 33 3e 4d 61 72 20  33 31 20 31 33 3a 35 39  <span class="op">&lt;</span>13<span class="op">&gt;</span>Mar 31 13:59 <span class="kw">|</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a> <span class="kw">|</span> <span class="ex">00010</span>  3a 35 31 20 72 6f 6f 74  3a 20                    :51 root:        <span class="kw">|</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a> <span class="ex">*</span> 5 bytes in buffer 1</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a> <span class="kw">|</span> <span class="ex">00000</span>  68 65 6c 6c 6f                                    hello            <span class="kw">|</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="ex">+++</span> exited with 0 +++</span></code></pre></div>
 <ul>
 <li>strace rsyslogd.</li>
 </ul>
-<div class="sourceCode" id="cb14"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> strace <span class="at">-yy</span> <span class="at">-f</span> <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> rsyslogd<span class="kw">`</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  6925] recvmsg<span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>UNIX:<span class="pp">[</span><span class="ss">48529,</span><span class="st">&quot;/dev/log&quot;</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="ex">{msg_name=NULL,</span> msg_namelen=0, msg_iov=[{iov_base=<span class="st">&quot;&lt;13&gt;Mar 31 14:43:57 root: hello&quot;</span>, iov_len=8096}], msg_iovlen=1, msg_control=[{cmsg_len=32, cmsg_level=SOL_SOCKET, cmsg_type=SO_TIMESTAMP_OLD, cmsg_data={tv_sec=1774968237, tv_usec=352869}}, {cmsg_len=28, cmsg_level=SOL_SOCKET, cmsg_type=SCM_CREDENTIALS, cmsg_data={pid=7229, uid=0, gid=0}}], msg_controllen=64, msg_flags=0}, MSG_DONTWAIT<span class="kw">)</span> <span class="ex">=</span> 31</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  6936] write<span class="er">(</span><span class="dv">2</span><span class="op">&lt;</span>/var/log/syslog<span class="op">&gt;</span>, <span class="st">&quot;Mar 31 14:43:57 pc root: hello\n&quot;</span><span class="ex">,</span> 31<span class="kw">)</span> <span class="ex">=</span> 31</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> strace <span class="at">-yy</span> <span class="at">-f</span> <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> rsyslogd<span class="kw">`</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  6925] recvmsg<span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>UNIX:<span class="pp">[</span><span class="ss">48529,</span><span class="st">&quot;/dev/log&quot;</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="ex">{msg_name=NULL,</span> msg_namelen=0, msg_iov=[{iov_base=<span class="st">&quot;&lt;13&gt;Mar 31 14:43:57 root: hello&quot;</span>, iov_len=8096}], msg_iovlen=1, msg_control=[{cmsg_len=32, cmsg_level=SOL_SOCKET, cmsg_type=SO_TIMESTAMP_OLD, cmsg_data={tv_sec=1774968237, tv_usec=352869}}, {cmsg_len=28, cmsg_level=SOL_SOCKET, cmsg_type=SCM_CREDENTIALS, cmsg_data={pid=7229, uid=0, gid=0}}], msg_controllen=64, msg_flags=0}, MSG_DONTWAIT<span class="kw">)</span> <span class="ex">=</span> 31</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  6936] write<span class="er">(</span><span class="dv">2</span><span class="op">&lt;</span>/var/log/syslog<span class="op">&gt;</span>, <span class="st">&quot;Mar 31 14:43:57 pc root: hello\n&quot;</span><span class="ex">,</span> 31<span class="kw">)</span> <span class="ex">=</span> 31</span></code></pre></div>
 <ul>
 <li>Debug rsyslogd with gdb.</li>
 </ul>
-<div class="sourceCode" id="cb15"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> rsyslogd<span class="kw">`</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">catch</span> syscall recvmsg</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Catchpoint</span> 1 <span class="er">(</span><span class="ex">syscall</span> <span class="st">&#39;recvmsg&#39;</span> <span class="pp">[</span><span class="ss">47</span><span class="pp">]</span><span class="kw">)</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">catch</span> syscall write</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Catchpoint</span> 2 <span class="er">(</span><span class="ex">syscall</span> <span class="st">&#39;write&#39;</span> <span class="pp">[</span><span class="ss">1</span><span class="pp">]</span><span class="kw">)</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">c</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> rsyslogd<span class="kw">`</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">catch</span> syscall recvmsg</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Catchpoint</span> 1 <span class="er">(</span><span class="ex">syscall</span> <span class="st">&#39;recvmsg&#39;</span> <span class="pp">[</span><span class="ss">47</span><span class="pp">]</span><span class="kw">)</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">catch</span> syscall write</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Catchpoint</span> 2 <span class="er">(</span><span class="ex">syscall</span> <span class="st">&#39;write&#39;</span> <span class="pp">[</span><span class="ss">1</span><span class="pp">]</span><span class="kw">)</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">c</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span></code></pre></div>
 <ul>
 <li>rsyslogd handles incomming messages.</li>
 </ul>
-<div class="sourceCode" id="cb16"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">[Switching</span> to Thread 0x7fa065194640 <span class="er">(</span><span class="ex">LWP</span> 6925<span class="kw">)</span><span class="ex">]</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 2 <span class="st">&quot;in:imuxsock&quot;</span> hit Catchpoint 1 <span class="er">(</span><span class="ex">call</span> to syscall recvmsg<span class="kw">)</span><span class="ex">,</span> __recvmsg_syscall <span class="er">(</span><span class="va">flags</span><span class="op">=</span>64, <span class="va">msg</span><span class="op">=</span>0x7fa0651907e0, <span class="va">fd</span><span class="op">=</span>3<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/recvmsg.c:27</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> threads</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Id</span>   Target Id                                        Frame </span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">1</span>    Thread 0x7fa0652c4780 <span class="er">(</span><span class="ex">LWP</span> 6924<span class="kw">)</span> <span class="st">&quot;rsyslogd&quot;</span>      pselect64_syscall <span class="er">(</span><span class="va">sigmask</span><span class="op">=</span>0x7ffe614c8e50, <span class="va">timeout</span><span class="op">=&lt;</span>optimized <span class="ex">out</span><span class="op">&gt;</span>, exceptfds=0x0, writefds=0x0, readfds=0x0, nfds=0<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/pselect.c:34</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 2    Thread 0x7fa065194640 <span class="er">(</span><span class="ex">LWP</span> 6925<span class="kw">)</span> <span class="st">&quot;in:imuxsock&quot;</span>   __recvmsg_syscall <span class="er">(</span><span class="va">flags</span><span class="op">=</span>64, <span class="va">msg</span><span class="op">=</span>0x7fa0651907e0, <span class="va">fd</span><span class="op">=</span>3<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/recvmsg.c:27</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">3</span>    Thread 0x7fa064d93640 <span class="er">(</span><span class="ex">LWP</span> 6926<span class="kw">)</span> <span class="st">&quot;in:imklog&quot;</span>     __GI___libc_read <span class="er">(</span><span class="va">nbytes</span><span class="op">=</span>8096, <span class="va">buf</span><span class="op">=</span>0x7fa064d72ce0, <span class="va">fd</span><span class="op">=</span>5<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/read.c:26</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">4</span>    Thread 0x7fa064992640 <span class="er">(</span><span class="ex">LWP</span> 6936<span class="kw">)</span> <span class="st">&quot;rs:main Q:Reg&quot;</span> __futex_abstimed_wait_common64 <span class="er">(</span><span class="va">private</span><span class="op">=</span>0, <span class="va">cancel</span><span class="op">=</span>true, <span class="va">abstime</span><span class="op">=</span>0x0, <span class="va">op</span><span class="op">=</span>393, <span class="va">expected</span><span class="op">=</span>0, <span class="va">futex_word</span><span class="op">=</span>0x5619e6c60a0c<span class="kw">)</span> <span class="ex">at</span> ./nptl/futex-internal.c:57</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">bt</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#0  __recvmsg_syscall (flags=64, msg=0x7fa0651907e0, fd=3) at ../sysdeps/unix/sysv/linux/recvmsg.c:27</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#1  __libc_recvmsg (fd=3, msg=msg@entry=0x7fa0651907e0, flags=flags@entry=64) at ../sysdeps/unix/sysv/linux/recvmsg.c:41</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#2  0x00007fa0652bcce1 in readSocket (pLstn=0x5619e6c39480) at imuxsock.c:1105</span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#3  0x00007fa0652be013 in runInput (pThrd=&lt;optimized out&gt;) at imuxsock.c:1548</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co">#4  0x00005619c2df059a in thrdStarter (arg=0x5619e6c5a890) at ../threads.c:243</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">#5  0x00007fa06535dac3 in start_thread (arg=&lt;optimized out&gt;) at ./nptl/pthread_create.c:442</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co">#6  0x00007fa0653ef8d0 in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:81</span></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">c</span></span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">[Switching</span> to Thread 0x7fa065194640 <span class="er">(</span><span class="ex">LWP</span> 6925<span class="kw">)</span><span class="ex">]</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 2 <span class="st">&quot;in:imuxsock&quot;</span> hit Catchpoint 1 <span class="er">(</span><span class="ex">call</span> to syscall recvmsg<span class="kw">)</span><span class="ex">,</span> __recvmsg_syscall <span class="er">(</span><span class="va">flags</span><span class="op">=</span>64, <span class="va">msg</span><span class="op">=</span>0x7fa0651907e0, <span class="va">fd</span><span class="op">=</span>3<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/recvmsg.c:27</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> threads</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Id</span>   Target Id                                        Frame </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">1</span>    Thread 0x7fa0652c4780 <span class="er">(</span><span class="ex">LWP</span> 6924<span class="kw">)</span> <span class="st">&quot;rsyslogd&quot;</span>      pselect64_syscall <span class="er">(</span><span class="va">sigmask</span><span class="op">=</span>0x7ffe614c8e50, <span class="va">timeout</span><span class="op">=&lt;</span>optimized <span class="ex">out</span><span class="op">&gt;</span>, exceptfds=0x0, writefds=0x0, readfds=0x0, nfds=0<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/pselect.c:34</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 2    Thread 0x7fa065194640 <span class="er">(</span><span class="ex">LWP</span> 6925<span class="kw">)</span> <span class="st">&quot;in:imuxsock&quot;</span>   __recvmsg_syscall <span class="er">(</span><span class="va">flags</span><span class="op">=</span>64, <span class="va">msg</span><span class="op">=</span>0x7fa0651907e0, <span class="va">fd</span><span class="op">=</span>3<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/recvmsg.c:27</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">3</span>    Thread 0x7fa064d93640 <span class="er">(</span><span class="ex">LWP</span> 6926<span class="kw">)</span> <span class="st">&quot;in:imklog&quot;</span>     __GI___libc_read <span class="er">(</span><span class="va">nbytes</span><span class="op">=</span>8096, <span class="va">buf</span><span class="op">=</span>0x7fa064d72ce0, <span class="va">fd</span><span class="op">=</span>5<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/read.c:26</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">4</span>    Thread 0x7fa064992640 <span class="er">(</span><span class="ex">LWP</span> 6936<span class="kw">)</span> <span class="st">&quot;rs:main Q:Reg&quot;</span> __futex_abstimed_wait_common64 <span class="er">(</span><span class="va">private</span><span class="op">=</span>0, <span class="va">cancel</span><span class="op">=</span>true, <span class="va">abstime</span><span class="op">=</span>0x0, <span class="va">op</span><span class="op">=</span>393, <span class="va">expected</span><span class="op">=</span>0, <span class="va">futex_word</span><span class="op">=</span>0x5619e6c60a0c<span class="kw">)</span> <span class="ex">at</span> ./nptl/futex-internal.c:57</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">bt</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co">#0  __recvmsg_syscall (flags=64, msg=0x7fa0651907e0, fd=3) at ../sysdeps/unix/sysv/linux/recvmsg.c:27</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co">#1  __libc_recvmsg (fd=3, msg=msg@entry=0x7fa0651907e0, flags=flags@entry=64) at ../sysdeps/unix/sysv/linux/recvmsg.c:41</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co">#2  0x00007fa0652bcce1 in readSocket (pLstn=0x5619e6c39480) at imuxsock.c:1105</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="co">#3  0x00007fa0652be013 in runInput (pThrd=&lt;optimized out&gt;) at imuxsock.c:1548</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co">#4  0x00005619c2df059a in thrdStarter (arg=0x5619e6c5a890) at ../threads.c:243</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co">#5  0x00007fa06535dac3 in start_thread (arg=&lt;optimized out&gt;) at ./nptl/pthread_create.c:442</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="co">#6  0x00007fa0653ef8d0 in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:81</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">c</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="ex">Continuing.</span></span></code></pre></div>
 <ul>
 <li>rsyslogd write messages to log file.</li>
 </ul>
-<div class="sourceCode" id="cb17"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">[Switching</span> to Thread 0x7fa064992640 <span class="er">(</span><span class="ex">LWP</span> 6936<span class="kw">)</span><span class="ex">]</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 4 <span class="st">&quot;rs:main Q:Reg&quot;</span> hit Catchpoint 2 <span class="er">(</span><span class="ex">call</span> to syscall write<span class="kw">)</span><span class="ex">,</span> __GI___libc_write <span class="er">(</span><span class="va">nbytes</span><span class="op">=</span>31, <span class="va">buf</span><span class="op">=</span>0x7fa05c001200, <span class="va">fd</span><span class="op">=</span>2<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/write.c:26</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> threads</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Id</span>   Target Id                                        Frame </span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">1</span>    Thread 0x7fa0652c4780 <span class="er">(</span><span class="ex">LWP</span> 6924<span class="kw">)</span> <span class="st">&quot;rsyslogd&quot;</span>      pselect64_syscall <span class="er">(</span><span class="va">sigmask</span><span class="op">=</span>0x7ffe614c8e50, <span class="va">timeout</span><span class="op">=&lt;</span>optimized <span class="ex">out</span><span class="op">&gt;</span>, exceptfds=0x0, writefds=0x0, readfds=0x0, nfds=0<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/pselect.c:34</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="ex">2</span>    Thread 0x7fa065194640 <span class="er">(</span><span class="ex">LWP</span> 6925<span class="kw">)</span> <span class="st">&quot;in:imuxsock&quot;</span>   0x00007fa0653e1c4f in __GI___poll <span class="er">(</span><span class="va">fds</span><span class="op">=</span>fds@entry=0x7fa060000b90, <span class="va">nfds</span><span class="op">=</span>1, <span class="va">timeout</span><span class="op">=</span>timeout@entry=-1<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/poll.c:29</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">3</span>    Thread 0x7fa064d93640 <span class="er">(</span><span class="ex">LWP</span> 6926<span class="kw">)</span> <span class="st">&quot;in:imklog&quot;</span>     __GI___libc_read <span class="er">(</span><span class="va">nbytes</span><span class="op">=</span>8096, <span class="va">buf</span><span class="op">=</span>0x7fa064d72ce0, <span class="va">fd</span><span class="op">=</span>5<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/read.c:26</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 4    Thread 0x7fa064992640 <span class="er">(</span><span class="ex">LWP</span> 6936<span class="kw">)</span> <span class="st">&quot;rs:main Q:Reg&quot;</span> __GI___libc_write <span class="er">(</span><span class="va">nbytes</span><span class="op">=</span>31, <span class="va">buf</span><span class="op">=</span>0x7fa05c001200, <span class="va">fd</span><span class="op">=</span>2<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/write.c:26</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">bt</span></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co">#0  __GI___libc_write (nbytes=31, buf=0x7fa05c001200, fd=2) at ../sysdeps/unix/sysv/linux/write.c:26</span></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">#1  __GI___libc_write (fd=2, buf=buf@entry=0x7fa05c001200, nbytes=nbytes@entry=31) at ../sysdeps/unix/sysv/linux/write.c:24</span></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">#2  0x00005619c2dd1de1 in doWriteCall (pLenBuf=&lt;synthetic pointer&gt;, pBuf=&lt;optimized out&gt;, pThis=0x7fa05c000f10) at stream.c:1464</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co">#3  strmPhysWrite (pThis=pThis@entry=0x7fa05c000f10, pBuf=&lt;optimized out&gt;, lenBuf=&lt;optimized out&gt;) at stream.c:1770</span></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co">#4  0x00005619c2dd2491 in doWriteInternal (pThis=pThis@entry=0x7fa05c000f10, pBuf=&lt;optimized out&gt;, lenBuf=&lt;optimized out&gt;, bFlush=0, bFlush@entry=1) at stream.c:1531</span></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co">#5  0x00005619c2dd28e4 in strmSchedWrite (bFlushZip=1, lenBuf=&lt;optimized out&gt;, pBuf=&lt;optimized out&gt;, pThis=0x7fa05c000f10) at stream.c:1604</span></span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="co">#6  0x00005619c2dd2f9a in strmFlush (pThis=0x7fa05c000f10) at stream.c:1933</span></span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="co">#7  0x00005619c2d95658 in commitTransaction (pWrkrData=&lt;optimized out&gt;, pParams=0x7fa05c000b90, nParams=1) at omfile.c:1078</span></span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="co">#8  0x00005619c2ded0e2 in actionCallCommitTransaction (nparams=&lt;optimized out&gt;, iparams=&lt;optimized out&gt;, pWti=&lt;optimized out&gt;, pThis=&lt;optimized out&gt;) at ../action.c:1283</span></span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="co">#9  doTransaction (nparams=1, iparams=0x7fa05c000b90, pWti=0x5619e6c60970, pThis=0x5619e6c52f10) at ../action.c:1327</span></span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="co">#10 actionTryCommit (nparams=1, iparams=0x7fa05c000b90, pWti=0x5619e6c60970, pThis=0x5619e6c52f10) at ../action.c:1369</span></span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="co">#11 actionTryCommit (pThis=0x5619e6c52f10, pWti=0x5619e6c60970, iparams=0x7fa05c000b90, nparams=1) at ../action.c:1361</span></span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="co">#12 0x00005619c2ded69f in actionCommit (pThis=pThis@entry=0x5619e6c52f10, pWti=pWti@entry=0x5619e6c60970) at ../action.c:1543</span></span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="co">#13 0x00005619c2deefcc in actionCommitAllDirect (pWti=pWti@entry=0x5619e6c60970) at ../action.c:1632</span></span>
-<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a><span class="co">#14 0x00005619c2de6053 in processBatch (pBatch=0x5619e6c609a8, pWti=0x5619e6c60970) at ruleset.c:675</span></span>
-<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="co">#15 0x00005619c2d8afa4 in msgConsumer (notNeeded=&lt;optimized out&gt;, pBatch=0x5619e6c609a8, pWti=0x5619e6c60970) at rsyslogd.c:694</span></span>
-<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="co">#16 0x00005619c2ddfa5f in ConsumerReg (pThis=0x5619e6c58980, pWti=0x5619e6c60970) at queue.c:2164</span></span>
-<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="co">#17 0x00005619c2dda859 in wtiWorker (pThis=pThis@entry=0x5619e6c60970) at wti.c:428</span></span>
-<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a><span class="co">#18 0x00005619c2dd7b85 in wtpWorker (arg=0x5619e6c60970) at wtp.c:435</span></span>
-<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="co">#19 0x00007fa06535dac3 in start_thread (arg=&lt;optimized out&gt;) at ./nptl/pthread_create.c:442</span></span>
-<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="co">#20 0x00007fa0653ef8d0 in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:81</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">[Switching</span> to Thread 0x7fa064992640 <span class="er">(</span><span class="ex">LWP</span> 6936<span class="kw">)</span><span class="ex">]</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 4 <span class="st">&quot;rs:main Q:Reg&quot;</span> hit Catchpoint 2 <span class="er">(</span><span class="ex">call</span> to syscall write<span class="kw">)</span><span class="ex">,</span> __GI___libc_write <span class="er">(</span><span class="va">nbytes</span><span class="op">=</span>31, <span class="va">buf</span><span class="op">=</span>0x7fa05c001200, <span class="va">fd</span><span class="op">=</span>2<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/write.c:26</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> threads</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Id</span>   Target Id                                        Frame </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">1</span>    Thread 0x7fa0652c4780 <span class="er">(</span><span class="ex">LWP</span> 6924<span class="kw">)</span> <span class="st">&quot;rsyslogd&quot;</span>      pselect64_syscall <span class="er">(</span><span class="va">sigmask</span><span class="op">=</span>0x7ffe614c8e50, <span class="va">timeout</span><span class="op">=&lt;</span>optimized <span class="ex">out</span><span class="op">&gt;</span>, exceptfds=0x0, writefds=0x0, readfds=0x0, nfds=0<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/pselect.c:34</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="ex">2</span>    Thread 0x7fa065194640 <span class="er">(</span><span class="ex">LWP</span> 6925<span class="kw">)</span> <span class="st">&quot;in:imuxsock&quot;</span>   0x00007fa0653e1c4f in __GI___poll <span class="er">(</span><span class="va">fds</span><span class="op">=</span>fds@entry=0x7fa060000b90, <span class="va">nfds</span><span class="op">=</span>1, <span class="va">timeout</span><span class="op">=</span>timeout@entry=-1<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/poll.c:29</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">3</span>    Thread 0x7fa064d93640 <span class="er">(</span><span class="ex">LWP</span> 6926<span class="kw">)</span> <span class="st">&quot;in:imklog&quot;</span>     __GI___libc_read <span class="er">(</span><span class="va">nbytes</span><span class="op">=</span>8096, <span class="va">buf</span><span class="op">=</span>0x7fa064d72ce0, <span class="va">fd</span><span class="op">=</span>5<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/read.c:26</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 4    Thread 0x7fa064992640 <span class="er">(</span><span class="ex">LWP</span> 6936<span class="kw">)</span> <span class="st">&quot;rs:main Q:Reg&quot;</span> __GI___libc_write <span class="er">(</span><span class="va">nbytes</span><span class="op">=</span>31, <span class="va">buf</span><span class="op">=</span>0x7fa05c001200, <span class="va">fd</span><span class="op">=</span>2<span class="kw">)</span> <span class="ex">at</span> ../sysdeps/unix/sysv/linux/write.c:26</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">bt</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co">#0  __GI___libc_write (nbytes=31, buf=0x7fa05c001200, fd=2) at ../sysdeps/unix/sysv/linux/write.c:26</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co">#1  __GI___libc_write (fd=2, buf=buf@entry=0x7fa05c001200, nbytes=nbytes@entry=31) at ../sysdeps/unix/sysv/linux/write.c:24</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="co">#2  0x00005619c2dd1de1 in doWriteCall (pLenBuf=&lt;synthetic pointer&gt;, pBuf=&lt;optimized out&gt;, pThis=0x7fa05c000f10) at stream.c:1464</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="co">#3  strmPhysWrite (pThis=pThis@entry=0x7fa05c000f10, pBuf=&lt;optimized out&gt;, lenBuf=&lt;optimized out&gt;) at stream.c:1770</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="co">#4  0x00005619c2dd2491 in doWriteInternal (pThis=pThis@entry=0x7fa05c000f10, pBuf=&lt;optimized out&gt;, lenBuf=&lt;optimized out&gt;, bFlush=0, bFlush@entry=1) at stream.c:1531</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="co">#5  0x00005619c2dd28e4 in strmSchedWrite (bFlushZip=1, lenBuf=&lt;optimized out&gt;, pBuf=&lt;optimized out&gt;, pThis=0x7fa05c000f10) at stream.c:1604</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="co">#6  0x00005619c2dd2f9a in strmFlush (pThis=0x7fa05c000f10) at stream.c:1933</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a><span class="co">#7  0x00005619c2d95658 in commitTransaction (pWrkrData=&lt;optimized out&gt;, pParams=0x7fa05c000b90, nParams=1) at omfile.c:1078</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="co">#8  0x00005619c2ded0e2 in actionCallCommitTransaction (nparams=&lt;optimized out&gt;, iparams=&lt;optimized out&gt;, pWti=&lt;optimized out&gt;, pThis=&lt;optimized out&gt;) at ../action.c:1283</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="co">#9  doTransaction (nparams=1, iparams=0x7fa05c000b90, pWti=0x5619e6c60970, pThis=0x5619e6c52f10) at ../action.c:1327</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a><span class="co">#10 actionTryCommit (nparams=1, iparams=0x7fa05c000b90, pWti=0x5619e6c60970, pThis=0x5619e6c52f10) at ../action.c:1369</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="co">#11 actionTryCommit (pThis=0x5619e6c52f10, pWti=0x5619e6c60970, iparams=0x7fa05c000b90, nparams=1) at ../action.c:1361</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="co">#12 0x00005619c2ded69f in actionCommit (pThis=pThis@entry=0x5619e6c52f10, pWti=pWti@entry=0x5619e6c60970) at ../action.c:1543</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a><span class="co">#13 0x00005619c2deefcc in actionCommitAllDirect (pWti=pWti@entry=0x5619e6c60970) at ../action.c:1632</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a><span class="co">#14 0x00005619c2de6053 in processBatch (pBatch=0x5619e6c609a8, pWti=0x5619e6c60970) at ruleset.c:675</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a><span class="co">#15 0x00005619c2d8afa4 in msgConsumer (notNeeded=&lt;optimized out&gt;, pBatch=0x5619e6c609a8, pWti=0x5619e6c60970) at rsyslogd.c:694</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a><span class="co">#16 0x00005619c2ddfa5f in ConsumerReg (pThis=0x5619e6c58980, pWti=0x5619e6c60970) at queue.c:2164</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a><span class="co">#17 0x00005619c2dda859 in wtiWorker (pThis=pThis@entry=0x5619e6c60970) at wti.c:428</span></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a><span class="co">#18 0x00005619c2dd7b85 in wtpWorker (arg=0x5619e6c60970) at wtp.c:435</span></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a><span class="co">#19 0x00007fa06535dac3 in start_thread (arg=&lt;optimized out&gt;) at ./nptl/pthread_create.c:442</span></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a><span class="co">#20 0x00007fa0653ef8d0 in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:81</span></span></code></pre></div>
 <ul>
 <li>Illustrate.
 <pre class="mermaid">
