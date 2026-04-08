@@ -16,17 +16,12 @@ title: "strace"
 |                           | `-e trace=file -e trace='!write'` |
 | `-e trace=/regex`         | `-e trace=/open.*`                |
 
-:::
-::: {.column width=30%}
 
-| File Descriptor | Example      |
+| File            | Example      |
 |:----------------|:-------------|
 | `-e fds=set`    | `-e fds=1`   |
 |                 | `-e fds=!1`  |
 |                 | `-e fds=1,2` |
-
-| Path            | Example      |
-|:----------------|:-------------|
 | `--trace-path=path` | `--trace-path=hello` |
 | `-P`                | `-P hello`           |
 
