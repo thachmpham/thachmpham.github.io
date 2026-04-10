@@ -37,13 +37,11 @@
 <header id="title-block-header">
 <h1 class="title">strace</h1>
 </header>
-<div class="columns">
-<div class="column">
 <table>
 <colgroup>
-<col style="width: 40%" />
-<col style="width: 40%" />
-<col style="width: 18%" />
+<col style="width: 34%" />
+<col style="width: 34%" />
+<col style="width: 30%" />
 </colgroup>
 <thead>
 <tr>
@@ -101,7 +99,8 @@ style="text-align: left;"><code>-e trace=file -e trace='!write'</code></td>
 </tr>
 </tbody>
 </table>
-</div><div class="column">
+<div class="columns">
+<div class="column">
 <table>
 <thead>
 <tr>
@@ -128,10 +127,43 @@ style="text-align: left;"><code>-e trace=file -e trace='!write'</code></td>
 </tr>
 </tbody>
 </table>
+</div><div class="column">
+<table>
+<colgroup>
+<col style="width: 49%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Fork &amp; Daemon</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>-p pid</code></td>
+<td style="text-align: left;"><code>--attach=pid</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>-o myfile</code></td>
+<td style="text-align: left;">Output to file</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>-o myfile -f</code></td>
+<td style="text-align: left;">Follow child, output to file</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>-o myfile -ff</code></td>
+<td style="text-align: left;">Each child output to a separated file</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>-o myfile -D</code></td>
+<td style="text-align: left;">Detached mode</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<div class="columns">
-<div class="column">
 <table>
 <colgroup>
 <col style="width: 29%" />
@@ -196,43 +228,6 @@ ascii</td>
 </tr>
 </tbody>
 </table>
-</div><div class="column">
-<table>
-<colgroup>
-<col style="width: 49%" />
-<col style="width: 50%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">Fork &amp; Daemon</th>
-<th style="text-align: left;"></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><code>-p pid</code></td>
-<td style="text-align: left;"><code>--attach=pid</code></td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>-o myfile</code></td>
-<td style="text-align: left;">Output to file</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>-o myfile -f</code></td>
-<td style="text-align: left;">Follow child, output to file</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>-o myfile -ff</code></td>
-<td style="text-align: left;">Each child output to a separated file</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>-o myfile -D</code></td>
-<td style="text-align: left;">Detached mode</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
 <hr />
 <h3 id="real-cases">Real Cases</h3>
 <table>
