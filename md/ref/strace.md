@@ -2,19 +2,24 @@
 title: "strace"
 ---
 
-| Filter  |         |        |
-|:--------|:--------|:-------|
-| `syscalls`      | `-e trace=read`                   | Single syscall |
-|                 | `-e trace='!read'`                | Not syscall |
-|                 | `-e trace=read,write`             | Multiple syscalls |
-| `syscall regex` | `-e trace='/open.*'`              | Regex |
-| `syscall sets`  | `-e trace=file`                   | |
-|                 | `-e trace=file -e trace='!write'` | |
-| `fds`           | `-e fds=1`   | Single fd |
-|                 | `-e fds=!1`  | Not fd |
-|                 | `-e fds=1,2` | Multiple fds |
+
 
 :::::::::::::: {.columns}
+::: {.column}
+
+| Filter |         |        |
+|:-------|:--------|:-------|
+| `syscalls`      | `-e trace=read`                   | Single syscall    |
+|                 | `-e trace=read,write`             | Multiple syscalls |
+|                 | `-e trace='!read'`                | Not syscall  |
+| `syscall regex` | `-e trace='/open.*'`              | Regex        |
+| `syscall sets`  | `-e trace=file`                   | File callset |
+|                 | `-e trace=file -e trace='!write'` | File callset |
+| `fds`           | `-e fds=1`   | Single fd |
+|                 | `-e fds=1,2` | Multiple fds |
+|                 | `-e fds=!1`  | Not fd |
+
+:::
 ::: {.column}
 
 | Filter          |              |
@@ -24,19 +29,20 @@ title: "strace"
 | signal          | `-e signals=SIGIO`     |
 | path            | `-P hello`             |
 
-:::
-::: {.column}
-
-| Fork & Daemon                     |                                    |
-|:----------------------------------|:-----------------------------------|
-| `-p pid`                          | `--attach=pid`                   |
-| `-o myfile`                       | Output to file                   |
-| `-o myfile -f`                    | Follow child, output to file     |
-| `-o myfile -ff`                   | Each child output to a separated file |
-| `-o myfile -D`                    | Detached mode                    |
+| Fork            |                                    |
+|:----------------|:-----------------------------------|
+| `-p pid`        | `--attach=pid`                        |
+| `-o myfile`     | Output to file                        |
+| `-o myfile -f`  | Follow child, output to file          |
+| `-o myfile -ff` | Each child output to a separated file |
+| `-o myfile -D`  | Detached mode                         |
 
 :::
 ::::::::::::::
+
+
+:::::::::::::: {.columns}
+::: {.column}
 
 | Decode                |               |                                        |
 |:----------------------|:------------- |:---------------------------------------|
@@ -49,6 +55,13 @@ title: "strace"
 |                       | `-yy`         | Show all info associated with fds       |
 | backtrace             |`-k`           | `--stack-trace=symbol` |
 |                       |`-kk`          | `--stack-trace=source` |
+
+:::
+::: {.column}
+
+
+:::
+::::::::::::::
 
 * * * * *
 
