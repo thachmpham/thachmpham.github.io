@@ -16,7 +16,7 @@ body {
     overflow-wrap: break-word;
     text-rendering: optimizeLegibility;
     font-kerning: normal;
-    font-size: 125%;
+    font-size: 110%;
 }
 
 @media (max-width: 600px) {
