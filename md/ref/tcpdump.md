@@ -39,15 +39,7 @@ title: tcpdump
 
 
 :::::::::::::: {.columns}
-::: {.column width=20%}
-
-| stdio |  |
-|:-------------|-------------|
-| `-l` | Flush on end of line  |
-| `-U` | flush on end of packet |
-
-:::
-::: {.column width=80%}
+::: {.column}
 
 | grep & awk |
 |:-----------|
@@ -55,6 +47,13 @@ title: tcpdump
 | `tcpdump -i interface -l | grep --line-buffered expr | awk '{print $3}'` |
 | `tcpdump -i interface -l | grep --line-buffered expr | awk '{print $3; fflush()}' | python3 decode.py` |
 
+:::
+::: {.column}
+
+| stdio |  |
+|:-------------|-------------|
+| `-l` | Flush on end of line  |
+| `-U` | flush on end of packet |
 
 :::
 ::::::::::::::

@@ -127,26 +127,7 @@
 </div>
 </div>
 <div class="columns">
-<div class="column" style="width:20%;">
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">stdio</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><code>-l</code></td>
-<td>Flush on end of line</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>-U</code></td>
-<td>flush on end of packet</td>
-</tr>
-</tbody>
-</table>
-</div><div class="column" style="width:80%;">
+<div class="column">
 <table>
 <colgroup>
 <col style="width: 100%" />
@@ -168,6 +149,25 @@ style="text-align: left;"><code>tcpdump -i interface -l | grep --line-buffered e
 <tr class="odd">
 <td
 style="text-align: left;"><code>tcpdump -i interface -l | grep --line-buffered expr | awk '{print $3; fflush()}' | python3 decode.py</code></td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">stdio</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>-l</code></td>
+<td>Flush on end of line</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>-U</code></td>
+<td>flush on end of packet</td>
 </tr>
 </tbody>
 </table>
