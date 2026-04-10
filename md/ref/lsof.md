@@ -3,28 +3,32 @@ title: "lsof"
 ---
 
 :::::::::::::: {.columns}
-::: {.column width=60%}
+::: {.column}
 
-| Process                           | Example                   | Explain                                   |
-|:----------------------------------|:--------------------------|:------------------------------------------|
-| Filter by process pid             | `-p 123`                  | Show files opened by pid 123              |
-|                                   | `-p ^123`                 | Show files opened by pid != 123           |
-| Filter by process command         | `-c rsyslogd`             | Show files opened by rsyslogd             |
-|                                   | `-c ^rsyslogd`            | Show files opened by comm != rsyslogd     |
-| Filter by command regex           | `-c '/rsys.*/'`           | Show files opened by rsys.*               |
-|                                   | `-c '/rsyslogd|vi/'`      | Show files opened by rsyslogd or vi       |
+| Process to file                   |                           |                                      |
+|:----------------------------------|:--------------------------|:-------------------------------------|
+| Filter by process pid             | `-p 123`                  | Files opened by pid 123              |
+|                                   | `-p ^123`                 | Files opened by pid != 123           |
+| Filter by process command         | `-c rsyslogd`             | Files opened by rsyslogd             |
+|                                   | `-c ^rsyslogd`            | Files opened by comm != rsyslogd     |
+| Filter by command regex           | `-c '/rsys.*/'`           | Files opened by rsys.*               |
+|                                   | `-c '/rsyslogd|vi/'`      | Files opened by rsyslogd or vi       |
 
-| Path                              | Example                   | Explain                                   |
+| File to process                   |                           |                                           |
 |:----------------------------------|:--------------------------|:------------------------------------------|
-| Filter by file name               | `lsof hello.txt`          | Show processes open hello.txt             |
-| Filter by directory               | `+d /var/log`             | Show processes access /var/log directly   |
-| Filter by directory recursively   | `+D /var/log`             | Show processes access /var/log recursively|
-| Filter by file descriptor         | `-d 3`                    | Show processes have fd 3                  |
+| Filter by file name               | `lsof hello.txt`          | Processes open hello.txt             |
+| Filter by directory               | `+d /var/log`             | Processes access /var/log directly   |
+| Filter by directory recursively   | `+D /var/log`             | Processes access /var/log recursively|
+| Filter by file descriptor         | `-d 3`                    | Processes have fd 3                  |
 
 :::
-::: {.column width=40%}
+::: {.column}
 
-| Socket                            | Example                   | 
+| AND operation                     |                           |
+|:----------------------------------|:--------------------------|
+| `-c rsyslog -a -d 1`              | comm=rsyslogd and fd=1    |
+
+| Socket                            |                           | 
 |:----------------------------------|:--------------------------|
 | Filter by address                 | `-i addr`                 |
 | Filter by IP                      | `-i 127.0.0.1`            |
@@ -35,10 +39,6 @@ title: "lsof"
 
 Address format:  
 `[46][protocol][@hostname|hostaddr][:service|port]`
-
-| AND operation                     | Explain                   |
-|:----------------------------------|:--------------------------|
-| `-c rsyslog -a -d 1`              | comm=rsyslogd and fd=1    |
 
 :::
 ::::::::::::::

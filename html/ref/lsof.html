@@ -35,50 +35,50 @@
 <h1 class="title">lsof</h1>
 </header>
 <div class="columns">
-<div class="column" style="width:60%;">
-<table style="width:100%;">
+<div class="column">
+<table>
 <colgroup>
-<col style="width: 33%" />
-<col style="width: 25%" />
-<col style="width: 40%" />
+<col style="width: 35%" />
+<col style="width: 27%" />
+<col style="width: 38%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Process</th>
-<th style="text-align: left;">Example</th>
-<th style="text-align: left;">Explain</th>
+<th style="text-align: left;">Process to file</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Filter by process pid</td>
 <td style="text-align: left;"><code>-p 123</code></td>
-<td style="text-align: left;">Show files opened by pid 123</td>
+<td style="text-align: left;">Files opened by pid 123</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-p ^123</code></td>
-<td style="text-align: left;">Show files opened by pid != 123</td>
+<td style="text-align: left;">Files opened by pid != 123</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Filter by process command</td>
 <td style="text-align: left;"><code>-c rsyslogd</code></td>
-<td style="text-align: left;">Show files opened by rsyslogd</td>
+<td style="text-align: left;">Files opened by rsyslogd</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-c ^rsyslogd</code></td>
-<td style="text-align: left;">Show files opened by comm != rsyslogd</td>
+<td style="text-align: left;">Files opened by comm != rsyslogd</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Filter by command regex</td>
 <td style="text-align: left;"><code>-c '/rsys.*/'</code></td>
-<td style="text-align: left;">Show files opened by rsys.*</td>
+<td style="text-align: left;">Files opened by rsys.*</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-c '/rsyslogd|vi/'</code></td>
-<td style="text-align: left;">Show files opened by rsyslogd or vi</td>
+<td style="text-align: left;">Files opened by rsyslogd or vi</td>
 </tr>
 </tbody>
 </table>
@@ -90,42 +90,54 @@
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Path</th>
-<th style="text-align: left;">Example</th>
-<th style="text-align: left;">Explain</th>
+<th style="text-align: left;">File to process</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Filter by file name</td>
 <td style="text-align: left;"><code>lsof hello.txt</code></td>
-<td style="text-align: left;">Show processes open hello.txt</td>
+<td style="text-align: left;">Processes open hello.txt</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Filter by directory</td>
 <td style="text-align: left;"><code>+d /var/log</code></td>
-<td style="text-align: left;">Show processes access /var/log
-directly</td>
+<td style="text-align: left;">Processes access /var/log directly</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Filter by directory recursively</td>
 <td style="text-align: left;"><code>+D /var/log</code></td>
-<td style="text-align: left;">Show processes access /var/log
-recursively</td>
+<td style="text-align: left;">Processes access /var/log recursively</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Filter by file descriptor</td>
 <td style="text-align: left;"><code>-d 3</code></td>
-<td style="text-align: left;">Show processes have fd 3</td>
+<td style="text-align: left;">Processes have fd 3</td>
 </tr>
 </tbody>
 </table>
-</div><div class="column" style="width:40%;">
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">AND operation</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>-c rsyslog -a -d 1</code></td>
+<td style="text-align: left;">comm=rsyslogd and fd=1</td>
+</tr>
+</tbody>
+</table>
 <table>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Socket</th>
-<th style="text-align: left;">Example</th>
+<th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
@@ -157,20 +169,6 @@ recursively</td>
 </table>
 <p>Address format:<br />
 <code>[46][protocol][@hostname|hostaddr][:service|port]</code></p>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">AND operation</th>
-<th style="text-align: left;">Explain</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><code>-c rsyslog -a -d 1</code></td>
-<td style="text-align: left;">comm=rsyslogd and fd=1</td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
 <footer class="footer text-muted">
