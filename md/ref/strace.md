@@ -22,10 +22,10 @@ title: "strace"
 
 | Filter          |              |
 |:----------------|:-------------|
-| status.         | `-e status=successful` |
-|                 | `-e status=failed`|
-| signal          | `-e signals=SIGIO` |
-| path            | `-P hello` |
+| status          | `-e status=successful` |
+|                 | `-e status=failed`     |
+| signal          | `-e signals=SIGIO`     |
+| path            | `-P hello`             |
 
 :::
 ::::::::::::::
