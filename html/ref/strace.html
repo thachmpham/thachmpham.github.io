@@ -37,113 +37,101 @@
 <header id="title-block-header">
 <h1 class="title">strace</h1>
 </header>
-<h3 id="filter">Filter</h3>
 <div class="columns">
-<div class="column" style="width:40%;">
+<div class="column">
 <table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 40%" />
+<col style="width: 18%" />
+</colgroup>
 <thead>
 <tr>
-<th style="text-align: left;">Syscall</th>
-<th style="text-align: left;">Example</th>
+<th style="text-align: left;">Filter</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>-e trace=syscall</code></td>
+<td style="text-align: left;"><code>syscalls</code></td>
 <td style="text-align: left;"><code>-e trace=read</code></td>
+<td style="text-align: left;">Single syscall</td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-e trace='!read'</code></td>
+<td style="text-align: left;">Not syscall</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>-e trace=syscalls</code></td>
+<td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-e trace=read,write</code></td>
+<td style="text-align: left;">Multiple syscalls</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>-e trace=syscall_set</code></td>
+<td style="text-align: left;"><code>syscall regex</code></td>
+<td style="text-align: left;"><code>-e trace='/open.*'</code></td>
+<td style="text-align: left;">Regex</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>syscall sets</code></td>
 <td style="text-align: left;"><code>-e trace=file</code></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td
 style="text-align: left;"><code>-e trace=file -e trace='!write'</code></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>-e trace=/regex</code></td>
-<td style="text-align: left;"><code>-e trace=/open.*</code></td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">File</th>
-<th style="text-align: left;">Example</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><code>-e fds=set</code></td>
+<td style="text-align: left;"><code>fds</code></td>
 <td style="text-align: left;"><code>-e fds=1</code></td>
+<td style="text-align: left;">Single fd</td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-e fds=!1</code></td>
+<td style="text-align: left;">Not fd</td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-e fds=1,2</code></td>
+<td style="text-align: left;">Multiple fds</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Filter</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">status.</td>
+<td style="text-align: left;"><code>-e status=successful</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>--trace-path=path</code></td>
-<td style="text-align: left;"><code>--trace-path=hello</code></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>-e status=failed</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>-P</code></td>
+<td style="text-align: left;">signal</td>
+<td style="text-align: left;"><code>-e signals=SIGIO</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">path</td>
 <td style="text-align: left;"><code>-P hello</code></td>
 </tr>
 </tbody>
 </table>
-</div><div class="column" style="width:30%;">
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Return Status</th>
-<th style="text-align: left;">Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><code>-e status=set</code></td>
-<td
-style="text-align: left;"><code>successful, failed, unfinished</code></td>
-</tr>
-<tr>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>detached, unavailable</code></td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Signal</th>
-<th style="text-align: left;">Example</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><code>-e signals=set</code></td>
-<td style="text-align: left;"><code>-e signals=SIGIO</code></td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
-<h3 id="display">Display</h3>
 <div class="columns">
-<div class="column" style="width:60%;">
+<div class="column">
 <table>
 <colgroup>
 <col style="width: 29%" />
@@ -152,95 +140,63 @@ style="text-align: left;"><code>successful, failed, unfinished</code></td>
 </colgroup>
 <thead>
 <tr>
-<th style="text-align: left;">Decode Argument</th>
-<th style="text-align: left;">Example</th>
-<th style="text-align: left;">Explain</th>
+<th style="text-align: left;">Decode</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>--write=fd_set</code></td>
+<td style="text-align: left;">hex dump</td>
 <td style="text-align: left;"><code>--write=1</code></td>
-<td style="text-align: left;">Print data of write on fd 1 in hex +
+<td style="text-align: left;">On writes to fd 1, show data in hex +
 ascii</td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>--write=all</code></td>
-<td style="text-align: left;">Print data of all writes in hex +
+<td style="text-align: left;">On writes to all fds, show data in hex +
 ascii</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>--read=fd_set</code></td>
+<td style="text-align: left;"></td>
 <td style="text-align: left;"><code>--read=0</code></td>
-<td style="text-align: left;">Print data of read on fd 0 in hex +
-ascii</td>
+<td style="text-align: left;">On reads from fd 0, show hex + ascii</td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>--read=all</code></td>
-<td style="text-align: left;">Print data of all reads in hex +
+<td style="text-align: left;">On reads from all fds, show hex +
 ascii</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>xx -s N</code></td>
+<td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-xx -s 32</code></td>
-<td style="text-align: left;">Print data in hex, max length is 32</td>
-</tr>
-</tbody>
-</table>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 11%" />
-<col style="width: 54%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">Decode Descriptor</th>
-<th style="text-align: left;">Abbrev</th>
-<th style="text-align: left;">Explain</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><code>--decode-fds</code></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">Show data in hex, max length 32</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>--decode-fds=set</code></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>--decode-fds=path</code></td>
+<td style="text-align: left;">decode fds</td>
 <td style="text-align: left;"><code>-y</code></td>
-<td style="text-align: left;">Decode file path associated with fds</td>
+<td style="text-align: left;">Show file path associated with fds</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>--decode-fds=all</code></td>
+<td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-yy</code></td>
-<td style="text-align: left;">Decode all info associated with fds</td>
+<td style="text-align: left;">Show all info associated with fds</td>
+</tr>
+<tr>
+<td style="text-align: left;">backtrace</td>
+<td style="text-align: left;"><code>-k</code></td>
+<td style="text-align: left;"><code>--stack-trace=symbol</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>--decode-pids=set</code></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>--decode-pids=comm</code></td>
-<td style="text-align: left;"><code>-Y</code></td>
-<td style="text-align: left;">Decode command names for pids</td>
+<td style="text-align: left;"><code>-kk</code></td>
+<td style="text-align: left;"><code>--stack-trace=source</code></td>
 </tr>
 </tbody>
 </table>
-</div><div class="column" style="width:40%;">
+</div><div class="column">
 <table>
 <colgroup>
 <col style="width: 49%" />
@@ -249,53 +205,35 @@ ascii</td>
 <thead>
 <tr>
 <th style="text-align: left;">Fork &amp; Daemon</th>
-<th style="text-align: left;">Explain</th>
+<th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>-o myfile</code></td>
-<td style="text-align: left;">Output to myfile</td>
+<td style="text-align: left;"><code>-p pid</code></td>
+<td style="text-align: left;"><code>--attach=pid</code></td>
 </tr>
 <tr>
-<td
-style="text-align: left;"><code>-o myfile --output-separately</code></td>
-<td style="text-align: left;">Output to file myfile.pid</td>
+<td style="text-align: left;"><code>-o myfile</code></td>
+<td style="text-align: left;">Output to file</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>-o myfile -f</code></td>
-<td style="text-align: left;">Follow child, output to myfile</td>
+<td style="text-align: left;">Follow child, output to file</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>-o myfile -ff</code></td>
-<td style="text-align: left;">Follow child, output to myfile.pid</td>
+<td style="text-align: left;">Each child output to a separated file</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>-o myfile -D</code></td>
-<td style="text-align: left;">strace and target process detached</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Backtrace</th>
-<th style="text-align: left;">Abbrev</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><code>--stack-trace=symbol</code></td>
-<td style="text-align: left;"><code>-k</code></td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>--stack-trace=source</code></td>
-<td style="text-align: left;"><code>-kk</code></td>
+<td style="text-align: left;">Detached mode</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
+<hr />
 <h3 id="real-cases">Real Cases</h3>
 <table>
 <colgroup>

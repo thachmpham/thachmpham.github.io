@@ -2,86 +2,65 @@
 title: "strace"
 ---
 
-### Filter
-
 :::::::::::::: {.columns}
-::: {.column width=40%}
+::: {.column}
 
-| Syscall | Example |
-|:--------|:--------|
-| `-e trace=syscall`        | `-e trace=read`                   |
-|                           | `-e trace='!read'`                |
-| `-e trace=syscalls`       | `-e trace=read,write`             |
-| `-e trace=syscall_set`    | `-e trace=file`                   |
-|                           | `-e trace=file -e trace='!write'` |
-| `-e trace=/regex`         | `-e trace=/open.*`                |
-
-
-| File            | Example      |
-|:----------------|:-------------|
-| `-e fds=set`    | `-e fds=1`   |
-|                 | `-e fds=!1`  |
-|                 | `-e fds=1,2` |
-| `--trace-path=path` | `--trace-path=hello` |
-| `-P`                | `-P hello`           |
+| Filter   |         |   |
+|:--------|:--------|:---|
+| `syscalls`                | `-e trace=read`                   | Single syscall |
+|                           | `-e trace='!read'`                | Not syscall |
+|                           | `-e trace=read,write`             | Multiple syscalls |
+| `syscall regex`           | `-e trace='/open.*'`              | Regex |
+| `syscall sets`            | `-e trace=file`                   | |
+|                           | `-e trace=file -e trace='!write'` | |
+| `fds`                     | `-e fds=1`   | Single fd |
+|                           | `-e fds=!1`  | Not fd |
+|                           | `-e fds=1,2` | Multiple fds |
 
 :::
-::: {.column width=30%}
+::: {.column}
 
-| Return Status   | Value      |
+| Filter          |              |
 |:----------------|:-------------|
-| `-e status=set` | `successful, failed, unfinished` |
-|                 | `detached, unavailable` |
-
-| Signal          | Example      |
-|:----------------|:-------------|
-| `-e signals=set` | `-e signals=SIGIO` |
+| status.         | `-e status=successful` |
+|                 | `-e status=failed`|
+| signal          | `-e signals=SIGIO` |
+| path            | `-P hello` |
 
 :::
 ::::::::::::::
 
-### Display
 
 :::::::::::::: {.columns}
-::: {.column width=60%}
+::: {.column}
 
-| Decode Argument       | Example       | Explain |
+| Decode                |               |                                        |
 |:----------------------|:------------- |:---------------------------------------|
-| `--write=fd_set`      | `--write=1`   | Print data of write on fd 1 in hex + ascii    |
-|                       | `--write=all` | Print data of all writes in hex + ascii       |
-| `--read=fd_set`       | `--read=0`    | Print data of read on fd 0 in hex + ascii     |
-|                       | `--read=all`  | Print data of all reads in hex + ascii        |
-| `xx -s N`             | `-xx -s 32`   | Print data in hex, max length is 32           |
-
-| Decode Descriptor     | Abbrev | Explain |
-|:----------------------|:-------|:------------------------------------|
-| `--decode-fds`        |        |                                     |
-| `--decode-fds=set`    |        |                                     |
-| `--decode-fds=path`   | `-y`   | Decode file path associated with fds |
-| `--decode-fds=all`    | `-yy`  | Decode all info associated with fds  |
-|                       |        |                                     |
-| `--decode-pids=set`   |        |                                     |
-| `--decode-pids=comm`  | `-Y`   | Decode command names for pids        |
+| hex dump              | `--write=1`   | On writes to fd 1, show data in hex + ascii |
+|                       | `--write=all` | On writes to all fds, show data in hex + ascii |
+|                       | `--read=0`    | On reads from fd 0, show hex + ascii    |
+|                       | `--read=all`  | On reads from all fds, show hex + ascii |
+|                       | `-xx -s 32`   | Show data in hex, max length 32         |
+| decode fds            | `-y`          | Show file path associated with fds      |
+|                       | `-yy`         | Show all info associated with fds       |
+| backtrace             |`-k`           | `--stack-trace=symbol` |
+|                       |`-kk`          | `--stack-trace=source` |
 
 :::
-::: {.column width=40%}
+::: {.column}
 
-| Fork & Daemon                     | Explain                            |
+| Fork & Daemon                     |                                    |
 |:----------------------------------|:-----------------------------------|
-| `-o myfile`                       | Output to myfile                   |
-| `-o myfile --output-separately`   | Output to file myfile.pid          |
-| `-o myfile -f`                    | Follow child, output to myfile     |
-| `-o myfile -ff`                   | Follow child, output to myfile.pid |
-| `-o myfile -D`                    | strace and target process detached |
-
-| Backtrace              | Abbrev  |
-|:-----------------------|:--------|
-| `--stack-trace=symbol` | `-k`    |
-| `--stack-trace=source` | `-kk`   |
+| `-p pid`                          | `--attach=pid`                   |
+| `-o myfile`                       | Output to file                   |
+| `-o myfile -f`                    | Follow child, output to file     |
+| `-o myfile -ff`                   | Each child output to a separated file |
+| `-o myfile -D`                    | Detached mode                    |
 
 :::
 ::::::::::::::
 
+* * * * *
 
 ### Real Cases
 
