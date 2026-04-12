@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>A Developer Notebook</title>
   <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -38,118 +41,82 @@
 <ul>
 <li><a href="#software-troubleshooting"
 id="toc-software-troubleshooting"><span
-class="toc-section-number">0.0.1</span> Software
-Troubleshooting</a></li>
+class="toc-section-number">1</span> Software Troubleshooting</a></li>
 <li><a href="#case-studies" id="toc-case-studies"><span
-class="toc-section-number">0.0.2</span> Case Studies</a></li>
+class="toc-section-number">2</span> Case Studies</a></li>
 <li><a href="#life-leisure" id="toc-life-leisure"><span
-class="toc-section-number">0.0.3</span> Life &amp; Leisure</a></li>
+class="toc-section-number">3</span> Life &amp; Leisure</a></li>
 </ul>
 </nav>
-<h3 data-number="0.0.1" id="software-troubleshooting"><span
-class="header-section-number">0.0.1</span> Software Troubleshooting</h3>
+<h2 data-number="1" id="software-troubleshooting"><span
+class="header-section-number">1</span> Software Troubleshooting</h2>
 <div class="columns">
-<div class="column">
-<p>Log Collection</p>
-<ul>
-<li><a href="/html/ref/strace.html">strace</a></li>
-<li><a href="/html/ref/lsof.html">lsof</a></li>
-<li><a href="/html/ref/tcpdump.html">tcpdump</a></li>
-<li><a href="/html/ref/pcap-filter.html">pcap filter</a></li>
-</ul>
-<p><br></p>
-<p>Log Processing</p>
-<ul>
-<li><a href="/html/ref/grep.html">grep</a></li>
-<li><a href="/html/ref/perl.html">perl</a></li>
-</ul>
-<p><br></p>
-<p>Documentation</p>
-<ul>
-<li><a href="/html/ref/plantuml.html">plantuml</a></li>
-</ul>
-</div><div class="column">
-<p>GDB</p>
-<ul>
-<li><a href="/html/ref/gdb/break.html">breakpoint</a></li>
-<li><a href="/html/ref/gdb/catch.html">catchpoint</a></li>
-<li><a href="/html/ref/gdb/watch.html">watchpoint</a></li>
-<li><a href="/html/ref/gdb/trace.html">tracepoint</a></li>
-<li><a href="/html/ref/gdb/memory.html">process memory</a></li>
-<li><a href="/html/ref/gdb/remote_debug.html">remote debug</a></li>
-<li><a href="/html/ref/gdb/symbol.html">symbol table</a></li>
-<li><a href="/html/ref/gdb/pretty_printer.html">pretty printer</a></li>
-<li><a href="/html/ref/gdb/debuginfo.html">debug info</a></li>
-</ul>
-<p><br></p>
-</div><div class="column">
-<p>Protocols</p>
-<ul>
-<li><a href="/html/ref/arp.html">arp</a></li>
-<li><a href="/html/ref/ip-routing.html">ip routing</a></li>
-<li><a href="/html/ref/dhcp.html">dhcp</a></li>
-<li><a href="/html/ref/tipc.html">tipc</a></li>
-<li><a href="/html/ref/vip.html">virtual ip</a></li>
-<li><a href="/html/ref/drbd.html">drbd</a></li>
-<li><a href="/html/ref/nfs.html">nfs</a></li>
-<li><a href="/html/ref/ldap.html">ldap</a></li>
-<li><a href="/html/ref/diameter.html">diameter</a></li>
-</ul>
-<p><br></p>
-<p>Linux Kernel</p>
-<ul>
-<li><a href="/html/ref/kernel/module.html">kernel module</a></li>
-<li><a href="/html/ref/kernel/cdev.html">character device</a></li>
-</ul>
-</div><div class="column">
-<p>Booting</p>
-<ul>
-<li><a href="/html/ref/grub.html">grub</a></li>
-<li><a href="/html/ref/pxe.html">pxe</a></li>
-</ul>
-<p><br></p>
-<p>Adminstration</p>
-<ul>
-<li><a href="/html/ref/systemd.html">systemd</a></li>
-<li><a href="/html/ref/fdisk.html">fdisk</a></li>
-<li><a href="/html/ref/firewall.html">firewall</a></li>
-<li><a href="/html/ref/kvm.html">kvm</a></li>
-</ul>
-<p><br></p>
-<p>Network Interfaces</p>
-<ul>
-<li><a href="/html/ref/veth.html">veth</a></li>
-<li><a href="/html/ref/vbridge.html">bridge</a></li>
-<li><a href="/html/ref/vbond.html">bond</a></li>
-<li><a href="/html/ref/vdummy.html">dummy</a></li>
-</ul>
-</div><div class="column">
-<p>OpenSAF</p>
-<ul>
-<li><a href="/html/ref/opensaf/install.html">build install</a></li>
-<li><a href="/html/ref/opensaf/1sc.html">single-node cluster</a></li>
-<li><a href="/html/ref/opensaf/2sc.html">two-node cluster</a></li>
-<li><a href="/html/ref/opensaf/imm.html">imm</a></li>
-<li><a href="/html/ref/opensaf/log.html">log</a></li>
-<li><a href="/html/ref/opensaf/smf.html">smf</a></li>
-<li><a href="/html/ref/opensaf/sa-aware.html">sa-aware
-application</a></li>
-<li><a href="/html/ref/opensaf/non-sa-ware.html">non-sa-aware
-application</a></li>
-<li><a href="/html/ref/opensaf/healthcheck.html">healthcheck</a></li>
-<li><a href="/html/ref/opensaf/recovery.html">error detection</a></li>
-</ul>
+<div class="column" style="width:50%;">
+<p><strong>Log Collection</strong>: <a
+href="/html/ref/strace.html">strace</a>, <a
+href="/html/ref/lsof.html">lsof</a>, <a
+href="/html/ref/tcpdump.html">tcpdump</a>, <a
+href="/html/ref/pcap-filter.html">pcap filter</a>.</p>
+<p><strong>Log Processing</strong>: <a
+href="/html/ref/grep.html">grep</a>, <a
+href="/html/ref/perl.html">perl</a>.</p>
+<p><strong>Documentation</strong>: <a
+href="/html/ref/plantuml.html">plantuml</a>.</p>
+<p><strong>GDB</strong>: <a
+href="/html/ref/gdb/break.html">breakpoint</a>, <a
+href="/html/ref/gdb/catch.html">catchpoint</a>, <a
+href="/html/ref/gdb/watch.html">watchpoint</a>, <a
+href="/html/ref/gdb/trace.html">tracepoint</a>, <a
+href="/html/ref/gdb/memory.html">process memory</a>, <a
+href="/html/ref/gdb/remote_debug.html">remote debug</a>, <a
+href="/html/ref/gdb/symbol.html">symbol table</a>, <a
+href="/html/ref/gdb/pretty_printer.html">pretty printer</a>, <a
+href="/html/ref/gdb/debuginfo.html">debug info</a>.</p>
+<p><strong>Linux Kernel</strong>: <a
+href="/html/ref/kernel/module.html">kernel module</a>, <a
+href="/html/ref/kernel/cdev.html">character device</a></p>
+</div><div class="column" style="width:50%;">
+<p><strong>Protocols</strong>: <a href="/html/ref/arp.html">arp</a>, <a
+href="/html/ref/ip-routing.html">ip routing</a>, <a
+href="/html/ref/dhcp.html">dhcp</a>, <a
+href="/html/ref/tipc.html">tipc</a>, <a
+href="/html/ref/vip.html">virtual ip</a>, <a
+href="/html/ref/drbd.html">drbd</a>, <a
+href="/html/ref/nfs.html">nfs</a>, <a
+href="/html/ref/ldap.html">ldap</a>, <a
+href="/html/ref/diameter.html">diameter</a>.</p>
+<p><strong>Booting</strong>: <a href="/html/ref/grub.html">grub</a>, <a
+href="/html/ref/pxe.html">pxe</a>.</p>
+<p><strong>Adminstration</strong>: <a
+href="/html/ref/systemd.html">systemd</a>, <a
+href="/html/ref/fdisk.html">fdisk</a>, <a
+href="/html/ref/firewall.html">firewall</a>, <a
+href="/html/ref/kvm.html">kvm</a>.</p>
+<p><strong>Network Interfaces</strong>: <a
+href="/html/ref/veth.html">veth</a>, <a
+href="/html/ref/vbridge.html">bridge</a>, <a
+href="/html/ref/vbond.html">bond</a>, <a
+href="/html/ref/vdummy.html">dummy</a>.</p>
+<p><strong>OpenSAF</strong>: <a
+href="/html/ref/opensaf/install.html">build install</a>, <a
+href="/html/ref/opensaf/1sc.html">single-node cluster</a>, <a
+href="/html/ref/opensaf/2sc.html">two-node cluster</a>, <a
+href="/html/ref/opensaf/imm.html">imm</a>, <a
+href="/html/ref/opensaf/log.html">log</a>, <a
+href="/html/ref/opensaf/smf.html">smf</a>, <a
+href="/html/ref/opensaf/sa-aware.html">sa-aware application</a>, <a
+href="/html/ref/opensaf/non-sa-ware.html">non-sa-aware application</a>,
+<a href="/html/ref/opensaf/healthcheck.html">healthcheck</a>, <a
+href="/html/ref/opensaf/recovery.html">error detection</a>.</p>
 </div>
 </div>
-<hr />
-<h3 data-number="0.0.2" id="case-studies"><span
-class="header-section-number">0.0.2</span> Case Studies</h3>
+<h2 data-number="2" id="case-studies"><span
+class="header-section-number">2</span> Case Studies</h2>
 <ul>
 <li><a href="/html/std/rsyslog.html">rsyslog</a></li>
 </ul>
-<hr />
-<h3 data-number="0.0.3" id="life-leisure"><span
-class="header-section-number">0.0.3</span> Life &amp; Leisure</h3>
+<h2 data-number="3" id="life-leisure"><span
+class="header-section-number">3</span> Life &amp; Leisure</h2>
 <ul>
 <li><a
 href="/html/interpreting/note-taking-andrew-gillies.html">Note-Taking
