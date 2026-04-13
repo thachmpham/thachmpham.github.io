@@ -11,7 +11,7 @@ subtitle: "Andrew Gillies"
 
 **Practice: Mind Map**
 
-- Download transcripts.
+- Read transcripts.
 - Mind map for the main ideas.
 
 :::
@@ -19,7 +19,7 @@ subtitle: "Andrew Gillies"
 
 **Practice: Section Summary**
 
-- Download transcripts.
+- Read transcripts.
 - Two-column table.
     - Column 1: Transcript. Highlight sentences sum up section.
     - Column 2: One-line summary per section.
@@ -29,7 +29,7 @@ subtitle: "Andrew Gillies"
 
 **Practice: Speech Summary**
 
-- Listen to a speech.
+- Listen audios.
     - How many points.
     - Note one word per point.
 
@@ -40,8 +40,24 @@ subtitle: "Andrew Gillies"
 ## Recognizing and Splitting Ideas
 An idea is a Subject - Verb - Object group (SVO).
 
-**Practice SVO**
+:::::::::::::: {.columns}
+::: {.column}
 
-- Download transcripts.
+**Practice: SVO**
+
+- Read transcripts.
 - Remove all paragraph breaks or blank lines. Reformat text to be a single block of text.
 - Go through the text with cursor, hit enter twice after each SVO group - in other words, between ideas.
+
+:::
+::: {.column}
+
+**Practice: Diagonal SVO**
+
+- Listen audios.
+- Round 1: Scratch diagonal SVO. Only two words per element.
+- Round 2: Fill more.
+- Round 3: Check transcripts.
+
+:::
+::::::::::::::
