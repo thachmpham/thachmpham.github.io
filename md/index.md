@@ -36,8 +36,10 @@ title: "A Developer Notebook"
 
 
 **Linux Kernel**:
+[Build & Run](/html/ref/kernel/kernel_build.html),
 [Kernel Module](/html/ref/kernel/module.html),
 [Character Device](/html/ref/kernel/cdev.html).
+
 
 :::
 ::: {.column width=50%}
