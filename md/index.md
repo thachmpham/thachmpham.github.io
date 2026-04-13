@@ -8,19 +8,19 @@ title: "A Developer Notebook"
 ::: {.column width=50%}
 
 **Log Collection**:
-[Strace](/html/ref/strace.html),
-[LSOF](/html/ref/lsof.html),
-[Tcpdump](/html/ref/tcpdump.html),
+[strace](/html/ref/strace.html),
+[lsof](/html/ref/lsof.html),
+[tcpdump](/html/ref/tcpdump.html),
 [PCAP Filter](/html/ref/pcap-filter.html).
 
 
 **Log Processing**:
-[Grep](/html/ref/grep.html),
-[Perl](/html/ref/perl.html).
+[grep](/html/ref/grep.html),
+[perl](/html/ref/perl.html).
 
 
 **Documentation**:
-[Plantuml](/html/ref/plantuml.html).
+[PlantUML](/html/ref/plantuml.html).
 
 
 **GDB**:
@@ -46,7 +46,7 @@ title: "A Developer Notebook"
 
 **Protocols**:
 [ARP](/html/ref/arp.html),
-[IP routing](/html/ref/ip-routing.html),
+[IP Routing](/html/ref/ip-routing.html),
 [DHCP](/html/ref/dhcp.html),
 [TIPC](/html/ref/tipc.html),
 [vIP](/html/ref/vip.html),
