@@ -35,7 +35,7 @@
 <h1 class="title">PERL</h1>
 </header>
 <div class="columns">
-<div class="column" style="width:25%;">
+<div class="column">
 <table>
 <thead>
 <tr class="header">
@@ -98,7 +98,6 @@
 </tr>
 </tbody>
 </table>
-</div><div class="column" style="width:25%;">
 <table>
 <thead>
 <tr class="header">
@@ -132,24 +131,6 @@
 <table>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Greedy</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><code>a*b</code></td>
-<td>Longest a*b</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>a*?b</code></td>
-<td>Shortest a*b</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
 <th style="text-align: left;">Boundary</th>
 <th></th>
 </tr>
@@ -169,7 +150,121 @@
 </tr>
 </tbody>
 </table>
-</div><div class="column" style="width:50%;">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Greedy</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>a*b</code></td>
+<td>Longest a*b</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>a*?b</code></td>
+<td>Shortest a*b</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: left;">Command line arguments</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-e</code></td>
+<td style="text-align: left;">Execute command</td>
+</tr>
+<tr class="even">
+<td><code>-E</code></td>
+<td style="text-align: left;">Execute with features</td>
+</tr>
+<tr class="odd">
+<td><code>-p</code></td>
+<td style="text-align: left;">Print all lines</td>
+</tr>
+<tr class="even">
+<td><code>-n</code></td>
+<td style="text-align: left;">Not print automatically</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Subtitude</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>-pe 's/foo/bar/'</code></td>
+<td>Replace first <code>foo</code> by <code>bar</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>-pe 's/foo/bar/g'</code></td>
+<td>Replace all <code>foo</code> by <code>bar</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>-pe 's/foo/bar/i'</code></td>
+<td>Ignore case insensitive</td>
+</tr>
+<tr class="even">
+<td
+style="text-align: left;"><code>-pe 's/(foo) (bar)/$2 $1/'</code></td>
+<td>Capure groups. Swap <code>foo</code>, <code>bar</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Split &amp; Field</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>-F&lt;regex&gt;</code></td>
+<td>Split on regex</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>-F:</code></td>
+<td>Split on <code>:</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>-F'[:,]'</code></td>
+<td>Split on <code>:</code> or <code>,</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>$F[0] $F[1]</code></td>
+<td>Fields 0, 1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>@F</code></td>
+<td>All fields</td>
+</tr>
+<tr class="even">
+<td
+style="text-align: left;"><code>-F: -e 'print "$F[0] $F[1]\n"'</code></td>
+<td>Split on <code>:</code> and print fields 0, 1.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>-F: -e 'print "@F\n"'</code></td>
+<td>Split on <code>:</code> and print all fields.</td>
+</tr>
+</tbody>
+</table>
 <table>
 <thead>
 <tr class="header">
@@ -190,6 +285,8 @@ style="text-align: left;"><code>'print "$1 $2\n" if /name=(\w+) age=(\d+)/'</cod
 </tr>
 </tbody>
 </table>
+</div>
+</div>
 <table>
 <colgroup>
 <col style="width: 26%" />
@@ -250,110 +347,6 @@ style="text-align: left;"><code>'print "$1 $2\n" if /name=(\w+) age=(\d+)/'</cod
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="columns">
-<div class="column" style="width:20%;">
-<table>
-<thead>
-<tr class="header">
-<th></th>
-<th style="text-align: left;">Command line arguments</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>-e</code></td>
-<td style="text-align: left;">Execute command</td>
-</tr>
-<tr class="even">
-<td><code>-E</code></td>
-<td style="text-align: left;">Execute with features</td>
-</tr>
-<tr class="odd">
-<td><code>-p</code></td>
-<td style="text-align: left;">Print all lines</td>
-</tr>
-<tr class="even">
-<td><code>-n</code></td>
-<td style="text-align: left;">Not print automatically</td>
-</tr>
-</tbody>
-</table>
-</div><div class="column" style="width:30%;">
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Subtitude</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><code>-pe 's/foo/bar/'</code></td>
-<td>Replace first <code>foo</code> by <code>bar</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>-pe 's/foo/bar/g'</code></td>
-<td>Replace all <code>foo</code> by <code>bar</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>-pe 's/foo/bar/i'</code></td>
-<td>Ignore case insensitive</td>
-</tr>
-<tr class="even">
-<td
-style="text-align: left;"><code>-pe 's/(foo) (bar)/$2 $1/'</code></td>
-<td>Capure groups. Swap <code>foo</code>, <code>bar</code></td>
-</tr>
-</tbody>
-</table>
-</div><div class="column" style="width:50%;">
-<table>
-<colgroup>
-<col style="width: 51%" />
-<col style="width: 48%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Split &amp; Field</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><code>-F&lt;regex&gt;</code></td>
-<td>Split on regex</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>-F:</code></td>
-<td>Split on <code>:</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>-F'[:,]'</code></td>
-<td>Split on <code>:</code> or <code>,</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>$F[0] $F[1]</code></td>
-<td>Fields 0, 1</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>@F</code></td>
-<td>All fields</td>
-</tr>
-<tr class="even">
-<td
-style="text-align: left;"><code>-F: -e 'print "$F[0] $F[1]\n"'</code></td>
-<td>Split on <code>:</code> and print fields 0, 1.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>-F: -e 'print "@F\n"'</code></td>
-<td>Split on <code>:</code> and print all fields.</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
 <footer class="footer text-muted">
    <div align="center">      
       <br>
