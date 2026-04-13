@@ -7,20 +7,14 @@ title: "A Developer Notebook"
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-**Log Collection**:
+**Common Tools**:
 [strace](/html/ref/strace.html),
 [lsof](/html/ref/lsof.html),
 [tcpdump](/html/ref/tcpdump.html),
-[PCAP Filter](/html/ref/pcap-filter.html).
-
-
-**Log Processing**:
+[pcap](/html/ref/pcap-filter.html),
 [grep](/html/ref/grep.html),
-[perl](/html/ref/perl.html).
-
-
-**Documentation**:
-[PlantUML](/html/ref/plantuml.html).
+[perl](/html/ref/perl.html),
+[plantuml](/html/ref/plantuml.html).
 
 
 **GDB**:
@@ -34,6 +28,17 @@ title: "A Developer Notebook"
 [Pretty Printer](/html/ref/gdb/pretty_printer.html),
 [Debug Info](/html/ref/gdb/debuginfo.html).
 
+:::
+::: {.column width=50%}
+
+**Linux**:
+[GRUB](/html/ref/grub.html),
+[PXE](/html/ref/pxe.html),
+[SystemD](/html/ref/systemd.html),
+[FDisk](/html/ref/fdisk.html),
+[Firewall](/html/ref/firewall.html),
+[KVM](/html/ref/kvm.html).
+
 
 **Linux Kernel**:
 [Build & Run](/html/ref/kernel/kernel_build.html),
@@ -42,9 +47,6 @@ title: "A Developer Notebook"
 [Kernel Module](/html/ref/kernel/module.html),
 [Character Device](/html/ref/kernel/cdev.html).
 
-
-:::
-::: {.column width=50%}
 
 **Protocols**:
 [ARP](/html/ref/arp.html),
@@ -56,18 +58,6 @@ title: "A Developer Notebook"
 [NFS](/html/ref/nfs.html),
 [LDAP](/html/ref/ldap.html),
 [Diameter](/html/ref/diameter.html).
-
-
-**Booting**:
-[GRUB](/html/ref/grub.html),
-[PXE](/html/ref/pxe.html).
-
-
-**Adminstration**:
-[SystemD](/html/ref/systemd.html),
-[FDisk](/html/ref/fdisk.html),
-[Firewall](/html/ref/firewall.html),
-[KVM](/html/ref/kvm.html).
 
 
 **Network Interfaces**:
@@ -93,11 +83,9 @@ title: "A Developer Notebook"
 :::
 ::::::::::::::
 
-
 ## Case Studies
 - [rsyslog](/html/std/rsyslog.html)
 
 
 ## Life & Leisure
 - [Note-Taking for Consecutive Interpreting, Andrew Gillies](/html/interpreting/note-taking-andrew-gillies.html)
-
