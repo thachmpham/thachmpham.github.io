@@ -5,7 +5,7 @@ title:  "Linux Kernel: Debug with GDB"
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-1. Build kernel with GDB support.
+1. Build kernel with gdb support.
 ```sh
 $ make menuconfig
 ```
@@ -22,7 +22,7 @@ $ make -j `nproc`
 ```
 
 
-2. Run kernel.
+2. Run kernel with gdb server support.
 ```sh
 $ qemu-system-x86_64 -boot order=c -m 2048M \
     -kernel /root/kernel/linux-5.15.186/arch/x86/boot/bzImage \
@@ -32,12 +32,12 @@ $ qemu-system-x86_64 -boot order=c -m 2048M \
     -s -S
 ```
 
-- The `-s -S` options start QEMU with a GDB server on port 1234.
+- The `-s -S` options start qemu with a gdb server on port 1234.
 
 :::
 ::: {.column width=50%}
 
-3. Attach GDB. Launch GDB on host and connect to the GDB server on QEMU VM.
+3. Launch gdb on host and connect to the gdb server on qemu VM.
 
 ```sh
 $ gdb /root/kernel/linux-5.15.186/vmlinux
@@ -55,12 +55,12 @@ Breakpoint 60 at 0xffffffff810710a0: file kernel/exit.c, line 777.
 (gdb) continue
 ```
 
-- In the QEMU VM, run the ls command.
+- In the qemu VM, run the ls command.
 ```sh
 $ ls
 ```
 
-- In GDB, verify that the breakpoint at do_exit is hit.
+- In gdb, verify that the breakpoint at do_exit is hit.
 ```sh
 Breakpoint 60, do_exit (code=code@entry=0) at kernel/exit.c:777
 777     {

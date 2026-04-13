@@ -104,7 +104,7 @@
 <div class="columns">
 <div class="column" style="width:50%;">
 <ol type="1">
-<li>Build kernel with GDB support.</li>
+<li>Build kernel with gdb support.</li>
 </ol>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make menuconfig</span></code></pre></div>
 <ul>
@@ -123,7 +123,7 @@
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make <span class="at">-j</span> <span class="kw">`</span><span class="fu">nproc</span><span class="kw">`</span></span></code></pre></div>
 <ol start="2" type="1">
-<li>Run kernel.</li>
+<li>Run kernel with gdb server support.</li>
 </ol>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> qemu-system-x86_64 <span class="at">-boot</span> order=c <span class="at">-m</span> 2048M <span class="dt">\</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">-kernel</span> /root/kernel/linux-5.15.186/arch/x86/boot/bzImage <span class="dt">\</span></span>
@@ -132,13 +132,12 @@
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">-nographic</span> <span class="dt">\</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">-s</span> <span class="at">-S</span></span></code></pre></div>
 <ul>
-<li>The <code>-s -S</code> options start QEMU with a GDB server on port
+<li>The <code>-s -S</code> options start qemu with a gdb server on port
 1234.</li>
 </ul>
 </div><div class="column" style="width:50%;">
 <ol start="3" type="1">
-<li>Attach GDB. Launch GDB on host and connect to the GDB server on QEMU
-VM.</li>
+<li>Launch gdb on host and connect to the gdb server on qemu VM.</li>
 </ol>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb /root/kernel/linux-5.15.186/vmlinux</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -152,11 +151,11 @@ VM.</li>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">continue</span></span></code></pre></div>
 <ul>
-<li>In the QEMU VM, run the ls command.</li>
+<li>In the qemu VM, run the ls command.</li>
 </ul>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ls</span></code></pre></div>
 <ul>
-<li>In GDB, verify that the breakpoint at do_exit is hit.</li>
+<li>In gdb, verify that the breakpoint at do_exit is hit.</li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 60, do_exit <span class="er">(</span><span class="va">code</span><span class="op">=</span>code@entry=0<span class="kw">)</span> <span class="ex">at</span> kernel/exit.c:777</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">777</span>     {</span>
