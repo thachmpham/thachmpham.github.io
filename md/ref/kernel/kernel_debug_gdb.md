@@ -1,14 +1,13 @@
 ---
-title:  "Debug Linux Kernel with GDB"
+title:  "Linux Kernel: Debug with GDB"
 ---
 
+:::::::::::::: {.columns}
+::: {.column width=50%}
 
-# 1. Enable GDB Support
-Enable GDB support with the config menu.
+1. Build kernel with GDB support.
 ```sh
-  
 $ make menuconfig
-  
 ```
 
 - Kernel hacking
@@ -19,62 +18,50 @@ $ make menuconfig
         - Provide GDB scripts for kernel debugging
 
 ```sh
-  
 $ make -j `nproc`
-  
 ```
 
 
-# 2. Run Kernel
-Run the kernel with QEMU. 
+2. Run kernel.
 ```sh
-  
 $ qemu-system-x86_64 -boot order=c -m 2048M \
     -kernel /root/kernel/linux-5.15.186/arch/x86/boot/bzImage \
     -hda /root/kernel/buildroot-2025.05/output/images/rootfs.ext2 \
     -append "root=/dev/sda rw console=ttyS0,115200 nokaslr" \
     -nographic \
     -s -S
-  
 ```
 
-The -s -S options start QEMU with a GDB server on port 1234.
+- The `-s -S` options start QEMU with a GDB server on port 1234.
 
+:::
+::: {.column width=50%}
 
-# 3. Attach GDB
-To debug the Linux kernel remotely, launch GDB on the host and connect it to the QEMU GDB server.
+3. Attach GDB. Launch GDB on host and connect to the GDB server on QEMU VM.
 
 ```sh
-  
 $ gdb /root/kernel/linux-5.15.186/vmlinux
 
 (gdb) target remote :1234
 (gdb) continue
-  
 ```
 
 
-# 4. Breakpoint
-Set a breakpoint at the `do_exit` function
+4. Set a breakpoint at the `do_exit` function.
 ```sh
-  
 (gdb) break do_exit
 Breakpoint 60 at 0xffffffff810710a0: file kernel/exit.c, line 777.
 
 (gdb) continue
-  
 ```
 
-In the QEMU VM, run the ls command.
+- In the QEMU VM, run the ls command.
 ```sh
-  
 $ ls
-  
 ```
 
-In GDB, verify that the breakpoint at do_exit is hit.
+- In GDB, verify that the breakpoint at do_exit is hit.
 ```sh
-  
 Breakpoint 60, do_exit (code=code@entry=0) at kernel/exit.c:777
 777     {
 (gdb) bt
@@ -88,5 +75,7 @@ Breakpoint 60, do_exit (code=code@entry=0) at kernel/exit.c:777
 #7  0xffffffff81c3358f in do_fast_syscall_32 (regs=0xffffc900001d7f58) at arch/x86/entry/common.c:203
 #8  0xffffffff81e01749 in entry_SYSCALL_compat () at arch/x86/entry/entry_64_compat.S:272
 #9  0x0000000000000000 in ?? ()
-  
 ```
+
+:::
+::::::::::::::
