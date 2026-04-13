@@ -30,8 +30,8 @@ subtitle: "Andrew Gillies"
 **Practice: Speech Summary**
 
 - Listen audios.
-    - How many points.
-    - Note one word per point.
+- Note one word per point.
+- Draw mind map.
 
 :::
 ::::::::::::::
@@ -43,21 +43,20 @@ An idea is a Subject - Verb - Object group (SVO).
 :::::::::::::: {.columns}
 ::: {.column}
 
-**Practice: SVO**
+**Practice: Diagonal SVO & Link**
 
-- Read transcripts.
-- Remove all paragraph breaks or blank lines. Reformat text to be a single block of text.
-- Go through the text with cursor, hit enter twice after each SVO group - in other words, between ideas.
+- Prepare two-column table:
+    - Left 20% for links.
+    - Right 80% for SVO.
+- Listen audios.
+    - Round 1: Scratch diagonal SVO. Only two words per element.
+    - Round 2: Fill links.
+    - Round 3: Check transcripts.
 
 :::
 ::: {.column}
 
-**Practice: Diagonal SVO**
 
-- Listen audios.
-- Round 1: Scratch diagonal SVO. Only two words per element.
-- Round 2: Fill more.
-- Round 3: Check transcripts.
 
 :::
 ::::::::::::::
