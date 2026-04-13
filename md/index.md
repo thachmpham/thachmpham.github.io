@@ -8,83 +8,83 @@ title: "A Developer Notebook"
 ::: {.column width=50%}
 
 **Log Collection**:
-[strace](/html/ref/strace.html),
-[lsof](/html/ref/lsof.html),
-[tcpdump](/html/ref/tcpdump.html),
-[pcap filter](/html/ref/pcap-filter.html).
+[Strace](/html/ref/strace.html),
+[LSOF](/html/ref/lsof.html),
+[Tcpdump](/html/ref/tcpdump.html),
+[PCAP Filter](/html/ref/pcap-filter.html).
 
 
 **Log Processing**:
-[grep](/html/ref/grep.html),
-[perl](/html/ref/perl.html).
+[Grep](/html/ref/grep.html),
+[Perl](/html/ref/perl.html).
 
 
 **Documentation**:
-[plantuml](/html/ref/plantuml.html).
+[Plantuml](/html/ref/plantuml.html).
 
 
 **GDB**:
-[breakpoint](/html/ref/gdb/break.html),
-[catchpoint](/html/ref/gdb/catch.html),
-[watchpoint](/html/ref/gdb/watch.html),
-[tracepoint](/html/ref/gdb/trace.html),
-[process memory](/html/ref/gdb/memory.html),
-[remote debug](/html/ref/gdb/remote_debug.html),
-[symbol table](/html/ref/gdb/symbol.html),
-[pretty printer](/html/ref/gdb/pretty_printer.html),
-[debug info](/html/ref/gdb/debuginfo.html).
+[Breakpoint](/html/ref/gdb/break.html),
+[Catchpoint](/html/ref/gdb/catch.html),
+[Watchpoint](/html/ref/gdb/watch.html),
+[Tracepoint](/html/ref/gdb/trace.html),
+[Process Memory](/html/ref/gdb/memory.html),
+[Remote Debug](/html/ref/gdb/remote_debug.html),
+[Symbol Table](/html/ref/gdb/symbol.html),
+[Pretty Printer](/html/ref/gdb/pretty_printer.html),
+[Debug Info](/html/ref/gdb/debuginfo.html).
+
 
 **Linux Kernel**:
-[kernel module](/html/ref/kernel/module.html),
-[character device](/html/ref/kernel/cdev.html)
+[Kernel Module](/html/ref/kernel/module.html),
+[Character Device](/html/ref/kernel/cdev.html).
 
 :::
 ::: {.column width=50%}
 
 **Protocols**:
-[arp](/html/ref/arp.html),
-[ip routing](/html/ref/ip-routing.html),
-[dhcp](/html/ref/dhcp.html),
-[tipc](/html/ref/tipc.html),
-[virtual ip](/html/ref/vip.html),
-[drbd](/html/ref/drbd.html),
-[nfs](/html/ref/nfs.html),
-[ldap](/html/ref/ldap.html),
-[diameter](/html/ref/diameter.html).
-
-
-
+[ARP](/html/ref/arp.html),
+[IP routing](/html/ref/ip-routing.html),
+[DHCP](/html/ref/dhcp.html),
+[TIPC](/html/ref/tipc.html),
+[vIP](/html/ref/vip.html),
+[DRDB](/html/ref/drbd.html),
+[NFS](/html/ref/nfs.html),
+[LDAP](/html/ref/ldap.html),
+[Diameter](/html/ref/diameter.html).
 
 
 **Booting**:
-[grub](/html/ref/grub.html),
-[pxe](/html/ref/pxe.html).
+[GRUB](/html/ref/grub.html),
+[PXE](/html/ref/pxe.html).
 
 
 **Adminstration**:
-[systemd](/html/ref/systemd.html),
-[fdisk](/html/ref/fdisk.html),
-[firewall](/html/ref/firewall.html),
-[kvm](/html/ref/kvm.html).
+[SystemD](/html/ref/systemd.html),
+[FDisk](/html/ref/fdisk.html),
+[Firewall](/html/ref/firewall.html),
+[KVM](/html/ref/kvm.html).
 
 
 **Network Interfaces**:
-[veth](/html/ref/veth.html),
-[bridge](/html/ref/vbridge.html),
-[bond](/html/ref/vbond.html),
-[dummy](/html/ref/vdummy.html).
+[vEth](/html/ref/veth.html),
+[Bridge](/html/ref/vbridge.html),
+[Bond](/html/ref/vbond.html),
+[Dummy](/html/ref/vdummy.html).
+
 
 **OpenSAF**:
-[build install](/html/ref/opensaf/install.html),
-[single-node cluster](/html/ref/opensaf/1sc.html),
-[two-node cluster](/html/ref/opensaf/2sc.html),
-[imm](/html/ref/opensaf/imm.html),
-[log](/html/ref/opensaf/log.html),
-[smf](/html/ref/opensaf/smf.html),
-[sa-aware application](/html/ref/opensaf/sa-aware.html),
-[non-sa-aware application](/html/ref/opensaf/non-sa-ware.html),
-[healthcheck](/html/ref/opensaf/healthcheck.html),
-[error detection](/html/ref/opensaf/recovery.html).
+[Build & Install](/html/ref/opensaf/install.html),
+[Single-Node Cluster](/html/ref/opensaf/1sc.html),
+[Two-Node Cluster](/html/ref/opensaf/2sc.html),
+[IMM](/html/ref/opensaf/imm.html),
+[LOG](/html/ref/opensaf/log.html),
+[SMF](/html/ref/opensaf/smf.html),
+[SA-Aware Application](/html/ref/opensaf/sa-aware.html),
+[Non-SA-Aware Application](/html/ref/opensaf/non-sa-ware.html),
+[Healthcheck](/html/ref/opensaf/healthcheck.html),
+[Error Detection](/html/ref/opensaf/recovery.html).
+
 
 :::
 ::::::::::::::
