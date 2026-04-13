@@ -2,7 +2,7 @@
 title: "A Developer Notebook"
 ---
 
-## Software Troubleshooting
+## Linux Diagnostic
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -14,6 +14,7 @@ title: "A Developer Notebook"
 [pcap](/html/ref/pcap-filter.html),
 [grep](/html/ref/grep.html),
 [perl](/html/ref/perl.html),
+[tc](/html/ref/tc.html),
 [plantuml](/html/ref/plantuml.html).
 
 
