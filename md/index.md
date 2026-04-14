@@ -18,16 +18,10 @@ title: "A Developer Notebook"
 [plantuml](/html/ref/plantuml.html).
 
 
-**GDB**:
-[Breakpoint](/html/ref/gdb/break.html),
-[Catchpoint](/html/ref/gdb/catch.html),
-[Watchpoint](/html/ref/gdb/watch.html),
-[Tracepoint](/html/ref/gdb/trace.html),
-[Process Memory](/html/ref/gdb/memory.html),
-[Remote Debug](/html/ref/gdb/remote_debug.html),
+**C/C++**:
 [Symbol Table](/html/ref/gdb/symbol.html),
-[Pretty Printer](/html/ref/gdb/pretty_printer.html),
-[Debug Info](/html/ref/gdb/debuginfo.html).
+[Memory](/html/ref/gdb/memory.html).
+
 
 :::
 ::: {.column width=50%}
@@ -79,6 +73,16 @@ title: "A Developer Notebook"
 [Non-SA-Aware Application](/html/ref/opensaf/non-sa-ware.html),
 [Healthcheck](/html/ref/opensaf/healthcheck.html),
 [Error Detection](/html/ref/opensaf/recovery.html).
+
+
+**GDB**:
+[Breakpoint](/html/ref/gdb/break.html),
+[Catchpoint](/html/ref/gdb/catch.html),
+[Watchpoint](/html/ref/gdb/watch.html),
+[Tracepoint](/html/ref/gdb/trace.html),
+[Remote Debug](/html/ref/gdb/remote_debug.html),
+[Pretty Printer](/html/ref/gdb/pretty_printer.html),
+[Debug Info](/html/ref/gdb/debuginfo.html).
 
 
 :::

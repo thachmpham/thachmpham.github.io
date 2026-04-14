@@ -1,5 +1,5 @@
 ---
-title: "Process Memory"
+title: "Memory"
 ---
 
 # 1. Stack
