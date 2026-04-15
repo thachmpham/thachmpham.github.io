@@ -75,4 +75,5 @@ title: "strace"
 | Service      | Patch                                                                        |
 |:-------------|:-----------------------------------------------------------------------------|
 | rsyslog | `ExecStart=strace -yy -o /tmp/rsyslog.strace -ff -D /usr/sbin/rsyslogd -n -iNONE` |
-| logger | `strace -yy --write=all -e trace='/(read|write|send|recv).*' -f logger hello` |
+| logger | `strace -yy --write=all -e trace='/(read|write|send|recv).*' -f logger hello`      |
+| tipc   | `strace -yy -x --read=all --write=all -f -p $(pidof hello_server)`                 |

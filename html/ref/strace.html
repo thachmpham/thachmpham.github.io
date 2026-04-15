@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>strace</title>
   <style>
-    /* Default styles provided by pandoc.
-    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -46,55 +43,55 @@
 <col style="width: 32%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Filter</th>
 <th style="text-align: left;"></th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;"><code>syscalls</code></td>
 <td style="text-align: left;"><code>-e trace=read</code></td>
 <td style="text-align: left;">Single syscall</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-e trace=read,write</code></td>
 <td style="text-align: left;">Multiple syscalls</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-e trace='!read'</code></td>
 <td style="text-align: left;">Not syscall</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"><code>syscall regex</code></td>
 <td style="text-align: left;"><code>-e trace='/open.*'</code></td>
 <td style="text-align: left;">Regex</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;"><code>syscall sets</code></td>
 <td style="text-align: left;"><code>-e trace=file</code></td>
 <td style="text-align: left;">File callset</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"></td>
 <td
 style="text-align: left;"><code>-e trace=file -e trace='!write'</code></td>
 <td style="text-align: left;">File callset</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;"><code>fds</code></td>
 <td style="text-align: left;"><code>-e fds=1</code></td>
 <td style="text-align: left;">Single fd</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-e fds=1,2</code></td>
 <td style="text-align: left;">Multiple fds</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-e fds=!1</code></td>
 <td style="text-align: left;">Not fd</td>
@@ -104,25 +101,25 @@ style="text-align: left;"><code>-e trace=file -e trace='!write'</code></td>
 </div><div class="column">
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Filter</th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">status</td>
 <td style="text-align: left;"><code>-e status=successful</code></td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-e status=failed</code></td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">signal</td>
 <td style="text-align: left;"><code>-e signals=SIGIO</code></td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">path</td>
 <td style="text-align: left;"><code>-P hello</code></td>
 </tr>
@@ -130,29 +127,29 @@ style="text-align: left;"><code>-e trace=file -e trace='!write'</code></td>
 </table>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Fork</th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;"><code>-p pid</code></td>
 <td style="text-align: left;"><code>--attach=pid</code></td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"><code>-o myfile</code></td>
 <td style="text-align: left;">Output to file</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;"><code>-o myfile -f</code></td>
 <td style="text-align: left;">Follow child, output to file</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"><code>-o myfile -ff</code></td>
 <td style="text-align: left;">Each child output to a separated file</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;"><code>-o myfile -D</code></td>
 <td style="text-align: left;">Detached mode</td>
 </tr>
@@ -169,47 +166,47 @@ style="text-align: left;"><code>-e trace=file -e trace='!write'</code></td>
 <col style="width: 61%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Decode</th>
 <th style="text-align: left;"></th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">string</td>
 <td style="text-align: left;"><code>--write=1</code></td>
 <td style="text-align: left;">On writes to fd 1, show data in hex +
 ascii</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>--write=all</code></td>
 <td style="text-align: left;">On writes to all fds, show data in hex +
 ascii</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>--read=0</code></td>
 <td style="text-align: left;">On reads from fd 0, show hex + ascii</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>--read=all</code></td>
 <td style="text-align: left;">On reads from all fds, show hex +
 ascii</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-x</code></td>
 <td style="text-align: left;">Print non-ascii strings in hex</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-xx</code></td>
 <td style="text-align: left;">Print all strings in hex</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-x -s 32</code></td>
 <td style="text-align: left;">Non-ascii strings in hex, max length
@@ -220,29 +217,29 @@ ascii</td>
 </div><div class="column">
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Decode</th>
 <th style="text-align: left;"></th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">fds</td>
 <td style="text-align: left;"><code>-y</code></td>
 <td style="text-align: left;">Show file path associated with fds</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-yy</code></td>
 <td style="text-align: left;">Show all info associated with fds</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">backtrace</td>
 <td style="text-align: left;"><code>-k</code></td>
 <td style="text-align: left;"><code>--stack-trace=symbol</code></td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>-kk</code></td>
 <td style="text-align: left;"><code>--stack-trace=source</code></td>
@@ -259,21 +256,26 @@ ascii</td>
 <col style="width: 84%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Service</th>
 <th style="text-align: left;">Patch</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">rsyslog</td>
 <td
 style="text-align: left;"><code>ExecStart=strace -yy -o /tmp/rsyslog.strace -ff -D /usr/sbin/rsyslogd -n -iNONE</code></td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">logger</td>
 <td
 style="text-align: left;"><code>strace -yy --write=all -e trace='/(read|write|send|recv).*' -f logger hello</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tipc</td>
+<td
+style="text-align: left;"><code>strace -yy -x --read=all --write=all -f -p $(pidof hello_server)</code></td>
 </tr>
 </tbody>
 </table>
