@@ -3,21 +3,13 @@ title: TIPC Protocol
 subtitle: Transparent Inter-Process Communication
 ---
 
-## 1. Setup Lab
-### Enable TIPC
-```sh
+# Setup Lab
 
-# host
-$ modprobe tipc
-$ lsmod | grep tipc
-  
-```
+:::::::::::::: {.columns}
+::: {.column}
 
-### Build Docker Image
+1. Dockerfile.
 ```Dockerfile
-  
-# Dockerfile
-
 FROM ubuntu:24.04
 
 RUN apt -y update
@@ -38,44 +30,67 @@ RUN make
 RUN make install
 
 CMD ["tail", "-f", "/dev/null"]
-  
 ```
 
 ```sh
-  
 $ docker build --progress=plain .
-  
 ```
 
-### Run Docker Containers
+:::
+::: {.column}
+
+2. Host: Enable TIPC.
 ```sh
-  
+# host
+$ modprobe tipc
+$ lsmod | grep tipc
+```
+
+3. Run docker containers (test nodes).
+```sh
 $ docker run --privileged -dit --name node1 --hostname node1 tipc
 $ docker run --privileged -dit --name node2 --hostname node2 tipc
   
 $ docker exec -it node1 bash
 $ docker exec -it node2 bash
-  
 ```
 
-### Attach Interface
+4. Node 1: Setup bearer.
 ```sh
-  
-# node1
 $ tipc bearer enable media eth dev eth0
-
-# node2
-$ tipc bearer enable media eth dev eth0
-  
 ```
 
-### Hello World
+5. Node 2: Setup bearer.
 ```sh
-  
-# node1
+$ tipc bearer enable media eth dev eth0
+```
+
+:::
+::::::::::::::
+
+# Hello World
+
+:::::::::::::: {.columns}
+::: {.column}
+
+Node 1.
+```sh
 $ /root/tipcutils/demos/hello_world/hello_server
+```
 
-# node2
+:::
+::: {.column}
+
+Node 2.
+```sh
 $ /root/tipcutils/demos/hello_world/hello_client
-  
+```
+
+:::
+::::::::::::::
+
+Decode strace output.
+
+```sh
+$ strace -yy -f -x -p `pidof hello_server`
 ```

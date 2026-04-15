@@ -9,7 +9,7 @@ title: "strace"
 
 | Filter |         |        |
 |:-------|:--------|:-------|
-| `syscalls`      | `-e trace=read`                   | Single syscall    |
+| `syscalls`    | `-e trace=read`                   | Single syscall    |
 |                 | `-e trace=read,write`             | Multiple syscalls |
 |                 | `-e trace='!read'`                | Not syscall  |
 | `syscall regex` | `-e trace='/open.*'`              | Regex        |
@@ -44,21 +44,26 @@ title: "strace"
 :::::::::::::: {.columns}
 ::: {.column}
 
-| Decode                |               |                                        |
-|:----------------------|:------------- |:---------------------------------------|
-| hex dump              | `--write=1`   | On writes to fd 1, show data in hex + ascii |
-|                       | `--write=all` | On writes to all fds, show data in hex + ascii |
-|                       | `--read=0`    | On reads from fd 0, show hex + ascii    |
-|                       | `--read=all`  | On reads from all fds, show hex + ascii |
-|                       | `-xx -s 32`   | Show data in hex, max length 32         |
-| decode fds            | `-y`          | Show file path associated with fds      |
-|                       | `-yy`         | Show all info associated with fds       |
-| backtrace             |`-k`           | `--stack-trace=symbol` |
-|                       |`-kk`          | `--stack-trace=source` |
+| Decode    |               |                                        |
+|:----------|:------------- |:---------------------------------------|
+| string    | `--write=1`   | On writes to fd 1, show data in hex + ascii    |
+|           | `--write=all` | On writes to all fds, show data in hex + ascii |
+|           | `--read=0`    | On reads from fd 0, show hex + ascii    |
+|           | `--read=all`  | On reads from all fds, show hex + ascii |
+|           | `-x`          | Print non-ascii strings in hex  |
+|           | `-xx`         | Print all strings in hex        |
+|           | `-x -s 32`    | Non-ascii strings in hex, max length 32 |
+
 
 :::
 ::: {.column}
 
+| Decode    |               |                                        |
+|:----------|:------------- |:---------------------------------------|
+| fds       | `-y`          | Show file path associated with fds      |
+|           | `-yy`         | Show all info associated with fds       |
+| backtrace |`-k`           | `--stack-trace=symbol` |
+|           |`-kk`          | `--stack-trace=source` |
 
 :::
 ::::::::::::::
