@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>GBD Breakpoints</title>
   <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -21,8 +24,9 @@
       vertical-align: middle;
     }
     /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +37,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -98,6 +102,17 @@
 <h1 class="title">GBD Breakpoints</h1>
 <p class="subtitle">Stop at a location</p>
 </header>
+<h1 id="tips">Tips</h1>
+<table>
+<tbody>
+<tr>
+<td style="text-align: left;">Break before process exits</td>
+<td style="text-align: left;"><code>break _exit</code></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<h1 id="demo">Demo</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Software Breakpoint.</p>
@@ -130,44 +145,42 @@ performance and memory safety are critical.</li>
 </ul>
 </div>
 </div>
-<hr />
-<p><br></p>
 <h2 id="break">break</h2>
 <div class="columns">
 <div class="column">
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Linespec Location</th>
 <th></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>break 10</code></td>
 <td>Line 10 current file</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>break hello.c::10</code></td>
 <td>Line 10, file hello.c</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>break -3</code></td>
 <td>Current line -3</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>break +3</code></td>
 <td>Current line +3</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>break sum</code></td>
 <td>Function sum</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>break hello.c::sum</code></td>
 <td>Function sum in hello.c</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>break A::sum</code></td>
 <td>Function A::sum</td>
 </tr>
@@ -175,13 +188,13 @@ performance and memory safety are critical.</li>
 </table>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Explicit Location</th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>break -qualified sum</code></td>
 <td style="text-align: left;">Match sum, not A::sum</td>
 </tr>
@@ -189,17 +202,17 @@ performance and memory safety are critical.</li>
 </table>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Address Location</th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>break *sum+16</code></td>
 <td style="text-align: left;">Instruction 16 in sum</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>break 0x</code>0x400670</td>
 <td style="text-align: left;">Instruction at 0x400670</td>
 </tr>
@@ -207,25 +220,25 @@ performance and memory safety are critical.</li>
 </table>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Regex Location</th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>rbreak sum.*</code></td>
 <td style="text-align: left;">Function sum.*</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>rbreak demo.c:sum.*</code></td>
 <td style="text-align: left;">Function sum.* in hello.c</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>rbreak .</code></td>
 <td style="text-align: left;">All function in current program</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>rbreak demo.c:.</code></td>
 <td style="text-align: left;">All function in file</td>
 </tr>
@@ -234,35 +247,35 @@ performance and memory safety are critical.</li>
 </div><div class="column">
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Condition</th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>break sum if x &gt; 3</code></td>
 <td style="text-align: left;">Conditional</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>break sum inferior 1</code></td>
 <td style="text-align: left;">Inferior specific</td>
 </tr>
-<tr class="odd">
+<tr>
 <td
 style="text-align: left;"><code>break sum inferior 1 if x &gt; 3</code></td>
 <td style="text-align: left;">Inferior + condition</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>break sum thread 1</code></td>
 <td style="text-align: left;">Thread specific</td>
 </tr>
-<tr class="odd">
+<tr>
 <td
 style="text-align: left;"><code>break sum thread 1 if x &gt; 3</code></td>
 <td style="text-align: left;">Thread + condition</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>condition 2 if x &gt; 5</code></td>
 <td style="text-align: left;">Change condition of break 2</td>
 </tr>
@@ -270,17 +283,17 @@ style="text-align: left;"><code>break sum thread 1 if x &gt; 3</code></td>
 </table>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Command</th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>command</code></td>
 <td style="text-align: left;">Command for current break</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>command 2</code></td>
 <td style="text-align: left;">Command for break 2</td>
 </tr>
@@ -293,13 +306,13 @@ style="text-align: left;"><code>break sum thread 1 if x &gt; 3</code></td>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">end</span></span></code></pre></div>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Temporary Break</th>
 <th></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>tbreak sum</code></td>
 <td>Auto delete after hit</td>
 </tr>
@@ -308,37 +321,37 @@ style="text-align: left;"><code>break sum thread 1 if x &gt; 3</code></td>
 </div><div class="column">
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Management</th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>info break</code></td>
 <td style="text-align: left;">List of breakpoints</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>enable break [ids]</code></td>
 <td style="text-align: left;">Enable breakpoints</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>disable break [ids]</code></td>
 <td style="text-align: left;">Disable breakpoints</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>delete break [ids]</code></td>
 <td style="text-align: left;">Delete breakpoints</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>clear &lt;locspec&gt;</code></td>
 <td style="text-align: left;">Delete all breakpoints at locspec</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;"><code>save break &lt;file&gt;</code></td>
 <td style="text-align: left;">Save breakpoints to file</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;"><code>source &lt;file&gt;</code></td>
 <td style="text-align: left;">Load breakpoints from file</td>
 </tr>
@@ -453,7 +466,6 @@ class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span i
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#1  0x000055555555521d in main () at main.c:30</span></span></code></pre></div>
 </div>
 </div>
-<hr />
 <p><br></p>
 <h3 id="reference">Reference</h3>
 <ul>

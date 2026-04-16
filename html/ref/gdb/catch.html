@@ -192,8 +192,27 @@ style="text-align: left;"><code>set follow-exec-mode same</code></td>
 </table>
 </div>
 </div>
-<hr />
+<h1 id="tips">Tips</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Syscall</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Catch before process exits</td>
+<td style="text-align: left;"><code>catch syscall exit</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>catch syscall exit_group</code></td>
+</tr>
+</tbody>
+</table>
 <p><br></p>
+<h1 id="demo">Demo</h1>
 <h3 id="keep-child-process-under-gdb-control.">Keep Child Process Under
 GDB Control.</h3>
 <div class="columns">
@@ -219,10 +238,8 @@ GDB Control.</h3>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="ex">2</span>    process 4097      1 <span class="er">(</span><span class="ex">native</span><span class="kw">)</span>           <span class="ex">/root/demo/demo</span></span></code></pre></div>
 </div>
 </div>
-<hr />
-<p><br></p>
-<h3 id="debug-program-launched-script.">Debug Program Launched
-Script.</h3>
+<h3 id="debug-programs-started-by-scripts.">Debug Programs Started By
+Scripts.</h3>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run.sh</span></span>
@@ -247,8 +264,6 @@ Script.</h3>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 2    process 5911      1 <span class="er">(</span><span class="ex">native</span><span class="kw">)</span>           <span class="ex">/usr/bin/ls</span></span></code></pre></div>
 </div>
 </div>
-<hr />
-<p><br></p>
 <h3 id="auto-print-backtrace-on-crash.">Auto Print Backtrace On
 Crash.</h3>
 <div class="columns">
@@ -277,8 +292,6 @@ Crash.</h3>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="ex">Program</span> terminated with signal SIGSEGV, Segmentation fault.</span></code></pre></div>
 </div>
 </div>
-<hr />
-<p><br></p>
 <footer class="footer text-muted">
    <div align="center">      
       <br>

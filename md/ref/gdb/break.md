@@ -3,6 +3,15 @@ title: "GBD Breakpoints"
 subtitle: "Stop at a location"
 ---
 
+# Tips
+|  |  |
+|:-------------|:-------------|
+| Break before process exits  | `break _exit` |
+
+<br>
+
+# Demo
+
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
@@ -26,10 +35,6 @@ Hardware Breakpoint.
 
 :::
 ::::::::::::::
-
-* * * * *
-
-<br>
 
 ## break
 
@@ -245,8 +250,6 @@ Breakpoint 5, 0x00007ffff7ffa060 in sub ()
 
 :::
 ::::::::::::::
-
-* * * * *
 
 <br>
 

@@ -7,6 +7,7 @@ subtitle: "Stop on a program event"
 :::::::::::::: {.columns}
 ::: {.column}
 
+
 | Fork |  |
 |:-------------|:-------------|
 | `catch fork`                | Stop execution on fork |
@@ -35,10 +36,15 @@ subtitle: "Stop on a program event"
 :::
 ::::::::::::::
 
-* * * * *
+# Tips
+| Syscall |  |
+|:-------------|:-------------|
+| Catch before process exits  | `catch syscall exit` |
+|                             | `catch syscall exit_group` |
 
 <br>
 
+# Demo
 ### Keep Child Process Under GDB Control.
 
 :::::::::::::: {.columns}
@@ -77,11 +83,8 @@ Catchpoint 1 (forked process 4097), arch_fork (ctid=0x7ffff7d85a10)
 :::
 ::::::::::::::
 
-* * * * *
 
-<br>
-
-### Debug Program Launched Script.
+### Debug Programs Started By Scripts.
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
@@ -120,9 +123,6 @@ Thread 2.1 "ls" hit Catchpoint 1 (exec'd /usr/bin/ls')
 :::
 ::::::::::::::
 
-* * * * *
-
-<br>
 
 ### Auto Print Backtrace On Crash.
 :::::::::::::: {.columns}
@@ -161,6 +161,3 @@ Program terminated with signal SIGSEGV, Segmentation fault.
 :::
 ::::::::::::::
 
-* * * * *
-
-<br>
