@@ -79,12 +79,44 @@ $ tipc bearer enable media eth dev eth0
 $ /root/tipcutils/demos/hello_world/hello_server
 ```
 
+- Code.
+```c
+struct sockaddr_tipc server = {
+	.family = AF_TIPC,
+	.addrtype = TIPC_SERVICE_ADDR,
+	.scope = TIPC_CLUSTER_SCOPE,
+	.addr.name.name.type = 18888,
+	.addr.name.name.instance = 17
+};
+
+sd = socket(AF_TIPC, SOCK_RDM, 0);
+bind(sd, (void*)&server, sizeof(server));
+recvfrom(sd, inbuf, sizeof(inbuf), 0, (struct sockaddr *)&client, &alen);
+sendto(sd, outbuf, strlen(outbuf) + 1, 0, (void*)&client, sizeof(client))
+```
+
 :::
 ::: {.column width=50%}
 
 - Node 2: Start client.
 ```sh
 $ /root/tipcutils/demos/hello_world/hello_client
+```
+
+- Code.
+
+```c
+struct sockaddr_tipc server = {
+	.family = AF_TIPC,
+	.addrtype = TIPC_SERVICE_ADDR,
+	.addr.name.name.type = 18888,
+	.addr.name.name.instance = 17,
+	.addr.name.domain = 0
+};
+
+socket(AF_TIPC, SOCK_RDM, 0);
+sendto(sd, buf, strlen(buf) + 1, 0, (void*)&server, sizeof(server));
+recv(sd, buf, sizeof(buf), 0));
 ```
 
 :::
@@ -150,10 +182,19 @@ struct tipc_service_addr {
 	__u32 type;                 //0     4   (I)        
 	__u32 instance;             //4     4   (I)
 };
-```
 
-:::
-::: {.column}
+// values for sockaddr_tipc.addrtype
+#define TIPC_ADDR_MCAST         1
+#define TIPC_SERVICE_RANGE      1
+#define TIPC_SERVICE_ADDR       2
+#define TIPC_SOCKET_ADDR        3
+
+// values for sockaddr_tipc.scope
+enum tipc_scope {
+	TIPC_CLUSTER_SCOPE = 2, /* 0 can also be used */
+	TIPC_NODE_SCOPE    = 3
+};
+```
 
 3. decode.py
 ```python
@@ -175,19 +216,17 @@ print(record)
 ```
 
 :::
-::::::::::::::
-
-
-:::::::::::::: {.columns}
 ::: {.column}
 
 4. Decode server strace.
 ```sh
 # bind
-$ python3 decode.py '\x02\x02\xc8\x49\x00\x00\x11\x00\x00\x00\x00\x00\x00\x00'
-sa_data(addrtype=3, scope=0, type=465815997, instance=1507927867)
+# server = {TIPC_SERVICE_ADDR, TIPC_CLUSTER_SCOPE, {18888, 17}}
+$ python3 decode.py "\x02\x02\xc8\x49\x00\x00\x11\x00\x00\x00\x00\x00\x00\x00"
+sa_data(addrtype=2, scope=2, type=18888, instance=17)
 
 # recvfrom
+# client = {TIPC_SOCKET_ADDR, TIPC_NODE_SCOPE, {3139101818, 0}}
 $ python3 decode.py '\x03\x00\x7a\xe4\x1a\xbb\x00\x00\x00\x00\x00\x00\x00\x00'
 sa_data(addrtype=3, scope=0, type=3139101818, instance=0)
 
@@ -195,25 +234,41 @@ sa_data(addrtype=3, scope=0, type=3139101818, instance=0)
 $ python3 decode.py '\x03\x00\x7a\xe4\x1a\xbb\x00\x00\x00\x00\x00\x00\x00\x00'
 sa_data(addrtype=3, scope=0, type=3139101818, instance=0)
 ```
-
-:::
-::: {.column}
 
 5. Decode client strace.
 ```sh
 # connect
+# topology server = TIPC_SERVICE_ADDR, TIPC_NODE_SCOPE, {1, 1}}
 $ python3 decode.py '\x02\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00'
 sa_data(addrtype=2, scope=0, type=1, instance=1)
 
 # sendto
-# recvfrom
-
-# sendto
+# server = {TIPC_SERVICE_ADDR, TIPC_CLUSTER_SCOPE, {18888, 17}}
 $ python3 decode.py '\x02\x00\xc8\x49\x00\x00\x11\x00\x00\x00\x00\x00\x00\x00'
 sa_data(addrtype=2, scope=0, type=18888, instance=17)
+```
 
-# recvfrom
+6. Find corresponding packets in pcap. Sample: [hello.pcap](https://github.com/thachmpham/samples/blob/main/pcap/tipc/hello_word/hello.pcap).
+```sh
+$ tcpdump -i any -w hello.pcap 'ether proto 0x88ca'
+$ tshark -r hello.pcap
+    1   0.000000        0.0.0 → 0.0.0        TIPC 60 Payld:Low    NamedMsg type:1 inst:1
+    2   0.000147        0.0.0 →              TIPC 44 Payld:Low    ConnMsg
+    3   0.000298        0.0.0 →              TIPC 72 Payld:Low    ConnMsg
+    4   0.000621        0.0.0 →              TIPC 92 Payld:Low    ConnMsg
+    5   0.000759        0.0.0 →              TIPC 44 Payld:NoRej  ConnMsg ErrNoPort
+    6   0.000921        0.0.0 → 0.0.0        TIPC 75 Payld:Low    NamedMsg type:18888 inst:17
+    7   0.013607        0.0.0 → 0.0.0        TIPC 57 Payld:Low    DirectMsg
+
+# client -> server: HelloWorld!!!
+$ tshark -r hello.pcap -Y 'frame contains 48:65:6c:6c:6f:20:57:6f:72:6c:64:21:21:21:00'
+    6   0.000921        0.0.0 → 0.0.0        TIPC 75 Payld:Low    NamedMsg type:18888 inst:17
+
+# server -> client: Uh ?
+$ tshark -r hello.pcap -Y 'frame contains 55:68:20:3f:00'
+    7   0.013607        0.0.0 → 0.0.0        TIPC 57 Payld:Low    DirectMsg
 ```
 
 :::
 ::::::::::::::
+
