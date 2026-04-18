@@ -7,7 +7,7 @@ title: "A Developer Notebook"
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-**Common Tools**:
+**Common Tools**  
 [strace](/html/ref/strace.html),
 [lsof](/html/ref/lsof.html),
 [tcpdump](/html/ref/tcpdump.html),
@@ -18,15 +18,30 @@ title: "A Developer Notebook"
 [plantuml](/html/ref/plantuml.html).
 
 
-**C/C++**:
-[Symbol Table](/html/ref/gdb/symbol.html),
-[Memory](/html/ref/gdb/memory.html).
+**C/C++ & GDB**  
+[Symbols](/html/ref/gdb/symbol.html),
+[Memory](/html/ref/gdb/memory.html),
+[Break](/html/ref/gdb/break.html),
+[Catch](/html/ref/gdb/catch.html),
+[Watch](/html/ref/gdb/watch.html),
+[Trace](/html/ref/gdb/trace.html),
+[Remote Debug](/html/ref/gdb/remote_debug.html),
+[Pretty Printer](/html/ref/gdb/pretty_printer.html),
+[Debug Info](/html/ref/gdb/debuginfo.html).
+
+
+**Kernel**  
+[Build & Run](/html/ref/kernel/kernel_build.html),
+[Debug Kernel with GDB](/html/ref/kernel/kernel_debug_gdb.html),
+[User Space to Kernel Space](/html/ref/kernel/kernel_user_to_kernel.html),
+[Kernel Module](/html/ref/kernel/module.html),
+[Character Device](/html/ref/kernel/cdev.html).
 
 
 :::
 ::: {.column width=50%}
 
-**Linux**:
+**Adminstration**  
 [GRUB](/html/ref/grub.html),
 [PXE](/html/ref/pxe.html),
 [SystemD](/html/ref/systemd.html),
@@ -35,15 +50,7 @@ title: "A Developer Notebook"
 [KVM](/html/ref/kvm.html).
 
 
-**Linux Kernel**:
-[Build & Run](/html/ref/kernel/kernel_build.html),
-[Debug Kernel with GDB](/html/ref/kernel/kernel_debug_gdb.html),
-[User Space to Kernel Space](/html/ref/kernel/kernel_user_to_kernel.html),
-[Kernel Module](/html/ref/kernel/module.html),
-[Character Device](/html/ref/kernel/cdev.html).
-
-
-**Protocols**:
+**Protocols**  
 [ARP](/html/ref/arp.html),
 [IP Routing](/html/ref/ip-routing.html),
 [DHCP](/html/ref/dhcp.html),
@@ -55,14 +62,14 @@ title: "A Developer Notebook"
 [Diameter](/html/ref/diameter.html).
 
 
-**Network Interfaces**:
+**Network Interfaces**  
 [vEth](/html/ref/veth.html),
 [Bridge](/html/ref/vbridge.html),
 [Bond](/html/ref/vbond.html),
 [Dummy](/html/ref/vdummy.html).
 
 
-**OpenSAF**:
+**OpenSAF**  
 [Build & Install](/html/ref/opensaf/install.html),
 [Single-Node Cluster](/html/ref/opensaf/1sc.html),
 [Two-Node Cluster](/html/ref/opensaf/2sc.html),
@@ -73,16 +80,6 @@ title: "A Developer Notebook"
 [Non-SA-Aware Application](/html/ref/opensaf/non-sa-ware.html),
 [Healthcheck](/html/ref/opensaf/healthcheck.html),
 [Error Detection](/html/ref/opensaf/recovery.html).
-
-
-**GDB**:
-[Breakpoint](/html/ref/gdb/break.html),
-[Catchpoint](/html/ref/gdb/catch.html),
-[Watchpoint](/html/ref/gdb/watch.html),
-[Tracepoint](/html/ref/gdb/trace.html),
-[Remote Debug](/html/ref/gdb/remote_debug.html),
-[Pretty Printer](/html/ref/gdb/pretty_printer.html),
-[Debug Info](/html/ref/gdb/debuginfo.html).
 
 
 :::
