@@ -92,36 +92,44 @@ $ /root/tipcutils/demos/hello_world/hello_client
 
 
 # 3. Decode Strace
-Decode strace to find tipc address type and instance on recvfrom and sendto syscalls.
+Decode sa_data in strace to find tipc addresses.
 
 1. Collect strace.
 ```sh
-$ /root/tipcutils/demos/hello_world/hello_server
-$ /root/tipcutils/demos/hello_world/hello_client
+$ strace -e trace=network -yy -x -f ./hello_server
+
+****** TIPC hello world server started ******
+socket(AF_TIPC, SOCK_RDM, 0)            = 3<socket:[106808]>
+bind(3<socket:[106808]>, {sa_family=AF_TIPC, sa_data="\x02\x02\xc8\x49\x00\x00\x11\x00\x00\x00\x00\x00\x00\x00"}, 16) = 0
+recvfrom(3<socket:[106808]>, "\x48\x65\x6c\x6c\x6f\x20\x57\x6f\x72\x6c\x64\x21\x21\x21\x00", 40, 0, {sa_family=AF_TIPC, sa_data="\x03\x00\x7a\xe4\x1a\xbb\x00\x00\x00\x00\x00\x00\x00\x00"}, [16]) = 15
+Server: Message received: Hello World!!! 
+sendto(3<socket:[106808]>, "\x55\x68\x20\x3f\x00", 5, 0, {sa_family=AF_TIPC, sa_data="\x03\x00\x7a\xe4\x1a\xbb\x00\x00\x00\x00\x00\x00\x00\x00"}, 16) = 5
+Server: Sent response : Uh ? 
+****** TIPC hello world server finished ******
++++ exited with 0 +++
 ```
 
 ```sh
-$ strace -yy -x --read=3 --write=3 -f -p `pidof hello_server`
+$ strace -e trace=network -yy -x -f ./hello_client
 
-strace: Process 22515 attached
-recvfrom(3<socket:[91081]>, "\x48\x65\x6c\x6c\x6f\x20\x57\x6f\x72\x6c\x64\x21\x21\x21\x00", 40, 0, {sa_family=AF_TIPC, sa_data="\x03\x00\xbd\xc9\xc3\x1b\x3b\x27\xe1\x59\x00\x00\x00\x00"}, [16]) = 15
- | 00000  48 65 6c 6c 6f 20 57 6f  72 6c 64 21 21 21 00     Hello World!!!.  |
-write(1</dev/pts/2<char 136:2>>, "Server: Message received: Hello "..., 42) = 42
-sendto(3<socket:[91081]>, "\x55\x68\x20\x3f\x00", 5, 0, {sa_family=AF_TIPC, sa_data="\x03\x00\xbd\xc9\xc3\x1b\x3b\x27\xe1\x59\x00\x00\x00\x00"}, 16) = 5
- | 00000  55 68 20 3f 00                                    Uh ?.            |
-write(1</dev/pts/2<char 136:2>>, "Server: Sent response : Uh ? \n", 30) = 30
-write(1</dev/pts/2<char 136:2>>, "****** TIPC hello world server f"..., 47) = 47
+****** TIPC hello world client started ******
+socket(AF_TIPC, SOCK_SEQPACKET, 0)      = 3<socket:[108592]>
+connect(3<socket:[108592]>, {sa_family=AF_TIPC, sa_data="\x02\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00"}, 16) = 0
+sendto(3<socket:[108592]>, "\xc8\x49\x00\x00\x11\x00\x00\x00\x11\x00\x00\x00\x10\x27\x00\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00", 28, 0, NULL, 0) = 28
+recvfrom(3<socket:[108592]>, "\x01\x00\x00\x00\x11\x00\x00\x00\x11\x00\x00\x00\xb7\x38\xcd\x18\x00\x00\x00\x00\xc8\x49\x00\x00\x11\x00\x00\x00\x11\x00\x00\x00"..., 48, 0, NULL, NULL) = 48
+socket(AF_TIPC, SOCK_RDM, 0)            = 3<socket:[108593]>
+sendto(3<socket:[108593]>, "\x48\x65\x6c\x6c\x6f\x20\x57\x6f\x72\x6c\x64\x21\x21\x21\x00", 15, 0, {sa_family=AF_TIPC, sa_data="\x02\x00\xc8\x49\x00\x00\x11\x00\x00\x00\x00\x00\x00\x00"}, 16) = 15
+Client: sent message: Hello World!!! 
+recvfrom(3<socket:[108593]>, "\x55\x68\x20\x3f\x00", 40, 0, NULL, NULL) = 5
+Client: received response: Uh ? 
+****** TIPC hello client finished ******
++++ exited with 0 +++
 ```
 
 :::::::::::::: {.columns}
 ::: {.column}
 
-2. Strace raw data.
-```c
-{sa_family=AF_TIPC, sa_data="\x03\x00\xbd\xc9\xc3\x1b\x3b\x27\xe1\x59\x00\x00\x00\x00"}
-```
-
-3. Check tipc headers to determine the format.
+2. Check tipc headers to determine the format.
 ```c
 // header: /usr/include/linux/tipc.h
 struct sockaddr_tipc {
@@ -166,10 +174,45 @@ record = names._make(data)
 print(record)
 ```
 
-4. Decode.
+:::
+::::::::::::::
+
+
+:::::::::::::: {.columns}
+::: {.column}
+
+4. Decode server strace.
 ```sh
-$ python3 decode.py '\x03\x00\xbd\xc9\xc3\x1b\x3b\x27\xe1\x59\x00\x00\x00\x00'
+# bind
+$ python3 decode.py '\x02\x02\xc8\x49\x00\x00\x11\x00\x00\x00\x00\x00\x00\x00'
 sa_data(addrtype=3, scope=0, type=465815997, instance=1507927867)
+
+# recvfrom
+$ python3 decode.py '\x03\x00\x7a\xe4\x1a\xbb\x00\x00\x00\x00\x00\x00\x00\x00'
+sa_data(addrtype=3, scope=0, type=3139101818, instance=0)
+
+# sendto
+$ python3 decode.py '\x03\x00\x7a\xe4\x1a\xbb\x00\x00\x00\x00\x00\x00\x00\x00'
+sa_data(addrtype=3, scope=0, type=3139101818, instance=0)
+```
+
+:::
+::: {.column}
+
+5. Decode client strace.
+```sh
+# connect
+$ python3 decode.py '\x02\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00'
+sa_data(addrtype=2, scope=0, type=1, instance=1)
+
+# sendto
+# recvfrom
+
+# sendto
+$ python3 decode.py '\x02\x00\xc8\x49\x00\x00\x11\x00\x00\x00\x00\x00\x00\x00'
+sa_data(addrtype=2, scope=0, type=18888, instance=17)
+
+# recvfrom
 ```
 
 :::

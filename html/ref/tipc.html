@@ -166,78 +166,111 @@ class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb1-
 </div>
 </div>
 <h1 id="decode-strace">3. Decode Strace</h1>
-<p>Decode strace to find tipc address type and instance on recvfrom and
-sendto syscalls.</p>
+<p>Decode sa_data in strace to find tipc addresses.</p>
 <ol type="1">
 <li>Collect strace.</li>
 </ol>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> /root/tipcutils/demos/hello_world/hello_server</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> /root/tipcutils/demos/hello_world/hello_client</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> strace <span class="at">-e</span> trace=network <span class="at">-yy</span> <span class="at">-x</span> <span class="at">-f</span> ./hello_server</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">******</span> TIPC hello world server started <span class="pp">******</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">socket</span><span class="er">(</span><span class="ex">AF_TIPC,</span> SOCK_RDM, 0<span class="kw">)</span>            <span class="ex">=</span> <span class="dv">3</span><span class="op">&lt;</span>socket:<span class="pp">[</span><span class="ss">106808</span><span class="pp">]</span><span class="op">&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">bind</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>socket:<span class="pp">[</span><span class="ss">106808</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="ex">{sa_family=AF_TIPC,</span> sa_data=<span class="st">&quot;\x02\x02\xc8\x49\x00\x00\x11\x00\x00\x00\x00\x00\x00\x00&quot;</span>}, 16<span class="kw">)</span> <span class="ex">=</span> 0</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">recvfrom</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>socket:<span class="pp">[</span><span class="ss">106808</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="st">&quot;\x48\x65\x6c\x6c\x6f\x20\x57\x6f\x72\x6c\x64\x21\x21\x21\x00&quot;</span><span class="ex">,</span> 40, 0, {sa_family=AF_TIPC, sa_data=<span class="st">&quot;\x03\x00\x7a\xe4\x1a\xbb\x00\x00\x00\x00\x00\x00\x00\x00&quot;</span>}, <span class="pp">[</span><span class="ss">16</span><span class="pp">]</span><span class="kw">)</span> <span class="ex">=</span> 15</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Server:</span> Message received: Hello World!!! </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="ex">sendto</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>socket:<span class="pp">[</span><span class="ss">106808</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="st">&quot;\x55\x68\x20\x3f\x00&quot;</span><span class="ex">,</span> 5, 0, {sa_family=AF_TIPC, sa_data=<span class="st">&quot;\x03\x00\x7a\xe4\x1a\xbb\x00\x00\x00\x00\x00\x00\x00\x00&quot;</span>}, 16<span class="kw">)</span> <span class="ex">=</span> 5</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Server:</span> Sent response : Uh <span class="pp">?</span> </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="ex">******</span> TIPC hello world server finished <span class="pp">******</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="ex">+++</span> exited with 0 +++</span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> strace <span class="at">-yy</span> <span class="at">-x</span> <span class="at">--read</span><span class="op">=</span>3 <span class="at">--write</span><span class="op">=</span>3 <span class="at">-f</span> <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> hello_server<span class="kw">`</span></span>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> strace <span class="at">-e</span> trace=network <span class="at">-yy</span> <span class="at">-x</span> <span class="at">-f</span> ./hello_client</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">strace:</span> Process 22515 attached</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">recvfrom</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>socket:<span class="pp">[</span><span class="ss">91081</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="st">&quot;\x48\x65\x6c\x6c\x6f\x20\x57\x6f\x72\x6c\x64\x21\x21\x21\x00&quot;</span><span class="ex">,</span> 40, 0, {sa_family=AF_TIPC, sa_data=<span class="st">&quot;\x03\x00\xbd\xc9\xc3\x1b\x3b\x27\xe1\x59\x00\x00\x00\x00&quot;</span>}, <span class="pp">[</span><span class="ss">16</span><span class="pp">]</span><span class="kw">)</span> <span class="ex">=</span> 15</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a> <span class="kw">|</span> <span class="ex">00000</span>  48 65 6c 6c 6f 20 57 6f  72 6c 64 21 21 21 00     Hello World!!!.  <span class="kw">|</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">write</span><span class="er">(</span><span class="dv">1</span><span class="op">&lt;</span>/dev/pts/2<span class="op">&lt;</span>char <span class="ex">136:2</span><span class="op">&gt;&gt;</span>, <span class="st">&quot;Server: Message received: Hello &quot;</span>..., 42<span class="kw">)</span> <span class="ex">=</span> 42</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="ex">sendto</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>socket:<span class="pp">[</span><span class="ss">91081</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="st">&quot;\x55\x68\x20\x3f\x00&quot;</span><span class="ex">,</span> 5, 0, {sa_family=AF_TIPC, sa_data=<span class="st">&quot;\x03\x00\xbd\xc9\xc3\x1b\x3b\x27\xe1\x59\x00\x00\x00\x00&quot;</span>}, 16<span class="kw">)</span> <span class="ex">=</span> 5</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a> <span class="kw">|</span> <span class="ex">00000</span>  55 68 20 3f 00                                    Uh <span class="pp">?</span>.            <span class="kw">|</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write</span><span class="er">(</span><span class="dv">1</span><span class="op">&lt;</span>/dev/pts/2<span class="op">&lt;</span>char <span class="ex">136:2</span><span class="op">&gt;&gt;</span>, <span class="st">&quot;Server: Sent response : Uh ? \n&quot;</span>, 30<span class="kw">)</span> <span class="ex">=</span> 30</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">write</span><span class="er">(</span><span class="dv">1</span><span class="op">&lt;</span>/dev/pts/2<span class="op">&lt;</span>char <span class="ex">136:2</span><span class="op">&gt;&gt;</span>, <span class="st">&quot;****** TIPC hello world server f&quot;</span>..., 47<span class="kw">)</span> <span class="ex">=</span> 47</span></code></pre></div>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">******</span> TIPC hello world client started <span class="pp">******</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">socket</span><span class="er">(</span><span class="ex">AF_TIPC,</span> SOCK_SEQPACKET, 0<span class="kw">)</span>      <span class="ex">=</span> <span class="dv">3</span><span class="op">&lt;</span>socket:<span class="pp">[</span><span class="ss">108592</span><span class="pp">]</span><span class="op">&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">connect</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>socket:<span class="pp">[</span><span class="ss">108592</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="ex">{sa_family=AF_TIPC,</span> sa_data=<span class="st">&quot;\x02\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00&quot;</span>}, 16<span class="kw">)</span> <span class="ex">=</span> 0</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="ex">sendto</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>socket:<span class="pp">[</span><span class="ss">108592</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="st">&quot;\xc8\x49\x00\x00\x11\x00\x00\x00\x11\x00\x00\x00\x10\x27\x00\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&quot;</span><span class="ex">,</span> 28, 0, NULL, 0<span class="kw">)</span> <span class="ex">=</span> 28</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="ex">recvfrom</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>socket:<span class="pp">[</span><span class="ss">108592</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="st">&quot;\x01\x00\x00\x00\x11\x00\x00\x00\x11\x00\x00\x00\xb7\x38\xcd\x18\x00\x00\x00\x00\xc8\x49\x00\x00\x11\x00\x00\x00\x11\x00\x00\x00&quot;</span><span class="ex">...,</span> 48, 0, NULL, NULL<span class="kw">)</span> <span class="ex">=</span> 48</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="ex">socket</span><span class="er">(</span><span class="ex">AF_TIPC,</span> SOCK_RDM, 0<span class="kw">)</span>            <span class="ex">=</span> <span class="dv">3</span><span class="op">&lt;</span>socket:<span class="pp">[</span><span class="ss">108593</span><span class="pp">]</span><span class="op">&gt;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="ex">sendto</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>socket:<span class="pp">[</span><span class="ss">108593</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="st">&quot;\x48\x65\x6c\x6c\x6f\x20\x57\x6f\x72\x6c\x64\x21\x21\x21\x00&quot;</span><span class="ex">,</span> 15, 0, {sa_family=AF_TIPC, sa_data=<span class="st">&quot;\x02\x00\xc8\x49\x00\x00\x11\x00\x00\x00\x00\x00\x00\x00&quot;</span>}, 16<span class="kw">)</span> <span class="ex">=</span> 15</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Client:</span> sent message: Hello World!!! </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="ex">recvfrom</span><span class="er">(</span><span class="dv">3</span><span class="op">&lt;</span>socket:<span class="pp">[</span><span class="ss">108593</span><span class="pp">]</span><span class="op">&gt;</span>, <span class="st">&quot;\x55\x68\x20\x3f\x00&quot;</span><span class="ex">,</span> 40, 0, NULL, NULL<span class="kw">)</span> <span class="ex">=</span> 5</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Client:</span> received response: Uh <span class="pp">?</span> </span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="ex">******</span> TIPC hello client finished <span class="pp">******</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="ex">+++</span> exited with 0 +++</span></code></pre></div>
 <div class="columns">
 <div class="column">
 <ol start="2" type="1">
-<li>Strace raw data.</li>
-</ol>
-<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span>sa_family<span class="op">=</span>AF_TIPC<span class="op">,</span> sa_data<span class="op">=</span><span class="st">&quot;</span><span class="sc">\x03\x00\xbd\xc9\xc3\x1b\x3b\x27\xe1\x59\x00\x00\x00\x00</span><span class="st">&quot;</span><span class="op">}</span></span></code></pre></div>
-<ol start="3" type="1">
 <li>Check tipc headers to determine the format.</li>
 </ol>
-<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">// header: /usr/include/linux/tipc.h</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> sockaddr_tipc <span class="op">{</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">short</span> family<span class="op">;</span>      <span class="co">//0     2   already decode by strace</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span>  addrtype<span class="op">;</span>    <span class="co">//2     1   (B)</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">signed</span>   <span class="dt">char</span>  scope<span class="op">;</span>       <span class="co">//3     1   (b)</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">union</span> <span class="op">{</span>                     <span class="co">//4     12</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">struct</span> tipc_socket_addr id<span class="op">;</span> <span class="co">//      (II)</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">struct</span> tipc_service_range nameseq<span class="op">;</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">struct</span> <span class="op">{</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>            <span class="kw">struct</span> tipc_service_addr name<span class="op">;</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>            __u32 domain<span class="op">;</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> name<span class="op">;</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> addr<span class="op">;</span>             </span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> tipc_service_addr <span class="op">{</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    __u32 type<span class="op">;</span>                 <span class="co">//0     4   (I)        </span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    __u32 instance<span class="op">;</span>             <span class="co">//4     4   (I)</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">// header: /usr/include/linux/tipc.h</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> sockaddr_tipc <span class="op">{</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">short</span> family<span class="op">;</span>      <span class="co">//0     2   already decode by strace</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span>  addrtype<span class="op">;</span>    <span class="co">//2     1   (B)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">signed</span>   <span class="dt">char</span>  scope<span class="op">;</span>       <span class="co">//3     1   (b)</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">union</span> <span class="op">{</span>                     <span class="co">//4     12</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">struct</span> tipc_socket_addr id<span class="op">;</span> <span class="co">//      (II)</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">struct</span> tipc_service_range nameseq<span class="op">;</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>            <span class="kw">struct</span> tipc_service_addr name<span class="op">;</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>            __u32 domain<span class="op">;</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> name<span class="op">;</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> addr<span class="op">;</span>             </span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> tipc_service_addr <span class="op">{</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    __u32 type<span class="op">;</span>                 <span class="co">//0     4   (I)        </span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    __u32 instance<span class="op">;</span>             <span class="co">//4     4   (I)</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
 </div><div class="column">
 <ol start="3" type="1">
 <li>decode.py</li>
 </ol>
-<div class="sourceCode" id="cb13"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage:</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   python3 decode.py &#39;\x03\x00\xbd\xc9\xc3\x1b\x3b\x27\xe1\x59\x00\x00\x00\x00&#39;</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> struct, sys</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> namedtuple</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> <span class="bu">bytes</span>(sys.argv[<span class="dv">1</span>], <span class="st">&#39;utf-8&#39;</span>).decode(<span class="st">&#39;unicode_escape&#39;</span>).encode(<span class="st">&#39;latin1&#39;</span>)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>fmt <span class="op">=</span> <span class="st">&#39;=BbII4x&#39;</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> struct.unpack(fmt, raw)</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> namedtuple(<span class="st">&#39;sa_data&#39;</span>, <span class="st">&#39;addrtype scope type instance&#39;</span>)</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>record <span class="op">=</span> names._make(data)</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(record)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage:</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   python3 decode.py &#39;\x03\x00\xbd\xc9\xc3\x1b\x3b\x27\xe1\x59\x00\x00\x00\x00&#39;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> struct, sys</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> namedtuple</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> <span class="bu">bytes</span>(sys.argv[<span class="dv">1</span>], <span class="st">&#39;utf-8&#39;</span>).decode(<span class="st">&#39;unicode_escape&#39;</span>).encode(<span class="st">&#39;latin1&#39;</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>fmt <span class="op">=</span> <span class="st">&#39;=BbII4x&#39;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> struct.unpack(fmt, raw)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> namedtuple(<span class="st">&#39;sa_data&#39;</span>, <span class="st">&#39;addrtype scope type instance&#39;</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>record <span class="op">=</span> names._make(data)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(record)</span></code></pre></div>
+</div>
+</div>
+<div class="columns">
+<div class="column">
 <ol start="4" type="1">
-<li>Decode.</li>
+<li>Decode server strace.</li>
+</ol>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bind</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> python3 decode.py <span class="st">&#39;\x02\x02\xc8\x49\x00\x00\x11\x00\x00\x00\x00\x00\x00\x00&#39;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">sa_data</span><span class="er">(</span><span class="va">addrtype</span><span class="op">=</span>3, <span class="va">scope</span><span class="op">=</span>0, <span class="va">type</span><span class="op">=</span>465815997, <span class="va">instance</span><span class="op">=</span>1507927867<span class="kw">)</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># recvfrom</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> python3 decode.py <span class="st">&#39;\x03\x00\x7a\xe4\x1a\xbb\x00\x00\x00\x00\x00\x00\x00\x00&#39;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="ex">sa_data</span><span class="er">(</span><span class="va">addrtype</span><span class="op">=</span>3, <span class="va">scope</span><span class="op">=</span>0, <span class="va">type</span><span class="op">=</span>3139101818, <span class="va">instance</span><span class="op">=</span>0<span class="kw">)</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># sendto</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> python3 decode.py <span class="st">&#39;\x03\x00\x7a\xe4\x1a\xbb\x00\x00\x00\x00\x00\x00\x00\x00&#39;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="ex">sa_data</span><span class="er">(</span><span class="va">addrtype</span><span class="op">=</span>3, <span class="va">scope</span><span class="op">=</span>0, <span class="va">type</span><span class="op">=</span>3139101818, <span class="va">instance</span><span class="op">=</span>0<span class="kw">)</span></span></code></pre></div>
+</div><div class="column">
+<ol start="5" type="1">
+<li>Decode client strace.</li>
 </ol>
 <div class="sourceCode" id="cb14"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> python3 decode.py <span class="st">&#39;\x03\x00\xbd\xc9\xc3\x1b\x3b\x27\xe1\x59\x00\x00\x00\x00&#39;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">sa_data</span><span class="er">(</span><span class="va">addrtype</span><span class="op">=</span>3, <span class="va">scope</span><span class="op">=</span>0, <span class="va">type</span><span class="op">=</span>465815997, <span class="va">instance</span><span class="op">=</span>1507927867<span class="kw">)</span></span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># connect</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> python3 decode.py <span class="st">&#39;\x02\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00&#39;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">sa_data</span><span class="er">(</span><span class="va">addrtype</span><span class="op">=</span>2, <span class="va">scope</span><span class="op">=</span>0, <span class="va">type</span><span class="op">=</span>1, <span class="va">instance</span><span class="op">=</span>1<span class="kw">)</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># sendto</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> python3 decode.py <span class="st">&#39;\x02\x00\xc8\x49\x00\x00\x11\x00\x00\x00\x00\x00\x00\x00&#39;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="ex">sa_data</span><span class="er">(</span><span class="va">addrtype</span><span class="op">=</span>2, <span class="va">scope</span><span class="op">=</span>0, <span class="va">type</span><span class="op">=</span>18888, <span class="va">instance</span><span class="op">=</span>17<span class="kw">)</span></span></code></pre></div>
 </div>
 </div>
 <footer class="footer text-muted">
