@@ -66,29 +66,25 @@ The .plt section contains a small executable code to find addresses for dynamic 
 
 ```go
                                             ┌──────────────────┐
-┌──────────┐    ┌──────────────────────┐    │   ┌───────────┐  │   ┌─────────────────────────────┐    ┌──────────┐
-│ main()   │    │.plt                  │    │   │.got       │  │   │ runtime linker              │    │ rela.plt │
-│          │    |──────────────────────|    │   |───────────|  │   |─────────────────────────────|    │          │
-│   puts()─┼────┼► puts@plt()          │    │   │           │  └───┼─►_dl_runtime_resolve()      │    │          |
-│          │    │    find puts in .got─┼────┼──►│           │      │    find puts                │    │          │
-│          │    │                      │    │   │           │      │    check rela.plt ──────────┼──► │          |
-└──────────┘    │    if not found      │    │   │           │◄─────┼─── update puts addr to .got │    └──────────┘
+┌──────────┐    ┌──────────────────────┐    │   ┌───────────┐  │   ┌─────────────────────────────┐
+│ main()   │    │.plt                  │    │   │.got       │  │   │ runtime linker              │
+│          │    |──────────────────────|    │   |───────────|  │   |─────────────────────────────|
+│   puts()─┼────┼► puts@plt()          │    │   │           │  └───┼─►_dl_runtime_resolve()      │
+│          │    │    find puts in .got─┼────┼──►│           │      │    find puts                │
+│          │    │                      │    │   │           │      │                             │
+└──────────┘    │    if not found      │    │   │           │◄─────┼─── update puts addr to .got │
                 │       let linker find┼────┘   └───────────┘      └─────────────────────────────┘
                 │    call puts         │
                 └──────────────────────┘
 ```
 
-- When program calls puts, the call goes to puts@plt. Since the symbol is not resolved yet, .plt delegates runtime linker to find the address of puts in libc.so.
-- After found the address, it call puts.
-- Following the instructions in .rela.plt, the resolved address is written to the corresponding entry in .got.
+- When program calls puts, the call goes to puts@plt. Since the symbol is not resolved yet, .plt delegates runtime linker to find the address of puts.
+- After found the address, runtime linker update the address to .got and then execute the function.
 - In the next calls, puts@plt simply read the address of puts in .got and directly jump to the function.
 
-### Before First Call
+### Examine First Call
 
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-1. Setup gdb to debug shared library events.
+1. Setup gdb to debug shared library.
 ```sh
 (gdb) set stop-on-solib-events 1
 (gdb) set auto-solib-add 0
@@ -127,9 +123,6 @@ Dump of assembler code for function puts@plt:
 puts@got[plt] in section .got of /root/demo/main
 ```
 
-:::
-::: {.column width=50%}
-
 4. Since the address of puts is not yet resolved, the corresponding .got entry points back to 0x1036, an instruction in .plt, as shown in the objdump output. This indicates that the symbol has not been resolved, so the runtime linker is delegated to find the address.
 ```sh
 (gdb) x/a 0x555555557fd0
@@ -144,7 +137,7 @@ $ objdump --disassemble --section=.plt main
     103b:       e9 e0 ff ff ff          jmp    1020 <_init+0x20>
 ```
 
-6. Examine .got.
+5. Examine .got.
 ```sh
 (gdb) info files
 0x0000555555557fb8 - 0x0000555555558000 is .got
@@ -157,10 +150,7 @@ $ objdump --disassemble --section=.plt main
 0x555555557ff8: 0x0
 ```
 
-:::
-::::::::::::::
-
-7. Illustrate the call flow.
+Illustrate .plt, .got before the first call.
 ```go
                  file: main                                    file: main              
               section: .plt                                 section: .got            
@@ -178,19 +168,14 @@ $ objdump --disassemble --section=.plt main
 ```
 
 
-### After First Call
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-1. Continue program, it will stop when libc.so loaded.
+6. Continue program, it will stop when libc.so loaded.
 ```sh
 (gdb) continue
 Stopped due to shared library event:
   Inferior loaded /lib/x86_64-linux-gnu/libc.so.6
 ```
 
-2. Examine .got. After runtime loader solve puts, it updated the .got entry from 0x1036 to 0x7ffff7e08e50, which is the memory address of puts in libc.so.
+7. Examine .got. After runtime loader solve puts, it updated the .got entry from 0x1036 to 0x7ffff7e08e50, which is the memory address of puts in libc.so.
 ```sh
 (gdb) x/9a 0x0000555555557fb8
 0x555555557fb8: 0x3dc8  0x0
@@ -203,10 +188,7 @@ Stopped due to shared library event:
 puts in section .text of /lib/x86_64-linux-gnu/libc.so.6
 ```
 
-:::
-::: {.column width=50%}
-
-3. Check the call flow of puts@plt. Now, it jumps directly to 0x7ffff7e08e50, the memory address of puts in libc.so.
+8. Check the call flow of puts@plt. Now, it jumps directly to 0x7ffff7e08e50, the memory address of puts in libc.so.
 ```sh
 (gdb) disassemble 0x555555555030
 Dump of assembler code for function puts@plt:
@@ -218,10 +200,7 @@ Dump of assembler code for function puts@plt:
 0x555555557fd0 <puts@got.plt>:  0x7ffff7e08e50 <__GI__IO_puts>
 ```
 
-:::
-::::::::::::::
-
-4. Illustrate the call flow.
+Illustrate .plt, .got after the first call.
 ```go
                  file: main                                    file: main                              file: libc.so
               section: .plt                                 section: .got                           section: .text

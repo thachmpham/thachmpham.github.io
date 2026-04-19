@@ -111,10 +111,8 @@ class="toc-section-number">1.2</span> Section .rela.plt</a></li>
 id="toc-sections-.plt-and-.got"><span
 class="toc-section-number">1.3</span> Sections .plt and .got</a>
 <ul>
-<li><a href="#before-first-call" id="toc-before-first-call"><span
-class="toc-section-number">1.3.1</span> Before First Call</a></li>
-<li><a href="#after-first-call" id="toc-after-first-call"><span
-class="toc-section-number">1.3.2</span> After First Call</a></li>
+<li><a href="#examine-first-call" id="toc-examine-first-call"><span
+class="toc-section-number">1.3.1</span> Examine First Call</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -178,32 +176,29 @@ class="header-section-number">1.3</span> Sections .plt and .got</h2>
 for dynamic symbols. The .got section holds the dynamic symbol
 addresses.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>                                            ┌──────────────────┐</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>┌──────────┐    ┌──────────────────────┐    │   ┌───────────┐  │   ┌─────────────────────────────┐    ┌──────────┐</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>│ main<span class="op">()</span>   │    │<span class="op">.</span>plt                  │    │   │<span class="op">.</span>got       │  │   │ runtime linker              │    │ rela<span class="op">.</span>plt │</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>│          │    <span class="op">|</span>──────────────────────<span class="op">|</span>    │   <span class="op">|</span>───────────<span class="op">|</span>  │   <span class="op">|</span>─────────────────────────────<span class="op">|</span>    │          │</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>│   puts<span class="op">()</span>─┼────┼► puts@plt<span class="op">()</span>          │    │   │           │  └───┼─►_dl_runtime_resolve<span class="op">()</span>      │    │          <span class="op">|</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>│          │    │    find puts in <span class="op">.</span>got─┼────┼──►│           │      │    find puts                │    │          │</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>│          │    │                      │    │   │           │      │    check rela<span class="op">.</span>plt ──────────┼──► │          <span class="op">|</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>└──────────┘    │    <span class="cf">if</span> not found      │    │   │           │◄─────┼─── update puts addr to <span class="op">.</span>got │    └──────────┘</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>┌──────────┐    ┌──────────────────────┐    │   ┌───────────┐  │   ┌─────────────────────────────┐</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>│ main<span class="op">()</span>   │    │<span class="op">.</span>plt                  │    │   │<span class="op">.</span>got       │  │   │ runtime linker              │</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>│          │    <span class="op">|</span>──────────────────────<span class="op">|</span>    │   <span class="op">|</span>───────────<span class="op">|</span>  │   <span class="op">|</span>─────────────────────────────<span class="op">|</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>│   puts<span class="op">()</span>─┼────┼► puts@plt<span class="op">()</span>          │    │   │           │  └───┼─►_dl_runtime_resolve<span class="op">()</span>      │</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>│          │    │    find puts in <span class="op">.</span>got─┼────┼──►│           │      │    find puts                │</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>│          │    │                      │    │   │           │      │                             │</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>└──────────┘    │    <span class="cf">if</span> not found      │    │   │           │◄─────┼─── update puts addr to <span class="op">.</span>got │</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                │       let linker find┼────┘   └───────────┘      └─────────────────────────────┘</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                │    call puts         │</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                └──────────────────────┘</span></code></pre></div>
 <ul>
 <li>When program calls puts, the call goes to puts@plt. Since the symbol
 is not resolved yet, .plt delegates runtime linker to find the address
-of puts in libc.so.</li>
-<li>After found the address, it call puts.</li>
-<li>Following the instructions in .rela.plt, the resolved address is
-written to the corresponding entry in .got.</li>
+of puts.</li>
+<li>After found the address, runtime linker update the address to .got
+and then execute the function.</li>
 <li>In the next calls, puts@plt simply read the address of puts in .got
 and directly jump to the function.</li>
 </ul>
-<h3 data-number="1.3.1" id="before-first-call"><span
-class="header-section-number">1.3.1</span> Before First Call</h3>
-<div class="columns">
-<div class="column" style="width:50%;">
+<h3 data-number="1.3.1" id="examine-first-call"><span
+class="header-section-number">1.3.1</span> Examine First Call</h3>
 <ol type="1">
-<li>Setup gdb to debug shared library events.</li>
+<li>Setup gdb to debug shared library.</li>
 </ol>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> stop-on-solib-events 1</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> auto-solib-add 0</span>
@@ -239,7 +234,6 @@ associated entry in .got.</li>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> symbol 0x555555557fd0</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">puts@got[plt]</span> in section .got of /root/demo/main</span></code></pre></div>
-</div><div class="column" style="width:50%;">
 <ol start="4" type="1">
 <li>Since the address of puts is not yet resolved, the corresponding
 .got entry points back to 0x1036, an instruction in .plt, as shown in
@@ -254,7 +248,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1030:</span>       ff 25 9a 2f 00 00       jmp    <span class="pp">*</span>0x2f9a<span class="er">(</span><span class="ex">%rip</span><span class="kw">)</span>        <span class="co"># 3fd0 &lt;puts@GLIBC_2.2.5&gt;</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1036:</span>       68 00 00 00 00          push   <span class="va">$0</span>x0</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">103b:</span>       e9 e0 ff ff ff          jmp    1020 <span class="op">&lt;</span>_init+0x20<span class="op">&gt;</span></span></code></pre></div>
-<ol start="6" type="1">
+<ol start="5" type="1">
 <li>Examine .got.</li>
 </ol>
 <div class="sourceCode" id="cb11"><pre
@@ -267,11 +261,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555557fd8:</span> 0x0     0x0</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555557fe8:</span> 0x0     0x0</span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555557ff8:</span> 0x0</span></code></pre></div>
-</div>
-</div>
-<ol start="7" type="1">
-<li>Illustrate the call flow.</li>
-</ol>
+<p>Illustrate .plt, .got before the first call.</p>
 <div class="sourceCode" id="cb12"><pre
 class="sourceCode go"><code class="sourceCode go"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>                 file<span class="op">:</span> main                                    file<span class="op">:</span> main              </span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>              section<span class="op">:</span> <span class="op">.</span>plt                                 section<span class="op">:</span> <span class="op">.</span>got            </span>
@@ -286,18 +276,14 @@ class="sourceCode go"><code class="sourceCode go"><span id="cb12-1"><a href="#cb
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>│                    │                     │ │    │                │          │     │</span>
 <span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>│ <span class="bn">0x000055555555503b</span> │ jmp   <span class="bn">0x555555555020</span>│ └────┼────────────────┼──────────┘     │</span>
 <span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>└────────────────────┴─────────────────────┘      └────────────────┴────────────────┘ </span></code></pre></div>
-<h3 data-number="1.3.2" id="after-first-call"><span
-class="header-section-number">1.3.2</span> After First Call</h3>
-<div class="columns">
-<div class="column" style="width:50%;">
-<ol type="1">
+<ol start="6" type="1">
 <li>Continue program, it will stop when libc.so loaded.</li>
 </ol>
 <div class="sourceCode" id="cb13"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">continue</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Stopped</span> due to shared library event:</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Inferior</span> loaded /lib/x86_64-linux-gnu/libc.so.6</span></code></pre></div>
-<ol start="2" type="1">
+<ol start="7" type="1">
 <li>Examine .got. After runtime loader solve puts, it updated the .got
 entry from 0x1036 to 0x7ffff7e08e50, which is the memory address of puts
 in libc.so.</li>
@@ -312,8 +298,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> symbol 0x7ffff7e08e50</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="ex">puts</span> in section .text of /lib/x86_64-linux-gnu/libc.so.6</span></code></pre></div>
-</div><div class="column" style="width:50%;">
-<ol start="3" type="1">
+<ol start="8" type="1">
 <li>Check the call flow of puts@plt. Now, it jumps directly to
 0x7ffff7e08e50, the memory address of puts in libc.so.</li>
 </ol>
@@ -326,11 +311,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/a</span> 0x555555557fd0</span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="ex">0x555555557fd0</span> <span class="op">&lt;</span>puts@got.plt<span class="op">&gt;</span>:  0x7ffff7e08e50 <span class="op">&lt;</span>__GI__IO_puts<span class="op">&gt;</span></span></code></pre></div>
-</div>
-</div>
-<ol start="4" type="1">
-<li>Illustrate the call flow.</li>
-</ol>
+<p>Illustrate .plt, .got after the first call.</p>
 <div class="sourceCode" id="cb16"><pre
 class="sourceCode go"><code class="sourceCode go"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>                 file<span class="op">:</span> main                                    file<span class="op">:</span> main                              file<span class="op">:</span> libc<span class="op">.</span>so</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>              section<span class="op">:</span> <span class="op">.</span>plt                                 section<span class="op">:</span> <span class="op">.</span>got                           section<span class="op">:</span> <span class="op">.</span>text</span>
