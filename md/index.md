@@ -3,7 +3,8 @@ title: "A Developer Notebook"
 ---
 
 ## C/C++ & GDB
-[Static Symbol Table](/html/gdb/static_symbol_table.html)
+[Static Symbol Table](/html/gdb/static_symbol_table.html),
+[Dynamic Symbol Table](/html/gdb/dynamic_symbol_table.html),
 
 
 ## Linux Diagnostic

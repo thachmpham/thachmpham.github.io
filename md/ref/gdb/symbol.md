@@ -3,8 +3,6 @@ title: "Symbol Table"
 ---
 
 
-A symbol represents a function, a global variable, and other named entity. The symbol table is a section that maps symbols to their addresses. Two typical symbol tables are the .symtab and .dynsym sections.
-
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 

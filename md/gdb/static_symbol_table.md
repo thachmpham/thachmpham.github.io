@@ -2,6 +2,7 @@
 title: "Static Symbol Table"
 ---
 
+
 # Read Static Symbol Table
 ## List of Sections
 
@@ -82,7 +83,7 @@ Each line shows a symbol name and its offset within the .strtab section.
 ::::::::::::::
 
 ## Section .symtab
-The .symtab section contains all symbols in the file.
+A symbol represents a function, a global variable, and other named entity. Section .symtab is the symbol table that map symbols to their addresses.
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
