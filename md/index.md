@@ -2,6 +2,10 @@
 title: "A Developer Notebook"
 ---
 
+## C/C++ & GDB
+[Static Symbol Table](/html/gdb/static_symbol_table.html)
+
+
 ## Linux Diagnostic
 
 :::::::::::::: {.columns}

@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Symbol Table</title>
   <style>
-    /* Default styles provided by pandoc.
-    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -24,9 +21,8 @@
       vertical-align: middle;
     }
     /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -37,7 +33,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -177,16 +173,15 @@ the ELF file.</p>
 </div><div class="column" style="width:40%;">
 <p>Explain the output.</p>
 <ul>
-<li><p>There are 28 sections.</p></li>
-<li><p>The .text section has index 14 (Nr). It contains the executable
+<li>There are 28 sections.</li>
+<li>The .text section has index 14 (Nr). It contains the executable
 machine code (PROBITS). In the file, it starts at offset 0x001040 and
-has a size of 0x00013b bytes.</p></li>
-<li><p>The index of .symtab is 26 (Nr). It is a symbol table (SYMTAB).
+has a size of 0x00013b bytes.</li>
+<li>The index of .symtab is 26 (Nr). It is a symbol table (SYMTAB).
 Within the file, it begins 0x003048 with a length of 0x000378
-bytes.</p></li>
-<li><p>The .strtab section, with index 27 (Nr), is a string table
-(STRTAB). It starts at offset 0x0033c0 and spans 0x0001d3
-bytes.</p></li>
+bytes.</li>
+<li>The .strtab section, with index 27 (Nr), is a string table (STRTAB).
+It starts at offset 0x0033c0 and spans 0x0001d3 bytes.</li>
 </ul>
 </div>
 </div>
@@ -562,39 +557,39 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb33-1"><a href="#
 <p>Explain the outputs.</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">First Line</th>
 <th style="text-align: left;"></th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">st_name</td>
 <td style="text-align: left;">0x134</td>
 <td style="text-align: left;">Index 0x134 in .strtab: g_int</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">st_info</td>
 <td style="text-align: left;">0x11</td>
 <td style="text-align: left;">Type object, global</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">st_other</td>
 <td style="text-align: left;">0x0</td>
 <td style="text-align: left;">Visibility default</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">st_shndx</td>
 <td style="text-align: left;">0x17</td>
 <td style="text-align: left;">Section 0x17 = 23 = .data</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">st_value</td>
 <td style="text-align: left;">0x4010</td>
 <td style="text-align: left;">Offset 0x4010</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">st_size</td>
 <td style="text-align: left;">0x4</td>
 <td style="text-align: left;">Size of 4 bytes</td>
@@ -603,39 +598,39 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb33-1"><a href="#
 </table>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Second Line</th>
 <th style="text-align: left;"></th>
 <th style="text-align: left;"></th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">st_name</td>
 <td style="text-align: left;">0x163</td>
 <td style="text-align: left;">Index 0x136 in .strtab: sum</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">st_info</td>
 <td style="text-align: left;">0x11</td>
 <td style="text-align: left;">Type func, global</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">st_other</td>
 <td style="text-align: left;">0x0</td>
 <td style="text-align: left;">Visibility default</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">st_shndx</td>
 <td style="text-align: left;">0x17</td>
 <td style="text-align: left;">Section: 0xe = 14 = .text</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">st_value</td>
 <td style="text-align: left;">0x4010</td>
 <td style="text-align: left;">Offset 0x1129</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">st_size</td>
 <td style="text-align: left;">0x18</td>
 <td style="text-align: left;">Size of 24 bytes</td>

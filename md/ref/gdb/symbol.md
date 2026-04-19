@@ -93,11 +93,8 @@ Section Headers:
 Explain the output.
 
 - There are 28 sections.
-
 - The .text section has index 14 (Nr). It contains the executable machine code (PROBITS). In the file, it starts at offset 0x001040 and has a size of 0x00013b bytes.
-
 - The index of .symtab is 26 (Nr). It is a symbol table (SYMTAB). Within the file, it begins 0x003048 with a length of 0x000378 bytes.
-
 - The .strtab section, with index 27 (Nr), is a string table (STRTAB). It starts at offset 0x0033c0 and spans 0x0001d3 bytes.
 
 :::
