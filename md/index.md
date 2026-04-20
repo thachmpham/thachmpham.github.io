@@ -14,6 +14,7 @@ title: "A Developer Notebook"
 - [Debug Code in mmap Memory](/html/gdb/debug_mmap_code.html)
 - [Keep Child Process under GDB Control](/html/gdb/keep_child_under_gdb.html)
 - [Debug Program Started By Bash Script](/html/gdb/prog_started_by_bash.html)
+- [Automatically Backtrace on Termination](/html/gdb/auto_backtrace_on_terminate.html)
 
 :::
 ::: {.column width=50%}
