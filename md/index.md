@@ -11,6 +11,8 @@ title: "A Developer Notebook"
 [Dynamic Symbol Table](/html/gdb/dynamic_symbol_table.html),
 [Stack](/html/gdb/stack.html).
 
+[Debug SystemD Program](/html/gdb/debug_systemd_program.html)
+
 :::
 ::: {.column width=50%}
 
