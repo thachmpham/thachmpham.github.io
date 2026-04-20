@@ -50,35 +50,6 @@ subtitle: "Stop on a program event"
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-```sh
-#include <unistd.h>
-int main()
-{
-    fork();
-    while (1) {}
-}
-```
-
-```sh
-(gdb) set detach-on-fork off
-(gdb) catch fork
-```
-
-:::
-::: {.column width=50%}
-
-```sh
-(gdb) run
-Catchpoint 1 (forked process 4097), arch_fork (ctid=0x7ffff7d85a10)
-
-(gdb) next
-[New inferior 2 (process 4097)]
-
-(gdb) info inferiors 
-  Num  Description       Connection           Executable        
-* 1    process 4094      1 (native)           /root/demo/demo   
-  2    process 4097      1 (native)           /root/demo/demo
-```
 
 :::
 ::::::::::::::

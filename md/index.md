@@ -12,6 +12,9 @@ title: "A Developer Notebook"
 - [Examine the Stack](/html/gdb/stack.html)
 - [Debug SystemD Program](/html/gdb/debug_systemd_program.html)
 - [Debug Code in mmap Memory](/html/gdb/debug_mmap_code.html)
+- [Keep Child Process under GDB Control](/html/gdb/keep_child_under_gdb.html)
+- [Debug Program Started By Bash Script](/html/gdb/prog_started_by_bash.html)
+
 :::
 ::: {.column width=50%}
 
