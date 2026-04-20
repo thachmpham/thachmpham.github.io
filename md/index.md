@@ -7,6 +7,7 @@ title: "A Developer Notebook"
 [Dynamic Symbol Table](/html/gdb/dynamic_symbol_table.html),
 [Stack](/html/gdb/stack.html),
 [Break](/html/gdb/break.html),
+[Catch](/html/gdb/catch.html),
 
 
 ## Linux Diagnostic
