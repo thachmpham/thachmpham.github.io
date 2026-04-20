@@ -99,97 +99,74 @@
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
+<li><a href="#common-procedures" id="toc-common-procedures"><span
+class="toc-section-number">1</span> Common Procedures</a>
+<ul>
 <li><a href="#single-mode" id="toc-single-mode"><span
-class="toc-section-number">1</span> Single Mode</a>
-<ul>
-<li><a href="#launch-program" id="toc-launch-program"><span
-class="toc-section-number">1.1</span> Launch Program</a></li>
-<li><a href="#attach-to-running-process"
-id="toc-attach-to-running-process"><span
-class="toc-section-number">1.2</span> Attach to Running Process</a></li>
-</ul></li>
+class="toc-section-number">1.1</span> Single Mode</a></li>
 <li><a href="#multi-mode" id="toc-multi-mode"><span
-class="toc-section-number">2</span> Multi Mode</a>
-<ul>
-<li><a href="#launch-program-1" id="toc-launch-program-1"><span
-class="toc-section-number">2.1</span> Launch Program</a></li>
-<li><a href="#attach-to-running-process-1"
-id="toc-attach-to-running-process-1"><span
-class="toc-section-number">2.2</span> Attach to Running Process</a></li>
+class="toc-section-number">1.2</span> Multi Mode</a></li>
 </ul></li>
-<li><a href="#debug-program-started-by-systemd"
-id="toc-debug-program-started-by-systemd"><span
-class="toc-section-number">3</span> Debug Program Started By SystemD</a>
+<li><a href="#debug-systemd-program"
+id="toc-debug-systemd-program"><span class="toc-section-number">2</span>
+Debug SystemD Program</a>
 <ul>
 <li><a href="#program" id="toc-program"><span
-class="toc-section-number">3.1</span> Program</a></li>
-<li><a href="#procedure" id="toc-procedure"><span
-class="toc-section-number">3.2</span> Procedure</a></li>
+class="toc-section-number">2.1</span> Program</a></li>
+<li><a href="#debug" id="toc-debug"><span
+class="toc-section-number">2.2</span> Debug</a></li>
 </ul></li>
 </ul>
 </nav>
-<h1 data-number="1" id="single-mode"><span
-class="header-section-number">1</span> Single Mode</h1>
-<h2 data-number="1.1" id="launch-program"><span
-class="header-section-number">1.1</span> Launch Program</h2>
+<h1 data-number="1" id="common-procedures"><span
+class="header-section-number">1</span> Common Procedures</h1>
+<h2 data-number="1.1" id="single-mode"><span
+class="header-section-number">1.1</span> Single Mode</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>Server</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdbserver localhost:12345 ls</span></code></pre></div>
+<p>Launch a program.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># server</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdbserver localhost:12345 ls</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># client</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="fu">file</span> ls</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">target</span> remote localhost:12345</span></code></pre></div>
 </div><div class="column" style="width:50%;">
-<p>Client</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="fu">file</span> ls</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">target</span> remote localhost:12345</span></code></pre></div>
+<p>Attach to a running process.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># server</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> vi</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdbserver <span class="at">--attach</span> localhost:12345 <span class="kw">`</span><span class="fu">pidof</span> vi<span class="kw">`</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># client</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="fu">file</span> vi</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">target</span> remote localhost:12345</span></code></pre></div>
 </div>
 </div>
-<h2 data-number="1.2" id="attach-to-running-process"><span
-class="header-section-number">1.2</span> Attach to Running Process</h2>
+<h2 data-number="1.2" id="multi-mode"><span
+class="header-section-number">1.2</span> Multi Mode</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>Server</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> vi</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdbserver <span class="at">--attach</span> localhost:12345 <span class="kw">`</span><span class="fu">pidof</span> vi<span class="kw">`</span></span></code></pre></div>
+<p>Launch Program</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sever</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdbserver <span class="at">--multi</span> :12345</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># client</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">target</span> extended-remote :12345</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> remote exec-file vi</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">start</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">monitor</span> exit</span></code></pre></div>
 </div><div class="column" style="width:50%;">
-<p>Client</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="fu">file</span> vi</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">target</span> remote localhost:12345</span></code></pre></div>
+<p>Attach to a running process.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># server</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> vi</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdbserver <span class="at">--multi</span> localhost:12345</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># client</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">target</span> extended-remote localhost:12345</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">attach</span> 19832  <span class="co"># pidof vi</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">monitor</span> exit</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="2" id="multi-mode"><span
-class="header-section-number">2</span> Multi Mode</h1>
-<h2 data-number="2.1" id="launch-program-1"><span
-class="header-section-number">2.1</span> Launch Program</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p>Server.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdbserver <span class="at">--multi</span> :12345</span></code></pre></div>
-</div><div class="column" style="width:50%;">
-<p>Client.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">target</span> extended-remote :12345</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> remote exec-file vi</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">start</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">monitor</span> exit</span></code></pre></div>
-</div>
-</div>
-<h2 data-number="2.2" id="attach-to-running-process-1"><span
-class="header-section-number">2.2</span> Attach to Running Process</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p>Server.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> vi</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdbserver <span class="at">--multi</span> localhost:12345</span></code></pre></div>
-</div><div class="column" style="width:50%;">
-<p>Client.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">target</span> extended-remote localhost:12345</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">attach</span> 19832  <span class="co"># pidof vi</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">monitor</span> exit</span></code></pre></div>
-</div>
-</div>
-<h1 data-number="3" id="debug-program-started-by-systemd"><span
-class="header-section-number">3</span> Debug Program Started By
-SystemD</h1>
-<h2 data-number="3.1" id="program"><span
-class="header-section-number">3.1</span> Program</h2>
+<h1 data-number="2" id="debug-systemd-program"><span
+class="header-section-number">2</span> Debug SystemD Program</h1>
+<h2 data-number="2.1" id="program"><span
+class="header-section-number">2.1</span> Program</h2>
 <div class="columns">
 <div class="column">
 <ol type="1">
@@ -255,8 +232,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="va">Type</span><span class="op">=</span>forking</span></code></pre></div>
 </div>
 </div>
-<h2 data-number="3.2" id="procedure"><span
-class="header-section-number">3.2</span> Procedure</h2>
+<h2 data-number="2.2" id="debug"><span
+class="header-section-number">2.2</span> Debug</h2>
 <ol type="1">
 <li>Modify start() to launch the program with gdbserver.</li>
 </ol>

@@ -2,44 +2,37 @@
 title: 'GDB Remote Debug'
 ---
 
-# Single Mode
-## Launch Program
+# Common Procedures
+## Single Mode
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-Server
+Launch a program.
+
 ```sh
+# server
 $ gdbserver localhost:12345 ls
 ```
 
-:::
-::: {.column width=50%}
-
-Client
 ```sh
+# client
 (gdb) file ls
 (gdb) target remote localhost:12345
 ```
-
 :::
-::::::::::::::
-
-## Attach to Running Process
-:::::::::::::: {.columns}
 ::: {.column width=50%}
 
-Server
+Attach to a running process.
+
 ```sh
+# server
 $ vi
 $ gdbserver --attach localhost:12345 `pidof vi`
 ```
 
-:::
-::: {.column width=50%}
-
-Client
 ```sh
+# client
 (gdb) file vi
 (gdb) target remote localhost:12345
 ```
@@ -47,22 +40,22 @@ Client
 :::
 ::::::::::::::
 
-# Multi Mode
-## Launch Program
+
+## Multi Mode
+
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-Server.
+Launch Program
+
 ```sh
+# sever
 $ gdbserver --multi :12345
 ```
 
-:::
-::: {.column width=50%}
-
-Client.
 ```sh
+# client
 (gdb) target extended-remote :12345
 (gdb) set remote exec-file vi
 (gdb) start
@@ -70,26 +63,18 @@ Client.
 ```
 
 :::
-::::::::::::::
-
-
-## Attach to Running Process
-
-
-:::::::::::::: {.columns}
 ::: {.column width=50%}
 
-Server.
+Attach to a running process.
+
 ```sh
+# server
 $ vi
 $ gdbserver --multi localhost:12345
 ```
 
-:::
-::: {.column width=50%}
-
-Client.
 ```sh
+# client
 (gdb) target extended-remote localhost:12345
 (gdb) attach 19832  # pidof vi
 (gdb) monitor exit
@@ -98,7 +83,8 @@ Client.
 :::
 ::::::::::::::
 
-# Debug Program Started By SystemD
+
+# Debug SystemD Program
 ## Program
 
 :::::::::::::: {.columns}
@@ -173,7 +159,7 @@ Type=forking
 :::
 ::::::::::::::
 
-## Procedure
+## Debug
 1. Modify start() to launch the program with gdbserver.
 ```sh
 start() {
