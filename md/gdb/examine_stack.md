@@ -1,30 +1,14 @@
 ---
-title: 'Stack'
+title: 'Reverse the Stack Memory'
 ---
-
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-:::
-::: {.column width=50%}
-
-:::
-::::::::::::::
-
-
-Each thread has its own stack memory, not shared with others. Stores arguments, local variables. On a function call, the stack grows downward from high to low address.Shrinks on function returns.
 
 # Stack Pointer
 
-- Stack pointer (rsp) always points to top of the stack. 
-- Changed on instructions push, pop, call, ret.
+Stack pointer (rsp) always points to top of the stack. Register rsp changed on instructions push, pop, call, ret.
 
 ## Push & Pop
 
-- Instruction push put a value onto the stack.  
-- Instruction pop remove a value from the stack.
-- Register rsp automatically moves to the top of the stack.
+Instruction push put a value onto the stack. Instruction pop remove a value from the stack.
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
@@ -119,8 +103,7 @@ Illustrate.
 
 ## Call & Ret
 
-- Instruction call pushes the address of the next instruction (rip) onto the stack then jump to the target function. This address is also called the return address.  
-- Instruction ret pops the return address from the stack and jump to this address.
+Instruction call pushes the address of the next instruction (rip) onto the stack then jump to the target function. This address is also called the return address. Instruction ret pops the return address from the stack and jump to this address.
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
@@ -216,16 +199,14 @@ Illustrate.
 
 # Base Pointer
 
-- Base pointer (rbp) stores the start address of the function stack frame.
-- Remains fixed throughout the function, allowing compiler to use its stable position to generate offsets for local variables and function arguments.
+Base pointer (rbp) stores the start address of the function stack frame. Remains fixed throughout the function, allowing compiler to use its stable position to generate offsets for local variables and function arguments.
 
 ## Prolog & Epilog
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
 
-- When calling a new C/C++ function, prolog is the compiler-generated code that sets up the stack frame for the new function.
-- When leaving a C/C++ function, epilog is the compiler-generated code that restores the parent's stack frame and jump back to parent function.
+When calling a new C/C++ function, prolog is the compiler-generated code that sets up the stack frame for the new function. When leaving a C/C++ function, epilog is the compiler-generated code that restores the parent's stack frame and jump back to parent function.
 
 Example: parent_func calls child_func.
 ```c
@@ -341,19 +322,14 @@ int child_func(int a, int b)
 :::
 ::::::::::::::
 
-# Examine Stack
+# Print the Raw Stack
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-- Instruction call pushes the parent rip onto the stack. 
-- Prolog pushes the parent rip onto the stack.
-- Function arguments and local variables are stored in the stack, and their addresses are based on the current $rbp.
+Instruction call pushes the parent rip onto the stack. Prolog pushes the parent rip onto the stack. Function arguments and local variables are stored in the stack, and their addresses are based on the current $rbp.
 
-So:
-
-- From current rbp, go backward to lower addresses, we reach the local variables and arguments.
-- From current rbp, go forward to higher addresses, we reach the parent rbp and rip.
+So, from current rbp, go backward to lower addresses, we reach the local variables and arguments. From current rbp, go forward to higher addresses, we reach the parent rbp and rip.
 
 In GDB:
 
@@ -386,7 +362,7 @@ In GDB:
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-File main.c
+1. main.c
 ```c
 int func(int argv1, int argv2)
 {
@@ -408,7 +384,7 @@ int main(int argc, char** argv)
 $ gcc main.c -o main
 ```
 
-Run under GDB.
+2. Run.
 
 ```sh
 (gdb) file main
@@ -430,7 +406,7 @@ Run under GDB.
 :::
 ::: {.column width=50%}
 
-Set breakpoint at the end of func.
+3. Set breakpoint at the end of func.
 
 ```sh
 (gdb) break *func+42
@@ -439,14 +415,14 @@ Set breakpoint at the end of func.
 Breakpoint 1, 0x0000555555555153 in func ()
 ```
 
-Examine arguments and local variables.
+4. Examine arguments and local variables.
 ```sh
 (gdb) x/-6wx $rbp
 0x7fffffffe5b8: 0x22222222      0x11111111      0xaaaaaaaa      0xbbbbbbbb
 0x7fffffffe5c8: 0xcccccccc      0xdddddddd
 ```
 
-Examine parent's $rip and $rbp.
+5. Examine parent's $rip and $rbp.
 ```sh
 (gdb) x/2a $rbp
 0x7fffffffe5d0: 0x7fffffffe5f0  0x55555555517c <main+34>
@@ -454,21 +430,76 @@ Examine parent's $rip and $rbp.
 
 Illustrate the stack.
 ```go
-                         ┌────────────────┐               
-                         │     stack      │               
-          ───low address ├────────────────┤               
-                         │                │               
+                         ┌────────────────┐
+                         │     stack      │
+          ───low address ├────────────────┤
+                         │                │
           0x7fffffffe5b8 │ 0x22222222     │ argument argv2
                          │ 0x11111111     │ argument argv2
-                         │ 0xaaaaaaaa     │ variable a    
-                         │ 0xbbbbbbbb     │ variable b    
-          0x7fffffffe5c8 │ 0xcccccccc     │ variable c    
-                         │ 0xdddddddd     │ variable d    
-$rbp ───► 0x7fffffffe5d0 │ 0x7fffffffe5f0 │ parent $rbp   
-                         │ 0x55555555517c │ parent $rip   
-                         │                │               
-          ──high address └────────────────┘               
+                         │ 0xaaaaaaaa     │ variable a
+                         │ 0xbbbbbbbb     │ variable b
+          0x7fffffffe5c8 │ 0xcccccccc     │ variable c
+                         │ 0xdddddddd     │ variable d
+$rbp ───► 0x7fffffffe5d0 │ 0x7fffffffe5f0 │ parent $rbp
+                         │ 0x55555555517c │ parent $rip
+                         │                │
+          ──high address └────────────────┘
 ```
 
 :::
 ::::::::::::::
+
+# DWARF
+## Find Variable Address
+TODO...
+
+## Reverse Variable from the Stack
+TODO...
+
+# GDB Utilities
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+```sh
+$ gcc -g main.c -o main
+$ gdb main
+```
+
+```sh
+(gdb) break *func+42
+Breakpoint 1 at 0x1153: file main.c, line 7.
+
+(gdb) run
+Starting program: /root/demo/main 
+Breakpoint 1, func (argv1=286331153, argv2=572662306) at main.c:7
+
+(gdb) info frame
+Stack level 0, frame at 0x7fffffffe5e0:
+ rip = 0x555555555153 in func (main.c:7); saved rip = 0x55555555517c
+ called by frame at 0x7fffffffe600
+ source language c.
+ Arglist at 0x7fffffffe5d0, args: argv1=286331153, argv2=572662306
+ Locals at 0x7fffffffe5d0, Previous frame's sp is 0x7fffffffe5e0
+ Saved registers:
+  rbp at 0x7fffffffe5d0, rip at 0x7fffffffe5d8
+```
+
+:::
+::: {.column width=50%}
+
+```sh
+(gdb) info args
+argv1 = 286331153
+argv2 = 572662306
+
+(gdb) info locals
+a = -1431655766
+b = -1145324613
+c = -858993460
+d = -572662307
+```
+
+:::
+::::::::::::::
+
