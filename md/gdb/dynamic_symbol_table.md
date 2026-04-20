@@ -1,8 +1,7 @@
 ---
-title: 'Dynamic Symbol Table'
+title: 'Decode Dynamic Symbol Table'
 ---
 
-# Read Dynamic Symbol Table
 Dynamic symbol is a symbol whose address cannot be determined at compile time, but must be resolved at runtime. Section .dynsym contains the dynamic symbols. It works together with the .dynstr, .plt, .rela.plt, .got sections.
 
 - .dynstr (dynamic string): provides symbol names for .dynsym.
@@ -11,7 +10,7 @@ Dynamic symbol is a symbol whose address cannot be determined at compile time, b
 - .got (global offset table): holds memory addresses of external symbol addresses.
 
 
-## Section .dynstr
+# Section .dynstr
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -47,7 +46,7 @@ $ gcc -fcf-protection=none main.c -o main
 ::::::::::::::
 
 
-## Section .rela.plt
+# Section .rela.plt
 rela.plt is a relocation table that tells the runtime linker how to find addresses for dynamic symbols.
 
 ```sh
@@ -61,7 +60,7 @@ Relocation section '.rela.plt' at offset 0x600 contains 1 entry:
 - Offset 000000003fd0: Write the memory address of puts to .got at 0x3fd0.
 
 
-## Sections .plt and .got
+# Sections .plt and .got
 The .plt section contains a small executable code to find addresses for dynamic symbols. The .got section holds the dynamic symbol addresses.
 
 ```go
@@ -82,7 +81,7 @@ The .plt section contains a small executable code to find addresses for dynamic 
 - After found the address, runtime linker update the address to .got and then execute the function.
 - In the next calls, puts@plt simply read the address of puts in .got and directly jump to the function.
 
-### Examine First Call
+# Examine First Call
 
 1. Setup gdb to debug shared library.
 ```sh

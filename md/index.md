@@ -7,11 +7,11 @@ title: "A Developer Notebook"
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-- [Decode Static Symbol Table](/html/gdb/static_symbol_table.html)  
-- [Decode Dynamic Symbol Table](/html/gdb/dynamic_symbol_table.html)  
-- [Examine the Stack](/html/gdb/stack.html).
+- [Decode Static Symbol Table](/html/gdb/static_symbol_table.html)
+- [Decode Dynamic Symbol Table](/html/gdb/dynamic_symbol_table.html)
+- [Examine the Stack](/html/gdb/stack.html)
 - [Debug SystemD Program](/html/gdb/debug_systemd_program.html)
-
+- [Debug Code in mmap Memory](/html/gdb/debug_mmap_code.html)
 :::
 ::: {.column width=50%}
 
