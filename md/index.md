@@ -41,18 +41,6 @@ title: "A Developer Notebook"
 [plantuml](/html/ref/plantuml.html).
 
 
-**C/C++ & GDB**  
-[Symbols](/html/ref/gdb/symbol.html),
-[Memory](/html/ref/gdb/memory.html),
-[Break](/html/ref/gdb/break.html),
-[Catch](/html/ref/gdb/catch.html),
-[Watch](/html/ref/gdb/watch.html),
-[Trace](/html/ref/gdb/trace.html),
-[Remote Debug](/html/ref/gdb/remote_debug.html),
-[Pretty Printer](/html/ref/gdb/pretty_printer.html),
-[Debug Info](/html/ref/gdb/debuginfo.html).
-
-
 **Kernel**  
 [Build & Run](/html/ref/kernel/kernel_build.html),
 [Debug Kernel with GDB](/html/ref/kernel/kernel_debug_gdb.html),
