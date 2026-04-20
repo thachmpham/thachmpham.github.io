@@ -449,11 +449,11 @@ $rbp ───► 0x7fffffffe5d0 │ 0x7fffffffe5f0 │ parent $rbp
 :::
 ::::::::::::::
 
-# DWARF
-## Find Variable Address
+# Reverse Local Variables
+## DWARF to Variable Address
 TODO...
 
-## Reverse Variable from the Stack
+## Print the Variable in the Stack
 TODO...
 
 # GDB Utilities

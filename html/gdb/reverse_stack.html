@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Reverse the Stack</title>
+  <title>Reverse the Stack Memory</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -95,7 +95,7 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Reverse the Stack</h1>
+<h1 class="title">Reverse the Stack Memory</h1>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -117,10 +117,22 @@ id="toc-arguments-local-variables"><span
 class="toc-section-number">2.2</span> Arguments &amp; Local
 Variables</a></li>
 </ul></li>
-<li><a href="#examine-the-stack" id="toc-examine-the-stack"><span
-class="toc-section-number">3</span> Examine the Stack</a></li>
-<li><a href="#gdb-info-frame" id="toc-gdb-info-frame"><span
-class="toc-section-number">4</span> GDB info frame</a></li>
+<li><a href="#print-the-raw-stack" id="toc-print-the-raw-stack"><span
+class="toc-section-number">3</span> Print the Raw Stack</a></li>
+<li><a href="#reverse-local-variables"
+id="toc-reverse-local-variables"><span
+class="toc-section-number">4</span> Reverse Local Variables</a>
+<ul>
+<li><a href="#dwarf-to-variable-address"
+id="toc-dwarf-to-variable-address"><span
+class="toc-section-number">4.1</span> DWARF to Variable Address</a></li>
+<li><a href="#print-the-variable-in-the-stack"
+id="toc-print-the-variable-in-the-stack"><span
+class="toc-section-number">4.2</span> Print the Variable in the
+Stack</a></li>
+</ul></li>
+<li><a href="#gdb-utilities" id="toc-gdb-utilities"><span
+class="toc-section-number">5</span> GDB Utilities</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="stack-pointer"><span
@@ -383,8 +395,8 @@ class="sourceCode asm"><code class="sourceCode fasm"><span id="cb20-1"><a href="
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span>    <span class="op">%</span><span class="kw">esi</span><span class="op">,-</span><span class="bn">0x18</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>   <span class="op">#</span> save <span class="op">$</span>esi to stack<span class="op">,</span> a</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="3" id="examine-the-stack"><span
-class="header-section-number">3</span> Examine the Stack</h1>
+<h1 data-number="3" id="print-the-raw-stack"><span
+class="header-section-number">3</span> Print the Raw Stack</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Instruction call pushes the parent rip onto the stack. Prolog pushes
@@ -498,8 +510,19 @@ class="sourceCode go"><code class="sourceCode go"><span id="cb28-1"><a href="#cb
 <span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>          ──high address └────────────────┘</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="4" id="gdb-info-frame"><span
-class="header-section-number">4</span> GDB info frame</h1>
+<h1 data-number="4" id="reverse-local-variables"><span
+class="header-section-number">4</span> Reverse Local Variables</h1>
+<h2 data-number="4.1" id="dwarf-to-variable-address"><span
+class="header-section-number">4.1</span> DWARF to Variable Address</h2>
+<p>TODO…</p>
+<h2 data-number="4.2" id="print-the-variable-in-the-stack"><span
+class="header-section-number">4.2</span> Print the Variable in the
+Stack</h2>
+<p>TODO…</p>
+<h1 data-number="5" id="gdb-utilities"><span
+class="header-section-number">5</span> GDB Utilities</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
 <div class="sourceCode" id="cb29"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-g</span> main.c <span class="at">-o</span> main</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb main</span></code></pre></div>
@@ -520,6 +543,19 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb30-1"><a href="#
 <span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a> <span class="ex">Locals</span> at 0x7fffffffe5d0, Previous frame<span class="st">&#39;s sp is 0x7fffffffe5e0</span></span>
 <span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="st"> Saved registers:</span></span>
 <span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="st">  rbp at 0x7fffffffe5d0, rip at 0x7fffffffe5d8</span></span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> args</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="ex">argv1</span> = 286331153</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="ex">argv2</span> = 572662306</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> locals</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="ex">a</span> = <span class="at">-1431655766</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="ex">b</span> = <span class="at">-1145324613</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="ex">c</span> = <span class="at">-858993460</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="ex">d</span> = <span class="at">-572662307</span></span></code></pre></div>
+</div>
+</div>
 <footer class="footer text-muted">
    <div align="center">      
       <br>
