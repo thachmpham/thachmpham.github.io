@@ -8,6 +8,7 @@ title: "A Developer Notebook"
 [Stack](/html/gdb/stack.html),
 [Break](/html/gdb/break.html),
 [Catch](/html/gdb/catch.html),
+[Trace](/html/gdb/trace.html),
 
 
 ## Linux Diagnostic
