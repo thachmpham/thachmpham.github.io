@@ -117,8 +117,8 @@ id="toc-arguments-local-variables"><span
 class="toc-section-number">2.2</span> Arguments &amp; Local
 Variables</a></li>
 </ul></li>
-<li><a href="#print-the-raw-stack" id="toc-print-the-raw-stack"><span
-class="toc-section-number">3</span> Print the Raw Stack</a></li>
+<li><a href="#dump-raw-stack-frame" id="toc-dump-raw-stack-frame"><span
+class="toc-section-number">3</span> Dump Raw Stack Frame</a></li>
 <li><a href="#reverse-function-arguments"
 id="toc-reverse-function-arguments"><span
 class="toc-section-number">4</span> Reverse Function Arguments</a>
@@ -395,8 +395,8 @@ class="sourceCode asm"><code class="sourceCode fasm"><span id="cb20-1"><a href="
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span>    <span class="op">%</span><span class="kw">esi</span><span class="op">,-</span><span class="bn">0x18</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>   <span class="op">#</span> save <span class="op">$</span>esi to stack<span class="op">,</span> a</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="3" id="print-the-raw-stack"><span
-class="header-section-number">3</span> Print the Raw Stack</h1>
+<h1 data-number="3" id="dump-raw-stack-frame"><span
+class="header-section-number">3</span> Dump Raw Stack Frame</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Instruction call pushes the parent rip onto the stack. Prolog pushes

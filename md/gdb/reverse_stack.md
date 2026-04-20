@@ -322,7 +322,7 @@ int child_func(int a, int b)
 :::
 ::::::::::::::
 
-# Print the Raw Stack
+# Dump Raw Stack Frame
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
