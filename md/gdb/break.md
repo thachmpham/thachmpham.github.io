@@ -4,7 +4,7 @@ subtitle: "Stop at a location"
 ---
 
 
-# Software Breakpoint
+# Cheatsheet
 
 :::::::::::::: {.columns}
 ::: {.column}
@@ -87,12 +87,6 @@ end
 :::
 ::::::::::::::
 
-
-
-<br>
-
-# Hardware Breakpoint
-
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
@@ -114,6 +108,10 @@ Hardware Breakpoint.
 :::
 ::::::::::::::
 
+<br>
+
+# Tips & Tricks
+## Debug Code in MMAP Regions
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}

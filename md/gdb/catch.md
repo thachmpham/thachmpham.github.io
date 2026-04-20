@@ -3,6 +3,8 @@ title: "GDB Catchpoint"
 subtitle: "Stop on a program event"
 ---
 
+# Cheatsheet
+
 :::::::::::::: {.columns}
 ::: {.column}
 
@@ -40,11 +42,13 @@ subtitle: "Stop on a program event"
 ::::::::::::::
 
 
-# Fork
-## Keep Child Under GDB Control.
+# Tips & Tricks
+## Fork
+
+1. Keep Child Process Under GDB Control.
 
 :::::::::::::: {.columns}
-::: {.column width=40%}
+::: {.column width=50%}
 
 ```sh
 #include <unistd.h>
@@ -61,7 +65,7 @@ int main()
 ```
 
 :::
-::: {.column width=60%}
+::: {.column width=50%}
 
 ```sh
 (gdb) run
@@ -80,10 +84,10 @@ Catchpoint 1 (forked process 4097), arch_fork (ctid=0x7ffff7d85a10)
 ::::::::::::::
 
 
-## Programs Started By Scripts.
+2. Debug Programs Started By Scripts.
 
 :::::::::::::: {.columns}
-::: {.column width=40%}
+::: {.column width=50%}
 
 ```sh
 # run.sh
@@ -101,7 +105,7 @@ $ gdb --args bash run.sh
 ```
 
 :::
-::: {.column width=60%}
+::: {.column width=50%}
 
 ```sh
 (gdb) run
@@ -120,10 +124,12 @@ Thread 2.1 "ls" hit Catchpoint 1 (exec'd /usr/bin/ls')
 ::::::::::::::
 
 
-# Signal
-## Print Backtrace On Crash.
+## Signal
+
+1. Automatically Print Backtrace On Crash.
+
 :::::::::::::: {.columns}
-::: {.column width=40%}
+::: {.column width=50%}
 
 ```c
 void crash()
@@ -139,7 +145,7 @@ int main()
 ```
 
 :::
-::: {.column width=60%}
+::: {.column width=50%}
 
 ```sh
 (gdb) catch signal SIGSEGV

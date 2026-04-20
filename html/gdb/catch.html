@@ -100,27 +100,20 @@
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
+<li><a href="#cheatsheet" id="toc-cheatsheet"><span
+class="toc-section-number">1</span> Cheatsheet</a></li>
+<li><a href="#tips-tricks" id="toc-tips-tricks"><span
+class="toc-section-number">2</span> Tips &amp; Tricks</a>
+<ul>
 <li><a href="#fork" id="toc-fork"><span
-class="toc-section-number">1</span> Fork</a>
-<ul>
-<li><a href="#keep-child-under-gdb-control."
-id="toc-keep-child-under-gdb-control."><span
-class="toc-section-number">1.1</span> Keep Child Under GDB
-Control.</a></li>
-<li><a href="#programs-started-by-scripts."
-id="toc-programs-started-by-scripts."><span
-class="toc-section-number">1.2</span> Programs Started By
-Scripts.</a></li>
-</ul></li>
+class="toc-section-number">2.1</span> Fork</a></li>
 <li><a href="#signal" id="toc-signal"><span
-class="toc-section-number">2</span> Signal</a>
-<ul>
-<li><a href="#print-backtrace-on-crash."
-id="toc-print-backtrace-on-crash."><span
-class="toc-section-number">2.1</span> Print Backtrace On Crash.</a></li>
+class="toc-section-number">2.2</span> Signal</a></li>
 </ul></li>
 </ul>
 </nav>
+<h1 data-number="1" id="cheatsheet"><span
+class="header-section-number">1</span> Cheatsheet</h1>
 <div class="columns">
 <div class="column">
 <table>
@@ -229,13 +222,15 @@ style="text-align: left;"><code>set follow-exec-mode same</code></td>
 </table>
 </div>
 </div>
-<h1 data-number="1" id="fork"><span
-class="header-section-number">1</span> Fork</h1>
-<h2 data-number="1.1" id="keep-child-under-gdb-control."><span
-class="header-section-number">1.1</span> Keep Child Under GDB
-Control.</h2>
+<h1 data-number="2" id="tips-tricks"><span
+class="header-section-number">2</span> Tips &amp; Tricks</h1>
+<h2 data-number="2.1" id="fork"><span
+class="header-section-number">2.1</span> Fork</h2>
+<ol type="1">
+<li>Keep Child Process Under GDB Control.</li>
+</ol>
 <div class="columns">
-<div class="column" style="width:40%;">
+<div class="column" style="width:50%;">
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;unistd.h&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">int</span> main<span class="er">(</span><span class="kw">)</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
@@ -244,7 +239,7 @@ Control.</h2>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> detach-on-fork off</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">catch</span> fork</span></code></pre></div>
-</div><div class="column" style="width:60%;">
+</div><div class="column" style="width:50%;">
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Catchpoint</span> 1 <span class="er">(</span><span class="ex">forked</span> process 4097<span class="kw">)</span><span class="ex">,</span> arch_fork <span class="er">(</span><span class="va">ctid</span><span class="op">=</span>0x7ffff7d85a10<span class="kw">)</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -257,11 +252,11 @@ Control.</h2>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="ex">2</span>    process 4097      1 <span class="er">(</span><span class="ex">native</span><span class="kw">)</span>           <span class="ex">/root/demo/demo</span></span></code></pre></div>
 </div>
 </div>
-<h2 data-number="1.2" id="programs-started-by-scripts."><span
-class="header-section-number">1.2</span> Programs Started By
-Scripts.</h2>
+<ol start="2" type="1">
+<li>Debug Programs Started By Scripts.</li>
+</ol>
 <div class="columns">
-<div class="column" style="width:40%;">
+<div class="column" style="width:50%;">
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run.sh</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -----</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> /home</span>
@@ -271,7 +266,7 @@ Scripts.</h2>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> detach-on-fork off</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="bu">set</span> follow-fork-mode child</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">catch</span> exec</span></code></pre></div>
-</div><div class="column" style="width:60%;">
+</div><div class="column" style="width:50%;">
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[New</span> inferior 2 <span class="er">(</span><span class="ex">process</span> 5911<span class="kw">)</span><span class="ex">]</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">process</span> 5911 is executing new program: /usr/bin/ls</span>
@@ -284,12 +279,13 @@ Scripts.</h2>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 2    process 5911      1 <span class="er">(</span><span class="ex">native</span><span class="kw">)</span>           <span class="ex">/usr/bin/ls</span></span></code></pre></div>
 </div>
 </div>
-<h1 data-number="2" id="signal"><span
-class="header-section-number">2</span> Signal</h1>
-<h2 data-number="2.1" id="print-backtrace-on-crash."><span
-class="header-section-number">2.1</span> Print Backtrace On Crash.</h2>
+<h2 data-number="2.2" id="signal"><span
+class="header-section-number">2.2</span> Signal</h2>
+<ol type="1">
+<li>Automatically Print Backtrace On Crash.</li>
+</ol>
 <div class="columns">
-<div class="column" style="width:40%;">
+<div class="column" style="width:50%;">
 <div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> crash<span class="op">()</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
@@ -300,7 +296,7 @@ class="header-section-number">2.1</span> Print Backtrace On Crash.</h2>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    crash<span class="op">();</span></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-</div><div class="column" style="width:60%;">
+</div><div class="column" style="width:50%;">
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">catch</span> signal SIGSEGV</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">commands</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span>backtrace</span>
