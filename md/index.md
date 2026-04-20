@@ -3,13 +3,23 @@ title: "A Developer Notebook"
 ---
 
 ## C/C++ & GDB
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
 [Static Symbol Table](/html/gdb/static_symbol_table.html),
 [Dynamic Symbol Table](/html/gdb/dynamic_symbol_table.html),
 [Stack](/html/gdb/stack.html),
+
+:::
+::: {.column width=50%}
+
 [Break](/html/gdb/break.html),
 [Catch](/html/gdb/catch.html),
 [Trace](/html/gdb/trace.html),
 
+:::
+::::::::::::::
 
 ## Linux Diagnostic
 
@@ -90,9 +100,9 @@ title: "A Developer Notebook"
 [Healthcheck](/html/ref/opensaf/healthcheck.html),
 [Error Detection](/html/ref/opensaf/recovery.html).
 
-
 :::
 ::::::::::::::
+
 
 ## Case Studies
 - [rsyslog](/html/std/rsyslog.html)
