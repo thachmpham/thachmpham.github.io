@@ -1,9 +1,9 @@
 ---
-title: "Static Symbol Table"
+title: "Decode Static Symbol Table"
 ---
 
 
-# Read Static Symbol Table
+# Give a Try with readelf
 ## List of Sections
 
 :::::::::::::: {.columns}
