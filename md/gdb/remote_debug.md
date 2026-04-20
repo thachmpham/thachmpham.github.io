@@ -118,10 +118,18 @@ int main(int argc, char** argv)
 $ gcc -g main.c -o main
 ```
 
+2. /etc/systemd/system/demo.service.
+```sh
+Description=Demo Service
+ExecStart=/opt/demo/control.sh start
+ExecStop=/opt/demo/control.sh stop
+Type=forking
+```
+
 :::
 ::: {.column}
 
-2. /opt/demo/control.sh.
+3. /opt/demo/control.sh.
 ```sh
 #!/bin/bash
 
@@ -148,18 +156,14 @@ esac
 exit 0
 ```
 
-3. /etc/systemd/system/demo.service.
-```sh
-Description=Demo Service
-ExecStart=/opt/demo/control.sh start
-ExecStop=/opt/demo/control.sh stop
-Type=forking
-```
-
 :::
 ::::::::::::::
 
 ## Debug
+
+:::::::::::::: {.columns}
+::: {.column}
+
 1. Modify start() to launch the program with gdbserver.
 ```sh
 start() {
@@ -168,9 +172,6 @@ start() {
         --exec /usr/bin/gdbserver localhost:5555 /opt/demo/main
 }
 ```
-
-:::::::::::::: {.columns}
-::: {.column}
 
 2. Start gdb.
 ```sh
@@ -185,18 +186,15 @@ $ gdb
 $ systemctl start demo
 ```
 
-- After gdbserver started, gdb automatically attached. Show inferiors.
+:::
+::: {.column}
+
+4. After gdbserver started, gdb automatically attached.
 ```sh
 (gdb) info inferiors
   Num  Description       Connection                         Executable        
 * 1    process 86099     1 (extended-remote localhost:5555) target:/opt/demo/main
-```
 
-:::
-::: {.column}
-
-4. Set breakpoints.
-```sh
 (gdb) break main
 Breakpoint 1 at 0x55555555519c: file main.c, line 7.
 
@@ -206,7 +204,7 @@ Breakpoint 1, main (argc=1, argv=0x7fffffffec78) at main.c:7
 7               openlog("main", LOG_PID | LOG_CONS, LOG_USER);
 ```
 
-- Detach.
+5. Detach.
 ```sh
 (gdb) detach
 Detaching from program: target:/opt/demo/main, process 86099
