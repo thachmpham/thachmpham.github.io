@@ -17,6 +17,7 @@ title: "A Developer Notebook"
 [Break](/html/gdb/break.html),
 [Catch](/html/gdb/catch.html),
 [Trace](/html/gdb/trace.html),
+[Remote Debug](/html/gdb/remote_debug.html),
 
 :::
 ::::::::::::::

@@ -1,117 +1,110 @@
 ---
-title: "GDB Remote Debug"
+title: 'GDB Remote Debug'
 ---
 
-
-# 1. Usages
-## 1.1. Launch Program
-Launch a proram under gdbserver control.
-```sh
-    gdb connection program args...
-```
-
-- *connection*: ip:port (TCP), TTY device, stdio, '-'.
-
-Sample: Server starts ls program. Client connect to debug.
+# Single Mode
+## Launch Program
 
 :::::::::::::: {.columns}
-::: {.column}
+::: {.column width=50%}
 
 Server
 ```sh
-gdbserver localhost:12345 ls
-  
+$ gdbserver localhost:12345 ls
 ```
 
 :::
-::: {.column}
+::: {.column width=50%}
 
 Client
 ```sh
 (gdb) file ls
 (gdb) target remote localhost:12345
-  
 ```
 
 :::
 ::::::::::::::
 
-## 1.2. Attach to Running Process
-Attach gdbserver to a running process.
-```sh
-    gdb --attach connection pid
-```
-
-Sample: Server attachs to running vim process. Client connect to debug.
-
-:::::::::::::: {.columns}
-::: {.column width=60%}
-
-Server
-```sh
-vim
-gdbserver --attach :12345 19832
-```
-
-:::
-::: {.column}
-
-Client
-```sh
-(gdb) file vim
-(gdb) target remote :12345
-```
-
-:::
-::::::::::::::
-
-## 1.3. Multi Mode
-Start gdbsever in multi mode
-```sh
-    gdbserver --multi connection
-```
-
-Sample: Server starts in multi mode.
-```sh
-vim
-gdbserver --multi :12345
-```
+## Attach to Running Process
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-Client runs vim program.
+Server
 ```sh
-(gdb) target extended-remote :12345
-(gdb) set remote exec-file vim
-(gdb) start
-(gdb) monitor exit
-  
+$ vi
+$ gdbserver --attach localhost:12345 `pidof vi`
 ```
 
 :::
-::: {.column}
+::: {.column width=50%}
 
+Client
+```sh
+(gdb) file vi
+(gdb) target remote localhost:12345
+```
 
-Client attachs to a running process.
+:::
+::::::::::::::
+
+# Multi Mode
+## Launch Program
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+Server.
+```sh
+$ gdbserver --multi :12345
+```
+
+:::
+::: {.column width=50%}
+
+Client.
 ```sh
 (gdb) target extended-remote :12345
-(gdb) attach 19832
+(gdb) set remote exec-file vi
+(gdb) start
 (gdb) monitor exit
-  
 ```
 
 :::
 ::::::::::::::
 
 
-# 2. Applications
-## 2.1. Debug Program Started By SystemD
-### 2.1.1. Program
+## Attach to Running Process
+
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+Server.
+```sh
+$ vi
+$ gdbserver --multi localhost:12345
+```
+
+:::
+::: {.column width=50%}
+
+Client.
+```sh
+(gdb) target extended-remote localhost:12345
+(gdb) attach 19832  # pidof vi
+(gdb) monitor exit
+```
+
+:::
+::::::::::::::
+
+# Debug Program Started By SystemD
+## Program
 
 :::::::::::::: {.columns}
 ::: {.column}
 
-File /opt/demo/main.c.
+1. /opt/demo/main.c.
 ```c
 #include <stdlib.h>
 #include <unistd.h>
@@ -135,7 +128,6 @@ int main(int argc, char** argv)
 }
 ```
 
-- Build.
 ```sh
 $ gcc -g main.c -o main
 ```
@@ -143,7 +135,7 @@ $ gcc -g main.c -o main
 :::
 ::: {.column}
 
-File /opt/demo/control.sh.
+2. /opt/demo/control.sh.
 ```sh
 #!/bin/bash
 
@@ -170,7 +162,7 @@ esac
 exit 0
 ```
 
-File /etc/systemd/system/demo.service.
+3. /etc/systemd/system/demo.service.
 ```sh
 Description=Demo Service
 ExecStart=/opt/demo/control.sh start
@@ -181,9 +173,8 @@ Type=forking
 :::
 ::::::::::::::
 
-### 2.1.2. Debug
-
-Modify start() to launch the program with gdbserver.
+## Procedure
+1. Modify start() to launch the program with gdbserver.
 ```sh
 start() {
     start-stop-daemon --start --background \
@@ -195,7 +186,7 @@ start() {
 :::::::::::::: {.columns}
 ::: {.column}
 
-- Start gdb.
+2. Start gdb.
 ```sh
 $ gdb
 (gdb) set tcp auto-retry on
@@ -203,7 +194,7 @@ $ gdb
 (gdb) target remote localhost:5555
 ```
 
-- Start service.
+3. Start service.
 ```sh
 $ systemctl start demo
 ```
@@ -218,7 +209,7 @@ $ systemctl start demo
 :::
 ::: {.column}
 
-- Set breakpoints.
+4. Set breakpoints.
 ```sh
 (gdb) break main
 Breakpoint 1 at 0x55555555519c: file main.c, line 7.
