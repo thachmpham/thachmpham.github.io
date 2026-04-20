@@ -98,47 +98,18 @@
 <h1 class="title">GBD Breakpoints</h1>
 <p class="subtitle">Stop at a location</p>
 </header>
-<h1 id="tips">Tips</h1>
-<table>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Break before process exits</td>
-<td style="text-align: left;"><code>break _exit</code></td>
-</tr>
-</tbody>
-</table>
-<p><br></p>
-<h1 id="demo">Demo</h1>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p>Software Breakpoint.</p>
+<nav id="TOC" role="doc-toc">
 <ul>
-<li>To setup a software breakpoint, GDB replaces the program instruction
-with a trap, illegal divide or some other instructions that will cause
-an exception. When the exception raised, GDB catches it and stops the
-program.</li>
-<li>The number of software breakpoints is unlimited.</li>
-<li>To set a software breakpoint, the target address must reside in a
-writable memory region.</li>
+<li><a href="#software-breakpoint" id="toc-software-breakpoint"><span
+class="toc-section-number">1</span> Software Breakpoint</a></li>
+<li><a href="#hardware-breakpoint" id="toc-hardware-breakpoint"><span
+class="toc-section-number">2</span> Hardware Breakpoint</a></li>
+<li><a href="#references" id="toc-references"><span
+class="toc-section-number">3</span> References</a></li>
 </ul>
-</div><div class="column" style="width:50%;">
-<p>Hardware Breakpoint.</p>
-<ul>
-<li>To setup a hardware breakpoint, GDB stores the breakpoint address to
-a debug register. When the program counter $pc matches the value in the
-debug register, GDB stops the program.</li>
-<li>The number of debug registers are limited and varies depending on
-the architecture. For example, x86 has 4 debug registers, DR0-DR3. So,
-the number of hardward breakpoints is limited.</li>
-<li>A hardware breakpoint can be placed at an address in read-only
-memory region.</li>
-</ul>
-</div>
-</div>
-<p>The impact of a hardware breakpoint on program performance is smaller
-than that of a software breakpoint. Typically used for read-only code or
-in live system, where performance and memory safety are critical.</p>
-<h2 id="break">break</h2>
+</nav>
+<h1 data-number="1" id="software-breakpoint"><span
+class="header-section-number">1</span> Software Breakpoint</h1>
 <div class="columns">
 <div class="column">
 <table>
@@ -237,7 +208,6 @@ in live system, where performance and memory safety are critical.</p>
 </tr>
 </tbody>
 </table>
-</div><div class="column">
 <table>
 <thead>
 <tr class="header">
@@ -274,6 +244,7 @@ style="text-align: left;"><code>break sum thread 1 if x &gt; 3</code></td>
 </tr>
 </tbody>
 </table>
+</div><div class="column">
 <table>
 <thead>
 <tr class="header">
@@ -311,7 +282,6 @@ style="text-align: left;"><code>break sum thread 1 if x &gt; 3</code></td>
 </tr>
 </tbody>
 </table>
-</div><div class="column">
 <table>
 <thead>
 <tr class="header">
@@ -350,15 +320,56 @@ style="text-align: left;"><code>break sum thread 1 if x &gt; 3</code></td>
 </tr>
 </tbody>
 </table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Tips &amp; Tricks</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Break before process exits</td>
+<td style="text-align: left;"><code>break _exit</code></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<hr />
 <p><br></p>
-<h2 id="hbreak">hbreak</h2>
-<p>Set hbreak at a function in a mmap region.</p>
+<h1 data-number="2" id="hardware-breakpoint"><span
+class="header-section-number">2</span> Hardware Breakpoint</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Software Breakpoint.</p>
+<ul>
+<li>To setup a software breakpoint, GDB replaces the program instruction
+with a trap, illegal divide or some other instructions that will cause
+an exception. When the exception raised, GDB catches it and stops the
+program.</li>
+<li>The number of software breakpoints is unlimited.</li>
+<li>To set a software breakpoint, the target address must reside in a
+writable memory region.</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p>Hardware Breakpoint.</p>
+<ul>
+<li>To setup a hardware breakpoint, GDB stores the breakpoint address to
+a debug register. When the program counter $pc matches the value in the
+debug register, GDB stops the program.</li>
+<li>The number of debug registers are limited and varies depending on
+the architecture. For example, x86 has 4 debug registers, DR0-DR3. So,
+the number of hardward breakpoints is limited.</li>
+<li>A hardware breakpoint can be placed at an address in read-only
+memory region.</li>
+</ul>
+</div>
+</div>
 <div class="columns">
 <div class="column" style="width:40%;">
-<p>File math.c</p>
+<ol type="1">
+<li>math.c</li>
+</ol>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1"></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="op">{</span></span>
@@ -369,7 +380,9 @@ class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span i
 <span id="cb2-7"><a href="#cb2-7"></a><span class="op">{</span></span>
 <span id="cb2-8"><a href="#cb2-8"></a>    <span class="cf">return</span> x <span class="op">-</span> y<span class="op">;</span></span>
 <span id="cb2-9"><a href="#cb2-9"></a><span class="op">}</span></span></code></pre></div>
-<p>File main.c</p>
+<ol start="2" type="1">
+<li>main.c</li>
+</ol>
 <div class="sourceCode" id="cb3"><pre
 class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1"></a><span class="pp">#include </span><span class="im">&lt;sys/mman.h&gt;</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="pp">#include </span><span class="im">&lt;stddef.h&gt;</span></span>
@@ -407,12 +420,16 @@ class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span i
 <span id="cb3-34"><a href="#cb3-34"></a></span>
 <span id="cb3-35"><a href="#cb3-35"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb3-36"><a href="#cb3-36"></a><span class="op">}</span></span></code></pre></div>
-<p>Run.</p>
+<ol start="3" type="1">
+<li>Build and run.</li>
+</ol>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-c</span> math.c <span class="at">-o</span> math.o</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-g</span> main.c <span class="at">-o</span> main</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./main</span></code></pre></div>
 </div><div class="column" style="width:50%;">
-<p>Inspect math.o</p>
+<ol start="4" type="1">
+<li>Inspect math.o</li>
+</ol>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--section-headers</span> <span class="at">--wide</span> math.o</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">[Nr]</span> Name     Type        Address             Off     Size    ES  Flg Lk Inf Al</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">[</span> 1] .text    PROGBITS    <span class="er">0000000000000000</span>    <span class="ex">000040</span>  00002e  00  AX  0   0  1</span>
@@ -421,7 +438,9 @@ class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span i
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Num:</span>    Value          Size Type    Bind   Vis      Ndx Name     </span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>     <span class="ex">3:</span> 0000000000000000    24 FUNC    GLOBAL DEFAULT    1 sum</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>     <span class="ex">4:</span> 0000000000000018    22 FUNC    GLOBAL DEFAULT    1 sub</span></code></pre></div>
-<p>Inspect process memory.</p>
+<ol start="5" type="1">
+<li>Inspect process memory.</li>
+</ol>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">main.c:27</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> proc mappings</span>
@@ -443,7 +462,9 @@ class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span i
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   ├── sum<span class="op">()</span>         <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x0000</span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>   └── sub<span class="op">()</span>         <span class="op">|</span>         <span class="op">+</span> <span class="bn">0x0018</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="op">+---------------------+</span></span></code></pre></div>
-<p>Add symbols and hbreak.</p>
+<ol start="6" type="1">
+<li>Add symbols and hbreak.</li>
+</ol>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">add-symbol-file</span> math.o 0x7ffff7ffa040</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> function sub</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x00007ffff7ffa058</span>  sub</span>
@@ -459,8 +480,8 @@ class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span i
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#1  0x000055555555521d in main () at main.c:30</span></span></code></pre></div>
 </div>
 </div>
-<p><br></p>
-<h3 id="reference">Reference</h3>
+<h1 data-number="3" id="references"><span
+class="header-section-number">3</span> References</h1>
 <ul>
 <li><a
 href="https://sourceware.org/gdb/wiki/Internals/Breakpoint%20Handling">GDB

@@ -3,14 +3,95 @@ title: "GBD Breakpoints"
 subtitle: "Stop at a location"
 ---
 
-# Tips
-|  |  |
+
+# Software Breakpoint
+
+:::::::::::::: {.columns}
+::: {.column}
+
+| Linespec Location |           |
+|:------------------|-----------|
+| `break 10`        | Line 10 current file |
+| `break hello.c::10`| Line 10, file hello.c |
+| `break -3`         | Current line -3 |
+| `break +3`         | Current line +3 |
+| `break sum`        | Function sum    |
+| `break hello.c::sum` | Function sum in hello.c |
+| `break A::sum`       | Function A::sum |
+
+
+| Explicit Location       |             |
+|:------------------------|:------------|
+| `break -qualified sum `    | Match sum, not A::sum |
+
+
+| Address Location        |             |
+|:------------------------|:------------|
+|`break *sum+16`          | Instruction 16 in sum |
+|`break 0x`0x400670       | Instruction at 0x400670 |
+
+
+| Regex Location          |             |
+|:------------------------|:------------|
+|`rbreak sum.*`           | Function sum.* |
+|`rbreak demo.c:sum.*`    | Function sum.* in hello.c       |
+|`rbreak .`               | All function in current program |
+|`rbreak demo.c:.`        | All function in file            |
+
+
+| Condition               |             |
+|:------------------------|:------------|
+| `break sum if x > 3`    | Conditional       |
+| `break sum inferior 1`  | Inferior specific |
+| `break sum inferior 1 if x > 3`  | Inferior + condition |
+| `break sum thread 1`    | Thread specific   |
+| `break sum thread 1 if x > 3`    | Thread + condition |
+| `condition 2 if x > 5`    | Change condition of break 2 |
+
+:::
+::: {.column}
+
+| Command                 |             |
+|:------------------------|:------------|
+| `command`               | Command for current break |
+| `command 2`             | Command for break 2 |
+
+```sh
+command 2
+    info args
+    backtrace
+    continue
+end
+```
+
+| Temporary Break   |           |
+|:------------------|-----------|
+| `tbreak sum`      | Auto delete after hit |
+
+
+| Management|           |
+|:----------|:----------|
+| `info break`          | List of breakpoints |
+| `enable break [ids]`  | Enable breakpoints  |
+| `disable break [ids]` | Disable breakpoints |
+| `delete break [ids]`  | Delete breakpoints  |
+| `clear <locspec>`     | Delete all breakpoints at locspec |
+| `save break <file>`   | Save breakpoints to file      |
+| `source <file>`       | Load breakpoints from file    |
+
+
+| Tips & Tricks |  |
 |:-------------|:-------------|
 | Break before process exits  | `break _exit` |
 
+:::
+::::::::::::::
+
+
+
 <br>
 
-# Demo
+# Hardware Breakpoint
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -33,98 +114,11 @@ Hardware Breakpoint.
 :::
 ::::::::::::::
 
-The impact of a hardware breakpoint on program performance is smaller than that of a software breakpoint. Typically used for read-only code or in live system, where performance and memory safety are critical.
-
-## break
-
-:::::::::::::: {.columns}
-::: {.column}
-
-| Linespec Location |           |
-|:------------------|-----------|
-| `break 10`        | Line 10 current file |
-| `break hello.c::10`| Line 10, file hello.c |
-| `break -3`         | Current line -3 |
-| `break +3`         | Current line +3 |
-| `break sum`        | Function sum    |
-| `break hello.c::sum` | Function sum in hello.c |
-| `break A::sum`       | Function A::sum |
-
-| Explicit Location       |             |
-|:------------------------|:------------|
-| `break -qualified sum `    | Match sum, not A::sum |
-
-| Address Location        |             |
-|:------------------------|:------------|
-|`break *sum+16`          | Instruction 16 in sum |
-|`break 0x`0x400670       | Instruction at 0x400670 |
-
-| Regex Location          |             |
-|:------------------------|:------------|
-|`rbreak sum.*`           | Function sum.* |
-|`rbreak demo.c:sum.*`    | Function sum.* in hello.c       |
-|`rbreak .`               | All function in current program |
-|`rbreak demo.c:.`        | All function in file            |
-
-
-:::
-::: {.column}
-
-| Condition               |             |
-|:------------------------|:------------|
-| `break sum if x > 3`    | Conditional       |
-| `break sum inferior 1`  | Inferior specific |
-| `break sum inferior 1 if x > 3`  | Inferior + condition |
-| `break sum thread 1`    | Thread specific   |
-| `break sum thread 1 if x > 3`    | Thread + condition |
-| `condition 2 if x > 5`    | Change condition of break 2 |
-
-| Command                 |             |
-|:------------------------|:------------|
-| `command`               | Command for current break |
-| `command 2`             | Command for break 2 |
-
-```sh
-command 2
-    info args
-    backtrace
-    continue
-end
-```
-
-| Temporary Break   |           |
-|:------------------|-----------|
-| `tbreak sum`      | Auto delete after hit |
-
-:::
-::: {.column}
-
-| Management|           |
-|:----------|:----------|
-| `info break`          | List of breakpoints |
-| `enable break [ids]`  | Enable breakpoints  |
-| `disable break [ids]` | Disable breakpoints |
-| `delete break [ids]`  | Delete breakpoints  |
-| `clear <locspec>`     | Delete all breakpoints at locspec |
-| `save break <file>`   | Save breakpoints to file      |
-| `source <file>`       | Load breakpoints from file    |
-
-:::
-::::::::::::::
-
-* * * * *
-
-<br>
-
-
-## hbreak
-
-Set hbreak at a function in a mmap region.
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
 
-File math.c
+1. math.c
 ```c {.numberLines}
 int sum(int x, int y)
 {
@@ -137,7 +131,7 @@ int sub(int x, int y)
 }
 ```
 
-File main.c
+2. main.c
 ```c {.numberLines}
 #include <sys/mman.h>
 #include <stddef.h>
@@ -177,7 +171,7 @@ int main()
 }
 ```
 
-Run.
+3. Build and run.
 ```sh
 $ gcc -c math.c -o math.o
 $ gcc -g main.c -o main
@@ -187,7 +181,7 @@ $ ./main
 :::
 ::: {.column width=50%}
 
-Inspect math.o
+4. Inspect math.o
 ```sh
 $ readelf --section-headers --wide math.o
   [Nr] Name     Type        Address             Off     Size    ES  Flg Lk Inf Al
@@ -199,7 +193,7 @@ $ readelf --symbols math.o
      4: 0000000000000018    22 FUNC    GLOBAL DEFAULT    1 sub
 ```
 
-Inspect process memory.
+5. Inspect process memory.
 ```sh
 (gdb) break main.c:27
 (gdb) run
@@ -230,7 +224,7 @@ Illustrate math.o and process memory.
 +---------------------+
 ```
 
-Add symbols and hbreak.
+6. Add symbols and hbreak.
 ```sh
 (gdb) add-symbol-file math.o 0x7ffff7ffa040
 (gdb) info function sub
@@ -250,7 +244,6 @@ Breakpoint 5, 0x00007ffff7ffa060 in sub ()
 :::
 ::::::::::::::
 
-<br>
 
-### Reference
+# References
 - [GDB Internal, Breakpoint Handling](https://sourceware.org/gdb/wiki/Internals/Breakpoint%20Handling)
