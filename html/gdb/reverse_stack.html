@@ -127,12 +127,22 @@ class="toc-section-number">4</span> Reverse Function Arguments</a>
 id="toc-dwarf-to-argument-addresses"><span
 class="toc-section-number">4.1</span> DWARF to Argument
 Addresses</a></li>
-<li><a href="#print-the-argument-values"
-id="toc-print-the-argument-values"><span
-class="toc-section-number">4.2</span> Print the Argument Values</a></li>
+<li><a href="#print-arguments" id="toc-print-arguments"><span
+class="toc-section-number">4.2</span> Print Arguments</a></li>
+</ul></li>
+<li><a href="#reverse-local-variables"
+id="toc-reverse-local-variables"><span
+class="toc-section-number">5</span> Reverse Local Variables</a>
+<ul>
+<li><a href="#dwarf-to-variable-addresses"
+id="toc-dwarf-to-variable-addresses"><span
+class="toc-section-number">5.1</span> DWARF to Variable
+Addresses</a></li>
+<li><a href="#print-variables" id="toc-print-variables"><span
+class="toc-section-number">5.2</span> Print Variables</a></li>
 </ul></li>
 <li><a href="#gdb-utilities" id="toc-gdb-utilities"><span
-class="toc-section-number">5</span> GDB Utilities</a></li>
+class="toc-section-number">6</span> GDB Utilities</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="stack-pointer"><span
@@ -644,8 +654,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb35-1"><a href="#
 </ul>
 </div>
 </div>
-<h2 data-number="4.2" id="print-the-argument-values"><span
-class="header-section-number">4.2</span> Print the Argument Values</h2>
+<h2 data-number="4.2" id="print-arguments"><span
+class="header-section-number">4.2</span> Print Arguments</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ol type="1">
@@ -686,33 +696,101 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb37-1"><a href="#
 <span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5b8:</span> 0x22222222</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="5" id="gdb-utilities"><span
-class="header-section-number">5</span> GDB Utilities</h1>
+<h1 data-number="5" id="reverse-local-variables"><span
+class="header-section-number">5</span> Reverse Local Variables</h1>
+<p>Using the same procedure as reversing function arguments.</p>
+<h2 data-number="5.1" id="dwarf-to-variable-addresses"><span
+class="header-section-number">5.1</span> DWARF to Variable
+Addresses</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Contents</span> of the .debug_info section:</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>bf<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 2 <span class="er">(</span><span class="ex">DW_TAG_variable</span><span class="kw">)</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>c0<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> a</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>c7<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 60      <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-32</span><span class="kw">)</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>ca<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 2 <span class="er">(</span><span class="ex">DW_TAG_variable</span><span class="kw">)</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>cb<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> b</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>d2<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 64      <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-28</span><span class="kw">)</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>d5<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 2 <span class="er">(</span><span class="ex">DW_TAG_variable</span><span class="kw">)</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>d6<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> c</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>dd<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 68      <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-24</span><span class="kw">)</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>e0<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 2 <span class="er">(</span><span class="ex">DW_TAG_variable</span><span class="kw">)</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>e1<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> d</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>e8<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 6c      <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-20</span><span class="kw">)</span></span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="ex">addr</span> of a   = DW_AT_location + CFA_Offset</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> <span class="er">(</span><span class="ex">DW_OP_fbreg</span> <span class="at">-</span> 32<span class="kw">)</span> <span class="ex">+</span> 16            </span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> rbp <span class="at">-</span> 16</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="ex">addr</span> of b   = DW_AT_location + CFA_Offset</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> <span class="er">(</span><span class="ex">DW_OP_fbreg</span> <span class="at">-</span> 28<span class="kw">)</span> <span class="ex">+</span> 16            </span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> rbp <span class="at">-</span> 12</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="ex">addr</span> of c   = DW_AT_location + CFA_Offset</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> <span class="er">(</span><span class="ex">DW_OP_fbreg</span> <span class="at">-</span> 24<span class="kw">)</span> <span class="ex">+</span> 16            </span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> rbp <span class="at">-</span> 8</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a><span class="ex">addr</span> of d   = DW_AT_location + CFA_Offset</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> <span class="er">(</span><span class="ex">DW_OP_fbreg</span> <span class="at">-</span> 20<span class="kw">)</span> <span class="ex">+</span> 16            </span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> rbp <span class="at">-</span> 4</span></code></pre></div>
+</div>
+</div>
+<h2 data-number="5.2" id="print-variables"><span
+class="header-section-number">5.2</span> Print Variables</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print a</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/wx</span> <span class="va">$rbp</span>-16</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5c0:</span> 0xaaaaaaaa</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="co"># print b</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/wx</span> <span class="va">$rbp</span>-12</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5c4:</span> 0xbbbbbbbb</span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print c</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/wx</span> <span class="va">$rbp</span>-8</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5c8:</span> 0xcccccccc</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co"># print d</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/wx</span> <span class="va">$rbp</span>-4</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5cc:</span> 0xdddddddd</span></code></pre></div>
+</div>
+</div>
+<h1 data-number="6" id="gdb-utilities"><span
+class="header-section-number">6</span> GDB Utilities</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Print frame info.</p>
-<div class="sourceCode" id="cb38"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> frame</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Stack</span> level 0, frame at 0x7fffffffe5e0:</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a> <span class="ex">rip</span> = 0x555555555153 in func <span class="er">(</span><span class="ex">main.c:7</span><span class="kw">);</span> <span class="ex">saved</span> rip = 0x55555555517c</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a> <span class="ex">called</span> by frame at 0x7fffffffe600</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a> <span class="bu">source</span> language c.</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">Arglist</span> at 0x7fffffffe5d0, args: argv1=286331153, argv2=572662306</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a> <span class="ex">Locals</span> at 0x7fffffffe5d0, Previous frame<span class="st">&#39;s sp is 0x7fffffffe5e0</span></span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="st"> Saved registers:</span></span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="st">  rbp at 0x7fffffffe5d0, rip at 0x7fffffffe5d8</span></span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> frame</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Stack</span> level 0, frame at 0x7fffffffe5e0:</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a> <span class="ex">rip</span> = 0x555555555153 in func <span class="er">(</span><span class="ex">main.c:7</span><span class="kw">);</span> <span class="ex">saved</span> rip = 0x55555555517c</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a> <span class="ex">called</span> by frame at 0x7fffffffe600</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a> <span class="bu">source</span> language c.</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">Arglist</span> at 0x7fffffffe5d0, args: argv1=286331153, argv2=572662306</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a> <span class="ex">Locals</span> at 0x7fffffffe5d0, Previous frame<span class="st">&#39;s sp is 0x7fffffffe5e0</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="st"> Saved registers:</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="st">  rbp at 0x7fffffffe5d0, rip at 0x7fffffffe5d8</span></span></code></pre></div>
 </div><div class="column" style="width:50%;">
 <p>Print function arguments and local variables.</p>
-<div class="sourceCode" id="cb39"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> args</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="ex">argv1</span> = 286331153</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="ex">argv2</span> = 572662306</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> locals</span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="ex">a</span> = <span class="at">-1431655766</span></span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="ex">b</span> = <span class="at">-1145324613</span></span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="ex">c</span> = <span class="at">-858993460</span></span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="ex">d</span> = <span class="at">-572662307</span></span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> args</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="ex">argv1</span> = 286331153</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="ex">argv2</span> = 572662306</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> locals</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="ex">a</span> = <span class="at">-1431655766</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="ex">b</span> = <span class="at">-1145324613</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="ex">c</span> = <span class="at">-858993460</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a><span class="ex">d</span> = <span class="at">-572662307</span></span></code></pre></div>
 </div>
 </div>
 <footer class="footer text-muted">

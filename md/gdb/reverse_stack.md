@@ -585,7 +585,7 @@ argv2 addr  = DW_AT_location + CFA_Offset
 :::
 ::::::::::::::
 
-## Print the Argument Values
+## Print Arguments
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -626,6 +626,90 @@ Dump of assembler code for function func:
 # print argv2
 (gdb) x/wx $rbp-24
 0x7fffffffe5b8: 0x22222222
+```
+
+:::
+::::::::::::::
+
+# Reverse Local Variables
+Using the same procedure as reversing function arguments.
+
+## DWARF to Variable Addresses
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+```sh
+Contents of the .debug_info section:
+ <2><bf>: Abbrev Number: 2 (DW_TAG_variable)
+    <c0>   DW_AT_name        : a
+    <c7>   DW_AT_location    : 2 byte block: 91 60      (DW_OP_fbreg: -32)
+
+ <2><ca>: Abbrev Number: 2 (DW_TAG_variable)
+    <cb>   DW_AT_name        : b
+    <d2>   DW_AT_location    : 2 byte block: 91 64      (DW_OP_fbreg: -28)
+
+ <2><d5>: Abbrev Number: 2 (DW_TAG_variable)
+    <d6>   DW_AT_name        : c
+    <dd>   DW_AT_location    : 2 byte block: 91 68      (DW_OP_fbreg: -24)
+
+ <2><e0>: Abbrev Number: 2 (DW_TAG_variable)
+    <e1>   DW_AT_name        : d
+    <e8>   DW_AT_location    : 2 byte block: 91 6c      (DW_OP_fbreg: -20)
+```
+
+:::
+::: {.column width=50%}
+
+```sh
+
+addr of a   = DW_AT_location + CFA_Offset
+            = (DW_OP_fbreg - 32) + 16            
+            = rbp - 16
+
+addr of b   = DW_AT_location + CFA_Offset
+            = (DW_OP_fbreg - 28) + 16            
+            = rbp - 12
+
+addr of c   = DW_AT_location + CFA_Offset
+            = (DW_OP_fbreg - 24) + 16            
+            = rbp - 8
+
+addr of d   = DW_AT_location + CFA_Offset
+            = (DW_OP_fbreg - 20) + 16            
+            = rbp - 4
+
+```
+
+:::
+::::::::::::::
+
+## Print Variables
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+```sh
+# print a
+(gdb) x/wx $rbp-16
+0x7fffffffe5c0: 0xaaaaaaaa
+
+# print b
+(gdb) x/wx $rbp-12
+0x7fffffffe5c4: 0xbbbbbbbb
+```
+
+:::
+::: {.column width=50%}
+
+```sh
+# print c
+(gdb) x/wx $rbp-8
+0x7fffffffe5c8: 0xcccccccc
+
+# print d
+(gdb) x/wx $rbp-4
+0x7fffffffe5cc: 0xdddddddd
 ```
 
 :::
