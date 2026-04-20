@@ -9,7 +9,7 @@ title: "A Developer Notebook"
 
 [Static Symbol Table](/html/gdb/static_symbol_table.html),
 [Dynamic Symbol Table](/html/gdb/dynamic_symbol_table.html),
-[Stack](/html/gdb/stack.html),
+[Stack](/html/gdb/stack.html).
 
 :::
 ::: {.column width=50%}
@@ -19,7 +19,7 @@ title: "A Developer Notebook"
 [Trace](/html/gdb/trace.html),
 [DebugInfo](/html/gdb/debuginfo.html),
 [Remote Debug](/html/gdb/remote_debug.html),
-
+[Pretty Printer](/html/gdb/pretty_printer.html).
 
 :::
 ::::::::::::::

@@ -111,7 +111,7 @@ Hardware Breakpoint.
 <br>
 
 # Tips & Tricks
-## Debug Code in MMAP Regions
+## Debug Code in mmap Region
 
 :::::::::::::: {.columns}
 ::: {.column width=40%}
