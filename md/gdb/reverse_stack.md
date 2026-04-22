@@ -1,5 +1,5 @@
 ---
-title: 'Reverse The Stack Frame'
+title: 'Reverse The Stack Memory'
 ---
 
 # Stack Pointer
@@ -199,7 +199,7 @@ Illustrate.
 
 # Base Pointer
 
-Base pointer (rbp) stores the start address of the function stack frame.
+Base pointer (rbp) stores the start address of the function stack frame. Remains fixed throughout the function, allowing compiler to use its stable position to generate offsets for local variables and function arguments.
 
 ## Prolog & Epilog
 
@@ -322,7 +322,7 @@ int child_func(int a, int b)
 :::
 ::::::::::::::
 
-## Dump Raw Stack Frame
+# Stack Frame Raw Data
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -445,6 +445,273 @@ $rbp ───► 0x7fffffffe5d0 │ 0x7fffffffe5f0 │ parent $rbp
                          │                │
           ──high address └────────────────┘
 ```
+
+:::
+::::::::::::::
+
+
+# DWARF
+## Canonical Frame Address (CFA)
+A Canonical Frame Address (CFA) is a fixed address in a stack frame. CFA is used as a pivot to locate return addresses, function arguments and local variables.
+
+### CFA Rules in ELF
+CFA rules define how to compute the Canonical Frame Address at each instruction in a function.
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+1. Print CFA rules.
+```sh
+$ readelf --debug-dump=frames-interp main
+Contents of the .eh_frame section:
+00000070 000000000000001c 00000074 FDE cie=00000000 pc=0000000000001129..000000000000115a
+   LOC           CFA      rbp   ra    
+0000000000001129 rsp+8    u     c-8   
+000000000000112e rsp+16   c-16  c-8   
+0000000000001131 rbp+16   c-16  c-8   
+0000000000001159 rsp+8    c-16  c-8 
+```
+
+:::
+::: {.column width=50%}
+
+In the below objdump output, range of func() is from `0x1129` to `0x1159`. Use this range to find the corresponding block in readelf output, we have `pc=0000000000001129..000000000000115a`. 
+
+So, CFA rules in func():
+
+- `1129: cfa = rsp + 8`
+- `112e: cfa = rsp + 16`
+- `1131: cfa = rbp + 16`
+- `1159: cfa = rsp + 8`
+
+:::
+::::::::::::::
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+2. Disassemble function func().
+```sh
+$ objdump --disassemble --no-show-raw-insn main
+0000000000001129 <func>:
+    1129:       endbr64 
+    112d:       push   %rbp
+    112e:       mov    %rsp,%rbp
+    1131:       mov    %edi,-0x14(%rbp)
+    1134:       mov    %esi,-0x18(%rbp)
+    1137:       movl   $0xaaaaaaaa,-0x10(%rbp)
+    113e:       movl   $0xbbbbbbbb,-0xc(%rbp)
+    1145:       movl   $0xcccccccc,-0x8(%rbp)
+    114c:       movl   $0xdddddddd,-0x4(%rbp)
+    1153:       mov    $0x0,%eax
+    1158:       pop    %rbp
+    1159:       ret
+```
+
+:::
+::: {.column width=50%}
+
+Reasons for CFA rule adjustment through instructions within func().
+```sh
+  
+0000000000001129 <func>:
+    1129:   initially, assign cfa:                          cfa = rsp + 8
+    112d:   push instruction moves stack pointer down:      rsp = rsp - 8
+    112e:   to keep cfa point to the assigned address:      cfa = rsp + 16
+    1131:   switch cfa rule to base pointer:                cfa = rbp + 16
+    1134:
+    1137:
+    113e:
+    1145:
+    114c:
+    1153:
+    1158:   pop instruction moves stack pointer up:         rsp = rsp + 8
+    1159:   to keep cfa point to the assigned address:      cfa = rsp + 8
+```
+
+:::
+::::::::::::::
+
+
+
+### Absolute CFA at Runtime
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+1. Set a breakpoint at the begin of func().
+```sh
+(gdb) set print frame-info location-and-address
+
+(gdb) break *func+0
+Breakpoint 1 at 0x1129: file main.c, line 2.
+
+(gdb) run
+Starting program: /root/demo/main 
+Breakpoint 1, 0x0000555555555129 in func (argv1=0, argv2=0) at main.c:2
+```
+
+2. Calculate assigned address of CFA.
+```sh
+(gdb) disassemble
+Dump of assembler code for function func:
+=> 0x0000555555555129 <+0>:     endbr64 
+   0x000055555555512d <+4>:     push   %rbp
+   0x000055555555512e <+5>:     mov    %rsp,%rbp
+   0x0000555555555131 <+8>:     mov    %edi,-0x14(%rbp)
+   0x0000555555555134 <+11>:    mov    %esi,-0x18(%rbp)
+   0x0000555555555137 <+14>:    movl   $0xaaaaaaaa,-0x10(%rbp)
+   0x000055555555513e <+21>:    movl   $0xbbbbbbbb,-0xc(%rbp)
+   0x0000555555555145 <+28>:    movl   $0xcccccccc,-0x8(%rbp)
+   0x000055555555514c <+35>:    movl   $0xdddddddd,-0x4(%rbp)
+   0x0000555555555153 <+42>:    mov    $0x0,%eax
+   0x0000555555555158 <+47>:    pop    %rbp
+   0x0000555555555159 <+48>:    ret    
+End of assembler dump.
+
+(gdb) print $rsp
+$1 = (void *) 0x7fffffffe5d8
+
+(gdb) print $rsp + 8
+$2 = (void *) 0x7fffffffe5e0
+```
+- According to CFA rules in readelf output, at func+0,
+    - `cfa = rsp + 8 = 0x7fffffffe5e0`
+
+
+3. Watch rsp, rbp.
+```sh
+(gdb) watch $rsp
+Watchpoint 2: $rsp
+
+(gdb) watch $rbp
+Watchpoint 3: $rbp
+```
+
+
+4. Check CFA after rsp changes.
+```sh
+(gdb) continue
+Continuing.
+
+Watchpoint 2: $rsp
+
+Old value = (void *) 0x7fffffffe5d8
+New value = (void *) 0x7fffffffe5d0
+0x000055555555512e in func (argv1=0, argv2=0) at main.c:2
+```
+After push instruction, rsp moves down from `0x7fffffffe5d8` to `0x7fffffffe5d0`.
+
+
+```sh
+(gdb) disassemble
+Dump of assembler code for function func:
+   0x0000555555555129 <+0>:     endbr64 
+   0x000055555555512d <+4>:     push   %rbp
+=> 0x000055555555512e <+5>:     mov    %rsp,%rbp
+   0x0000555555555131 <+8>:     mov    %edi,-0x14(%rbp)
+   0x0000555555555134 <+11>:    mov    %esi,-0x18(%rbp)
+   0x0000555555555137 <+14>:    movl   $0xaaaaaaaa,-0x10(%rbp)
+   0x000055555555513e <+21>:    movl   $0xbbbbbbbb,-0xc(%rbp)
+   0x0000555555555145 <+28>:    movl   $0xcccccccc,-0x8(%rbp)
+   0x000055555555514c <+35>:    movl   $0xdddddddd,-0x4(%rbp)
+   0x0000555555555153 <+42>:    mov    $0x0,%eax
+   0x0000555555555158 <+47>:    pop    %rbp
+   0x0000555555555159 <+48>:    ret    
+End of assembler dump.
+
+(gdb) print $rsp + 16
+$3 = (void *) 0x7fffffffe5e0
+```
+- According to CFA rules, at func+5,
+    - `cfa = rsp + 16 = 0x7fffffffe5e0`
+
+:::
+::: {.column width=50%}
+
+5. Check CFA after rbp changes.
+```sh
+(gdb) continue
+Continuing.
+
+Watchpoint 3: $rbp
+
+Old value = (void *) 0x7fffffffe5f0
+New value = (void *) 0x7fffffffe5d0
+0x0000555555555131 in func (argv1=0, argv2=0) at main.c:2
+```
+The rbp changes from `0x7fffffffe5f0` to `0x7fffffffe5d0`.
+
+
+```sh
+(gdb) disassemble
+Dump of assembler code for function func:
+   0x0000555555555129 <+0>:     endbr64 
+   0x000055555555512d <+4>:     push   %rbp
+   0x000055555555512e <+5>:     mov    %rsp,%rbp
+=> 0x0000555555555131 <+8>:     mov    %edi,-0x14(%rbp)
+   0x0000555555555134 <+11>:    mov    %esi,-0x18(%rbp)
+   0x0000555555555137 <+14>:    movl   $0xaaaaaaaa,-0x10(%rbp)
+   0x000055555555513e <+21>:    movl   $0xbbbbbbbb,-0xc(%rbp)
+   0x0000555555555145 <+28>:    movl   $0xcccccccc,-0x8(%rbp)
+   0x000055555555514c <+35>:    movl   $0xdddddddd,-0x4(%rbp)
+   0x0000555555555153 <+42>:    mov    $0x0,%eax
+   0x0000555555555158 <+47>:    pop    %rbp
+   0x0000555555555159 <+48>:    ret    
+End of assembler dump.
+
+(gdb) print $rbp + 16
+$4 = (void *) 0x7fffffffe5e0
+```
+- According to CFA rules, at func+8, 
+    - `cfa = rbp + 16 = 0x7fffffffe5e0`
+
+
+6. Check CFA after rsp changes.
+```sh
+(gdb) continue
+Continuing.
+
+Watchpoint 2: $rsp
+
+Old value = (void *) 0x7fffffffe5d0
+New value = (void *) 0x7fffffffe5d8
+
+Watchpoint 3: $rbp
+
+Old value = (void *) 0x7fffffffe5d0
+New value = (void *) 0x7fffffffe5f0
+0x0000555555555159 in func (argv1=286331153, argv2=572662306) at main.c:8
+```
+After pop instruction, rsp changes from `0x7fffffffe5d0` to `0x7fffffffe5d8`.
+
+
+```sh
+(gdb) disassemble
+Dump of assembler code for function func:
+   0x0000555555555129 <+0>:     endbr64 
+   0x000055555555512d <+4>:     push   %rbp
+   0x000055555555512e <+5>:     mov    %rsp,%rbp
+   0x0000555555555131 <+8>:     mov    %edi,-0x14(%rbp)
+   0x0000555555555134 <+11>:    mov    %esi,-0x18(%rbp)
+   0x0000555555555137 <+14>:    movl   $0xaaaaaaaa,-0x10(%rbp)
+   0x000055555555513e <+21>:    movl   $0xbbbbbbbb,-0xc(%rbp)
+   0x0000555555555145 <+28>:    movl   $0xcccccccc,-0x8(%rbp)
+   0x000055555555514c <+35>:    movl   $0xdddddddd,-0x4(%rbp)
+   0x0000555555555153 <+42>:    mov    $0x0,%eax
+   0x0000555555555158 <+47>:    pop    %rbp
+=> 0x0000555555555159 <+48>:    ret    
+End of assembler dump.
+
+(gdb) print $rsp + 8
+$5 = (void *) 0x7fffffffe5e0
+```
+- According to CFA rules, at func+48, 
+    - `cfa = rsp + 8 = 0x7fffffffe5e0`
+
+<br>
+
+So, within func(), when rsp or rbp changes, the CFA rule is adjusted to keep CFA point to the fixed assigned address `0x7fffffffe5e0`.
 
 :::
 ::::::::::::::
