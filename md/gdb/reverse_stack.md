@@ -1,5 +1,5 @@
 ---
-title: 'Reverse The Stack Memory'
+title: 'Reverse The Stack Frame'
 ---
 
 # Stack Pointer
