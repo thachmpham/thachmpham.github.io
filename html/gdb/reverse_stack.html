@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Reverse The Stack Memory</title>
+  <title>Reverse The Stack Frame</title>
   <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -21,8 +24,9 @@
       vertical-align: middle;
     }
     /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +37,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -95,7 +99,7 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Reverse The Stack Memory</h1>
+<h1 class="title">Reverse The Stack Frame</h1>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -116,33 +120,33 @@ class="toc-section-number">2.1</span> Prolog &amp; Epilog</a></li>
 id="toc-arguments-local-variables"><span
 class="toc-section-number">2.2</span> Arguments &amp; Local
 Variables</a></li>
-</ul></li>
 <li><a href="#dump-raw-stack-frame" id="toc-dump-raw-stack-frame"><span
-class="toc-section-number">3</span> Dump Raw Stack Frame</a></li>
+class="toc-section-number">2.3</span> Dump Raw Stack Frame</a></li>
+</ul></li>
 <li><a href="#reverse-function-arguments"
 id="toc-reverse-function-arguments"><span
-class="toc-section-number">4</span> Reverse Function Arguments</a>
+class="toc-section-number">3</span> Reverse Function Arguments</a>
 <ul>
 <li><a href="#dwarf-to-argument-addresses"
 id="toc-dwarf-to-argument-addresses"><span
-class="toc-section-number">4.1</span> DWARF to Argument
+class="toc-section-number">3.1</span> DWARF to Argument
 Addresses</a></li>
 <li><a href="#print-arguments" id="toc-print-arguments"><span
-class="toc-section-number">4.2</span> Print Arguments</a></li>
+class="toc-section-number">3.2</span> Print Arguments</a></li>
 </ul></li>
 <li><a href="#reverse-local-variables"
 id="toc-reverse-local-variables"><span
-class="toc-section-number">5</span> Reverse Local Variables</a>
+class="toc-section-number">4</span> Reverse Local Variables</a>
 <ul>
 <li><a href="#dwarf-to-variable-addresses"
 id="toc-dwarf-to-variable-addresses"><span
-class="toc-section-number">5.1</span> DWARF to Variable
+class="toc-section-number">4.1</span> DWARF to Variable
 Addresses</a></li>
 <li><a href="#print-variables" id="toc-print-variables"><span
-class="toc-section-number">5.2</span> Print Variables</a></li>
+class="toc-section-number">4.2</span> Print Variables</a></li>
 </ul></li>
 <li><a href="#gdb-utilities" id="toc-gdb-utilities"><span
-class="toc-section-number">6</span> GDB Utilities</a></li>
+class="toc-section-number">5</span> GDB Utilities</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="stack-pointer"><span
@@ -307,9 +311,7 @@ jump to this address.</li>
 <h1 data-number="2" id="base-pointer"><span
 class="header-section-number">2</span> Base Pointer</h1>
 <p>Base pointer (rbp) stores the start address of the function stack
-frame. Remains fixed throughout the function, allowing compiler to use
-its stable position to generate offsets for local variables and function
-arguments.</p>
+frame.</p>
 <h2 data-number="2.1" id="prolog-epilog"><span
 class="header-section-number">2.1</span> Prolog &amp; Epilog</h2>
 <div class="columns">
@@ -405,8 +407,8 @@ class="sourceCode asm"><code class="sourceCode fasm"><span id="cb20-1"><a href="
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span>    <span class="op">%</span><span class="kw">esi</span><span class="op">,-</span><span class="bn">0x18</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>   <span class="op">#</span> save <span class="op">$</span>esi to stack<span class="op">,</span> a</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="3" id="dump-raw-stack-frame"><span
-class="header-section-number">3</span> Dump Raw Stack Frame</h1>
+<h2 data-number="2.3" id="dump-raw-stack-frame"><span
+class="header-section-number">2.3</span> Dump Raw Stack Frame</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Instruction call pushes the parent rip onto the stack. Prolog pushes
@@ -520,10 +522,10 @@ class="sourceCode go"><code class="sourceCode go"><span id="cb28-1"><a href="#cb
 <span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>          ──high address └────────────────┘</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="4" id="reverse-function-arguments"><span
-class="header-section-number">4</span> Reverse Function Arguments</h1>
-<h2 data-number="4.1" id="dwarf-to-argument-addresses"><span
-class="header-section-number">4.1</span> DWARF to Argument
+<h1 data-number="3" id="reverse-function-arguments"><span
+class="header-section-number">3</span> Reverse Function Arguments</h1>
+<h2 data-number="3.1" id="dwarf-to-argument-addresses"><span
+class="header-section-number">3.1</span> DWARF to Argument
 Addresses</h2>
 <p>Fomular to calculate function argument and local variable
 addresses.</p>
@@ -654,8 +656,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb35-1"><a href="#
 </ul>
 </div>
 </div>
-<h2 data-number="4.2" id="print-arguments"><span
-class="header-section-number">4.2</span> Print Arguments</h2>
+<h2 data-number="3.2" id="print-arguments"><span
+class="header-section-number">3.2</span> Print Arguments</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ol type="1">
@@ -696,11 +698,11 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb37-1"><a href="#
 <span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5b8:</span> 0x22222222</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="5" id="reverse-local-variables"><span
-class="header-section-number">5</span> Reverse Local Variables</h1>
+<h1 data-number="4" id="reverse-local-variables"><span
+class="header-section-number">4</span> Reverse Local Variables</h1>
 <p>Using the same procedure as reversing function arguments.</p>
-<h2 data-number="5.1" id="dwarf-to-variable-addresses"><span
-class="header-section-number">5.1</span> DWARF to Variable
+<h2 data-number="4.1" id="dwarf-to-variable-addresses"><span
+class="header-section-number">4.1</span> DWARF to Variable
 Addresses</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -741,8 +743,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb39-1"><a href="#
 <span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> rbp <span class="at">-</span> 4</span></code></pre></div>
 </div>
 </div>
-<h2 data-number="5.2" id="print-variables"><span
-class="header-section-number">5.2</span> Print Variables</h2>
+<h2 data-number="4.2" id="print-variables"><span
+class="header-section-number">4.2</span> Print Variables</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="sourceCode" id="cb40"><pre
@@ -764,8 +766,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb41-1"><a href="#
 <span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5cc:</span> 0xdddddddd</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="6" id="gdb-utilities"><span
-class="header-section-number">6</span> GDB Utilities</h1>
+<h1 data-number="5" id="gdb-utilities"><span
+class="header-section-number">5</span> GDB Utilities</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Print frame info.</p>

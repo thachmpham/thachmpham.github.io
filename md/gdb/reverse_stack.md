@@ -1,5 +1,5 @@
 ---
-title: 'Reverse The Stack Memory'
+title: 'Reverse The Stack Frame'
 ---
 
 # Stack Pointer
@@ -199,7 +199,7 @@ Illustrate.
 
 # Base Pointer
 
-Base pointer (rbp) stores the start address of the function stack frame. Remains fixed throughout the function, allowing compiler to use its stable position to generate offsets for local variables and function arguments.
+Base pointer (rbp) stores the start address of the function stack frame.
 
 ## Prolog & Epilog
 
@@ -322,7 +322,7 @@ int child_func(int a, int b)
 :::
 ::::::::::::::
 
-# Dump Raw Stack Frame
+## Dump Raw Stack Frame
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
