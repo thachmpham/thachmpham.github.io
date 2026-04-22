@@ -902,6 +902,152 @@ Dump of assembler code for function func:
 :::
 ::::::::::::::
 
+
+# Reverse Local Variables
+To reverse local variables, we use the same steps as reverse function arguments.
+
+Apply the procedure to reverse the a,b,c,d variables within func().
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+1. Find the CFA at the target instruction.
+
+- The breakpoint will be put at 0x1153.
+```nasm
+$ objdump --disassemble --no-show-raw-insn main
+0000000000001129 <func>:
+    1129:       endbr64
+    112d:       push   %rbp
+    112e:       mov    %rsp,%rbp
+    1131:       mov    %edi,-0x14(%rbp)
+    1134:       mov    %esi,-0x18(%rbp)
+    1137:       movl   $0xaaaaaaaa,-0x10(%rbp)
+    113e:       movl   $0xbbbbbbbb,-0xc(%rbp)
+    1145:       movl   $0xcccccccc,-0x8(%rbp)
+    114c:       movl   $0xdddddddd,-0x4(%rbp)
+==> 1153:       mov    $0x0,%eax
+    1158:       pop    %rbp
+    1159:       ret
+```
+
+- 0x1153 within range [0x1131, 0x1159). The CFA in this range: cfa = rbp + 16.
+```sh
+$ readelf --debug-dump=frames-interp main
+Contents of the .eh_frame section:
+00000070 000000000000001c 00000074 FDE cie=00000000 pc=0000000000001129..000000000000115a
+   LOC           CFA      rbp   ra
+0000000000001129 rsp+8    u     c-8
+000000000000112e rsp+16   c-16  c-8
+0000000000001131 rbp+16   c-16  c-8    <==
+0000000000001159 rsp+8    c-16  c-8
+```
+
+
+2. Find DW_AT_location of the a, b, c, d variables.
+```sh
+$ readelf --debug-dump=info main
+Contents of the .debug_info section:
+
+ <1><85>: Abbrev Number: 8 (DW_TAG_subprogram)
+    <86>   DW_AT_name        : (indirect string, offset: 0x0): func
+    <91>   DW_AT_low_pc      : 0x1129
+
+<2><bf>: Abbrev Number: 2 (DW_TAG_variable)
+    <c0>   DW_AT_name        : a
+    <c7>   DW_AT_location    : 2 byte block: 91 60 	(DW_OP_fbreg: -32)
+
+ <2><ca>: Abbrev Number: 2 (DW_TAG_variable)
+    <cb>   DW_AT_name        : b    
+    <d2>   DW_AT_location    : 2 byte block: 91 64 	(DW_OP_fbreg: -28)
+
+ <2><d5>: Abbrev Number: 2 (DW_TAG_variable)
+    <d6>   DW_AT_name        : c    
+    <dd>   DW_AT_location    : 2 byte block: 91 68 	(DW_OP_fbreg: -24)
+    
+ <2><e0>: Abbrev Number: 2 (DW_TAG_variable)
+    <e1>   DW_AT_name        : d    
+    <e8>   DW_AT_location    : 2 byte block: 91 6c 	(DW_OP_fbreg: -20)
+```
+
+:::
+::: {.column width=50%}
+
+3. Calculate argument addresses based on CFA and DW_AT_location.
+```python
+Location of a:
+   DW_AT_location = DW_OP_fbreg - 32
+                  = cfa - 32
+                  = (rbp + 16) - 32
+                  = rbp - 16
+Location of b:
+   DW_AT_location = DW_OP_fbreg - 28
+                  = cfa - 28
+                  = (rbp + 16) - 28
+                  = rbp - 12
+Location of c:
+   DW_AT_location = DW_OP_fbreg - 24
+                  = cfa - 24
+                  = (rbp + 16) - 24
+                  = rbp - 8
+Location of d:
+   DW_AT_location = DW_OP_fbreg - 20
+                  = cfa - 20
+                  = (rbp + 16) - 20
+                  = rbp - 4
+So,
+   a locates at (rbp - 16)
+   b locates at (rbp - 12)
+   c locates at (rbp - 8)
+   d locates at (rbp - 4)
+```
+
+4. Dump memory at the calculated addresses.
+
+```sh
+(gdb) break *func+42
+
+(gdb) run
+Breakpoint 1, 0x0000555555555153 in func (argv1=286331153, argv2=572662306) at main.c:7
+
+(gdb) disassemble
+Dump of assembler code for function func:
+   0x0000555555555129 <+0>:     endbr64 
+   0x000055555555512d <+4>:     push   %rbp
+   0x000055555555512e <+5>:     mov    %rsp,%rbp
+   0x0000555555555131 <+8>:     mov    %edi,-0x14(%rbp)
+   0x0000555555555134 <+11>:    mov    %esi,-0x18(%rbp)
+   0x0000555555555137 <+14>:    movl   $0xaaaaaaaa,-0x10(%rbp)
+   0x000055555555513e <+21>:    movl   $0xbbbbbbbb,-0xc(%rbp)
+   0x0000555555555145 <+28>:    movl   $0xcccccccc,-0x8(%rbp)
+   0x000055555555514c <+35>:    movl   $0xdddddddd,-0x4(%rbp)
+=> 0x0000555555555153 <+42>:    mov    $0x0,%eax
+   0x0000555555555158 <+47>:    pop    %rbp
+   0x0000555555555159 <+48>:    ret
+
+# print variable a
+(gdb) x/wx $rbp-16
+0x7fffffffe5c0: 0xaaaaaaaa
+
+# print variable b
+(gdb) x/wx $rbp-12
+0x7fffffffe5c4: 0xbbbbbbbb
+
+# print variable c
+(gdb) x/wx $rbp-8
+0x7fffffffe5c8: 0xcccccccc
+
+# print variable d
+(gdb) x/wx $rbp-4
+0x7fffffffe5cc: 0xdddddddd
+```
+
+:::
+::::::::::::::
+
+
+
+
 # GDB Utilities
 
 :::::::::::::: {.columns}
