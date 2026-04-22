@@ -1,5 +1,5 @@
 ---
-title: 'Reverse The Stack Frame'
+title: 'Reverse the Stack Frame'
 ---
 
 # Stack Pointer
@@ -322,7 +322,7 @@ int child_func(int a, int b)
 :::
 ::::::::::::::
 
-# Stack Frame Raw Data
+# Raw Memory of Stack Frame
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}

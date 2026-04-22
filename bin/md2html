@@ -50,13 +50,13 @@ pandoc --from markdown --to html \
     ${workspace}/md/index.md
 
 # ====  about
-pandoc --from markdown --to html \
-    --css /html/style/dark.css \
-    --include-in-header ${workspace}/bin/header.html \
-    --include-after-body ${workspace}/bin/footer.html \
-    --standalone \
-    --output ${workspace}/html/about.html \
-    ${workspace}/md/about.md
+# pandoc --from markdown --to html \
+#     --css /html/style/dark.css \
+#     --include-in-header ${workspace}/bin/header.html \
+#     --include-after-body ${workspace}/bin/footer.html \
+#     --standalone \
+#     --output ${workspace}/html/about.html \
+#     ${workspace}/md/about.md
 
 # ====  posts
 cd ${workspace}

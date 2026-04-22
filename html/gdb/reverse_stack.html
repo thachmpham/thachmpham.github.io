@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Reverse The Stack Frame</title>
+  <title>Reverse the Stack Frame</title>
   <style>
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -99,7 +99,7 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Reverse The Stack Frame</h1>
+<h1 class="title">Reverse the Stack Frame</h1>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -121,8 +121,9 @@ id="toc-arguments-local-variables"><span
 class="toc-section-number">2.2</span> Arguments &amp; Local
 Variables</a></li>
 </ul></li>
-<li><a href="#stack-frame-raw-data" id="toc-stack-frame-raw-data"><span
-class="toc-section-number">3</span> Stack Frame Raw Data</a></li>
+<li><a href="#raw-memory-of-stack-frame"
+id="toc-raw-memory-of-stack-frame"><span
+class="toc-section-number">3</span> Raw Memory of Stack Frame</a></li>
 <li><a href="#dwarf" id="toc-dwarf"><span
 class="toc-section-number">4</span> DWARF</a>
 <ul>
@@ -423,8 +424,8 @@ class="sourceCode asm"><code class="sourceCode fasm"><span id="cb20-1"><a href="
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span>    <span class="op">%</span><span class="kw">esi</span><span class="op">,-</span><span class="bn">0x18</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span>   <span class="op">#</span> save <span class="op">$</span>esi to stack<span class="op">,</span> a</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="3" id="stack-frame-raw-data"><span
-class="header-section-number">3</span> Stack Frame Raw Data</h1>
+<h1 data-number="3" id="raw-memory-of-stack-frame"><span
+class="header-section-number">3</span> Raw Memory of Stack Frame</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Instruction call pushes the parent rip onto the stack. Prolog pushes
