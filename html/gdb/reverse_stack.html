@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Reverse the Stack Frame</title>
   <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -21,8 +24,9 @@
       vertical-align: middle;
     }
     /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +37,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -144,8 +148,6 @@ class="toc-section-number">5</span> Reverse Function Arguments</a></li>
 <li><a href="#reverse-local-variables"
 id="toc-reverse-local-variables"><span
 class="toc-section-number">6</span> Reverse Local Variables</a></li>
-<li><a href="#gdb-utilities" id="toc-gdb-utilities"><span
-class="toc-section-number">7</span> GDB Utilities</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="stack-pointer"><span
@@ -1110,35 +1112,6 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb52-1"><a href="#
 <span id="cb52-33"><a href="#cb52-33" aria-hidden="true" tabindex="-1"></a><span class="co"># print variable d</span></span>
 <span id="cb52-34"><a href="#cb52-34" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/wx</span> <span class="va">$rbp</span>-4</span>
 <span id="cb52-35"><a href="#cb52-35" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5cc:</span> 0xdddddddd</span></code></pre></div>
-</div>
-</div>
-<h1 data-number="7" id="gdb-utilities"><span
-class="header-section-number">7</span> GDB Utilities</h1>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p>Print frame info.</p>
-<div class="sourceCode" id="cb53"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> frame</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Stack</span> level 0, frame at 0x7fffffffe5e0:</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a> <span class="ex">rip</span> = 0x555555555153 in func <span class="er">(</span><span class="ex">main.c:7</span><span class="kw">);</span> <span class="ex">saved</span> rip = 0x55555555517c</span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a> <span class="ex">called</span> by frame at 0x7fffffffe600</span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a> <span class="bu">source</span> language c.</span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">Arglist</span> at 0x7fffffffe5d0, args: argv1=286331153, argv2=572662306</span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a> <span class="ex">Locals</span> at 0x7fffffffe5d0, Previous frame<span class="st">&#39;s sp is 0x7fffffffe5e0</span></span>
-<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="st"> Saved registers:</span></span>
-<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a><span class="st">  rbp at 0x7fffffffe5d0, rip at 0x7fffffffe5d8</span></span></code></pre></div>
-</div><div class="column" style="width:50%;">
-<p>Print function arguments and local variables.</p>
-<div class="sourceCode" id="cb54"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> args</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="ex">argv1</span> = 286331153</span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="ex">argv2</span> = 572662306</span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> locals</span>
-<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="ex">a</span> = <span class="at">-1431655766</span></span>
-<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="ex">b</span> = <span class="at">-1145324613</span></span>
-<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="ex">c</span> = <span class="at">-858993460</span></span>
-<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a><span class="ex">d</span> = <span class="at">-572662307</span></span></code></pre></div>
 </div>
 </div>
 <footer class="footer text-muted">
