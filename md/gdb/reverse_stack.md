@@ -511,7 +511,7 @@ $ objdump --disassemble --no-show-raw-insn main
 :::
 ::: {.column width=50%}
 
-Reasons for CFA rule adjustment through instructions within func().
+Line-by-line explanation.
 ```sh
   
 0000000000001129 <func>:
@@ -715,6 +715,46 @@ So, within func(), when rsp or rbp changes, the CFA rule is adjusted to keep CFA
 
 :::
 ::::::::::::::
+
+
+## Debugging Information Entry (DIE)
+The Debugging Information Entry (DIE) is used to translate assembly code back to C/C++ code.
+
+Each DIE entity consists of:
+
+- Tag (What entity describe)
+    - DW_TAG_subprogram: Function.
+    - DW_TAG_base_type: Data type.
+    - DW_TAG_formal_parameter: Function argument.
+    - DW_TAG_variable: Global or local variable.
+- Attributes (Key-Value pairs):
+    - DW_AT_name: Attribute name.
+    - DW_AT_type: Attribute type.
+    - DW_AT_location: Attribute location.
+    - DW_AT_low_pc: Low address (program counter) of a function.
+
+```sh
+$ readelf --debug-dump=info main
+Contents of the .debug_info section:
+ <1><6d>: Abbrev Number: 6 (DW_TAG_base_type)                           # Offset 6d, entry describes a data type.
+    <6e>   DW_AT_byte_size   : 4                                        # Size: 4
+    <70>   DW_AT_name        : int                                      # Data type name is int
+
+ <1><85>: Abbrev Number: 8 (DW_TAG_subprogram)                          # Level 1, entry describes a function.
+    <86>   DW_AT_name        : (indirect string, offset: 0x0): func     # Name: func().
+    <91>   DW_AT_low_pc      : 0x1129                                   # Low address: 0x1129.
+    <99>   DW_AT_high_pc     : 0x31                                     # Length: 0x31.
+
+ <2><a3>: Abbrev Number: 1 (DW_TAG_formal_parameter)                    # Level 2, entry describes a function argument of func().
+    <a4>   DW_AT_name        : (indirect string, offset: 0x5): argv1    # Name: argv1 
+    <aa>   DW_AT_type        : <0x6d>                                   # Type is defined at offset 0x6d, which is int.
+    <ae>   DW_AT_location    : 2 byte block: 91 5c (DW_OP_fbreg: -36)   # Frame-based location, location = CFA - 36.
+
+ <2><bf>: Abbrev Number: 2 (DW_TAG_variable)                            # Level 2, entry describes a local variable within func().
+    <c0>   DW_AT_name        : a                                        # Name: a    
+    <c3>   DW_AT_type        : <0x6d>                                   # Type is defined at offset 0x6d, which is int.
+    <c7>   DW_AT_location    : 2 byte block: 91 60 (DW_OP_fbreg: -32)   # Frame-based location, location = CBA - 32
+```
 
 # Reverse Function Arguments
 ## DWARF to Argument Addresses
