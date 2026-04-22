@@ -140,28 +140,9 @@ class="toc-section-number">4.2</span> Debugging Information Entry
 </ul></li>
 <li><a href="#reverse-function-arguments"
 id="toc-reverse-function-arguments"><span
-class="toc-section-number">5</span> Reverse Function Arguments</a>
-<ul>
-<li><a href="#dwarf-to-argument-addresses"
-id="toc-dwarf-to-argument-addresses"><span
-class="toc-section-number">5.1</span> DWARF to Argument
-Addresses</a></li>
-<li><a href="#print-arguments" id="toc-print-arguments"><span
-class="toc-section-number">5.2</span> Print Arguments</a></li>
-</ul></li>
-<li><a href="#reverse-local-variables"
-id="toc-reverse-local-variables"><span
-class="toc-section-number">6</span> Reverse Local Variables</a>
-<ul>
-<li><a href="#dwarf-to-variable-addresses"
-id="toc-dwarf-to-variable-addresses"><span
-class="toc-section-number">6.1</span> DWARF to Variable
-Addresses</a></li>
-<li><a href="#print-variables" id="toc-print-variables"><span
-class="toc-section-number">6.2</span> Print Variables</a></li>
-</ul></li>
+class="toc-section-number">5</span> Reverse Function Arguments</a></li>
 <li><a href="#gdb-utilities" id="toc-gdb-utilities"><span
-class="toc-section-number">7</span> GDB Utilities</a></li>
+class="toc-section-number">6</span> GDB Utilities</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="stack-pointer"><span
@@ -254,7 +235,7 @@ the stack and jump to this address.</p>
 class="sourceCode asm"><code class="sourceCode fasm"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>.<span class="bu">section</span> <span class="op">.</span>text</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>.global _start</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">_start:</span>    </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">_start:</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">mov</span>     <span class="op">$</span><span class="bn">5</span><span class="op">,</span> <span class="op">%</span><span class="kw">rdi</span>    <span class="op">#</span> x <span class="op">=</span> <span class="dv">5</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">mov</span>     <span class="op">$</span><span class="bn">7</span><span class="op">,</span> <span class="op">%</span><span class="kw">rsi</span>    <span class="op">#</span> y <span class="op">=</span> <span class="dv">7</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">call</span>    sum         <span class="op">#</span> sum<span class="op">(</span>x<span class="op">,</span> y<span class="op">)</span></span>
@@ -299,7 +280,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe6f8:</span> 0x0000000000401013      0x0000000000000001</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe708:</span> 0x00007fffffffe9ab      0x0000000000000000</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x401025 <span class="op">&lt;</span>sum+6<span class="op">&gt;</span>:    ret    </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x401025 <span class="op">&lt;</span>sum+6<span class="op">&gt;</span>:    ret</span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe700:</span> 0x0000000000000001      0x00007fffffffe9ab</span>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe710:</span> 0x0000000000000000      0x00007fffffffe9bc</span></code></pre></div>
 </div>
@@ -398,10 +379,10 @@ class="sourceCode asm"><code class="sourceCode fasm"><span id="cb18-1"><a href="
 </div>
 <p>When the parent function calls the child function, the arguments are
 saved in the registers rdi, rsi, rdx, rcx, r8, and r9. If more than 6
-arguments, the extra arguments are saved on the stack.<br />
-Inside the child function, it reads the registers and saves the
-arguments into its stack frame. The argument addresses in the stack
-frame are based on the base pointer rbp.</p>
+arguments, the extra arguments are saved on the stack. Inside the child
+function, it reads the registers and saves the arguments into its stack
+frame. The argument addresses in the stack frame are based on the base
+pointer rbp.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>parent_function<span class="op">()</span></span>
@@ -487,7 +468,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb23-1"><a href="#
 <div class="sourceCode" id="cb24"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="fu">file</span> main</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span> func</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64 </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64</span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000000000000112d</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     push   %rbp</span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000000000000112e</span> <span class="op">&lt;</span>+5<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001131</span> <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x14<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
@@ -560,11 +541,11 @@ instruction in a function.</p>
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--debug-dump</span><span class="op">=</span>frames-interp main</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Contents</span> of the .eh_frame section:</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="ex">00000070</span> 000000000000001c 00000074 FDE cie=00000000 pc=0000000000001129..000000000000115a</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>   <span class="ex">LOC</span>           CFA      rbp   ra    </span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001129</span> rsp+8    u     c-8   </span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="ex">000000000000112e</span> rsp+16   c-16  c-8   </span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001131</span> rbp+16   c-16  c-8   </span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001159</span> rsp+8    c-16  c-8 </span></code></pre></div>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>   <span class="ex">LOC</span>           CFA      rbp   ra</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001129</span> rsp+8    u     c-8</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="ex">000000000000112e</span> rsp+16   c-16  c-8</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001131</span> rbp+16   c-16  c-8</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001159</span> rsp+8    c-16  c-8</span></code></pre></div>
 </div><div class="column" style="width:50%;">
 <p>In the below objdump output, range of func() is from
 <code>0x1129</code> to <code>0x1159</code>. Use this range to find the
@@ -587,7 +568,7 @@ corresponding block in readelf output, we have
 <div class="sourceCode" id="cb30"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> <span class="at">--no-show-raw-insn</span> main</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001129</span> <span class="op">&lt;</span>func<span class="op">&gt;</span>:</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1129:</span>       endbr64 </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1129:</span>       endbr64</span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">112d:</span>       push   %rbp</span>
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">112e:</span>       mov    %rsp,%rbp</span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1131:</span>       mov    %edi,-0x14<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
@@ -602,7 +583,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb30-1"><a href="#
 </div><div class="column" style="width:50%;">
 <p>Line-by-line explanation.</p>
 <div class="sourceCode" id="cb31"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>  </span>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001129</span> <span class="op">&lt;</span>func<span class="op">&gt;</span>:</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1129:</span>   initially, assign cfa:                          cfa = rsp + 8</span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">112d:</span>   push instruction moves stack pointer down:      rsp = rsp <span class="at">-</span> 8</span>
@@ -632,7 +613,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb32-1"><a href="#
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1 at 0x1129: file main.c, line 2.</span>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Starting</span> program: /root/demo/main </span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Starting</span> program: /root/demo/main</span>
 <span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1, 0x0000555555555129 in func <span class="er">(</span><span class="va">argv1</span><span class="op">=</span>0, <span class="va">argv2</span><span class="op">=</span>0<span class="kw">)</span> <span class="ex">at</span> main.c:2</span></code></pre></div>
 <ol start="2" type="1">
 <li>Calculate assigned address of CFA.</li>
@@ -640,7 +621,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb32-1"><a href="#
 <div class="sourceCode" id="cb33"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Dump</span> of assembler code for function func:</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x0000555555555129 <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64 </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x0000555555555129 <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64</span>
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512d</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     push   %rbp</span>
 <span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512e</span> <span class="op">&lt;</span>+5<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
 <span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555131</span> <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x14<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
@@ -651,7 +632,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb33-1"><a href="#
 <span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555514c</span> <span class="op">&lt;</span>+35<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xdddddddd,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
 <span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555153</span> <span class="op">&lt;</span>+42<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x0,%eax</span>
 <span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555158</span> <span class="op">&lt;</span>+47<span class="op">&gt;</span>:    pop    %rbp</span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555159</span> <span class="op">&lt;</span>+48<span class="op">&gt;</span>:    ret    </span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555159</span> <span class="op">&lt;</span>+48<span class="op">&gt;</span>:    ret</span>
 <span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="ex">End</span> of assembler dump.</span>
 <span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print</span> <span class="va">$rsp</span></span>
@@ -691,7 +672,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb35-1"><a href="#
 <div class="sourceCode" id="cb36"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Dump</span> of assembler code for function func:</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64 </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64</span>
 <span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512d</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     push   %rbp</span>
 <span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x000055555555512e <span class="op">&lt;</span>+5<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
 <span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555131</span> <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x14<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
@@ -702,7 +683,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb36-1"><a href="#
 <span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555514c</span> <span class="op">&lt;</span>+35<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xdddddddd,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
 <span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555153</span> <span class="op">&lt;</span>+42<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x0,%eax</span>
 <span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555158</span> <span class="op">&lt;</span>+47<span class="op">&gt;</span>:    pop    %rbp</span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555159</span> <span class="op">&lt;</span>+48<span class="op">&gt;</span>:    ret    </span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555159</span> <span class="op">&lt;</span>+48<span class="op">&gt;</span>:    ret</span>
 <span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="ex">End</span> of assembler dump.</span>
 <span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print</span> <span class="va">$rsp</span> + 16</span>
@@ -731,7 +712,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb37-1"><a href="#
 <div class="sourceCode" id="cb38"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Dump</span> of assembler code for function func:</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64 </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64</span>
 <span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512d</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     push   %rbp</span>
 <span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512e</span> <span class="op">&lt;</span>+5<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
 <span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x0000555555555131 <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x14<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
@@ -742,7 +723,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb38-1"><a href="#
 <span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555514c</span> <span class="op">&lt;</span>+35<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xdddddddd,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
 <span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555153</span> <span class="op">&lt;</span>+42<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x0,%eax</span>
 <span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555158</span> <span class="op">&lt;</span>+47<span class="op">&gt;</span>:    pop    %rbp</span>
-<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555159</span> <span class="op">&lt;</span>+48<span class="op">&gt;</span>:    ret    </span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555159</span> <span class="op">&lt;</span>+48<span class="op">&gt;</span>:    ret</span>
 <span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a><span class="ex">End</span> of assembler dump.</span>
 <span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print</span> <span class="va">$rbp</span> + 16</span>
@@ -775,7 +756,7 @@ to <code>0x7fffffffe5d8</code>.</p>
 <div class="sourceCode" id="cb40"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Dump</span> of assembler code for function func:</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64 </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64</span>
 <span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512d</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     push   %rbp</span>
 <span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512e</span> <span class="op">&lt;</span>+5<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
 <span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555131</span> <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x14<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
@@ -786,7 +767,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb40-1"><a href="#
 <span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555514c</span> <span class="op">&lt;</span>+35<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xdddddddd,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
 <span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555153</span> <span class="op">&lt;</span>+42<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x0,%eax</span>
 <span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555158</span> <span class="op">&lt;</span>+47<span class="op">&gt;</span>:    pop    %rbp</span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x0000555555555159 <span class="op">&lt;</span>+48<span class="op">&gt;</span>:    ret    </span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x0000555555555159 <span class="op">&lt;</span>+48<span class="op">&gt;</span>:    ret</span>
 <span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a><span class="ex">End</span> of assembler dump.</span>
 <span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">print</span> <span class="va">$rsp</span> + 8</span>
@@ -827,296 +808,195 @@ code back to C/C++ code.</p>
 </ul>
 <div class="sourceCode" id="cb41"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--debug-dump</span><span class="op">=</span>info main</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Contents</span> of the .debug_info section:</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>1<span class="op">&gt;&lt;</span>6d<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 6 <span class="er">(</span><span class="ex">DW_TAG_base_type</span><span class="kw">)</span>                           <span class="co"># Offset 6d, entry describes a data type.</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>6e<span class="op">&gt;</span>   DW_AT_byte_size   <span class="bu">:</span> 4                                        <span class="co"># Size: 4</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>70<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> int                                      <span class="co"># Data type name is int</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>1<span class="op">&gt;&lt;</span>85<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 8 <span class="er">(</span><span class="ex">DW_TAG_subprogram</span><span class="kw">)</span>                          <span class="co"># Level 1, entry describes a function.</span></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>86<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> <span class="er">(</span><span class="ex">indirect</span> string, offset: 0x0<span class="kw">)</span><span class="bu">:</span> func     <span class="co"># Name: func().</span></span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>91<span class="op">&gt;</span>   DW_AT_low_pc      <span class="bu">:</span> 0x1129                                   <span class="co"># Low address: 0x1129.</span></span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>99<span class="op">&gt;</span>   DW_AT_high_pc     <span class="bu">:</span> 0x31                                     <span class="co"># Length: 0x31.</span></span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>a3<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 1 <span class="er">(</span><span class="ex">DW_TAG_formal_parameter</span><span class="kw">)</span>                    <span class="co"># Level 2, entry describes a function argument of func().</span></span>
-<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>a4<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> <span class="er">(</span><span class="ex">indirect</span> string, offset: 0x5<span class="kw">)</span><span class="bu">:</span> argv1    <span class="co"># Name: argv1 </span></span>
-<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>aa<span class="op">&gt;</span>   DW_AT_type        <span class="bu">:</span> <span class="op">&lt;</span>0x6d<span class="op">&gt;</span>                                   <span class="co"># Type is defined at offset 0x6d, which is int.</span></span>
-<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>ae<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 5c <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-36</span><span class="kw">)</span>   <span class="co"># Frame-based location, location = CFA - 36.</span></span>
-<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>bf<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 2 <span class="er">(</span><span class="ex">DW_TAG_variable</span><span class="kw">)</span>                            <span class="co"># Level 2, entry describes a local variable within func().</span></span>
-<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>c0<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> a                                        <span class="co"># Name: a    </span></span>
-<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>c3<span class="op">&gt;</span>   DW_AT_type        <span class="bu">:</span> <span class="op">&lt;</span>0x6d<span class="op">&gt;</span>                                   <span class="co"># Type is defined at offset 0x6d, which is int.</span></span>
-<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>c7<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 60 <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-32</span><span class="kw">)</span>   <span class="co"># Frame-based location, location = CBA - 32</span></span></code></pre></div>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>1<span class="op">&gt;&lt;</span>6d<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 6 <span class="er">(</span><span class="ex">DW_TAG_base_type</span><span class="kw">)</span>                           <span class="co"># Offset 6d, entry describes a data type.</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>6e<span class="op">&gt;</span>   DW_AT_byte_size   <span class="bu">:</span> 4                                        <span class="co"># Size: 4</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>70<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> int                                      <span class="co"># Data type name is int</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>1<span class="op">&gt;&lt;</span>85<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 8 <span class="er">(</span><span class="ex">DW_TAG_subprogram</span><span class="kw">)</span>                          <span class="co"># Level 1, entry describes a function.</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>86<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> <span class="er">(</span><span class="ex">indirect</span> string, offset: 0x0<span class="kw">)</span><span class="bu">:</span> func     <span class="co"># Name: func().</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>91<span class="op">&gt;</span>   DW_AT_low_pc      <span class="bu">:</span> 0x1129                                   <span class="co"># Low address: 0x1129.</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>99<span class="op">&gt;</span>   DW_AT_high_pc     <span class="bu">:</span> 0x31                                     <span class="co"># Length: 0x31.</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>a3<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 1 <span class="er">(</span><span class="ex">DW_TAG_formal_parameter</span><span class="kw">)</span>                    <span class="co"># Level 2, entry describes a function argument of func().</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>a4<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> <span class="er">(</span><span class="ex">indirect</span> string, offset: 0x5<span class="kw">)</span><span class="bu">:</span> argv1    <span class="co"># Name: argv1</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>aa<span class="op">&gt;</span>   DW_AT_type        <span class="bu">:</span> <span class="op">&lt;</span>0x6d<span class="op">&gt;</span>                                   <span class="co"># Type is defined at offset 0x6d, which is int.</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>ae<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 5c <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-36</span><span class="kw">)</span>   <span class="co"># Frame-based location, location = CFA - 36.</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>bf<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 2 <span class="er">(</span><span class="ex">DW_TAG_variable</span><span class="kw">)</span>                            <span class="co"># Level 2, entry describes a local variable within func().</span></span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>c0<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> a                                        <span class="co"># Name: a</span></span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>c3<span class="op">&gt;</span>   DW_AT_type        <span class="bu">:</span> <span class="op">&lt;</span>0x6d<span class="op">&gt;</span>                                   <span class="co"># Type is defined at offset 0x6d, which is int.</span></span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>c7<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 60 <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-32</span><span class="kw">)</span>   <span class="co"># Frame-based location, location = CBA - 32</span></span></code></pre></div>
 <h1 data-number="5" id="reverse-function-arguments"><span
 class="header-section-number">5</span> Reverse Function Arguments</h1>
-<h2 data-number="5.1" id="dwarf-to-argument-addresses"><span
-class="header-section-number">5.1</span> DWARF to Argument
-Addresses</h2>
-<p>Fomular to calculate function argument and local variable
-addresses.</p>
-<div class="sourceCode" id="cb42"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Address</span> = DW_AT_location + CFA_Offset</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">While:</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>        <span class="ex">DW_AT_location</span> is the relative address of the argument. Can be in section .debug_info.</span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>        <span class="ex">CFA_Offset</span> is Call Frame Address Offset at target instruction. Can be found in section .eh_frame.</span></code></pre></div>
-<p><br></p>
-<ol type="1">
-<li>Find range of func().</li>
-</ol>
-<div class="sourceCode" id="cb43"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--debug-dump</span> main</span></code></pre></div>
-<div class="sourceCode" id="cb44"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Contents</span> of the .debug_info section:</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>1<span class="op">&gt;&lt;</span>85<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 8 <span class="er">(</span><span class="ex">DW_TAG_subprogram</span><span class="kw">)</span></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>86<span class="op">&gt;</span>   DW_AT_external    <span class="bu">:</span> 1</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>86<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> <span class="er">(</span><span class="ex">indirect</span> string, offset: 0x0<span class="kw">)</span><span class="bu">:</span> func</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>8a<span class="op">&gt;</span>   DW_AT_decl_file   <span class="bu">:</span> 1</span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>8b<span class="op">&gt;</span>   DW_AT_decl_line   <span class="bu">:</span> 1</span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>8c<span class="op">&gt;</span>   DW_AT_decl_column <span class="bu">:</span> 5</span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>8d<span class="op">&gt;</span>   DW_AT_prototyped  <span class="bu">:</span> 1</span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>8d<span class="op">&gt;</span>   DW_AT_type        <span class="bu">:</span> <span class="op">&lt;</span>0x6d<span class="op">&gt;</span></span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>91<span class="op">&gt;</span>   DW_AT_low_pc      <span class="bu">:</span> 0x1129</span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>99<span class="op">&gt;</span>   DW_AT_high_pc     <span class="bu">:</span> 0x31</span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>a1<span class="op">&gt;</span>   DW_AT_frame_base  <span class="bu">:</span> 1 byte block: 9c         <span class="er">(</span><span class="ex">DW_OP_call_frame_cfa</span><span class="kw">)</span></span>
-<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>a3<span class="op">&gt;</span>   DW_AT_call_all_calls: <span class="ex">1</span></span></code></pre></div>
+<p>To reverse a function argument or a local variable at an
+instruction:</p>
 <ul>
-<li>Function func() starts at 0x1129, size of 0x31 bytes.</li>
+<li>Find the CFA at the target instruction.</li>
+<li>Find DW_AT_location of the argument/variable.</li>
+<li>Calculate argument/variable address based on CFA and
+DW_AT_location.</li>
+<li>Dump memory at the address.</li>
 </ul>
+<p><br></p>
+<p>Apply the procedure to reverse the argv1 and argv2 arguments of
+func().</p>
 <div class="columns">
 <div class="column" style="width:50%;">
+<ol type="1">
+<li>Find the CFA at the target instruction.</li>
+</ol>
+<ul>
+<li>The breakpoint will be put at 0x1153.</li>
+</ul>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>$ objdump <span class="op">--</span>disassemble <span class="op">--</span>no<span class="op">-</span>show<span class="op">-</span>raw<span class="op">-</span>insn main</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>0000000000001129 &lt;func<span class="op">&gt;:</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    1129:       <span class="kw">endbr64</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    112d:       <span class="kw">push</span>   <span class="op">%</span><span class="kw">rbp</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    112e:       <span class="kw">mov</span>    <span class="op">%</span><span class="kw">rsp</span><span class="op">,%</span><span class="kw">rbp</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    1131:       <span class="kw">mov</span>    <span class="op">%</span><span class="kw">edi</span><span class="op">,-</span><span class="bn">0x14</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    1134:       <span class="kw">mov</span>    <span class="op">%</span><span class="kw">esi</span><span class="op">,-</span><span class="bn">0x18</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    1137:       movl   <span class="op">$</span><span class="bn">0</span>xaaaaaaaa<span class="op">,-</span><span class="bn">0x10</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>    113e:       movl   <span class="op">$</span><span class="bn">0</span>xbbbbbbbb<span class="op">,-</span><span class="bn">0xc</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>    1145:       movl   <span class="op">$</span><span class="bn">0</span>xcccccccc<span class="op">,-</span><span class="bn">0x8</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>    114c:       movl   <span class="op">$</span><span class="bn">0</span>xdddddddd<span class="op">,-</span><span class="bn">0x4</span><span class="op">(%</span><span class="kw">rbp</span><span class="op">)</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>==&gt; 1153:       <span class="kw">mov</span>    <span class="op">$</span><span class="bn">0</span>x0<span class="op">,%</span><span class="kw">eax</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>    1158:       <span class="kw">pop</span>    <span class="op">%</span><span class="kw">rbp</span></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>    1159:       <span class="cf">ret</span></span></code></pre></div>
+<ul>
+<li>0x1153 within range [0x1131, 0x1159). The CFA in this range: cfa =
+rbp + 16.</li>
+</ul>
+<div class="sourceCode" id="cb43"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--debug-dump</span><span class="op">=</span>frames-interp main</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Contents</span> of the .eh_frame section:</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="ex">00000070</span> 000000000000001c 00000074 FDE cie=00000000 pc=0000000000001129..000000000000115a</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>   <span class="ex">LOC</span>           CFA      rbp   ra</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001129</span> rsp+8    u     c-8</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="ex">000000000000112e</span> rsp+16   c-16  c-8</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001131</span> rbp+16   c-16  c-8    <span class="op">&lt;</span>==</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001159</span> rsp+8    c-16  c-8</span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <ol start="2" type="1">
-<li>Find cfa offsets within func().</li>
+<li>Find DW_AT_location of the argv1 and argv2 arguments.</li>
+</ol>
+<div class="sourceCode" id="cb44"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> readelf <span class="at">--debug-dump</span><span class="op">=</span>info main</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Contents</span> of the .debug_info section:</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>1<span class="op">&gt;&lt;</span>85<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 8 <span class="er">(</span><span class="ex">DW_TAG_subprogram</span><span class="kw">)</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>86<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> <span class="er">(</span><span class="ex">indirect</span> string, offset: 0x0<span class="kw">)</span><span class="bu">:</span> func</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>91<span class="op">&gt;</span>   DW_AT_low_pc      <span class="bu">:</span> 0x1129</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>a3<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 1 <span class="er">(</span><span class="ex">DW_TAG_formal_parameter</span><span class="kw">)</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>a4<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> <span class="er">(</span><span class="ex">indirect</span> string, offset: 0x5<span class="kw">)</span><span class="bu">:</span> argv1</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>ae<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 5c  <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-36</span><span class="kw">)</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>b1<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 1 <span class="er">(</span><span class="ex">DW_TAG_formal_parameter</span><span class="kw">)</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>b2<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> <span class="er">(</span><span class="ex">indirect</span> string, offset: 0x9e<span class="kw">)</span><span class="bu">:</span> argv2</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>bc<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 58  <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-40</span><span class="kw">)</span></span></code></pre></div>
+<ol start="3" type="1">
+<li>Calculate argument addresses based on CFA and DW_AT_location.</li>
 </ol>
 <div class="sourceCode" id="cb45"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Contents</span> of the .eh_frame section:</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="ex">00000070</span> 000000000000001c 00000074 FDE cie=00000000 pc=0000000000001129..000000000000115a</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">DW_CFA_advance_loc:</span> 5 to 000000000000112e</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">DW_CFA_def_cfa_offset:</span> 16</span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">DW_CFA_offset:</span> r6 <span class="er">(</span><span class="ex">rbp</span><span class="kw">)</span> <span class="ex">at</span> cfa-16</span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">DW_CFA_advance_loc:</span> 3 to 0000000000001131</span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">DW_CFA_def_cfa_register:</span> r6 <span class="er">(</span><span class="ex">rbp</span><span class="kw">)</span></span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>  <span class="ex">DW_CFA_advance_loc:</span> 40 to 0000000000001159</span>
-<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>  <span class="ex">DW_CFA_def_cfa:</span> r7 <span class="er">(</span><span class="ex">rsp</span><span class="kw">)</span> <span class="ex">ofs</span> 8</span></code></pre></div>
-<ul>
-<li>Since 0x112e, cfa offset is 16 (DW_CFA_def_cfa_offset).</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<ol start="3" type="1">
-<li>Find cfa offset at the target instruction.</li>
-</ol>
-<div class="sourceCode" id="cb46"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> objdump <span class="at">--disassemble</span> main</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0000000000001129</span> <span class="op">&lt;</span>func<span class="op">&gt;</span>:</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1129:</span>       f3 0f 1e fa             endbr64 </span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">112d:</span>       55                      push   %rbp</span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">112e:</span>       48 89 e5                mov    %rsp,%rbp</span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1131:</span>       89 7d ec                mov    %edi,-0x14<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1134:</span>       89 75 e8                mov    %esi,-0x18<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1137:</span>       c7 45 f0 aa aa aa aa    movl   <span class="va">$0</span>xaaaaaaaa,-0x10<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">113e:</span>       c7 45 f4 bb bb bb bb    movl   <span class="va">$0</span>xbbbbbbbb,-0xc<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
-<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1145:</span>       c7 45 f8 cc cc cc cc    movl   <span class="va">$0</span>xcccccccc,-0x8<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
-<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">114c:</span>       c7 45 fc dd dd dd dd    movl   <span class="va">$0</span>xdddddddd,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
-<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1153:</span>       b8 00 00 00 00          mov    <span class="va">$0</span>x0,%eax</span>
-<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1158:</span>       5d                      pop    %rbp</span>
-<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>    <span class="ex">1159:</span>       c3                      ret</span></code></pre></div>
-<ul>
-<li>The breakpoint will be put at 0x1153. The cfa offset at this
-instruction is 16.</li>
-</ul>
+class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>Location of argv1:</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>   DW_AT_location <span class="op">=</span> DW_OP_fbreg <span class="op">-</span> <span class="dv">36</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>                  <span class="op">=</span> cfa <span class="op">-</span> <span class="dv">36</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>                  <span class="op">=</span> (rbp <span class="op">+</span> <span class="dv">16</span>) <span class="op">-</span> <span class="dv">36</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>                  <span class="op">=</span> rbp <span class="op">-</span> <span class="dv">20</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>Location of argv2:</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>   DW_AT_location <span class="op">=</span> DW_OP_fbreg <span class="op">-</span> <span class="dv">40</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>                  <span class="op">=</span> cfa <span class="op">-</span> <span class="dv">40</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>                  <span class="op">=</span> (rbp <span class="op">+</span> <span class="dv">16</span>) <span class="op">-</span> <span class="dv">40</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>                  <span class="op">=</span> rbp <span class="op">-</span> <span class="dv">24</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>So,</span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>   argv1 locates at (rbp <span class="op">-</span> <span class="dv">20</span>)</span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>   argv2 locates at (rbp <span class="op">-</span> <span class="dv">24</span>)</span></code></pre></div>
 </div>
 </div>
-<div class="columns">
-<div class="column" style="width:50%;">
 <ol start="4" type="1">
-<li>Find DW_AT_location of arguments.</li>
+<li>Dump memory at the calculated addresses.</li>
 </ol>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li>Run to the target instruction.</li>
+</ul>
+<div class="sourceCode" id="cb46"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb main</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span> func</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Dump</span> of assembler code for function func:</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64 </span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000000000000112d</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     push   %rbp</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000000000000112e</span> <span class="op">&lt;</span>+5<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001131</span> <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x14<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001134</span> <span class="op">&lt;</span>+11<span class="op">&gt;</span>:    mov    %esi,-0x18<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001137</span> <span class="op">&lt;</span>+14<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xaaaaaaaa,-0x10<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000000000000113e</span> <span class="op">&lt;</span>+21<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xbbbbbbbb,-0xc<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001145</span> <span class="op">&lt;</span>+28<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xcccccccc,-0x8<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000000000000114c</span> <span class="op">&lt;</span>+35<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xdddddddd,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001153</span> <span class="op">&lt;</span>+42<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x0,%eax</span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001158</span> <span class="op">&lt;</span>+47<span class="op">&gt;</span>:    pop    %rbp</span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000000000001159</span> <span class="op">&lt;</span>+48<span class="op">&gt;</span>:    ret</span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">*func+42</span></span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1, 0x0000555555555153 in func <span class="er">(</span><span class="va">argv1</span><span class="op">=</span>286331153, <span class="va">argv2</span><span class="op">=</span>572662306<span class="kw">)</span> <span class="ex">at</span> main.c:7</span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li>Print argv1 and argv2 based on the calculated addresses.</li>
+</ul>
 <div class="sourceCode" id="cb47"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>a3<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 1 <span class="er">(</span><span class="ex">DW_TAG_formal_parameter</span><span class="kw">)</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>a4<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> <span class="er">(</span><span class="ex">indirect</span> string, offset: 0x5<span class="kw">)</span><span class="bu">:</span> argv1</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>a8<span class="op">&gt;</span>   DW_AT_decl_file   <span class="bu">:</span> 1</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>a8<span class="op">&gt;</span>   DW_AT_decl_line   <span class="bu">:</span> 1</span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>a9<span class="op">&gt;</span>   DW_AT_decl_column <span class="bu">:</span> 14</span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>aa<span class="op">&gt;</span>   DW_AT_type        <span class="bu">:</span> <span class="op">&lt;</span>0x6d<span class="op">&gt;</span></span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>ae<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 5c      <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-36</span><span class="kw">)</span></span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>b1<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 1 <span class="er">(</span><span class="ex">DW_TAG_formal_parameter</span><span class="kw">)</span></span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>b2<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> <span class="er">(</span><span class="ex">indirect</span> string, offset: 0x9e<span class="kw">)</span><span class="bu">:</span> argv2</span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>b6<span class="op">&gt;</span>   DW_AT_decl_file   <span class="bu">:</span> 1</span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>b6<span class="op">&gt;</span>   DW_AT_decl_line   <span class="bu">:</span> 1</span>
-<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>b7<span class="op">&gt;</span>   DW_AT_decl_column <span class="bu">:</span> 25</span>
-<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>b8<span class="op">&gt;</span>   DW_AT_type        <span class="bu">:</span> <span class="op">&lt;</span>0x6d<span class="op">&gt;</span></span>
-<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>bc<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 58      <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-40</span><span class="kw">)</span></span></code></pre></div>
-<ul>
-<li>DW_AT_location of argv1 is (DW_OP_fbreg: -36).</li>
-<li>DW_AT_location of argv2 is (DW_OP_fbreg: -40).</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<ol start="5" type="1">
-<li>Calculate argument addresses.</li>
-</ol>
-<div class="sourceCode" id="cb48"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="ex">argv1</span> addr  = DW_AT_location + CFA_Offset</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> <span class="er">(</span><span class="ex">DW_OP_fbreg</span> <span class="at">-</span> 36<span class="kw">)</span> <span class="ex">+</span> CFA_Offset</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> <span class="er">(</span><span class="ex">rbp</span> <span class="at">-</span> 36<span class="kw">)</span> <span class="ex">+</span> 16</span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> rbp <span class="at">-</span> 20</span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="ex">argv2</span> addr  = DW_AT_location + CFA_Offset</span>
-<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> <span class="er">(</span><span class="ex">DW_OP_fbreg</span> <span class="at">-</span> 40<span class="kw">)</span> <span class="ex">+</span> CFA_Offset</span>
-<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> <span class="er">(</span><span class="ex">rbp</span> <span class="at">-</span> 40<span class="kw">)</span> <span class="ex">+</span> 16</span>
-<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> rbp <span class="at">-</span> 24</span>
-<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<ul>
-<li>argv1 will locate at rbp - 20.</li>
-<li>argv2 will locate at rbp - 24.</li>
-</ul>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Dump</span> of assembler code for function func:</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64 </span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512d</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     push   %rbp</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512e</span> <span class="op">&lt;</span>+5<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555131</span> <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x14<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555134</span> <span class="op">&lt;</span>+11<span class="op">&gt;</span>:    mov    %esi,-0x18<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555137</span> <span class="op">&lt;</span>+14<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xaaaaaaaa,-0x10<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513e</span> <span class="op">&lt;</span>+21<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xbbbbbbbb,-0xc<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555145</span> <span class="op">&lt;</span>+28<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xcccccccc,-0x8<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555514c</span> <span class="op">&lt;</span>+35<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xdddddddd,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x0000555555555153 <span class="op">&lt;</span>+42<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x0,%eax</span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555158</span> <span class="op">&lt;</span>+47<span class="op">&gt;</span>:    pop    %rbp</span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555159</span> <span class="op">&lt;</span>+48<span class="op">&gt;</span>:    ret</span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a><span class="co"># print argv1</span></span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/wx</span> <span class="va">$rbp</span>-20</span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5bc:</span> 0x11111111</span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a><span class="co"># print argv2</span></span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/wx</span> <span class="va">$rbp</span>-24</span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5b8:</span> 0x22222222</span></code></pre></div>
 </div>
 </div>
-<h2 data-number="5.2" id="print-arguments"><span
-class="header-section-number">5.2</span> Print Arguments</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<ol type="1">
-<li>Set breakpoint.</li>
-</ol>
-<div class="sourceCode" id="cb49"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="cf">break</span> <span class="ex">*func+42</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1 at 0x1153: file main.c, line 7.</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">run</span></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Breakpoint</span> 1, func <span class="er">(</span><span class="va">argv1</span><span class="op">=</span>286331153, <span class="va">argv2</span><span class="op">=</span>572662306<span class="kw">)</span> <span class="ex">at</span> main.c:7</span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">disassemble</span></span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Dump</span> of assembler code for function func:</span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555129</span> <span class="op">&lt;</span>+0<span class="op">&gt;</span>:     endbr64 </span>
-<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512d</span> <span class="op">&lt;</span>+4<span class="op">&gt;</span>:     push   %rbp</span>
-<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555512e</span> <span class="op">&lt;</span>+5<span class="op">&gt;</span>:     mov    %rsp,%rbp</span>
-<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555131</span> <span class="op">&lt;</span>+8<span class="op">&gt;</span>:     mov    %edi,-0x14<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
-<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555134</span> <span class="op">&lt;</span>+11<span class="op">&gt;</span>:    mov    %esi,-0x18<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
-<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555137</span> <span class="op">&lt;</span>+14<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xaaaaaaaa,-0x10<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
-<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555513e</span> <span class="op">&lt;</span>+21<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xbbbbbbbb,-0xc<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
-<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555145</span> <span class="op">&lt;</span>+28<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xcccccccc,-0x8<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
-<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x000055555555514c</span> <span class="op">&lt;</span>+35<span class="op">&gt;</span>:    movl   <span class="va">$0</span>xdddddddd,-0x4<span class="er">(</span><span class="ex">%rbp</span><span class="kw">)</span></span>
-<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a><span class="ex">=</span><span class="op">&gt;</span> 0x0000555555555153 <span class="op">&lt;</span>+42<span class="op">&gt;</span>:    mov    <span class="va">$0</span>x0,%eax</span>
-<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555158</span> <span class="op">&lt;</span>+47<span class="op">&gt;</span>:    pop    %rbp</span>
-<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>   <span class="ex">0x0000555555555159</span> <span class="op">&lt;</span>+48<span class="op">&gt;</span>:    ret</span></code></pre></div>
-</div><div class="column" style="width:50%;">
-<ol start="2" type="1">
-<li>Print function arguments.</li>
-</ol>
-<div class="sourceCode" id="cb50"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print argv1</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/wx</span> <span class="va">$rbp</span>-20</span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5bc:</span> 0x11111111</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="co"># print argv2</span></span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/wx</span> <span class="va">$rbp</span>-24</span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5b8:</span> 0x22222222</span></code></pre></div>
-</div>
-</div>
-<h1 data-number="6" id="reverse-local-variables"><span
-class="header-section-number">6</span> Reverse Local Variables</h1>
-<p>Using the same procedure as reversing function arguments.</p>
-<h2 data-number="6.1" id="dwarf-to-variable-addresses"><span
-class="header-section-number">6.1</span> DWARF to Variable
-Addresses</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="sourceCode" id="cb51"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Contents</span> of the .debug_info section:</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>bf<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 2 <span class="er">(</span><span class="ex">DW_TAG_variable</span><span class="kw">)</span></span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>c0<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> a</span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>c7<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 60      <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-32</span><span class="kw">)</span></span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>ca<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 2 <span class="er">(</span><span class="ex">DW_TAG_variable</span><span class="kw">)</span></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>cb<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> b</span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>d2<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 64      <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-28</span><span class="kw">)</span></span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>d5<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 2 <span class="er">(</span><span class="ex">DW_TAG_variable</span><span class="kw">)</span></span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>d6<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> c</span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>dd<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 68      <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-24</span><span class="kw">)</span></span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a> <span class="op">&lt;</span>2<span class="op">&gt;&lt;</span>e0<span class="op">&gt;</span>: <span class="ex">Abbrev</span> Number: 2 <span class="er">(</span><span class="ex">DW_TAG_variable</span><span class="kw">)</span></span>
-<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>e1<span class="op">&gt;</span>   DW_AT_name        <span class="bu">:</span> d</span>
-<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>e8<span class="op">&gt;</span>   DW_AT_location    <span class="bu">:</span> 2 byte block: 91 6c      <span class="er">(</span><span class="ex">DW_OP_fbreg:</span> <span class="at">-20</span><span class="kw">)</span></span></code></pre></div>
-</div><div class="column" style="width:50%;">
-<div class="sourceCode" id="cb52"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="ex">addr</span> of a   = DW_AT_location + CFA_Offset</span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> <span class="er">(</span><span class="ex">DW_OP_fbreg</span> <span class="at">-</span> 32<span class="kw">)</span> <span class="ex">+</span> 16            </span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> rbp <span class="at">-</span> 16</span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="ex">addr</span> of b   = DW_AT_location + CFA_Offset</span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> <span class="er">(</span><span class="ex">DW_OP_fbreg</span> <span class="at">-</span> 28<span class="kw">)</span> <span class="ex">+</span> 16            </span>
-<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> rbp <span class="at">-</span> 12</span>
-<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a><span class="ex">addr</span> of c   = DW_AT_location + CFA_Offset</span>
-<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> <span class="er">(</span><span class="ex">DW_OP_fbreg</span> <span class="at">-</span> 24<span class="kw">)</span> <span class="ex">+</span> 16            </span>
-<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> rbp <span class="at">-</span> 8</span>
-<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a><span class="ex">addr</span> of d   = DW_AT_location + CFA_Offset</span>
-<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> <span class="er">(</span><span class="ex">DW_OP_fbreg</span> <span class="at">-</span> 20<span class="kw">)</span> <span class="ex">+</span> 16            </span>
-<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>            <span class="ex">=</span> rbp <span class="at">-</span> 4</span></code></pre></div>
-</div>
-</div>
-<h2 data-number="6.2" id="print-variables"><span
-class="header-section-number">6.2</span> Print Variables</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="sourceCode" id="cb53"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print a</span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/wx</span> <span class="va">$rbp</span>-16</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5c0:</span> 0xaaaaaaaa</span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a><span class="co"># print b</span></span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/wx</span> <span class="va">$rbp</span>-12</span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5c4:</span> 0xbbbbbbbb</span></code></pre></div>
-</div><div class="column" style="width:50%;">
-<div class="sourceCode" id="cb54"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print c</span></span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/wx</span> <span class="va">$rbp</span>-8</span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5c8:</span> 0xcccccccc</span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="co"># print d</span></span>
-<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">x/wx</span> <span class="va">$rbp</span>-4</span>
-<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="ex">0x7fffffffe5cc:</span> 0xdddddddd</span></code></pre></div>
-</div>
-</div>
-<h1 data-number="7" id="gdb-utilities"><span
-class="header-section-number">7</span> GDB Utilities</h1>
+<h1 data-number="6" id="gdb-utilities"><span
+class="header-section-number">6</span> GDB Utilities</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Print frame info.</p>
-<div class="sourceCode" id="cb55"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> frame</span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Stack</span> level 0, frame at 0x7fffffffe5e0:</span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a> <span class="ex">rip</span> = 0x555555555153 in func <span class="er">(</span><span class="ex">main.c:7</span><span class="kw">);</span> <span class="ex">saved</span> rip = 0x55555555517c</span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a> <span class="ex">called</span> by frame at 0x7fffffffe600</span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a> <span class="bu">source</span> language c.</span>
-<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">Arglist</span> at 0x7fffffffe5d0, args: argv1=286331153, argv2=572662306</span>
-<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a> <span class="ex">Locals</span> at 0x7fffffffe5d0, Previous frame<span class="st">&#39;s sp is 0x7fffffffe5e0</span></span>
-<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a><span class="st"> Saved registers:</span></span>
-<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a><span class="st">  rbp at 0x7fffffffe5d0, rip at 0x7fffffffe5d8</span></span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> frame</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Stack</span> level 0, frame at 0x7fffffffe5e0:</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a> <span class="ex">rip</span> = 0x555555555153 in func <span class="er">(</span><span class="ex">main.c:7</span><span class="kw">);</span> <span class="ex">saved</span> rip = 0x55555555517c</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a> <span class="ex">called</span> by frame at 0x7fffffffe600</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a> <span class="bu">source</span> language c.</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">Arglist</span> at 0x7fffffffe5d0, args: argv1=286331153, argv2=572662306</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a> <span class="ex">Locals</span> at 0x7fffffffe5d0, Previous frame<span class="st">&#39;s sp is 0x7fffffffe5e0</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="st"> Saved registers:</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="st">  rbp at 0x7fffffffe5d0, rip at 0x7fffffffe5d8</span></span></code></pre></div>
 </div><div class="column" style="width:50%;">
 <p>Print function arguments and local variables.</p>
-<div class="sourceCode" id="cb56"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> args</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="ex">argv1</span> = 286331153</span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="ex">argv2</span> = 572662306</span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> locals</span>
-<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a><span class="ex">a</span> = <span class="at">-1431655766</span></span>
-<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a><span class="ex">b</span> = <span class="at">-1145324613</span></span>
-<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a><span class="ex">c</span> = <span class="at">-858993460</span></span>
-<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a><span class="ex">d</span> = <span class="at">-572662307</span></span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> args</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="ex">argv1</span> = 286331153</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="ex">argv2</span> = 572662306</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">gdb</span><span class="kw">)</span> <span class="ex">info</span> locals</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="ex">a</span> = <span class="at">-1431655766</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="ex">b</span> = <span class="at">-1145324613</span></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a><span class="ex">c</span> = <span class="at">-858993460</span></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a><span class="ex">d</span> = <span class="at">-572662307</span></span></code></pre></div>
 </div>
 </div>
 <footer class="footer text-muted">
