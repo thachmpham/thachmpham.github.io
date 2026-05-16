@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Analyze PThread Deadlock</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #cccccc; background-color: #303030; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ffcfaf; } /* Alert */
+    code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bn { color: #dca3a3; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #f0dfaf; } /* ControlFlow */
+    code span.ch { color: #dca3a3; } /* Char */
+    code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+    code span.co { color: #7f9f7f; } /* Comment */
+    code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+    code span.do { color: #7f9f7f; } /* Documentation */
+    code span.dt { color: #dfdfbf; } /* DataType */
+    code span.dv { color: #dcdccc; } /* DecVal */
+    code span.er { color: #c3bf9f; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #c0bed1; } /* Float */
+    code span.fu { color: #efef8f; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+    code span.kw { color: #f0dfaf; } /* Keyword */
+    code span.op { color: #f0efd0; } /* Operator */
+    code span.ot { color: #efef8f; } /* Other */
+    code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+    code span.sc { color: #dca3a3; } /* SpecialChar */
+    code span.ss { color: #cc9393; } /* SpecialString */
+    code span.st { color: #cc9393; } /* String */
+    code span.va { } /* Variable */
+    code span.vs { color: #cc9393; } /* VerbatimString */
+    code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="/html/style/dark.css" />
+  <!-- <script src="../3pp/d3.v7.js"></script> -->
+  <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+          theme: 'dark',
+      });
+  </script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Analyze PThread Deadlock</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#syscall-futex" id="toc-syscall-futex"><span
+class="toc-section-number">1</span> Syscall Futex</a>
+<ul>
+<li><a href="#futex-wait" id="toc-futex-wait"><span
+class="toc-section-number">1.1</span> Futex Wait</a></li>
+<li><a href="#futex-wake" id="toc-futex-wake"><span
+class="toc-section-number">1.2</span> Futex Wake</a></li>
+</ul></li>
+<li><a href="#deadlock" id="toc-deadlock"><span
+class="toc-section-number">2</span> Deadlock</a>
+<ul>
+<li><a href="#self-relock-deadlock" id="toc-self-relock-deadlock"><span
+class="toc-section-number">2.1</span> Self-Relock Deadlock</a></li>
+<li><a href="#abba-deadlock" id="toc-abba-deadlock"><span
+class="toc-section-number">2.2</span> ABBA Deadlock</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="1" id="syscall-futex"><span
+class="header-section-number">1</span> Syscall Futex</h1>
+<p>Syscall futex provides:</p>
+<ul>
+<li>FUTEX_WAIT: The method for a thread to sleep await a value at a
+given address.</li>
+<li>FUTEX_WAKE: The method to wake up thread through the given
+address.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> futex<span class="op">(</span><span class="dt">int</span> <span class="op">*</span>uaddr<span class="op">,</span> <span class="dt">int</span> op<span class="op">,</span> <span class="dt">int</span> val<span class="op">,</span> <span class="dt">const</span> <span class="kw">struct</span> timespec <span class="op">*</span>timeout<span class="op">,</span> <span class="dt">int</span> <span class="op">*</span>uaddr2<span class="op">,</span> <span class="dt">int</span> val3<span class="op">)</span></span></code></pre></div>
+<ul>
+<li>uaddr: target address.</li>
+<li>op: FUTEX_WAIT, FUTEX_WAKE.</li>
+<li>val: behavior depends on parameter op.</li>
+</ul>
+<p>Syscall futex is used to implement pthread mutex.</p>
+<h2 data-number="1.1" id="futex-wait"><span
+class="header-section-number">1.1</span> Futex Wait</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>futex<span class="op">(</span>uaddr<span class="op">,</span> FUTEX_WAIT<span class="op">,</span> val<span class="op">,</span> timeout<span class="op">,</span> <span class="op">...)</span></span></code></pre></div>
+<ul>
+<li>If *uaddr == val, futex lets the thread sleeps awaiting FUTEX_WAKE
+on uaddr.</li>
+<li>Otherwise, no waits, futex returns EAGAIN immediately, the thread
+continues.</li>
+</ul>
+<p><strong>Unit Test</strong>.</p>
+<div class="columns">
+<div class="column">
+<ol type="1">
+<li>futex_wait.c</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;linux/futex.h&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;sys/syscall.h&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;pthread.h&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span><span class="op">*</span> pInt <span class="op">=</span> NULL<span class="op">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span><span class="op">*</span> do_wait<span class="op">(</span><span class="dt">void</span><span class="op">*)</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// wait only if *pInt == 5</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    syscall<span class="op">(</span>SYS_futex<span class="op">,</span> pInt<span class="op">,</span> FUTEX_WAIT_PRIVATE<span class="op">,</span> <span class="dv">5</span><span class="op">,</span> NULL<span class="op">,</span> NULL<span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> argv<span class="op">)</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    pthread_t t1<span class="op">;</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    pInt <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">));</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>pInt <span class="op">=</span> atoi<span class="op">(</span>argv<span class="op">[</span><span class="dv">1</span><span class="op">]);</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    pthread_create<span class="op">(&amp;</span>t1<span class="op">,</span> NULL<span class="op">,</span> do_wait<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    sleep<span class="op">(</span><span class="dv">10</span><span class="op">);</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div><div class="column">
+<ol start="2" type="1">
+<li>Build.</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-g</span> <span class="at">-o</span> futex_wait futex_wait.c <span class="at">-pthread</span></span></code></pre></div>
+<ol start="3" type="1">
+<li>Case <code>*uaddr == val</code>: futex lets the thread sleep
+waits.</li>
+</ol>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> strace <span class="at">-tt</span> <span class="at">-e</span> futex <span class="at">-f</span> ./futex_wait 5</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">strace:</span> Process 7143 attached</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  7143] 11:21:05.931247 futex<span class="er">(</span><span class="ex">0x3bc2e2a0,</span> FUTEX_WAIT_PRIVATE, 5, NULL<span class="kw">)</span> <span class="ex">=</span> <span class="pp">?</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  7143] 11:21:15.931846 +++ exited with 0 +++</span></code></pre></div>
+<ul>
+<li>11:21:05, futex wait, *uaddr == val, so sleep await.</li>
+<li>11:21:15, process exits, thread exits.</li>
+</ul>
+<ol start="4" type="1">
+<li>Case <code>*uaddr != val</code>: futex returns EAGAIN, no
+waits.</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> strace <span class="at">-tt</span> <span class="at">-e</span> futex <span class="at">-f</span> ./futex_wait 4</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">strace:</span> Process 7068 attached</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  7068] 11:18:39.094043 futex<span class="er">(</span><span class="ex">0x289302a0,</span> FUTEX_WAIT_PRIVATE, 5, NULL<span class="kw">)</span> <span class="ex">=</span> <span class="at">-1</span> EAGAIN <span class="er">(</span><span class="ex">Resource</span> temporarily unavailable<span class="kw">)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  7068] 11:18:39.096230 +++ exited with 0 +++</span></code></pre></div>
+<ul>
+<li>11:18:39, futex wait, *uaddr == val, so don’t wait, futex returns
+EAGAIN immediately. Thread continues.</li>
+<li>11:18:39, thread exits after complete entry function.</li>
+</ul>
+</div>
+</div>
+<h2 data-number="1.2" id="futex-wake"><span
+class="header-section-number">1.2</span> Futex Wake</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>futex<span class="op">(</span>uaddr<span class="op">,</span> FUTEX_WAKE<span class="op">,</span> val<span class="op">,</span> _<span class="op">)</span></span></code></pre></div>
+<ul>
+<li>Wakes at most val processes waiting on uaddr.</li>
+</ul>
+<p><strong>Unit Test</strong></p>
+<div class="columns">
+<div class="column">
+<ul>
+<li><ol type="1">
+<li>futex_wake.c</li>
+</ol></li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;linux/futex.h&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;sys/syscall.h&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;pthread.h&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span><span class="op">*</span> pInt <span class="op">=</span> NULL<span class="op">;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span><span class="op">*</span> do_wait<span class="op">(</span><span class="dt">void</span><span class="op">*)</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// wait only if *pInt == 5</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    syscall<span class="op">(</span>SYS_futex<span class="op">,</span> pInt<span class="op">,</span> FUTEX_WAIT_PRIVATE<span class="op">,</span> <span class="dv">5</span><span class="op">,</span> NULL<span class="op">,</span> NULL<span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span><span class="op">*</span> do_wake<span class="op">(</span><span class="dt">void</span><span class="op">*)</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    sleep<span class="op">(</span><span class="dv">10</span><span class="op">);</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// wake at most 1 waiter thread</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    syscall<span class="op">(</span>SYS_futex<span class="op">,</span> pInt<span class="op">,</span> FUTEX_WAKE_PRIVATE<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> NULL<span class="op">,</span> NULL<span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> argv<span class="op">)</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    pthread_t t1<span class="op">,</span> t2<span class="op">;</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    pInt <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">));</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>pInt <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    pthread_create<span class="op">(&amp;</span>t1<span class="op">,</span> NULL<span class="op">,</span> do_wait<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    pthread_create<span class="op">(&amp;</span>t2<span class="op">,</span> NULL<span class="op">,</span> do_wake<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    sleep<span class="op">(</span><span class="dv">20</span><span class="op">);</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div><div class="column">
+<ol start="2" type="1">
+<li>Build.</li>
+</ol>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-g</span> <span class="at">-o</span> futex_wake futex_wake.c <span class="at">-pthread</span></span></code></pre></div>
+<ol start="3" type="1">
+<li>Run.</li>
+</ol>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> strace <span class="ex">-tt</span> <span class="at">-e</span> futex <span class="at">-f</span> ./futex_wake</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">strace:</span> Process 7313 attached</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  7313] 11:26:02.068129 futex<span class="er">(</span><span class="ex">0x2b9752a0,</span> FUTEX_WAIT_PRIVATE, 5, NULL <span class="op">&lt;</span>unfinished ...<span class="op">&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">strace:</span> Process 7314 attached</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  7314] 11:26:12.074906 futex<span class="er">(</span><span class="ex">0x2b9752a0,</span> FUTEX_WAKE_PRIVATE, 1<span class="kw">)</span> <span class="ex">=</span> 1</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  7313] 11:26:12.075414 <span class="op">&lt;</span>... futex resumed<span class="op">&gt;</span><span class="kw">)</span> <span class="ex">=</span> 0</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  7313] 11:26:12.077728 +++ exited with 0 +++</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  7314] 11:26:12.078209 +++ exited with 0 +++</span></code></pre></div>
+<ul>
+<li>11:26:02, thread 7313 sleeps await on 0x2b9752a0.</li>
+<li>11:26:12, thread 7314 send wake-up notification to 0x2b9752a0.</li>
+<li>11:26:12, thread 7313 wakes up and resumes.</li>
+</ul>
+</div>
+</div>
+<h1 data-number="2" id="deadlock"><span
+class="header-section-number">2</span> Deadlock</h1>
+<h2 data-number="2.1" id="self-relock-deadlock"><span
+class="header-section-number">2.1</span> Self-Relock Deadlock</h2>
+<p>Scenario</p>
+<ul>
+<li>Step 1: Thread 1 locks mutex A.</li>
+<li>Step 2: Thread 1 relocks mutex A.</li>
+</ul>
+<p>At step 2, thread 1 sleeps await mutex A. But the mutex is owned by
+thread 1, other threads cannot unlock the mutex. The mutex becomes
+locked forever, so thread 1 sleeps forever.</p>
+<p><strong>Reproduce &amp; Troubleshoot</strong></p>
+<div class="columns">
+<div class="column">
+<ol type="1">
+<li>deadlock_self_relock.c</li>
+</ol>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;pthread.h&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">*</span> argv<span class="op">)</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_t mutex_a<span class="op">;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_init<span class="op">(&amp;</span>mutex_a<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_lock<span class="op">(&amp;</span>mutex_a<span class="op">);</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_lock<span class="op">(&amp;</span>mutex_a<span class="op">);</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-g</span> <span class="at">-o</span> deadlock_self_relock deadlock_self_relock.c <span class="at">-pthread</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./deadlock_self_relock</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># process hangs</span></span></code></pre></div>
+</div><div class="column">
+<ol start="2" type="1">
+<li>Detect self deadlock.</li>
+</ol>
+<ul>
+<li>Trace syscall futex.</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> strace <span class="at">-e</span> futex <span class="at">-f</span> <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> deadlock_self_relock<span class="kw">`</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">strace:</span> Process 9526 attached</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">futex</span><span class="er">(</span><span class="ex">0xffffe8f67ea0,</span> FUTEX_WAIT_PRIVATE, 2, NULL</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># thread 9526 waits for mutex 0xffffe8f67ea0.</span></span></code></pre></div>
+<ul>
+<li>Print mutex content.</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb <span class="at">-batch</span> <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> deadlock_self_relock<span class="kw">`</span> <span class="at">-ex</span> <span class="st">&#39;p *(pthread_mutex_t*)0xffffe8f67ea0&#39;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span> = {__data = {__lock = 2, __count = 0, __owner = 9526, __nusers = 1, __kind = 0, __spins = 0, __list = {__prev = 0x0, __next = 0x0}}, __size = <span class="st">&quot;\002\000\000\000\000\000\000\0006%\000\000\001&quot;</span>, <span class="st">&#39;\000&#39;</span> <span class="op">&lt;</span>repeats 34 times<span class="op">&gt;</span>, __align = 2}</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># mutex 0xffffe8f67ea0 is owned by thread 9526.</span></span></code></pre></div>
+<ul>
+<li>Thead 9526 waits for mutex 0xffffe8f67ea0 which is owned by the
+thread itself.</li>
+</ul>
+<ol start="3" type="1">
+<li>Workaround: Force unlock.</li>
+</ol>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find ID of thread 9526</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb <span class="at">-batch</span> <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> deadlock_self_relock<span class="kw">`</span> <span class="at">-ex</span> <span class="st">&#39;thread find 9526&#39;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 1 has target id <span class="st">&#39;Thread 0xffffa08c9e40 (LWP 9526)&#39;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># thread LWP 9526 has ID 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># unlock the mutex from the owner thread.</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb <span class="at">-batch</span> <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> deadlock_self_relock<span class="kw">`</span> <span class="at">-ex</span> <span class="st">&#39;thread apply 1 call (int) pthread_mutex_unlock((pthread_mutex_t*)0xffffe8f67ea0)&#39;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[Inferior</span> 1 <span class="er">(</span><span class="ex">process</span> 9526<span class="kw">)</span> <span class="ex">detached]</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># After unlock, the thread wakes up, the program continues.</span></span></code></pre></div>
+</div>
+</div>
+<p>Solution: Self-Relock deadlock can be solved by
+PTHREAD_MUTEX_RECURSIVE.</p>
+<h2 data-number="2.2" id="abba-deadlock"><span
+class="header-section-number">2.2</span> ABBA Deadlock</h2>
+<p>Scenario</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Step</span> 1: Thread 1 locks mutex A. <span class="kw">|</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                                <span class="kw">|</span>   <span class="ex">Step</span> 2: Thread 2 locks mutex B.</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Step</span> 3: Thread 1 locks mutex B. <span class="kw">|</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                                <span class="kw">|</span>   <span class="ex">Step</span> 4: Thread 2 locks mutex A. </span></code></pre></div>
+<ul>
+<li>At step 3, thread 1 sleeps await mutex B which is owned by thread
+2.</li>
+<li>At step 4, thread 2 sleeps await mutex A which is owned by thread
+1.</li>
+<li>Both threads sleeps, no longer execute instructions, cannot reach
+the code to unlock mutexes. Program hangs.</li>
+</ul>
+<p><strong>Reproduce &amp; Troubleshoot</strong></p>
+<div class="columns">
+<div class="column">
+<ol type="1">
+<li>deadlock_abba.c</li>
+</ol>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;pthread.h&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>pthread_mutex_t mutex_a<span class="op">,</span> mutex_b<span class="op">;</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span><span class="op">*</span> do_lock_ab<span class="op">(</span><span class="dt">void</span><span class="op">*)</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_lock<span class="op">(&amp;</span>mutex_a<span class="op">);</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_lock<span class="op">(&amp;</span>mutex_b<span class="op">);</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_unlock<span class="op">(&amp;</span>mutex_b<span class="op">);</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_unlock<span class="op">(&amp;</span>mutex_a<span class="op">);</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span><span class="op">*</span> do_lock_ba<span class="op">(</span><span class="dt">void</span><span class="op">*)</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_lock<span class="op">(&amp;</span>mutex_b<span class="op">);</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_lock<span class="op">(&amp;</span>mutex_a<span class="op">);</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_unlock<span class="op">(&amp;</span>mutex_a<span class="op">);</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_unlock<span class="op">(&amp;</span>mutex_b<span class="op">);</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">*</span> argv<span class="op">)</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>    pthread_t t1<span class="op">,</span> t2<span class="op">;</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_init<span class="op">(&amp;</span>mutex_a<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_init<span class="op">(&amp;</span>mutex_b<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>    pthread_create<span class="op">(&amp;</span>t1<span class="op">,</span> NULL<span class="op">,</span> do_lock_ab<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>    pthread_create<span class="op">(&amp;</span>t2<span class="op">,</span> NULL<span class="op">,</span> do_lock_ba<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>    pthread_join<span class="op">(</span>t1<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>    pthread_join<span class="op">(</span>t2<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;done</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gcc <span class="at">-g</span> <span class="at">-o</span> deadlock_abba deadlock_abba.c <span class="at">-pthread</span></span></code></pre></div>
+<ol start="2" type="1">
+<li>Run</li>
+</ol>
+<ul>
+<li>Deadlock ABBA occurs randomly. So, repeatedly run the program until
+deadlock occurs. Terminal will hang on deadlock.</li>
+</ul>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> while true<span class="kw">;</span> <span class="cf">do</span> <span class="ex">./deadlock_abba</span><span class="kw">;</span> <span class="cf">done</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># process hangs</span></span></code></pre></div>
+</div><div class="column">
+<ol start="3" type="1">
+<li>Detech deadlock ABBA.</li>
+</ol>
+<ul>
+<li>Trace syscall futex.</li>
+</ul>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> strace <span class="at">-e</span> futex <span class="at">-f</span> <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> deadlock_abba<span class="kw">`</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">strace:</span> Process 5263 attached with 3 threads</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  5263] futex<span class="er">(</span><span class="ex">0xffffa256f270,</span> FUTEX_WAIT_BITSET<span class="kw">|</span><span class="ex">FUTEX_CLOCK_REALTIME,</span> 5264, NULL, FUTEX_BITSET_MATCH_ANY <span class="op">&lt;</span>unfinished ...<span class="op">&gt;</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  5264] futex<span class="er">(</span><span class="ex">0x420088,</span> FUTEX_WAIT_PRIVATE, 2, NULL <span class="op">&lt;</span>unfinished ...<span class="op">&gt;</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[pid</span>  5265] futex<span class="er">(</span><span class="ex">0x420058,</span> FUTEX_WAIT_PRIVATE, 2, NULL</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># thread 5264 waits for mutex 0x420088.</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># thread 5265 waits for mutex 0x420058.</span></span></code></pre></div>
+<ul>
+<li>Print mutex contents.</li>
+</ul>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb <span class="at">-batch</span> <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> deadlock_abba<span class="kw">`</span> <span class="at">-ex</span> <span class="st">&#39;p *(pthread_mutex_t*)0x420088&#39;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span> = {__data = {__lock = 2, __count = 0, __owner = 5265, __nusers = 1, __kind = 0, __spins = 0, __list = {__prev = 0x0, __next = 0x0}}, __size = <span class="st">&quot;\002\000\000\000\000\000\000\000\221\024\000\000\001&quot;</span>, <span class="st">&#39;\000&#39;</span> <span class="op">&lt;</span>repeats 34 times<span class="op">&gt;</span>, __align = 2}</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb <span class="at">-batch</span> <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> deadlock_abba<span class="kw">`</span> <span class="at">-ex</span> <span class="st">&#39;p *(pthread_mutex_t*)0x420058&#39;</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span> = {__data = {__lock = 2, __count = 0, __owner = 5264, __nusers = 1, __kind = 0, __spins = 0, __list = {__prev = 0x0, __next = 0x0}}, __size = <span class="st">&quot;\002\000\000\000\000\000\000\000\220\024\000\000\001&quot;</span>, <span class="st">&#39;\000&#39;</span> <span class="op">&lt;</span>repeats 34 times<span class="op">&gt;</span>, __align = 2}</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># mutex 0x420088 is owned by thread 5265.</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># mutex 0x420058 is owned by thread 5264.</span></span></code></pre></div>
+<ul>
+<li>Thread 5264 waits for mutex 0x420088 which is owned by 5265. Thread
+5265 waits for mutex 0x420058 which is owned by 5264. The two threads
+waits for mutexes owned by each other.</li>
+</ul>
+<ol start="4" type="1">
+<li>Workaround: Force unlock a mutex.</li>
+</ol>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Unlock the mutex on thread 5264.</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb <span class="at">-batch</span> <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> deadlock_abba<span class="kw">`</span> <span class="at">-ex</span> <span class="st">&#39;thread find 5264&#39;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Thread</span> 2 has target id <span class="st">&#39;Thread _ (LWP 5264)&#39;</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> gdb <span class="at">-batch</span> <span class="at">-p</span> <span class="kw">`</span><span class="fu">pidof</span> deadlock_abba<span class="kw">`</span> <span class="at">-ex</span> <span class="st">&#39;thread apply 2 call (int) pthread_mutex_unlock((pthread_mutex_t*)0x420088)&#39;</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co"># after unlock, deadlock solved, program can continue.</span></span></code></pre></div>
+</div>
+</div>
+<footer class="footer text-muted">
+   <div align="center">      
+      <br>
+      <br>
+      <a href="/index.html"><b>Home</b></a>
+   </div>
+ </footer>
+</body>
+</html>
