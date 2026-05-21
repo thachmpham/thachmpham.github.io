@@ -1,0 +1,2 @@
+- Self-Service Linux: Mastering the Art of Problem Determination. Mark Wilding, Dan Behman.
+- A Bug Hunter's Diary: A Guided Tour Through the Wilds of Software Security. Tobias Klein.
