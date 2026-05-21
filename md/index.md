@@ -1,5 +1,5 @@
 ---
-title: "A Developer Notebook"
+title: "A Developer Diary"
 ---
 
 ## C/C++
