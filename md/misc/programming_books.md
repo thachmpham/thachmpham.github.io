@@ -8,8 +8,9 @@ title: "Programing Books & Blogs"
 ::: {.column width=40%}
 
 - A Bug Hunter's Diary: A Guided Tour Through the Wilds of Software Security by Tobias Klein.
-- Self-Service Linux: Mastering the Art of Problem Determination by Mark Wilding, Dan Behman.
 - [The Fuzzing Book by Andreas Zeller, Rahul Gopinath, Marcel Böhme, Gordon Fraser, Christian Holler](https://www.fuzzingbook.org/).
+- Hacking: The Art of Exploitation by Jon Erickson.
+- Practical Binary Analysis by Dennis Andriesse.
 
 :::
 ::: {.column}
@@ -20,3 +21,5 @@ title: "Programing Books & Blogs"
 :::
 ::::::::::::::
 
+# Troubleshooting
+- Self-Service Linux: Mastering the Art of Problem Determination by Mark Wilding, Dan Behman.
