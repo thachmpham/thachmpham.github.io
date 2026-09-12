@@ -1,5 +1,5 @@
 ---
-title: 'Check and Repair a Filesystem'
+title: 'Repair a Filesystem'
 ---
 
 
@@ -114,3 +114,4 @@ vm$ umount /mnt/vda1
 # References
 - [QEMU Disk HotPlug](https://wiki.ubuntu.com/QemuDiskHotplug).
 - [QEMU Manual](https://www.qemu.org/docs/master/system/qemu-manpage.html).
+- https://www.linux.com/training-tutorials/fun-e2fsck-and-debugfs/
