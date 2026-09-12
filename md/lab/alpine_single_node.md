@@ -133,6 +133,14 @@ container$ ssh root@192.0.0.10
 ```
 
 
+# Shortcuts
+QEMU keys:
+
+- Ctrl + a h: Help Menu
+- Ctrl + a x: Exit
+- Ctrl + a c: Switch between VM console and QEMU CLI.
+
+
 # References
 - [Alpine Installation](https://wiki.alpinelinux.org/wiki/Installation)
 - [Alpine QEMU](https://wiki.alpinelinux.org/wiki/QEMU)
