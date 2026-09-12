@@ -5,6 +5,7 @@ title: "A Developer Diary"
 
 ## Lab
 - [Alpine Single Node](/html/lab/alpine_single_node.html)
+- [Alpine Two Nodes](/html/lab/alpine_two_nodes.html)
 
 
 

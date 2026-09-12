@@ -112,7 +112,7 @@ iface eth1 inet static
 vm$ rc-service networking restart
 
 vm$ ip addr show
-3: eth1: inet 192.0.0.3/24 scope global eth1
+eth1: inet 192.0.0.10
 ```
 
 
