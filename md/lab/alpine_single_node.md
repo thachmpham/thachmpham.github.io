@@ -138,7 +138,7 @@ QEMU keys:
 
 - Ctrl + a h: Help Menu
 - Ctrl + a x: Exit
-- Ctrl + a c: Switch between VM console and QEMU CLI.
+- Ctrl + a c: Switch between VM console and QEMU monitor.
 
 
 # References
