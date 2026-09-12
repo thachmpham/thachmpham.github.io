@@ -9,6 +9,9 @@ title: "A Developer Diary"
 - [PXE Boot](/html/lab/pxeboot.html)
 
 
+# Sysadmin
+- [Check and Repair a Filesystem](/html/sysadmin/filesystem_repair.html)
+
 ## C/C++
 - [Reverse the Stack Frame](/html/cpp/reverse_stack.html)
 - [Analyze PThread Deadlock](/html/cpp/pthread_deadlock.html)
