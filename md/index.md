@@ -2,7 +2,12 @@
 title: "A Developer Diary"
 ---
 
+
+## Lab
+- [Alpine Single Node](/html/lab/alpine_single_node.html)
+
+
+
 ## C/C++
 - [Reverse the Stack Frame](/html/cpp/reverse_stack.html)
 - [Analyze PThread Deadlock](/html/cpp/pthread_deadlock.html)
-
