@@ -127,7 +127,7 @@ vm2$ setup-alpine
 # - ssh key:    none
 # - disk:       sda, sys
 
-vm1$ poweroff
+vm2$ poweroff
 ```
 
 ```sh
@@ -152,14 +152,14 @@ iface eth1 inet static
 ```
 
 ```sh
-vm1$ rc-service networking restart
+vm2$ rc-service networking restart
 
-vm1$ ip addr show
+vm2$ ip addr show
 eth1: inet 192.0.0.20
 ```
 
 
-# Check
+## Check
 Check SSH.
 ```sh
 container$ ssh root@192.0.0.10

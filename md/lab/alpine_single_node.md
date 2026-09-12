@@ -66,7 +66,7 @@ container$ ./create_vm.sh
 
 ```sh
 vm$ setup-alpine
-# - hostname:   vm1
+# - hostname:   vm
 # - interface:  eth0
 # - ipv4 addr:  dhcp
 # - ipv6 addr:  auto
