@@ -109,7 +109,7 @@ vm$ mount /dev/vda1 /mnt/vda1
 # Corrupt & Repair Filesystem
 Filesystems can be corrupted in many ways. This section will focus on the inodes.
 
-## Orphaned Files
+## Orphaned File
 The inode link count is the number of filenames or hard links that point to the inode. An inode with a zero link count is known as an orphaned file. The fsck considers an orphaned file as a incomplete deletion error.
 
 
