@@ -41,7 +41,7 @@ PXE Server            PXE Client
 # PXE Server
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
-host$ cd lab/pxe/use/setup-02
+host$ cd lab/pxe/setup-2
 ```
 
 ```sh

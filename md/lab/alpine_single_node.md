@@ -49,7 +49,7 @@ Container               VM
 ## Create Container
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
-host$ cd lab/alpine/use/single-node
+host$ cd lab/alpine/1-node
 ```
 
 ```sh

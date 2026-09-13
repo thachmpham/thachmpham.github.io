@@ -37,7 +37,7 @@ Container               VM1                  VM2
 ## Setup Container
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
-host$ cd lab/alpine/use/two-nodes
+host$ cd lab/alpine/2-nodes
 ```
 
 ```sh
