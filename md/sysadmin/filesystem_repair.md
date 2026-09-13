@@ -1,5 +1,5 @@
 ---
-title: 'Repair a Filesystem'
+title: 'Corrupt & Repair a Filesystem'
 ---
 
 
@@ -93,7 +93,7 @@ vda    253:0    0    2G  0 disk
 vm$ mkfs.ext4 /dev/vda1
 ```
 
-- Check filesystem.
+- Check.
 ```sh
 vm$ fsck -fn /dev/vda1
 ```
@@ -114,4 +114,5 @@ vm$ umount /mnt/vda1
 # References
 - [QEMU Disk HotPlug](https://wiki.ubuntu.com/QemuDiskHotplug).
 - [QEMU Manual](https://www.qemu.org/docs/master/system/qemu-manpage.html).
-- https://www.linux.com/training-tutorials/fun-e2fsck-and-debugfs/
+- [Fun with fsck and debugfs](https://www.linux.com/training-tutorials/fun-e2fsck-and-debugfs).
+- [The debugfs Manual](https://man7.org/linux/man-pages/man8/debugfs.8.html).

@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc 3.11" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Repair a Filesystem</title>
+  <title>Corrupt &amp; Repair a Filesystem</title>
   <style>
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -102,7 +102,7 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Repair a Filesystem</h1>
+<h1 class="title">Corrupt &amp; Repair a Filesystem</h1>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -204,7 +204,7 @@ class="header-section-number">2.2</span> Create Filesystem</h2>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> mkfs.ext4 /dev/vda1</span></code></pre></div>
 <ul>
-<li>Check filesystem.</li>
+<li>Check.</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> fsck <span class="at">-fn</span> /dev/vda1</span></code></pre></div>
 <ul>
@@ -226,6 +226,11 @@ HotPlug</a>.</li>
 <li><a
 href="https://www.qemu.org/docs/master/system/qemu-manpage.html">QEMU
 Manual</a>.</li>
+<li><a
+href="https://www.linux.com/training-tutorials/fun-e2fsck-and-debugfs">Fun
+with fsck and debugfs</a>.</li>
+<li><a href="https://man7.org/linux/man-pages/man8/debugfs.8.html">The
+debugfs Manual</a>.</li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">      

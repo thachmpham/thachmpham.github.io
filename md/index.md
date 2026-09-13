@@ -10,7 +10,7 @@ title: "A Developer Diary"
 
 
 ## Sysadmin
-- [Repair a Filesystem](/html/sysadmin/filesystem_repair.html)
+- [Corrupt & Repair a Filesystem](/html/sysadmin/filesystem_repair.html)
 
 ## C/C++
 - [Reverse the Stack Frame](/html/cpp/reverse_stack.html)
