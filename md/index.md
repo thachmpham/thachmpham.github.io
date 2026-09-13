@@ -3,7 +3,7 @@ title: "A Developer Diary"
 ---
 
 :::::::::::::: {.columns}
-::: {.column width=30%}
+::: {.column width=40%}
 
 ## 1. Lab
 **QEMU**
@@ -14,20 +14,20 @@ title: "A Developer Diary"
 
 **Docker**
 
-- [Iproute2: 2 Nodes + 1 Router](/html/lab/iproute2_setup_1.html)
+- [Iproute: 2 Nodes + 1 Router](/html/lab/iproute_2n1r.html)
 
 :::
-::: {.column width=40%}
+::: {.column width=60%}
 
 ## 2. Reproduce & Troubleshoot
 - [Corrupt & Repair Filesystem](/html/sysadmin/filesystem_repair.html)
 - [Analyze PThread Deadlock](/html/cpp/pthread_deadlock.html)
 
-:::
-::: {.column width=30%}
+<br>
 
 ## 3. Procedure
 - [Reverse the Stack Frame](/html/cpp/reverse_stack.html)
 
 :::
 ::::::::::::::
+
