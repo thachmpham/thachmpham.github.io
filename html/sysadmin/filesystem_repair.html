@@ -116,8 +116,15 @@ class="toc-section-number">2.1</span> Create VM</a></li>
 <li><a href="#create-filesystem" id="toc-create-filesystem"><span
 class="toc-section-number">2.2</span> Create Filesystem</a></li>
 </ul></li>
+<li><a href="#corrupt-repair-filesystem"
+id="toc-corrupt-repair-filesystem"><span
+class="toc-section-number">3</span> Corrupt &amp; Repair Filesystem</a>
+<ul>
+<li><a href="#orphaned-files" id="toc-orphaned-files"><span
+class="toc-section-number">3.1</span> Orphaned Files</a></li>
+</ul></li>
 <li><a href="#references" id="toc-references"><span
-class="toc-section-number">3</span> References</a></li>
+class="toc-section-number">4</span> References</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="overview"><span
@@ -211,15 +218,159 @@ class="header-section-number">2.2</span> Create Filesystem</h2>
 <li>Mount.</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> mkdir /mnt/vda1</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> mount /dev/vda1 /mnt/vda1</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create test files</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> echo hello <span class="op">&gt;</span> /mnt/vda1/hello</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> echo world <span class="op">&gt;</span> /mnt/vda1/world</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> umount /mnt/vda1</span></code></pre></div>
-<h1 data-number="3" id="references"><span
-class="header-section-number">3</span> References</h1>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> mount /dev/vda1 /mnt/vda1</span></code></pre></div>
+<h1 data-number="3" id="corrupt-repair-filesystem"><span
+class="header-section-number">3</span> Corrupt &amp; Repair
+Filesystem</h1>
+<p>Filesystems can be corrupted in many ways. This section will focus on
+the inodes.</p>
+<h2 data-number="3.1" id="orphaned-files"><span
+class="header-section-number">3.1</span> Orphaned Files</h2>
+<p>The inode link count is the number of filenames or hard links that
+point to the inode. An inode with a zero link count is known as an
+orphaned file. The fsck considers an orphaned file as a incomplete
+deletion error.</p>
+<ul>
+<li>Create test files.</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> echo <span class="st">&#39;Hello A&#39;</span> <span class="op">&gt;</span> /mnt/vda1/file_a</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> echo <span class="st">&#39;Hello B&#39;</span> <span class="op">&gt;</span> /mnt/vda1/file_b</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> echo <span class="st">&#39;Hello C&#39;</span> <span class="op">&gt;</span> /mnt/vda1/file_c</span></code></pre></div>
+<ul>
+<li>Unmount to debugfs.</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> umount /mnt/vda1</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> debugfs <span class="at">-w</span> /dev/vda1</span></code></pre></div>
+<ul>
+<li>Check file info.</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="fu">ls</span> <span class="at">-l</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   inode   filetype &amp; mode       link_count      uid    gid      size    last modification   name</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#           (octal)</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      <span class="ex">2</span>     40755               <span class="er">(</span><span class="ex">2</span><span class="kw">)</span>             <span class="ex">0</span>      0        4096    13-Sep-2026 10:04   .</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>      <span class="ex">2</span>     40755               <span class="er">(</span><span class="ex">2</span><span class="kw">)</span>             <span class="ex">0</span>      0        4096    13-Sep-2026 10:04   ..</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>     <span class="ex">11</span>     100644              <span class="er">(</span><span class="ex">1</span><span class="kw">)</span>             <span class="ex">0</span>      0        8       13-Sep-2026 10:04   file_a</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>     <span class="ex">13</span>     100644              <span class="er">(</span><span class="ex">1</span><span class="kw">)</span>             <span class="ex">0</span>      0        8       13-Sep-2026 10:04   file_b</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>     <span class="ex">14</span>     100644              <span class="er">(</span><span class="ex">1</span><span class="kw">)</span>             <span class="ex">0</span>      0        8       13-Sep-2026 10:04   file_c</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># filetype &amp; mode: 100644</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     - 10 : file type</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     -  0 : special permission</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">#     - 644: owner,group,other permission</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="ex">show_inode_info</span> file_a</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Inode:</span> 11   Type: regular    Mode:  0644   Flags: 0x80000</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Generation:</span> 3585892460    Version: 0x00000000:00000002</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ex">User:</span>     0   Group:     0   Project:     0   Size: 8</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">File</span> ACL: 0</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Links:</span> 1   Blockcount: 8</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Fragment:</span>  Address: 0    Number: 0    Size: 0</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a> <span class="ex">ctime:</span> 0x6aa67531:d12564e0 <span class="at">--</span> Sun Sep 13 10:04:33 2026</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a> <span class="ex">atime:</span> 0x6aa67531:d0e85bdc <span class="at">--</span> Sun Sep 13 10:04:33 2026</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a> <span class="ex">mtime:</span> 0x6aa67531:d12564e0 <span class="at">--</span> Sun Sep 13 10:04:33 2026</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="ex">crtime:</span> 0x6aa67531:d0e85bdc <span class="at">--</span> Sun Sep 13 10:04:33 2026</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Size</span> of extra inode fields: 32</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Inode</span> checksum: 0x806f8cfd</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="ex">EXTENTS:</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">0</span><span class="kw">)</span><span class="ex">:33280</span></span></code></pre></div>
+<ul>
+<li>Set link count to zero.</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="ex">set_inode_field</span> file_a links_count 0</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="ex">show_inode_info</span> file_a</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Inode:</span> 11   Type: regular    Mode:  0644   Flags: 0x80000</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Generation:</span> 3585892460    Version: 0x00000000:00000002</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">User:</span>     0   Group:     0   Project:     0   Size: 8</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="ex">File</span> ACL: 0</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Links:</span> 0   Blockcount: 8</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Fragment:</span>  Address: 0    Number: 0    Size: 0</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a> <span class="ex">ctime:</span> 0x6aa67531:d12564e0 <span class="at">--</span> Sun Sep 13 10:04:33 2026</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a> <span class="ex">atime:</span> 0x6aa67531:d0e85bdc <span class="at">--</span> Sun Sep 13 10:04:33 2026</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a> <span class="ex">mtime:</span> 0x6aa67531:d12564e0 <span class="at">--</span> Sun Sep 13 10:04:33 2026</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="ex">crtime:</span> 0x6aa67531:d0e85bdc <span class="at">--</span> Sun Sep 13 10:04:33 2026</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Size</span> of extra inode fields: 32</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Inode</span> checksum: 0x806f8cfd</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="ex">EXTENTS:</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">0</span><span class="kw">)</span><span class="ex">:33280</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="ex">quit</span></span></code></pre></div>
+<ul>
+<li>Check fsck.</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> fsck <span class="at">-fn</span> /dev/vda1</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 1: Checking inodes, blocks, and sizes</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Deleted</span> inode 11 has zero dtime.  Fix<span class="pp">?</span> no</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 2: Checking directory structure</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Entry</span> <span class="st">&#39;file_a&#39;</span> in / <span class="er">(</span><span class="ex">2</span><span class="kw">)</span> <span class="ex">has</span> deleted/unused inode 11.  Clear<span class="pp">?</span> no</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 3: Checking directory connectivity</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 4: Checking reference counts</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 5: Checking group summary information</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="ex">Block</span> bitmap differences:  <span class="at">-33280</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Fix?</span> no</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="ex">Inode</span> bitmap differences:  <span class="at">-11</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="ex">Fix?</span> no</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="ex">/dev/vda1:</span> <span class="pp">**********</span> WARNING: Filesystem still has errors <span class="pp">**********</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="ex">/dev/vda1:</span> 14/65536 files <span class="er">(</span><span class="ex">0.0%</span> non-contiguous<span class="kw">)</span><span class="ex">,</span> 13018/262144 blocks</span></code></pre></div>
+<ul>
+<li>Repair with fsck.</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> fsck <span class="at">-f</span> /dev/vda1 </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 1: Checking inodes, blocks, and sizes</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Deleted</span> inode 11 has zero dtime.  Fix<span class="op">&lt;</span>y<span class="op">&gt;</span><span class="pp">?</span> yes</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 2: Checking directory structure</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Entry</span> <span class="st">&#39;file_a&#39;</span> in / <span class="er">(</span><span class="ex">2</span><span class="kw">)</span> <span class="ex">has</span> deleted/unused inode 11.  Clear<span class="op">&lt;</span>y<span class="op">&gt;</span><span class="pp">?</span> yes</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 3: Checking directory connectivity</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="ex">/lost+found</span> not found.  Create<span class="op">&lt;</span>y<span class="op">&gt;</span><span class="pp">?</span> yes</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 4: Checking reference counts</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 5: Checking group summary information</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Block</span> bitmap differences:  <span class="at">-33280</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="ex">Fix</span><span class="op">&lt;</span>y<span class="op">&gt;</span><span class="pp">?</span> yes</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Free</span> blocks count wrong for group <span class="co">#1 (32636, counted=32637).</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Fix</span><span class="op">&lt;</span>y<span class="op">&gt;</span><span class="pp">?</span> yes</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="ex">Free</span> blocks count wrong <span class="er">(</span><span class="ex">249125,</span> counted=249126<span class="kw">)</span><span class="bu">.</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="ex">Fix</span><span class="op">&lt;</span>y<span class="op">&gt;</span><span class="pp">?</span> yes</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="ex">Free</span> inodes count wrong for group <span class="co">#0 (8177, counted=8178).</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="ex">Fix</span><span class="op">&lt;</span>y<span class="op">&gt;</span><span class="pp">?</span> yes</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="ex">Free</span> inodes count wrong <span class="er">(</span><span class="ex">65521,</span> counted=65522<span class="kw">)</span><span class="bu">.</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="ex">Fix</span><span class="op">&lt;</span>y<span class="op">&gt;</span><span class="pp">?</span> yes</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="ex">/dev/vda1:</span> <span class="pp">*****</span> FILE SYSTEM WAS MODIFIED <span class="pp">*****</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="ex">/dev/vda1:</span> 14/65536 files <span class="er">(</span><span class="ex">0.0%</span> non-contiguous<span class="kw">)</span><span class="ex">,</span> 13018/262144 blocks</span></code></pre></div>
+<ul>
+<li>Post check.</li>
+</ul>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> fsck <span class="at">-fn</span> /dev/vda1 </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 1: Checking inodes, blocks, and sizes</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 2: Checking directory structure</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 3: Checking directory connectivity</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 4: Checking reference counts</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 5: Checking group summary information</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="ex">/dev/vda1:</span> 14/65536 files <span class="er">(</span><span class="ex">0.0%</span> non-contiguous<span class="kw">)</span><span class="ex">,</span> 13018/262144 blocks</span></code></pre></div>
+<ul>
+<li>After repair with fsck, the orphaned file (file_a) is deleted.</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> mount /dev/vda1 /mnt/vda1</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> tree /mnt/vda1</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">/mnt/vda1</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> file_b</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> file_c</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> lost+found</span></code></pre></div>
+<h1 data-number="4" id="references"><span
+class="header-section-number">4</span> References</h1>
 <ul>
 <li><a href="https://wiki.ubuntu.com/QemuDiskHotplug">QEMU Disk
 HotPlug</a>.</li>
@@ -231,6 +382,11 @@ href="https://www.linux.com/training-tutorials/fun-e2fsck-and-debugfs">Fun
 with fsck and debugfs</a>.</li>
 <li><a href="https://man7.org/linux/man-pages/man8/debugfs.8.html">The
 debugfs Manual</a>.</li>
+<li><a href="https://man7.org/linux/man-pages/man7/inode.7.html">The
+inode Manual</a>.</li>
+<li><a
+href="https://github.com/tytso/e2fsprogs/blob/master/debugfs">Source
+code debugfs</a>.</li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">      
