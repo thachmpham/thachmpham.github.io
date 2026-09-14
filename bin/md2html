@@ -40,7 +40,9 @@ export -f generate_post_notoc
 
 workspace=$(git rev-parse --show-toplevel)
 
-# ====  index
+
+
+# ====  generate index.html
 pandoc --from markdown --to html \
     --css /html/style/dark.css \
     --include-in-header ${workspace}/bin/header.html \
@@ -49,7 +51,7 @@ pandoc --from markdown --to html \
     --output ${workspace}/index.html \
     ${workspace}/md/index.md
 
-# ====  about
+# ====  generate about.html
 # pandoc --from markdown --to html \
 #     --css /html/style/dark.css \
 #     --include-in-header ${workspace}/bin/header.html \
@@ -58,7 +60,8 @@ pandoc --from markdown --to html \
 #     --output ${workspace}/html/about.html \
 #     ${workspace}/md/about.md
 
-# ====  posts
+
+# ====  generate html posts, from changed markdown files
 cd ${workspace}
 
 {
@@ -75,4 +78,6 @@ cd ${workspace}
     
 done
 
-# find "${workspace}/md/ref" -name "*.md" -exec bash -c 'generate_post_notoc $1' _ {} \;
+
+# ====  generate html post, from all markdown files
+find "${workspace}/md" -name "*.md" -exec bash -c 'generate_post $1' _ {} \;
