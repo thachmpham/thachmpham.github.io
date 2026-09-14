@@ -90,6 +90,10 @@ h2$ ping 10.0.0.2
 
 - Check rt.
 ```sh
+$ docker exec -it rt bash
+```
+
+```sh
 rt$ ip -br addr
 eth0@if129       UP             10.0.0.254/24
 eth1@if130       UP             20.0.0.254/24

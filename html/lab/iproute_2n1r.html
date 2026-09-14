@@ -196,12 +196,13 @@ class="header-section-number">2.2</span> Check Connection</h2>
 <ul>
 <li>Check rt.</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rt$</span> ip <span class="at">-br</span> addr</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">eth0@if129</span>       UP             10.0.0.254/24</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">eth1@if130</span>       UP             20.0.0.254/24</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">rt$</span> sysctl net.ipv4.ip_forward</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">net.ipv4.ip_forward</span> = 1</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker exec <span class="at">-it</span> rt bash</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rt$</span> ip <span class="at">-br</span> addr</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">eth0@if129</span>       UP             10.0.0.254/24</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">eth1@if130</span>       UP             20.0.0.254/24</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">rt$</span> sysctl net.ipv4.ip_forward</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">net.ipv4.ip_forward</span> = 1</span></code></pre></div>
 <h1 data-number="3" id="references"><span
 class="header-section-number">3</span> References</h1>
 <ul>
