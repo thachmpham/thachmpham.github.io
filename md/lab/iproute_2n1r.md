@@ -38,7 +38,7 @@ title: 'Iproute: 2 Nodes + 1 Router'
 
 
 # Setup
-## Setup Cluster
+## Create Cluster
 - Clone code.
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
