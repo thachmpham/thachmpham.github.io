@@ -33,7 +33,7 @@ title: Alpine Single Node
 ```go
 
 Container               VM
-192.0.0.2            192.0.0.10
+192.0.0.254         192.0.0.10
    br0                  eth1
     +                    +
     +--------------------+

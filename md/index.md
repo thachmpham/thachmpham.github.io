@@ -8,8 +8,8 @@ title: "A Developer Diary"
 ## 1. Lab
 **QEMU**
 
-- [Alpine 1 Node](/html/lab/alpine_single_node.html)
-- [Alpine 2 Nodes](/html/lab/alpine_two_nodes.html)
+- [Alpine 1 Node](/html/lab/alpine_1n.html)
+- [Alpine 2 Nodes](/html/lab/alpine_2n.html)
 - [PXE Boot](/html/lab/pxeboot.html)
 
 **Docker**

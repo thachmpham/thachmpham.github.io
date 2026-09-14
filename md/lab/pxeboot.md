@@ -24,9 +24,9 @@ title: PXE Boot
 ```go
 
 
-PXE Server            PXE Client
-(Container)             (VM)
-192.0.0.2            192.0.0.1XX
+PXE Server           PXE Client
+(Container)           (QEMU VM)
+192.0.0.254           192.0.0.X
    br0                  eth1
     +                    +
     +--------------------+
@@ -76,14 +76,14 @@ allow booting;
 allow bootp;
 
 subnet 192.0.0.0 netmask 255.255.255.0 {
-    range 192.0.0.100 192.0.0.150;          # range for client address
+    range 192.0.0.2 192.0.0.50;             # range for client address
     option broadcast-address 192.0.0.255;
 
-    next-server 192.0.0.2;                  # where is boot file
+    next-server 192.0.0.254;                # boot server IP
     option subnet-mask 255.255.255.0;
     filename "/pxelinux.0";                 # boot file
 }
-# ---------------------------------------- #
+# ----------------------------------------  #
 ```
 
 
