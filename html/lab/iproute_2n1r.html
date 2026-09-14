@@ -109,7 +109,13 @@
 <li><a href="#overview" id="toc-overview"><span
 class="toc-section-number">1</span> Overview</a></li>
 <li><a href="#setup" id="toc-setup"><span
-class="toc-section-number">2</span> Setup</a></li>
+class="toc-section-number">2</span> Setup</a>
+<ul>
+<li><a href="#setup-cluster" id="toc-setup-cluster"><span
+class="toc-section-number">2.1</span> Setup Cluster</a></li>
+<li><a href="#check-connection" id="toc-check-connection"><span
+class="toc-section-number">2.2</span> Check Connection</a></li>
+</ul></li>
 <li><a href="#references" id="toc-references"><span
 class="toc-section-number">3</span> References</a></li>
 </ul>
@@ -121,9 +127,9 @@ class="header-section-number">1</span> Overview</h1>
 <ul>
 <li>Each node is a docker container:
 <ul>
-<li>H1: Host 1.</li>
-<li>H2: Host 2.</li>
-<li>RT: Router, forward messages between hosts.</li>
+<li>H1: Node, host 1.</li>
+<li>H2: Node, host 2.</li>
+<li>RT: Router, forward messages between node.</li>
 </ul></li>
 <li>Allow transfer messages through the below paths:
 <ul>
@@ -136,65 +142,66 @@ class="header-section-number">1</span> Overview</h1>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> H1                 <span class="op">|</span>                     <span class="op">|</span>                   H2 <span class="op">|</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>            $eth0 <span class="op">+</span> <span class="op">|</span>                     <span class="op">|</span> <span class="op">+</span> $eth0              <span class="op">|</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>      <span class="fl">10.0</span><span class="er">.0.2</span><span class="op">/</span><span class="dv">24</span> <span class="op">|</span> <span class="op">|</span>                     <span class="op">|</span> <span class="op">|</span> <span class="fl">20.0</span><span class="er">.0.2</span><span class="op">/</span><span class="dv">24</span>        <span class="op">|</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                  <span class="op">|</span> <span class="op">|</span>                     <span class="op">|</span> <span class="op">|</span>                    <span class="op">|</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">+------------------|-+</span>                     <span class="op">+-|--------------------+</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                   <span class="op">|</span>                         <span class="op">|</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">+------------------|-------------------------|--------------------+</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> RT <span class="op">(</span>router<span class="op">)</span>      <span class="op">|</span>                         <span class="op">|</span>                    <span class="op">|</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>            $eth0 <span class="op">+</span>                         <span class="op">+</span> $eth1              <span class="op">|</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>      <span class="fl">10.0</span><span class="er">.2.100</span><span class="op">/</span><span class="dv">24</span>                         <span class="fl">20.0</span><span class="er">.0.100</span><span class="op">/</span><span class="dv">24</span>        <span class="op">|</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>                                                                 <span class="op">|</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">+-----------------------------------------------------------------+</span></span></code></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">+------------------|-+</span>                     <span class="op">+-|--------------------+</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                   <span class="op">|</span>                         <span class="op">|</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="op">+------------------|-------------------------|--------------------+</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> RT               <span class="op">|</span>                         <span class="op">|</span>                    <span class="op">|</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>            $eth0 <span class="op">+</span>                         <span class="op">+</span> $eth1              <span class="op">|</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>      <span class="fl">10.0</span><span class="er">.2.254</span><span class="op">/</span><span class="dv">24</span>                         <span class="fl">20.0</span><span class="er">.0.254</span><span class="op">/</span><span class="dv">24</span>        <span class="op">|</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="op">+-----------------------------------------------------------------+</span></span></code></pre></div>
 </div>
 </div>
 <h1 data-number="2" id="setup"><span
 class="header-section-number">2</span> Setup</h1>
+<h2 data-number="2.1" id="setup-cluster"><span
+class="header-section-number">2.1</span> Setup Cluster</h2>
 <ul>
 <li>Clone code.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> git clone https://github.com/thachmpham/lab.git</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cd lab/iproute2/2n1r</span></code></pre></div>
 <ul>
-<li>Build nodes.</li>
+<li>Build nodes, networks.</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose build</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose up <span class="at">--detach</span></span></code></pre></div>
+<h2 data-number="2.2" id="check-connection"><span
+class="header-section-number">2.2</span> Check Connection</h2>
 <ul>
 <li>Check h1.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec <span class="at">-it</span> h1 bash</span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h1$</span> ip route show</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">default</span> via 10.0.0.1 dev eth0</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">10.0.0.0/24</span> dev eth0 proto kernel scope link src 10.0.0.2</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">20.0.0.0/24</span> via 10.0.0.100 dev eth0</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">h1$</span> ip route get 20.0.0.2</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="ex">20.0.0.2</span> via 10.0.0.100 dev eth0 src 10.0.0.2 uid 0</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ex">h1$</span> ping <span class="at">-c3</span> 20.0.0.2</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="ex">64</span> bytes from 20.0.0.2: icmp_seq=1 ttl=63 time=0.178 ms</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="ex">h1$</span> traceroute <span class="at">-n</span> 20.0.0.2</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a> <span class="ex">1</span>  10.0.0.100  1.301 ms  1.119 ms  1.071 ms</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a> <span class="ex">2</span>  20.0.0.2  1.031 ms  0.931 ms  0.877 ms</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h1$</span> ip <span class="at">-br</span> addr</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">eth0@if128</span>       UP             10.0.0.2/24</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">h1$</span> traceroute <span class="at">-n</span> 20.0.0.2</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a> <span class="ex">1</span>  10.0.0.254  0.705 ms  0.560 ms  0.529 ms</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">2</span>  20.0.0.2  0.506 ms  0.402 ms  0.367 ms</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">h1$</span> ping 20.0.0.2</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ex">64</span> bytes from 20.0.0.2: icmp_seq=1 ttl=63 time=0.133 ms</span></code></pre></div>
 <ul>
 <li>Check h2.</li>
 </ul>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec <span class="at">-it</span> h2 bash</span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> ip route show</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">default</span> via 20.0.0.1 dev eth0</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">10.0.0.0/24</span> via 20.0.0.100 dev eth0</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">20.0.0.0/24</span> dev eth0 proto kernel scope link src 20.0.0.2</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> ip route get 10.0.0.2</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">10.0.0.2</span> via 20.0.0.100 dev eth0 src 20.0.0.2 uid 0</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> ping <span class="at">-c3</span> 10.0.0.2</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ex">64</span> bytes from 10.0.0.2: icmp_seq=1 ttl=63 time=0.258 ms</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> traceroute <span class="at">-n</span> 10.0.0.2</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a> <span class="ex">1</span>  20.0.0.100  1.403 ms  1.228 ms  1.182 ms</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a> <span class="ex">2</span>  10.0.0.2  1.141 ms  0.977 ms  0.920 ms</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> ip <span class="at">-br</span> addr</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">eth0@if127</span>       UP             20.0.0.2/24</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> traceroute <span class="at">-n</span> 10.0.0.2</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a> <span class="ex">1</span>  20.0.0.254  1.501 ms  1.291 ms  1.257 ms</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">2</span>  10.0.0.2  1.233 ms  1.160 ms  1.126 ms</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> ping 10.0.0.2</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="ex">64</span> bytes from 10.0.0.2: icmp_seq=1 ttl=63 time=0.314 ms</span></code></pre></div>
+<ul>
+<li>Check rt.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rt$</span> ip <span class="at">-br</span> addr</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">eth0@if129</span>       UP             10.0.0.254/24</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">eth1@if130</span>       UP             20.0.0.254/24</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">rt$</span> sysctl net.ipv4.ip_forward</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">net.ipv4.ip_forward</span> = 1</span></code></pre></div>
 <h1 data-number="3" id="references"><span
 class="header-section-number">3</span> References</h1>
 <ul>
