@@ -80,4 +80,4 @@ done
 
 
 # ====  generate html post, from all markdown files
-find "${workspace}/md" -name "*.md" -exec bash -c 'generate_post $1' _ {} \;
+# find "${workspace}/md" -name "*.md" -exec bash -c 'generate_post $1' _ {} \;
