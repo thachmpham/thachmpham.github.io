@@ -8,16 +8,28 @@ title:  'Thach Pham'
 <br>
 <br>
 
-*Hello and a warm welcome. Thank you for taking time to visit.*  
+:::::::::::::: {.columns}
+::: {.column width=10%}
+
+
+:::
+::: {.column width=40%}
+
+*Hi & a warm welcome. Thanks for visiting.*  
   
-I'm **Thach**, a software developer. I created this blog as a resource that's easy to look up when needed. The posts here are primarily focused on technical and programming topics. I hope you’ll find something interesting or helpful as well.
+I'm **Thach**, a software developer. I created this blog as a resource that's easy to look up when needed. The posts mainly cover programming practices. Hope you will enjoy it as I did.
   
-*Have a good day...*  
-  
-<br>
+:::
+::: {.column width=10%}
+
+:::
+::: {.column width=40%}
 
 **Contact**
 
 - Linkedin: [linkedin.com/in/thachmpham](https://linkedin.com/in/thachmpham)
 - Email: thachmpham@gmail.com
 - Address: Ho Chi Minh City, Vietnam
+
+:::
+::::::::::::::
