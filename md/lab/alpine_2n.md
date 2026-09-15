@@ -26,8 +26,8 @@ title: Alpine Two Nodes
         +                    +
         +--------------------+
                   +
-             192.0.0.254
-                  br0
+                 br0
+              192.0.0.254
                Container
 ```
 
