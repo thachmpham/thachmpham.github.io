@@ -28,7 +28,7 @@ title: Network File System (NFS)
 ::::::::::::::
 
 
-# Prerequisites
+# Create VMs
 - Refer to this post to create VMs, [**Alpine 2 Nodes**](/html/lab/alpine_2n.html).
 
 

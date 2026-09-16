@@ -10,8 +10,8 @@ title: "A Developer Diary"
 
 - [Alpine 1 Node](/html/lab/alpine_1n.html)
 - [Alpine 2 Nodes](/html/lab/alpine_2n.html)
-- [PXE Boot](/html/lab/pxeboot.html)
-- [NFS](/html/lab/nfs.html)
+- [Preboot Execution Environment (PXE)](/html/lab/pxeboot.html)
+- [Network File System (NFS)](/html/lab/nfs.html)
 
 **Docker**
 
