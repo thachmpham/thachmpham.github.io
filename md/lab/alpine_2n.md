@@ -8,8 +8,8 @@ title: Alpine Two Nodes
 :::::::::::::: {.columns}
 ::: {.column}
 
-- Create a docker container with qemu.
-- Create 2 qemu VMs in the container.
+- Create a docker container with QEMU.
+- Create 2 QEMU VMs in the container.
 - Connect container and VMs through a bridge.
 - Configure static IP.
 - Allow SSH from container to VMs.
@@ -192,5 +192,5 @@ QEMU keys:
 - [Alpine Installation](https://wiki.alpinelinux.org/wiki/Installation)
 - [Alpine QEMU](https://wiki.alpinelinux.org/wiki/QEMU)
 - [Alpine SSH](https://wiki.alpinelinux.org/wiki/Setting_up_a_SSH_server)
-- [QEMU Helper Networking](https://wiki.qemu.org/Features/HelperNetworking)
-- [Build a Security Test Lab](https://dev.to/zrouga/building-a-security-test-lab-with-qemu-from-zero-to-network-monitoring-4onm)
+- [QEMU Helper Networking](https://wiki.QEMU.org/Features/HelperNetworking)
+- [Build a Security Test Lab](https://dev.to/zrouga/building-a-security-test-lab-with-QEMU-from-zero-to-network-monitoring-4onm)

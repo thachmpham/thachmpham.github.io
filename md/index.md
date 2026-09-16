@@ -5,7 +5,10 @@ title: "A Developer Diary"
 :::::::::::::: {.columns}
 ::: {.column width=40%}
 
-## 1. Lab
+## Lab
+
+* * * * *
+
 **QEMU**
 
 - [Alpine 1 Node](/html/lab/alpine_1n.html)
@@ -20,13 +23,25 @@ title: "A Developer Diary"
 :::
 ::: {.column width=60%}
 
-## 2. Reproduce & Troubleshoot
-- [Corrupt & Repair Filesystem](/html/sysadmin/filesystem_repair.html)
-- [Analyze PThread Deadlock](/html/cpp/pthread_deadlock.html)
 
-<br>
+## Reproduce & Troubleshoot
+
+* * * * * 
+
+**File System**
+
+- [Corrupt & Repair a Filesystem](/html/sysadmin/filesystem_repair.html)
+- [Reproduce NFS Stale File Handle](/html/sysadmin/nfs_stale_file_handle.html)
+
+**C/C++**
+
+- [Reproduce & Analyze pthread Deadlock](/html/cpp/pthread_deadlock.html)
+
 
 ## 3. Procedure
+
+* * * * *
+
 - [Reverse the Stack Frame](/html/cpp/reverse_stack.html)
 
 :::

@@ -148,10 +148,10 @@ class="header-section-number">1</span> Overview</h1>
 <div class="columns">
 <div class="column">
 <ul>
-<li>Create 2 QEMU VMs, Alpine OS.</li>
+<li>Create 2 QEMU VMs.</li>
 <li>Setup VM1 as NFS server.</li>
 <li>Setup VM2 as NFS client.</li>
-<li>From client, mount a NFS directory hosted by server.</li>
+<li>VM2 mounts the NFS filesystem hosted by VM1.</li>
 </ul>
 </div><div class="column">
 <div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  VM1 <span class="op">(</span>NFS Server<span class="op">)</span>        VM2 <span class="op">(</span>NFS Client<span class="op">)</span></span>
@@ -164,8 +164,7 @@ class="header-section-number">1</span> Overview</h1>
 <h1 data-number="2" id="create-vms"><span
 class="header-section-number">2</span> Create VMs</h1>
 <ul>
-<li>Refer to this post to create VMs, <a
-href="/html/lab/alpine_2n.html"><strong>Alpine 2
+<li>Setup lab: <a href="/html/lab/alpine_2n.html"><strong>Alpine 2
 Nodes</strong></a>.</li>
 </ul>
 <h1 data-number="3" id="basic-setup"><span

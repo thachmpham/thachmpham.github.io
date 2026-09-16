@@ -8,10 +8,10 @@ title: Network File System (NFS)
 :::::::::::::: {.columns}
 ::: {.column}
 
-- Create 2 QEMU VMs, Alpine OS.
+- Create 2 QEMU VMs.
 - Setup VM1 as NFS server.
 - Setup VM2 as NFS client.
-- From client, mount a NFS directory hosted by server.
+- VM2 mounts the NFS filesystem hosted by VM1.
 
 :::
 ::: {.column}
@@ -29,7 +29,7 @@ title: Network File System (NFS)
 
 
 # Create VMs
-- Refer to this post to create VMs, [**Alpine 2 Nodes**](/html/lab/alpine_2n.html).
+- Setup lab: [**Alpine 2 Nodes**](/html/lab/alpine_2n.html).
 
 
 # Basic Setup 

@@ -4,11 +4,11 @@ title: 'Corrupt & Repair a Filesystem'
 
 
 # Overview
-- Create a docker container with qemu installed.
-- Create a qemu VM in the container.
-- Create a filesystem and plug to the VM.
+- Create a QEMU VM.
+- Create a QCOW2 disk image and plug to the VM.
+- Create a EXT4 filesystem on the disk.
 - Corrupt the filesystem.
-- Check and repair the filesystem.
+- Repair the filesystem.
 
 
 # Lab
@@ -23,7 +23,7 @@ vm$ apk add lsblk e2fsprogs-extra util-linux file
 ## Create Filesystem
 - Create a disk image.
 ```sh
-container$ qemu-img create -f qcow2 disk.qcow2 2G
+container$ QEMU-img create -f qcow2 disk.qcow2 2G
 ```
 
 
@@ -39,8 +39,8 @@ sda      8:0    0    8G  0 disk
 
 # Hotplug
 # Switch from VM console to QEMU monitor:   Ctrl + a c
-(qemu) drive_add 0 file=disk.qcow2,media=disk,if=none,id=mydrive
-(qemu) device_add virtio-blk-pci,drive=mydrive,id=mydevice
+(QEMU) drive_add 0 file=disk.qcow2,media=disk,if=none,id=mydrive
+(QEMU) device_add virtio-blk-pci,drive=mydrive,id=mydevice
 
 # After hotplug
 # Switch from QEMU monitor to VM console:   Ctrl + a c
@@ -265,7 +265,7 @@ vm$ tree /mnt/vda1
 
 # References
 - [QEMU Disk HotPlug](https://wiki.ubuntu.com/QemuDiskHotplug).
-- [QEMU Manual](https://www.qemu.org/docs/master/system/qemu-manpage.html).
+- [QEMU Manual](https://www.QEMU.org/docs/master/system/QEMU-manpage.html).
 - [Fun with fsck and debugfs](https://www.linux.com/training-tutorials/fun-e2fsck-and-debugfs).
 - [The debugfs Manual](https://man7.org/linux/man-pages/man8/debugfs.8.html).
 - [The inode Manual](https://man7.org/linux/man-pages/man7/inode.7.html).

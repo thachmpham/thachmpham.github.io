@@ -15,7 +15,7 @@ title: PXE Boot
         - Specify the boot file (pxelinux.0).
     - TFTP server (atftpd).
         - Host the directory that contains boot files.
-- PXE client is a qemu VM, boot from network.
+- PXE client is a QEMU VM, boot from network.
 - PXE server and client connect through a bridge.
 
 :::

@@ -135,11 +135,11 @@ class="toc-section-number">4</span> References</a></li>
 <h1 data-number="1" id="overview"><span
 class="header-section-number">1</span> Overview</h1>
 <ul>
-<li>Create a docker container with qemu installed.</li>
-<li>Create a qemu VM in the container.</li>
-<li>Create a filesystem and plug to the VM.</li>
+<li>Create a QEMU VM.</li>
+<li>Create a QCOW2 disk image and plug to the VM.</li>
+<li>Create a EXT4 filesystem on the disk.</li>
 <li>Corrupt the filesystem.</li>
-<li>Check and repair the filesystem.</li>
+<li>Repair the filesystem.</li>
 </ul>
 <h1 data-number="2" id="lab"><span
 class="header-section-number">2</span> Lab</h1>
@@ -156,7 +156,7 @@ class="header-section-number">2.2</span> Create Filesystem</h2>
 <ul>
 <li>Create a disk image.</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">container$</span> qemu-img create <span class="at">-f</span> qcow2 disk.qcow2 2G</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">container$</span> QEMU-img create <span class="at">-f</span> qcow2 disk.qcow2 2G</span></code></pre></div>
 <ul>
 <li>Hotplug disk image to VM.</li>
 </ul>
@@ -170,8 +170,8 @@ class="header-section-number">2.2</span> Create Filesystem</h2>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Hotplug</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Switch from VM console to QEMU monitor:   Ctrl + a c</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">qemu</span><span class="kw">)</span> <span class="ex">drive_add</span> 0 file=disk.qcow2,media=disk,if=none,id=mydrive</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">qemu</span><span class="kw">)</span> <span class="ex">device_add</span> virtio-blk-pci,drive=mydrive,id=mydevice</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">QEMU</span><span class="kw">)</span> <span class="ex">drive_add</span> 0 file=disk.qcow2,media=disk,if=none,id=mydrive</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">QEMU</span><span class="kw">)</span> <span class="ex">device_add</span> virtio-blk-pci,drive=mydrive,id=mydevice</span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># After hotplug</span></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Switch from QEMU monitor to VM console:   Ctrl + a c</span></span>
@@ -379,7 +379,7 @@ class="header-section-number">4</span> References</h1>
 <li><a href="https://wiki.ubuntu.com/QemuDiskHotplug">QEMU Disk
 HotPlug</a>.</li>
 <li><a
-href="https://www.qemu.org/docs/master/system/qemu-manpage.html">QEMU
+href="https://www.QEMU.org/docs/master/system/QEMU-manpage.html">QEMU
 Manual</a>.</li>
 <li><a
 href="https://www.linux.com/training-tutorials/fun-e2fsck-and-debugfs">Fun
