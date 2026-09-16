@@ -13,7 +13,7 @@ title: 'Corrupt & Repair a Filesystem'
 
 # Lab
 ## Create VM
-- Setup lab: [**Alpine Single Node**](/html/lab/alpine_single_node.html).
+- Setup lab: [**Alpine Single Node**](/html/lab/alpine_1n.html).
 - Install needed packages to the VM.
 ```sh
 vm$ apk add lsblk e2fsprogs-extra util-linux file
