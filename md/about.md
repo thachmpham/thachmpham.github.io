@@ -15,9 +15,9 @@ title:  'Thach Pham'
 :::
 ::: {.column width=40%}
 
-*Hi & a warm welcome. Thanks for visiting.*  
+*Hi & a warm welcome,*  
   
-I'm **Thach**, a software developer. I created this blog as a resource that's easy to look up when needed. The posts mainly cover programming practices. Hope you will enjoy it as I did.
+I'm **Thach**, a developer. This blog is my personal cheat sheet for lab setups and procedures. Hopefully, a few of these notes will be useful for your own projects too. Thanks for visiting!
   
 :::
 ::: {.column width=10%}
