@@ -1,5 +1,5 @@
 ---
-title: 'Reproduce & Analyze pthread Deadlock'
+title: 'Reproduce pthread Deadlock'
 ---
 
 # Syscall Futex

@@ -33,7 +33,7 @@ title: "A Developer Diary"
 
 * * * * *
 
-- [Reverse the Stack Frame](/html/cpp/reverse_stack.html)
+- [Reverse the Stack Frame](/html/debug/reverse_stack.html)
 
 <br>
 
@@ -43,12 +43,12 @@ title: "A Developer Diary"
 
 **File System**
 
-- [Corrupt & Repair a Filesystem](/html/sysadmin/filesystem_repair.html)
-- [Reproduce NFS Stale File Handle](/html/sysadmin/nfs_stale_file_handle.html)
+- [Corrupt a Filesystem](/html/reproduce/filesystem_corrupt.html)
+- [Reproduce NFS Stale File Handle](/html/reproduce/nfs_stale_file_handle.html)
 
 **Multithreading**
 
-- [Reproduce & Analyze pthread Deadlock](/html/cpp/pthread_deadlock.html)
+- [Reproduce pthread Deadlock](/html/reproduce/pthread_deadlock.html)
 
 :::
 ::::::::::::::
