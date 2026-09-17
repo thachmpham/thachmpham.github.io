@@ -5,7 +5,7 @@ title: "A Developer Diary"
 :::::::::::::: {.columns}
 ::: {.column width=40%}
 
-## Lab
+## 1. Lab
 
 * * * * *
 
@@ -20,11 +20,24 @@ title: "A Developer Diary"
 
 - [Iproute: 2 Nodes + 1 Router](/html/lab/iproute_2n1r.html)
 
+<br>
+
+## 2. Build
+
+* * * * *
+
 :::
 ::: {.column width=60%}
 
+## 3. Debug
 
-## Reproduce & Troubleshoot
+* * * * *
+
+- [Reverse the Stack Frame](/html/cpp/reverse_stack.html)
+
+<br>
+
+## 4. Reproduce
 
 * * * * * 
 
@@ -33,16 +46,9 @@ title: "A Developer Diary"
 - [Corrupt & Repair a Filesystem](/html/sysadmin/filesystem_repair.html)
 - [Reproduce NFS Stale File Handle](/html/sysadmin/nfs_stale_file_handle.html)
 
-**C/C++**
+**Multithreading**
 
 - [Reproduce & Analyze pthread Deadlock](/html/cpp/pthread_deadlock.html)
-
-
-## 3. Procedure
-
-* * * * *
-
-- [Reverse the Stack Frame](/html/cpp/reverse_stack.html)
 
 :::
 ::::::::::::::
