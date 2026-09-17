@@ -36,7 +36,11 @@ title: Network File System (NFS)
 ## Server - Host NFS Filesystem
 - Install packages.
 ```sh
-vm1$ apk add nfs-utils rsyslog
+# for nfs
+vm1$ apk add nfs-utils
+
+# for troubleshooting
+vm1$ apk add rsyslog util-linux e2fsprogs-extra
 ```
 
 - Start NFS service.
