@@ -159,7 +159,7 @@ class="header-section-number">2.2</span> Create a Filesystem</h2>
 <ul>
 <li>Create a disk image.</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">container$</span> QEMU-img create <span class="at">-f</span> qcow2 disk.qcow2 2G</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">container$</span> qemu-img create <span class="at">-f</span> qcow2 disk.qcow2 2G</span></code></pre></div>
 <ul>
 <li>Add the disk image to the VM.</li>
 </ul>
@@ -197,7 +197,7 @@ class="header-section-number">2.2</span> Create a Filesystem</h2>
 <ul>
 <li>Make a filesystem.</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> mkfs.ext4 /dev/vda1</span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> mkfs <span class="at">-t</span> ext4 /dev/vda1</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> fsck <span class="at">-fn</span> /dev/vda1</span></code></pre></div>
 <ul>
 <li>Mount the filesystem.</li>
@@ -219,35 +219,94 @@ deletion error.</p>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> umount /mnt/vda1</span></code></pre></div>
 <ul>
-<li>Show inode links count of the file.</li>
+<li>Check links count of the file.</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> debugfs <span class="at">-w</span> /dev/vda1</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="fu">ls</span> <span class="at">-l</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   inode   filetype &amp; mode       link_count      uid    gid      size    last modification   name</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#           (octal)</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>     <span class="ex">11</span>     100644              <span class="er">(</span><span class="ex">1</span><span class="kw">)</span>             <span class="ex">0</span>      0        8       13-Sep-2026 10:04   file_a</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="fu">ls</span> <span class="at">-l</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   inode   filetype &amp; mode     link_count      uid    gid      size    last modification   name</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>     <span class="ex">13</span>     100644              <span class="er">(</span><span class="ex">1</span><span class="kw">)</span>             <span class="ex">0</span>      0        8       13-Sep-2026 10:04   file_a</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># filetype &amp; mode: 100644</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#     10 (file type), 0 (special permission), 644 (owner,group,other permissions)</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="ex">show_inode_info</span> file_a</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="ex">Links:</span> 1</span></code></pre></div>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="ex">show_inode_info</span> file_a</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Inode:</span> 13   Type: regular    Mode:  0644   Flags: 0x80000</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Links:</span> 1</span></code></pre></div>
 <ul>
-<li>Set inode link count to zero.</li>
+<li>Set link count to zero.</li>
 </ul>
 <div class="sourceCode" id="cb10"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="ex">set_inode_field</span> file_a links_count 0</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="ex">show_inode_info</span> file_a</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Links:</span> 0</span></code></pre></div>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="ex">show_inode_info</span> file_a</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Inode:</span> 13   Type: regular    Mode:  0644   Flags: 0x80000</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Links:</span> 0</span></code></pre></div>
 <ul>
 <li>Check fsck.</li>
 </ul>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> fsck <span class="at">-fn</span> /dev/vda1</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/dev/vda1:</span> WARNING: Filesystem still has errors</span></code></pre></div>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 2: Checking directory structure</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Entry</span> <span class="st">&#39;file_a&#39;</span> in / <span class="er">(</span><span class="ex">2</span><span class="kw">)</span> <span class="ex">has</span> deleted/unused inode 13.  Clear<span class="pp">?</span> no</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">/dev/vda1:</span> WARNING: Filesystem still has errors</span></code></pre></div>
+<ul>
+<li>Mount and list files.</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> mount /dev/vda1 /mnt/vda1</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> ls /mnt/vda1/</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ls:</span> /mnt/vda1/file_a: Data consistency error</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ex">lost+found</span></span></code></pre></div>
 <h1 data-number="4" id="create-an-invalid-mode-file"><span
 class="header-section-number">4</span> Create an Invalid-Mode File</h1>
-<p>TODO…</p>
+<ul>
+<li>Create a test file.</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> echo <span class="st">&#39;Hello B&#39;</span> <span class="op">&gt;</span> /mnt/vda1</span></code></pre></div>
+<ul>
+<li>Unmount.</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> umount /mnt/vda1</span></code></pre></div>
+<ul>
+<li>Check file mode.</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> debugfs <span class="at">-w</span> /dev/vda1</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="fu">ls</span> <span class="at">-l</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#    inode     filetype &amp; mode     link_count      uid    gid      size    last modification   name</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>     <span class="ex">14</span>        100644              <span class="er">(</span><span class="ex">1</span><span class="kw">)</span>             <span class="ex">0</span>      0        8       18-Sep-2026 15:08   file_b</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># filetype &amp; mode: 100644 (octal)</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#     10: file type, 0: special permission, 644: owner,group,other permissions</span></span></code></pre></div>
+<ul>
+<li>Set an invalid file mode.</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># new mode: 020644 (oct) = 8612 (dec)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#           02: character device, 0: special permission, 644: owner,group,other permissions</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="ex">set_inode_field</span> file_b mode 8612</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">debugfs</span><span class="kw">)</span> <span class="fu">ls</span> <span class="at">-l</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">#    inode     filetype &amp; mode     link_count      uid    gid      size    last modification   name</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>     <span class="ex">14</span>        020644              <span class="er">(</span><span class="ex">1</span><span class="kw">)</span>             <span class="ex">0</span>      0        8       18-Sep-2026 15:08   file_b</span></code></pre></div>
+<ul>
+<li>Check fsck.</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> fsck <span class="at">-fn</span> /dev/vda1</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 2: Checking directory structure</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Inode</span> 14 <span class="er">(</span><span class="ex">/file_b</span><span class="kw">)</span> <span class="ex">is</span> an illegal character device.</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ex">/dev/vda1:</span> WARNING: Filesystem still has errors</span></code></pre></div>
+<ul>
+<li>Mount and list files.</li>
+</ul>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> mount /dev/vda1 /mnt/vda1/</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> ls <span class="at">-lh</span> /mnt/vda1</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">total</span> 20K    </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="ex">crw-r--r--</span>    1 root     root      243,  10 Sep 18 15:08 file_b</span></code></pre></div>
 <h1 data-number="5" id="create-sharing-block-files"><span
 class="header-section-number">5</span> Create Sharing-Block Files</h1>
 <p>TODO…</p>
@@ -261,7 +320,7 @@ href="https://www.QEMU.org/docs/master/system/QEMU-manpage.html">QEMU
 Manual</a>.</li>
 <li><a
 href="https://www.linux.com/training-tutorials/fun-e2fsck-and-debugfs">Fun
-with fsck and debugfs</a>.</li>
+with fsck &amp; debugfs</a>.</li>
 <li><a href="https://man7.org/linux/man-pages/man8/debugfs.8.html">The
 debugfs Manual</a>.</li>
 <li><a href="https://man7.org/linux/man-pages/man7/inode.7.html">The
