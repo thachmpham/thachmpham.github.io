@@ -3,6 +3,7 @@ title: 'Corrupt a Filesystem'
 ---
 
 
+# Overview
 A filesystem can be corrupted when an inode becomes invalid. We will reproduce the below issues:
 
 - Orphaned file.
@@ -10,7 +11,7 @@ A filesystem can be corrupted when an inode becomes invalid. We will reproduce t
 - Two files sharing the same block.
 
 
-# Lab
+# Setup Lab
 ## Initial Setup
 - Setup lab: [**Alpine 1 Node**](/html/lab/alpine_1n.html).
 - Install packages to the VM.
@@ -26,7 +27,7 @@ container$ QEMU-img create -f qcow2 disk.qcow2 2G
 ```
 
 
-- Plug the disk image to the VM.
+- Add the disk image to the VM.
 ```sh
 # Switch from VM console to QEMU monitor:   Ctrl + A C
 
@@ -36,22 +37,19 @@ container$ QEMU-img create -f qcow2 disk.qcow2 2G
 
 # Switch from QEMU monitor to VM console:   Ctrl + A C
 
+# Check if disk added
 vm$ lsblk
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 vda    253:0    0    2G  0 disk
 ```
 
 
-- Set partition table type.
+- Create a partition.
 ```sh
 vm$ fdisk /dev/vda
 (fdisk) o   # create a new empty DOS partition table
 (fdisk) w   # write changes
-```
 
-
-- Create a new partition.
-```sh
 vm$ fdisk /dev/vda
 (fdisk) n   # add a new partition
             # partition type: primary partition
@@ -59,76 +57,64 @@ vm$ fdisk /dev/vda
             # first sector: (default)
             # last sector: +1G
 (fdisk) w   # write changes
-```
 
-```sh
 vm$ lsblk
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
-vda    253:0    0    2G  0 disk 
+vda    253:0    0    2G  0 disk
 └─vda1 253:1    0    1G  0 part
 ```
 
 
-- Make filesystem.
+- Make a filesystem.
 ```sh
 vm$ mkfs.ext4 /dev/vda1
 vm$ fsck -fn /dev/vda1
 ```
 
-- Mount.
+- Mount the filesystem.
 ```sh
 vm$ mkdir /mnt/vda1
 vm$ mount /dev/vda1 /mnt/vda1
 ```
 
 
-# Orphaned File
+# Create an Orphaned File
 The inode link count is the number of filenames or hard links that point to the inode. An inode with a zero link count is known as an orphaned file. The fsck considers an orphaned file as a incomplete deletion error.
 
 
-- Create test files.
+- Create a test file.
 ```sh
 vm$ echo 'Hello A' > /mnt/vda1/file_a
-vm$ echo 'Hello B' > /mnt/vda1/file_b
-vm$ echo 'Hello C' > /mnt/vda1/file_c
 ```
 
 
-- Unmount to debugfs.
+- Unmount the filesystem.
 ```sh
 vm$ umount /mnt/vda1
-vm$ debugfs -w /dev/vda1
 ```
 
 
-- Check file info.
+- Show inode links count of the file.
 ```sh
+vm$ debugfs -w /dev/vda1
 (debugfs) ls -l
 #   inode   filetype & mode       link_count      uid    gid      size    last modification   name
 #           (octal)
-      2     40755               (2)             0      0        4096    13-Sep-2026 10:04   .
-      2     40755               (2)             0      0        4096    13-Sep-2026 10:04   ..
      11     100644              (1)             0      0        8       13-Sep-2026 10:04   file_a
-     13     100644              (1)             0      0        8       13-Sep-2026 10:04   file_b
-     14     100644              (1)             0      0        8       13-Sep-2026 10:04   file_c
-# filetype & mode: 100644
-#     - 10 : file type
-#     -  0 : special permission
-#     - 644: owner,group,other permission
-```
 
-```sh
+# filetype & mode: 100644
+#     10 (file type), 0 (special permission), 644 (owner,group,other permissions)
+
 (debugfs) show_inode_info file_a
 Links: 1
 ```
 
 
-- Set link count to zero.
+- Set inode link count to zero.
 ```sh
 (debugfs) set_inode_field file_a links_count 0
 (debugfs) show_inode_info file_a
 Links: 0
-(debugfs) quit
 ```
 
 
