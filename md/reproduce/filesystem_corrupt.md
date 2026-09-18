@@ -4,7 +4,7 @@ title: 'Corrupt a Filesystem'
 
 
 # Overview
-A filesystem can be corrupted when an inode becomes invalid. We will reproduce the below issues:
+When an inode becomes invalid, the filesystem is considered as corrupted. We will reproduce the below issues:
 
 - Orphaned file.
 - Invalid file mode.
@@ -121,10 +121,16 @@ Links: 0
 - Check fsck.
 ```sh
 vm$ fsck -fn /dev/vda1
-/dev/vda1: ********** WARNING: Filesystem still has errors **********
-/dev/vda1: 14/65536 files (0.0% non-contiguous), 13018/262144 blocks
+/dev/vda1: WARNING: Filesystem still has errors
 ```
 
+
+# Create an Invalid-Mode File
+TODO...
+
+
+# Create Sharing-Block Files
+TODO...
 
 # References
 - [QEMU Disk HotPlug](https://wiki.ubuntu.com/QemuDiskHotplug).

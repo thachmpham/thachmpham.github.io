@@ -44,7 +44,7 @@ title: "A Developer Diary"
 **File System**
 
 - [Corrupt a Filesystem](/html/reproduce/filesystem_corrupt.html)
-- [Reproduce NFS Stale File Handle](/html/reproduce/nfs_stale_file_handle.html)
+- [NFS Stale File Handle](/html/reproduce/nfs_stale_file_handle.html)
 
 **Multithreading**
 

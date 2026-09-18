@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc 3.11" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Reproduce NFS Stale File Handle</title>
+  <title>NFS Stale File Handle</title>
   <style>
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -107,56 +107,55 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Reproduce NFS Stale File Handle</h1>
+<h1 class="title">NFS Stale File Handle</h1>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
 <li><a href="#overview" id="toc-overview"><span
 class="toc-section-number">1</span> Overview</a></li>
-<li><a href="#lab" id="toc-lab"><span
-class="toc-section-number">2</span> Lab</a></li>
-<li><a href="#reproduce-stale-file" id="toc-reproduce-stale-file"><span
-class="toc-section-number">3</span> Reproduce Stale File</a>
-<ul>
-<li><a href="#delete-while-open" id="toc-delete-while-open"><span
-class="toc-section-number">3.1</span> Delete while Open</a></li>
-</ul></li>
+<li><a href="#setup-lab" id="toc-setup-lab"><span
+class="toc-section-number">2</span> Setup Lab</a></li>
+<li><a href="#delete-an-open-directory"
+id="toc-delete-an-open-directory"><span
+class="toc-section-number">3</span> Delete an Open Directory</a></li>
+<li><a href="#re-export-an-open-directory"
+id="toc-re-export-an-open-directory"><span
+class="toc-section-number">4</span> Re-Export an Open Directory</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="overview"><span
 class="header-section-number">1</span> Overview</h1>
+<p>When an NFS client accesses an inode that no longer available on the
+server, the stale file handle error (ESTALE) occurs. We will reproduce
+the by the below scenarios:</p>
 <ul>
-<li>Setup an NFS lab.</li>
-<li>Reproduce the ‘Stale File Handle’ error:
-<ul>
-<li>Scenario 1: Delete while open.</li>
-</ul></li>
+<li>While the client currently opens an NFS directory, the server
+deletes it.</li>
+<li>While the client currently opens an NFS directory, the server
+exports a different directory.</li>
 </ul>
-<h1 data-number="2" id="lab"><span
-class="header-section-number">2</span> Lab</h1>
+<h1 data-number="2" id="setup-lab"><span
+class="header-section-number">2</span> Setup Lab</h1>
 <ul>
 <li>Setup lab: <a href="/html/lab/nfs.html">Network File System
 (NFS)</a>.</li>
 <li>VM1 acts as NFS server.</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-v</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/srv/nfs</span> 192.0.0.0/24<span class="er">(</span><span class="fu">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,no_all_squash<span class="kw">)</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> showmount <span class="at">-a</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.20:/srv/nfs</span></span></code></pre></div>
-<ul>
 <li>VM2 acts as NFS client.</li>
 </ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-v</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/srv/nfs</span> 192.0.0.0/24<span class="er">(</span><span class="fu">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,no_all_squash<span class="kw">)</span></span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> df <span class="at">-h</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Filesystem</span>                Size      Used Available Use% Mounted on</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span>       5.6G    221.0M      5.1G   4% /mnt/nfs</span></code></pre></div>
-<h1 data-number="3" id="reproduce-stale-file"><span
-class="header-section-number">3</span> Reproduce Stale File</h1>
-<h2 data-number="3.1" id="delete-while-open"><span
-class="header-section-number">3.1</span> Delete while Open</h2>
+</div>
+</div>
+<h1 data-number="3" id="delete-an-open-directory"><span
+class="header-section-number">3</span> Delete an Open Directory</h1>
 <p>If the server deletes a file or directory while the client currently
-has open, the inode held by client become invalid. The further actions
+has open, the inode held by client becomes invalid. The further actions
 to the inode will fail with ‘Stale file handle’ error.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -182,6 +181,9 @@ to the inode will fail with ‘Stale file handle’ error.</p>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ls:</span> .: Stale file handle</span></code></pre></div>
 </div>
 </div>
+<h1 data-number="4" id="re-export-an-open-directory"><span
+class="header-section-number">4</span> Re-Export an Open Directory</h1>
+<p>TODO…</p>
 <footer class="footer text-muted">
    <div align="center">      
       <br>
