@@ -4,7 +4,9 @@ title: 'NFS Stale File Handle'
 
 
 # Overview
-When an NFS client accesses an inode that no longer available on the server, the stale file handle error (ESTALE) occurs. We will reproduce the  by the below scenarios:
+When an NFS client accesses an inode that no longer available on the server, the stale file handle error (ESTALE) occurs. 
+
+Reproduce cases:
 
 - While the client currently opens an NFS directory, the server deletes it.
 - While the client currently opens an NFS directory, the server exports a different directory.

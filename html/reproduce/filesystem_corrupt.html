@@ -137,11 +137,12 @@ class="toc-section-number">6</span> References</a></li>
 <h1 data-number="1" id="overview"><span
 class="header-section-number">1</span> Overview</h1>
 <p>When an inode becomes invalid, the filesystem is considered as
-corrupted. We will reproduce the below issues:</p>
+corrupted.</p>
+<p>Reproduce cases:</p>
 <ul>
-<li>Orphaned file.</li>
-<li>Invalid file mode.</li>
-<li>Two files sharing the same block.</li>
+<li>Create an orphaned file.</li>
+<li>Create an invalid file mode.</li>
+<li>Create two files sharing the same block.</li>
 </ul>
 <h1 data-number="2" id="setup-lab"><span
 class="header-section-number">2</span> Setup Lab</h1>

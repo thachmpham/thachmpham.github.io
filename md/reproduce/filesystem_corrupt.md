@@ -4,11 +4,13 @@ title: 'Corrupt a Filesystem'
 
 
 # Overview
-When an inode becomes invalid, the filesystem is considered as corrupted. We will reproduce the below issues:
+When an inode becomes invalid, the filesystem is considered as corrupted. 
 
-- Orphaned file.
-- Invalid file mode.
-- Two files sharing the same block.
+Reproduce cases:
+
+- Create an orphaned file.
+- Create an invalid file mode.
+- Create two files sharing the same block.
 
 
 # Setup Lab
