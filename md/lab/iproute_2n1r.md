@@ -43,12 +43,12 @@ subtitle: '(Lab Series)'
 - Clone code.
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
-host$ cd lab/iproute2/2n1r
 ```
 
 
-- Build nodes, networks.
+- Build container.
 ```sh
+host$ cd lab/iproute2/2n1r
 host$ docker compose build
 host$ docker compose up --detach
 ```
