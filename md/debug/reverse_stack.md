@@ -1,5 +1,5 @@
 ---
-title: 'Reverse the Stack Frame in C/C++'
+title: 'Reverse the C/C++ Stack Frame'
 subtitle: '(Debug Series)'
 ---
 

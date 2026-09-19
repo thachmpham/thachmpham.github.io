@@ -33,7 +33,7 @@ title: "A Developer Diary"
 
 * * * * *
 
-- [Reverse the Stack Frame](/html/debug/reverse_stack.html)
+- [Reverse C/C++ Stack Frame](/html/debug/reverse_stack.html)
 
 <br>
 
@@ -48,7 +48,7 @@ title: "A Developer Diary"
 
 **Multithreading**
 
-- [Reproduce pthread Deadlock](/html/reproduce/pthread_deadlock.html)
+- [C/C++ pthread Deadlock](/html/reproduce/pthread_deadlock.html)
 
 :::
 ::::::::::::::
