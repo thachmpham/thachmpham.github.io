@@ -10,7 +10,6 @@ Reproduce cases:
 
 - Create an orphaned file.
 - Create an invalid file mode.
-- Create two files sharing the same block.
 
 
 # Setup Lab
@@ -193,9 +192,6 @@ total 20K
 crw-r--r--    1 root     root      243,  10 Sep 18 15:08 file_b
 ```
 
-
-# Create Sharing-Block Files
-TODO...
 
 # References
 - [QEMU Disk HotPlug](https://wiki.ubuntu.com/QemuDiskHotplug).
