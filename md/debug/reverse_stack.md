@@ -1,5 +1,6 @@
 ---
-title: 'Reverse the Stack Frame'
+title: 'Reverse the Stack Frame in C/C++'
+subtitle: '(Debug Series)'
 ---
 
 # Stack Pointer

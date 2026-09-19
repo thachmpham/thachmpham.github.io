@@ -1,5 +1,6 @@
 ---
 title: PXE Boot
+subtitle: '(Lab Series)'
 ---
 
 

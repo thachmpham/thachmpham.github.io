@@ -108,19 +108,21 @@
 <body>
 <header id="title-block-header">
 <h1 class="title">NFS Stale File Handle</h1>
+<p class="subtitle">(Reproduce Series)</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
 <li><a href="#overview" id="toc-overview"><span
 class="toc-section-number">1</span> Overview</a></li>
-<li><a href="#setup-lab" id="toc-setup-lab"><span
-class="toc-section-number">2</span> Setup Lab</a></li>
+<li><a href="#prepare-lab" id="toc-prepare-lab"><span
+class="toc-section-number">2</span> Prepare Lab</a></li>
 <li><a href="#delete-an-open-directory"
 id="toc-delete-an-open-directory"><span
 class="toc-section-number">3</span> Delete an Open Directory</a></li>
-<li><a href="#re-export-an-open-directory"
-id="toc-re-export-an-open-directory"><span
-class="toc-section-number">4</span> Re-Export an Open Directory</a></li>
+<li><a href="#export-a-different-directory"
+id="toc-export-a-different-directory"><span
+class="toc-section-number">4</span> Export a Different
+Directory</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="overview"><span
@@ -134,8 +136,8 @@ deletes it.</li>
 <li>While the client currently opens an NFS directory, the server
 exports a different directory.</li>
 </ul>
-<h1 data-number="2" id="setup-lab"><span
-class="header-section-number">2</span> Setup Lab</h1>
+<h1 data-number="2" id="prepare-lab"><span
+class="header-section-number">2</span> Prepare Lab</h1>
 <ul>
 <li>Setup lab: <a href="/html/lab/nfs.html">Network File System
 (NFS)</a>.</li>
@@ -154,9 +156,16 @@ class="header-section-number">2</span> Setup Lab</h1>
 </div>
 <h1 data-number="3" id="delete-an-open-directory"><span
 class="header-section-number">3</span> Delete an Open Directory</h1>
-<p>If the server deletes a file or directory while the client currently
-has open, the inode held by client becomes invalid. The further actions
-to the inode will fail with ‘Stale file handle’ error.</p>
+<ul>
+<li>Scenario: While the client open a directory, the server deletes the
+directory.</li>
+<li>Result:
+<ul>
+<li>The inode held by the client becomes unavailable.</li>
+<li>The further request from the client to the inode will fail with
+‘Stale file handle’ error.</li>
+</ul></li>
+</ul>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>Server</strong>.</p>
@@ -177,13 +186,56 @@ to the inode will fail with ‘Stale file handle’ error.</p>
 <ul>
 <li>Step 4: List files.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2:/mnt/nfs/test$</span> ls</span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> ls</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ls:</span> .: Stale file handle</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="4" id="re-export-an-open-directory"><span
-class="header-section-number">4</span> Re-Export an Open Directory</h1>
-<p>TODO…</p>
+<h1 data-number="4" id="export-a-different-directory"><span
+class="header-section-number">4</span> Export a Different Directory</h1>
+<ul>
+<li>Scenario: While the client open a directory, the server unexport the
+directory and export a different path.</li>
+<li>Result:
+<ul>
+<li>The underlying inodes on server change.</li>
+<li>The further request from the client to the inode will fail with
+‘Stale file handle’ error.</li>
+</ul></li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Server</strong>.</p>
+<ul>
+<li>Step 1: Exporting the /srv/nfs directory.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-v</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/srv/nfs</span>        192.0.0.0/24<span class="er">(</span><span class="fu">sync</span>,wdelay,hide,no_subtree_check,fsid=1,sec=sys,rw,secure,root_squash,no_all_squash<span class="kw">)</span></span></code></pre></div>
+<ul>
+<li>Step 3: Export a different directory.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> mkdir /srv/nfs1</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> vi /etc/exports</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------------- #</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># /srv/nfs 192.0.0.0/24(rw,sync,no_subtree_check,fsid=1)    # old directory</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">/srv/nfs1</span> 192.0.0.0/24<span class="er">(</span><span class="ex">rw,sync,no_subtree_check,fsid=1</span><span class="kw">)</span>     <span class="co"># new directory</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------------- #</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-va</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ex">exporting</span> 192.0.0.0/24:/srv/nfs1</span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<p><strong>Client</strong>.</p>
+<ul>
+<li>Step 2: Go to the directory.</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> cd /mnt/nfs</span></code></pre></div>
+<ul>
+<li>Step 4: List files.</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> ls</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ls:</span> .: Stale file handle</span></code></pre></div>
+</div>
+</div>
 <footer class="footer text-muted">
    <div align="center">      
       <br>

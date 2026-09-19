@@ -1,5 +1,6 @@
 ---
-title: Alpine Single Node
+title: 'Alpine Single Node'
+subtitle: '(Lab Series)'
 ---
 
 
