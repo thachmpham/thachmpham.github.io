@@ -114,22 +114,18 @@
 <ul>
 <li><a href="#overview" id="toc-overview"><span
 class="toc-section-number">1</span> Overview</a></li>
-<li><a href="#setup" id="toc-setup"><span
-class="toc-section-number">2</span> Setup</a>
-<ul>
 <li><a href="#create-container" id="toc-create-container"><span
-class="toc-section-number">2.1</span> Create Container</a></li>
+class="toc-section-number">2</span> Create Container</a></li>
 <li><a href="#create-vm" id="toc-create-vm"><span
-class="toc-section-number">2.2</span> Create VM</a></li>
-<li><a href="#static-ip" id="toc-static-ip"><span
-class="toc-section-number">2.3</span> Static IP</a></li>
-<li><a href="#allow-ssh" id="toc-allow-ssh"><span
-class="toc-section-number">2.4</span> Allow SSH</a></li>
-</ul></li>
+class="toc-section-number">3</span> Create VM</a></li>
+<li><a href="#start-vm" id="toc-start-vm"><span
+class="toc-section-number">4</span> Start VM</a></li>
+<li><a href="#ssh-to-vm" id="toc-ssh-to-vm"><span
+class="toc-section-number">5</span> SSH to VM</a></li>
 <li><a href="#shortcuts" id="toc-shortcuts"><span
-class="toc-section-number">3</span> Shortcuts</a></li>
+class="toc-section-number">6</span> Shortcuts</a></li>
 <li><a href="#references" id="toc-references"><span
-class="toc-section-number">4</span> References</a></li>
+class="toc-section-number">7</span> References</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="overview"><span
@@ -161,78 +157,40 @@ class="header-section-number">1</span> Overview</h1>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 </div>
 </div>
-<h1 data-number="2" id="setup"><span
-class="header-section-number">2</span> Setup</h1>
-<h2 data-number="2.1" id="create-container"><span
-class="header-section-number">2.1</span> Create Container</h2>
+<h1 data-number="2" id="create-container"><span
+class="header-section-number">2</span> Create Container</h1>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> git clone https://github.com/thachmpham/lab.git</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cd lab/alpine/1-node</span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose build</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose up <span class="at">--detach</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec <span class="at">-it</span> apk bash</span></code></pre></div>
-<h2 data-number="2.2" id="create-vm"><span
-class="header-section-number">2.2</span> Create VM</h2>
+<h1 data-number="3" id="create-vm"><span
+class="header-section-number">3</span> Create VM</h1>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">container$</span> ./create_vm.sh</span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> setup-alpine</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># - hostname:   vm</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># - interface:  eth0</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># - ipv4 addr:  dhcp</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># - ipv6 addr:  auto</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># - manual network config:  no</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># - password:</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># - timezone:   UTC</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># - proxy:      none</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># - ntp:        busybox</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># - apk mirror: 1</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># - setup user: no</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># - ssh server: openssh</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># - allow root ssh: yes</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># - ssh key:    none</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># - disk:       sda, sys</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> poweroff</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> setup-alpine <span class="at">-e</span> <span class="at">-f</span> ans</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> vi /etc/ssh/sshd_config</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitRootLogin</span> yes</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">PasswordAuthentication</span> yes</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitEmptyPasswords</span> yes</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> poweroff</span></code></pre></div>
+<h1 data-number="4" id="start-vm"><span
+class="header-section-number">4</span> Start VM</h1>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">container$</span> ./start_vm.sh</span></code></pre></div>
-<h2 data-number="2.3" id="static-ip"><span
-class="header-section-number">2.3</span> Static IP</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> cat /etc/network/interfaces</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------- #</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">auto</span> lo</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">iface</span> lo inet loopback</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">auto</span> eth0</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ex">iface</span> eth0 inet dhcp</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hostname</span> alpine-test</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="ex">auto</span> eth1</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="ex">iface</span> eth1 inet static</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">address</span> 192.0.0.10</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">netmask</span> 255.255.255.0</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------- #</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> rc-service networking restart</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> ip addr show</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">eth1:</span> inet 192.0.0.10</span></code></pre></div>
-<h2 data-number="2.4" id="allow-ssh"><span
-class="header-section-number">2.4</span> Allow SSH</h2>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> vi /etc/ssh/sshd_config</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------- #</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitRootLogin</span> yes</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------- #</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> rc-service sshd restart</span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">container$</span> ssh root@192.0.0.10</span></code></pre></div>
-<h1 data-number="3" id="shortcuts"><span
-class="header-section-number">3</span> Shortcuts</h1>
+<h1 data-number="5" id="ssh-to-vm"><span
+class="header-section-number">5</span> SSH to VM</h1>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">container$</span> ssh vm</span></code></pre></div>
+<h1 data-number="6" id="shortcuts"><span
+class="header-section-number">6</span> Shortcuts</h1>
 <p>QEMU keys:</p>
 <ul>
 <li>Ctrl + a h: Help Menu</li>
 <li>Ctrl + a x: Exit</li>
 <li>Ctrl + a c: Switch between VM console and QEMU monitor.</li>
 </ul>
-<h1 data-number="4" id="references"><span
-class="header-section-number">4</span> References</h1>
+<h1 data-number="7" id="references"><span
+class="header-section-number">7</span> References</h1>
 <ul>
 <li><a href="https://wiki.alpinelinux.org/wiki/Installation">Alpine
 Installation</a></li>
