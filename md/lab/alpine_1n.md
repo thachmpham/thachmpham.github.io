@@ -46,7 +46,8 @@ Container               VM
 ::::::::::::::
 
 
-# Create Container
+# Setup
+## Setup Container
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
 host$ cd lab/alpine/1-node
@@ -59,7 +60,7 @@ host$ docker exec -it apk bash
 ```
 
 
-# Create VM
+## Create VM
 ```sh
 container$ ./create_vm.sh
 ```
@@ -76,13 +77,13 @@ vm$ poweroff
 ```
 
 
-# Start VM
+## Start VM
 ```sh
 container$ ./start_vm.sh
 ```
 
 
-# SSH to VM
+## Access VM
 ```sh
 container$ ssh vm
 ```
