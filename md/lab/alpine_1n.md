@@ -9,11 +9,16 @@ subtitle: '(Lab Series)'
 :::::::::::::: {.columns}
 ::: {.column}
 
-- Create a docker container with QEMU installed.
-- Create a QEMU VM in the container.
-- Connect container and VM through a bridge.
-- Configure static IP.
-- Allow SSH from container to VM.
+- The lab runs in a Docker container with a QEMU VM inside.
+- The VM connects to the container through two network interfaces:
+    - User-mode: -netdev user
+    - Bridge: -netdev bridge,br=br0
+- Static IP configured for SSH access:
+    - Container: br0, 192.0.0.254
+    - VM: eth1, 192.0.0.10
+- Two virtual disks added to the VM:
+    - disk_a.qcow2 (/dev/sda): Boot and filesystem.
+    - disk_b.qcow2 (/dev/sdb): For testing.
 
 :::
 ::: {.column}
@@ -48,44 +53,60 @@ Container               VM
 
 # Setup
 ## Setup Container
+- Clone code.
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
 host$ cd lab/alpine/1-node
 ```
 
+- Setup the container.
 ```sh
 host$ docker compose build
 host$ docker compose up --detach
-host$ docker exec -it apk bash
 ```
 
 
 ## Create VM
+- Access the container.
 ```sh
-container$ ./create_vm.sh
+host$ docker exec -it apk bash
 ```
 
+- Create the VM.
+```sh
+cont$ ./create_vm.sh
+```
+
+- On the VM, create a file named ans with the same content as lab/alpine/1-node/ans.
+
+- Install Alpine to the VM.
 ```sh
 vm$ setup-alpine -e -f ans
+```
 
+- Allow root ssh login with a empty password.
+```sh
 vm$ vi /etc/ssh/sshd_config
 PermitRootLogin yes
 PasswordAuthentication yes
 PermitEmptyPasswords yes
+```
 
+- Shutdown the VM.
+```
 vm$ poweroff
 ```
 
 
 ## Start VM
+- Start the VM.
 ```sh
-container$ ./start_vm.sh
+cont$ ./start_vm.sh
 ```
 
-
-## Access VM
+- Check ssh access from the container to the VM.
 ```sh
-container$ ssh vm
+cont$ ssh vm
 ```
 
 
