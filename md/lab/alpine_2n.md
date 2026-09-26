@@ -9,12 +9,18 @@ subtitle: '(Lab Series)'
 :::::::::::::: {.columns}
 ::: {.column}
 
-- Create a docker container with QEMU.
-- Create 2 QEMU VMs in the container.
-- Connect container and VMs through a bridge.
-- Configure static IP.
-- Allow SSH from container to VMs.
-- Allow ping between VMs.
+- The lab runs in a Docker container with two QEMU VMs inside.
+- Each VM connects to the container through two network interfaces:
+    - User-mode: -netdev user
+    - Bridge: -netdev bridge,br=br0
+- The VMs connect to each other through the bridge interface, br0.
+- Static IP configured for SSH access:
+    - Container: br0, 192.0.0.254
+    - VM1: eth1, 192.0.0.10
+    - VM2: eth1, 192.0.0.20
+- Each VM has two disks:
+   - /dev/sda: Boot and filesystem.
+   - /dev/sdb: For testing.
 
 
 :::

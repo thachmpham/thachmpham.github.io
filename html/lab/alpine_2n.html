@@ -135,12 +135,25 @@ class="header-section-number">1</span> Overview</h1>
 <div class="columns">
 <div class="column">
 <ul>
-<li>Create a docker container with QEMU.</li>
-<li>Create 2 QEMU VMs in the container.</li>
-<li>Connect container and VMs through a bridge.</li>
-<li>Configure static IP.</li>
-<li>Allow SSH from container to VMs.</li>
-<li>Allow ping between VMs.</li>
+<li>The lab runs in a Docker container with two QEMU VMs inside.</li>
+<li>Each VM connects to the container through two network interfaces:
+<ul>
+<li>User-mode: -netdev user</li>
+<li>Bridge: -netdev bridge,br=br0</li>
+</ul></li>
+<li>The VMs connect to each other through the bridge interface,
+br0.</li>
+<li>Static IP configured for SSH access:
+<ul>
+<li>Container: br0, 192.0.0.254</li>
+<li>VM1: eth1, 192.0.0.10</li>
+<li>VM2: eth1, 192.0.0.20</li>
+</ul></li>
+<li>Each VM has two disks:
+<ul>
+<li>/dev/sda: Boot and filesystem.</li>
+<li>/dev/sdb: For testing.</li>
+</ul></li>
 </ul>
 </div><div class="column">
 <div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>        VM1                 VM2</span>
