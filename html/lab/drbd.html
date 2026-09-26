@@ -116,8 +116,10 @@
 class="toc-section-number">1</span> Overview</a></li>
 <li><a href="#setup" id="toc-setup"><span
 class="toc-section-number">2</span> Setup</a></li>
+<li><a href="#check" id="toc-check"><span
+class="toc-section-number">3</span> Check</a></li>
 <li><a href="#references" id="toc-references"><span
-class="toc-section-number">3</span> References</a></li>
+class="toc-section-number">4</span> References</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="overview"><span
@@ -125,7 +127,7 @@ class="header-section-number">1</span> Overview</h1>
 <div class="columns">
 <div class="column">
 <ul>
-<li>Create 2 QEMU VMs: VM1, VM2</li>
+<li>Create 2 QEMU VMs: VM1, VM2.</li>
 <li>Connect VMs through a bridge: br0.</li>
 <li>Setup DRBD for the VMs.</li>
 </ul>
@@ -146,7 +148,7 @@ class="header-section-number">2</span> Setup</h1>
 <ul>
 <li>Setup lab: <a href="/html/lab/alpine_2n.html">Alpine 2
 Nodes</a>.</li>
-<li>Copy needed files to container.</li>
+<li>Copy needed files to the container.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cd lab/drbd/setup-1</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> find . <span class="at">-type</span> f <span class="at">-exec</span> docker cp {} apk:/ws <span class="dt">\;</span></span></code></pre></div>
@@ -165,13 +167,45 @@ Nodes</a>.</li>
 <ul>
 <li>Make filesystem and mount.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> mkfs <span class="at">-t</span> ext4 /dev/drbd0</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> mkdir <span class="at">-p</span> /mnt/drbd0</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> mount <span class="at">-t</span> ext4 /dev/drbd0 /mnt/drbd0</span></code></pre></div>
-<h1 data-number="3" id="references"><span
-class="header-section-number">3</span> References</h1>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> mkfs.ext4 /dev/drbd0</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> mkdir <span class="at">-p</span> /mnt/drbd0</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> mount /dev/drbd0 /mnt/drbd0</span></code></pre></div>
+<h1 data-number="3" id="check"><span
+class="header-section-number">3</span> Check</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Check vm1.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> lsblk</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>      MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">sdb</span>         8:16   0    4G  0 disk </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">└─sdb1</span>      8:17   0    2G  0 part </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">└─drbd0</span> 147:0    0    2G  0 disk /mnt/drbd0</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> drbdadm status</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">drbd0</span> role:Primary</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">disk:UpToDate</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="ex">peer</span> role:Secondary</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">replication:Established</span> peer-disk:UpToDate</span></code></pre></div>
+</div><div class="column">
+<ul>
+<li>Check vm2.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> lsblk</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>      MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">sdb</span>         8:16   0    8G  0 disk </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">└─sdb1</span>      8:17   0    2G  0 part </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> drbdadm status</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ex">drbd0</span> role:Secondary</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">disk:UpToDate</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">peer</span> role:Primary</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">replication:Established</span> peer-disk:UpToDate</span></code></pre></div>
+</div>
+</div>
+<h1 data-number="4" id="references"><span
+class="header-section-number">4</span> References</h1>
 <ul>
 <li><a
 href="https://wiki.alpinelinux.org/wiki/Disk_Replication_with_DRBD">Alpine

@@ -9,7 +9,7 @@ subtitle: '(Lab Series)'
 :::::::::::::: {.columns}
 ::: {.column}
 
-- Create 2 QEMU VMs: VM1, VM2
+- Create 2 QEMU VMs: VM1, VM2.
 - Connect VMs through a bridge: br0.
 - Setup DRBD for the VMs.
 
@@ -34,7 +34,7 @@ subtitle: '(Lab Series)'
 
 # Setup
 - Setup lab: [Alpine 2 Nodes](/html/lab/alpine_2n.html).
-- Copy needed files to container.
+- Copy needed files to the container.
 
 ```sh
 host$ cd lab/drbd/setup-1
@@ -58,11 +58,52 @@ host$ ./drbd_setup_devices.sh
 
 - Make filesystem and mount.
 ```sh
-vm1$ mkfs -t ext4 /dev/drbd0
+vm1$ mkfs.ext4 /dev/drbd0
 vm1$ mkdir -p /mnt/drbd0
-vm1$ mount -t ext4 /dev/drbd0 /mnt/drbd0
+vm1$ mount /dev/drbd0 /mnt/drbd0
 ```
 
+
+# Check
+
+:::::::::::::: {.columns}
+::: {.column}
+
+- Check vm1.
+```sh
+vm1$ lsblk
+NAME      MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sdb         8:16   0    4G  0 disk 
+└─sdb1      8:17   0    2G  0 part 
+  └─drbd0 147:0    0    2G  0 disk /mnt/drbd0
+
+vm2$ drbdadm status
+drbd0 role:Primary
+  disk:UpToDate
+  peer role:Secondary
+    replication:Established peer-disk:UpToDate
+```
+
+:::
+::: {.column}
+
+- Check vm2.
+```sh
+vm2$ lsblk
+NAME      MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sdb         8:16   0    8G  0 disk 
+└─sdb1      8:17   0    2G  0 part 
+
+vm2$ drbdadm status
+drbd0 role:Secondary
+  disk:UpToDate
+  peer role:Primary
+    replication:Established peer-disk:UpToDate
+```
+
+
+:::
+::::::::::::::
 
 # References
 - [Alpine DRBD](https://wiki.alpinelinux.org/wiki/Disk_Replication_with_DRBD)
