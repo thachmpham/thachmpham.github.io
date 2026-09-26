@@ -15,6 +15,7 @@ title: "A Developer Diary"
 - [Alpine 2 Nodes](/html/lab/alpine_2n.html)
 - [Preboot Execution Environment (PXE)](/html/lab/pxeboot.html)
 - [Network File System (NFS)](/html/lab/nfs.html)
+- [Distributed Replicated Block Device (DRBD)](/html/lab/drbd.html)
 
 **Docker**
 

@@ -33,14 +33,36 @@ subtitle: '(Lab Series)'
 
 
 # Setup
-## Setup Container
-```sh
-host$ git clone https://github.com/thachmpham/lab.git
-host$ cd lab/drbd/setup-1
-```
+- Setup lab: [Alpine 2 Nodes](/html/lab/alpine_2n.html).
+- Copy needed files to container.
 
 ```sh
-host$ docker compose build
-host$ docker compose up --detach
-host$ docker exec -it apk bash
+host$ cd lab/drbd/setup-1
+host$ find . -type f -exec docker cp {} apk:/ws \;
 ```
+
+- Install packages.
+```sh
+cont$ ./drbd_install_packages.sh
+```
+
+- Create disk partitions.
+```sh
+host$ ./drbd_create_partitions.sh
+```
+
+- Setup drbd devices.
+```sh
+host$ ./drbd_setup_devices.sh
+```
+
+- Make filesystem and mount.
+```sh
+vm1$ mkfs -t ext4 /dev/drbd0
+vm1$ mkdir -p /mnt/drbd0
+vm1$ mount -t ext4 /dev/drbd0 /mnt/drbd0
+```
+
+
+# References
+- [Alpine DRBD](https://wiki.alpinelinux.org/wiki/Disk_Replication_with_DRBD)

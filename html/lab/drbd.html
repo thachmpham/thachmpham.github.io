@@ -115,11 +115,9 @@
 <li><a href="#overview" id="toc-overview"><span
 class="toc-section-number">1</span> Overview</a></li>
 <li><a href="#setup" id="toc-setup"><span
-class="toc-section-number">2</span> Setup</a>
-<ul>
-<li><a href="#setup-container" id="toc-setup-container"><span
-class="toc-section-number">2.1</span> Setup Container</a></li>
-</ul></li>
+class="toc-section-number">2</span> Setup</a></li>
+<li><a href="#references" id="toc-references"><span
+class="toc-section-number">3</span> References</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="overview"><span
@@ -145,13 +143,40 @@ class="header-section-number">1</span> Overview</h1>
 </div>
 <h1 data-number="2" id="setup"><span
 class="header-section-number">2</span> Setup</h1>
-<h2 data-number="2.1" id="setup-container"><span
-class="header-section-number">2.1</span> Setup Container</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> git clone https://github.com/thachmpham/lab.git</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cd lab/drbd/setup-1</span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose build</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose up <span class="at">--detach</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec <span class="at">-it</span> apk bash</span></code></pre></div>
+<ul>
+<li>Setup lab: <a href="/html/lab/alpine_2n.html">Alpine 2
+Nodes</a>.</li>
+<li>Copy needed files to container.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cd lab/drbd/setup-1</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> find . <span class="at">-type</span> f <span class="at">-exec</span> docker cp {} apk:/ws <span class="dt">\;</span></span></code></pre></div>
+<ul>
+<li>Install packages.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./drbd_install_packages.sh</span></code></pre></div>
+<ul>
+<li>Create disk partitions.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> ./drbd_create_partitions.sh</span></code></pre></div>
+<ul>
+<li>Setup drbd devices.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> ./drbd_setup_devices.sh</span></code></pre></div>
+<ul>
+<li>Make filesystem and mount.</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> mkfs <span class="at">-t</span> ext4 /dev/drbd0</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> mkdir <span class="at">-p</span> /mnt/drbd0</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> mount <span class="at">-t</span> ext4 /dev/drbd0 /mnt/drbd0</span></code></pre></div>
+<h1 data-number="3" id="references"><span
+class="header-section-number">3</span> References</h1>
+<ul>
+<li><a
+href="https://wiki.alpinelinux.org/wiki/Disk_Replication_with_DRBD">Alpine
+DRBD</a></li>
+</ul>
 <footer class="footer text-muted">
    <div align="center">      
       <br>
