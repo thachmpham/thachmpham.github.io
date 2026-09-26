@@ -114,31 +114,23 @@
 <ul>
 <li><a href="#overview" id="toc-overview"><span
 class="toc-section-number">1</span> Overview</a></li>
-<li><a href="#create-vms" id="toc-create-vms"><span
-class="toc-section-number">2</span> Create VMs</a></li>
-<li><a href="#basic-setup" id="toc-basic-setup"><span
-class="toc-section-number">3</span> Basic Setup</a>
+<li><a href="#initial-setup" id="toc-initial-setup"><span
+class="toc-section-number">2</span> Initial Setup</a></li>
+<li><a href="#export-mount" id="toc-export-mount"><span
+class="toc-section-number">3</span> Export &amp; Mount</a>
 <ul>
-<li><a href="#server---host-nfs-filesystem"
-id="toc-server---host-nfs-filesystem"><span
-class="toc-section-number">3.1</span> Server - Host NFS
-Filesystem</a></li>
-<li><a href="#client---mount-nfs-filesystem"
-id="toc-client---mount-nfs-filesystem"><span
-class="toc-section-number">3.2</span> Client - Mount NFS
-Filesystem</a></li>
+<li><a href="#server" id="toc-server"><span
+class="toc-section-number">3.1</span> Server</a></li>
+<li><a href="#client" id="toc-client"><span
+class="toc-section-number">3.2</span> Client</a></li>
 </ul></li>
-<li><a href="#startup-setup" id="toc-startup-setup"><span
-class="toc-section-number">4</span> Startup Setup</a>
+<li><a href="#startup" id="toc-startup"><span
+class="toc-section-number">4</span> Startup</a>
 <ul>
-<li><a href="#server---start-nfs-on-boot"
-id="toc-server---start-nfs-on-boot"><span
-class="toc-section-number">4.1</span> Server - Start NFS on
-Boot</a></li>
-<li><a href="#client---mount-nfs-on-boot"
-id="toc-client---mount-nfs-on-boot"><span
-class="toc-section-number">4.2</span> Client - Mount NFS on
-Boot</a></li>
+<li><a href="#server-1" id="toc-server-1"><span
+class="toc-section-number">4.1</span> Server</a></li>
+<li><a href="#client-1" id="toc-client-1"><span
+class="toc-section-number">4.2</span> Client</a></li>
 </ul></li>
 <li><a href="#references" id="toc-references"><span
 class="toc-section-number">5</span> References</a></li>
@@ -162,83 +154,69 @@ class="header-section-number">1</span> Overview</h1>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">+------------------------+</span></span></code></pre></div>
 </div>
 </div>
-<h1 data-number="2" id="create-vms"><span
-class="header-section-number">2</span> Create VMs</h1>
+<h1 data-number="2" id="initial-setup"><span
+class="header-section-number">2</span> Initial Setup</h1>
 <ul>
 <li>Setup lab: <a href="/html/lab/alpine_2n.html"><strong>Alpine 2
 Nodes</strong></a>.</li>
 </ul>
-<h1 data-number="3" id="basic-setup"><span
-class="header-section-number">3</span> Basic Setup</h1>
-<h2 data-number="3.1" id="server---host-nfs-filesystem"><span
-class="header-section-number">3.1</span> Server - Host NFS
-Filesystem</h2>
+<h1 data-number="3" id="export-mount"><span
+class="header-section-number">3</span> Export &amp; Mount</h1>
+<h2 data-number="3.1" id="server"><span
+class="header-section-number">3.1</span> Server</h2>
 <ul>
 <li>Install packages.</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># for nfs</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> apk add nfs-utils</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for troubleshooting</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> apk add rsyslog util-linux e2fsprogs-extra</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> apk add nfs-utils rsyslog util-linux</span></code></pre></div>
 <ul>
 <li>Start NFS service.</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> rc-service nfs start</span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> rc-status</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">nfs</span> [  started  ]</span></code></pre></div>
 <ul>
 <li>Configure NFS directory.</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> cat /etc/exports </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------------------------------------- #</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Accept clients from 192.0.0.0/24</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">/srv/nfs</span> 192.0.0.0/24<span class="er">(</span><span class="ex">rw,sync,no_subtree_check</span><span class="kw">)</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------------------------------------- #</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-a</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-v</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/srv/nfs</span>        192.0.0.0/24<span class="er">(</span><span class="fu">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,ro<span class="kw">)</span></span></code></pre></div>
-<h2 data-number="3.2" id="client---mount-nfs-filesystem"><span
-class="header-section-number">3.2</span> Client - Mount NFS
-Filesystem</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> cat /etc/exports</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------------------------------------- #</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Accept clients from 192.0.0.0/24</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">/srv/nfs</span> 192.0.0.0/24<span class="er">(</span><span class="ex">rw,sync,no_subtree_check</span><span class="kw">)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------------------------------------- #</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-a</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-v</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ex">/srv/nfs</span>        192.0.0.0/24<span class="er">(</span><span class="fu">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,ro<span class="kw">)</span></span></code></pre></div>
+<h2 data-number="3.2" id="client"><span
+class="header-section-number">3.2</span> Client</h2>
 <ul>
 <li>Install packages.</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> apk add nfs-utils rsyslog</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> apk add nfs-utils rsyslog util-linux</span></code></pre></div>
 <ul>
 <li>Mount.</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mkdir /mnt/nfs</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mount <span class="at">-t</span> nfs 192.0.0.10:/srv/nfs /mnt/nfs</span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> df <span class="at">-h</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span>       5.6G    220.9M      5.1G   4% /mnt/nfs</span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> showmount <span class="at">-a</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">All</span> mount points on vm1:</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.20:/srv/nfs</span></span></code></pre></div>
-<h1 data-number="4" id="startup-setup"><span
-class="header-section-number">4</span> Startup Setup</h1>
-<h2 data-number="4.1" id="server---start-nfs-on-boot"><span
-class="header-section-number">4.1</span> Server - Start NFS on Boot</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mkdir /mnt/nfs</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mount <span class="at">-t</span> nfs 192.0.0.10:/srv/nfs /mnt/nfs</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> df <span class="at">-h</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span>       5.6G    220.9M      5.1G   4% /mnt/nfs</span></code></pre></div>
+<h1 data-number="4" id="startup"><span
+class="header-section-number">4</span> Startup</h1>
+<h2 data-number="4.1" id="server-1"><span
+class="header-section-number">4.1</span> Server</h2>
 <ul>
 <li>Auto-start NFS on boot.</li>
 </ul>
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> rc-update add nfs</span></code></pre></div>
-<h2 data-number="4.2" id="client---mount-nfs-on-boot"><span
-class="header-section-number">4.2</span> Client - Mount NFS on Boot</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> rc-update add nfs</span></code></pre></div>
+<h2 data-number="4.2" id="client-1"><span
+class="header-section-number">4.2</span> Client</h2>
 <ul>
 <li>Auto-mount on boot.</li>
 </ul>
-<div class="sourceCode" id="cb13"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> cat /etc/fstab</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------------------------------------- #</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span> /mnt/nfs nfs4 rw,_netdev 0 0</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------------------------------------- #</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> rc-update add nfsmount</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> cat /etc/fstab</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span> /mnt/nfs nfs4 rw,_netdev 0 0</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> rc-update add nfsmount</span></code></pre></div>
 <h1 data-number="5" id="references"><span
 class="header-section-number">5</span> References</h1>
 <ul>

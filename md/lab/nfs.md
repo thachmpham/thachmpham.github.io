@@ -29,19 +29,15 @@ subtitle: '(Lab Series)'
 ::::::::::::::
 
 
-# Create VMs
+# Initial Setup
 - Setup lab: [**Alpine 2 Nodes**](/html/lab/alpine_2n.html).
 
 
-# Basic Setup 
-## Server - Host NFS Filesystem
+# Export & Mount
+## Server
 - Install packages.
 ```sh
-# for nfs
-vm1$ apk add nfs-utils
-
-# for troubleshooting
-vm1$ apk add rsyslog util-linux e2fsprogs-extra
+vm1$ apk add nfs-utils rsyslog util-linux
 ```
 
 - Start NFS service.
@@ -49,76 +45,54 @@ vm1$ apk add rsyslog util-linux e2fsprogs-extra
 vm1$ rc-service nfs start
 ```
 
-```sh
-vm1$ rc-status
-nfs [  started  ]
-```
-
 - Configure NFS directory.
 ```sh
-vm1$ cat /etc/exports 
+vm1$ cat /etc/exports
 # -------------------------------------------------- #
 # Accept clients from 192.0.0.0/24
 /srv/nfs 192.0.0.0/24(rw,sync,no_subtree_check)
 # -------------------------------------------------- #
-```
 
-```sh
 vm1$ exportfs -a
-```
 
-```sh
 vm1$ exportfs -v
 /srv/nfs        192.0.0.0/24(sync,wdelay,hide,no_subtree_check,sec=sys,rw,secure,ro)
 ```
 
 
-## Client - Mount NFS Filesystem
+## Client
 - Install packages.
 ```sh
-vm2$ apk add nfs-utils rsyslog
+vm2$ apk add nfs-utils rsyslog util-linux
 ```
 
 - Mount.
 ```sh
 vm2$ mkdir /mnt/nfs
-vm2$ mount -t nfs 192.0.0.10:/srv/nfs /mnt/nfs
-```
 
-```sh
+vm2$ mount -t nfs 192.0.0.10:/srv/nfs /mnt/nfs
+
 vm2$ df -h
 192.0.0.10:/srv/nfs       5.6G    220.9M      5.1G   4% /mnt/nfs
 ```
 
-```sh
-vm1$ showmount -a
-All mount points on vm1:
-192.0.0.10:/srv/nfs
-192.0.0.20:/srv/nfs
-```
 
-
-# Startup Setup
-## Server - Start NFS on Boot
+# Startup
+## Server
 - Auto-start NFS on boot.
 ```sh
 vm1$ rc-update add nfs
 ```
 
 
-## Client - Mount NFS on Boot
+## Client
 - Auto-mount on boot.
 ```sh
 vm2$ cat /etc/fstab
-# -------------------------------------------------- #
 192.0.0.10:/srv/nfs /mnt/nfs nfs4 rw,_netdev 0 0
-# -------------------------------------------------- #
-```
 
-```sh
 vm2$ rc-update add nfsmount
 ```
-
 
 
 # References
