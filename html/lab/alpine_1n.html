@@ -121,8 +121,8 @@ class="toc-section-number">2</span> Setup</a>
 class="toc-section-number">2.1</span> Setup Container</a></li>
 <li><a href="#create-vm" id="toc-create-vm"><span
 class="toc-section-number">2.2</span> Create VM</a></li>
-<li><a href="#start-vm" id="toc-start-vm"><span
-class="toc-section-number">2.3</span> Start VM</a></li>
+<li><a href="#setup-ssh" id="toc-setup-ssh"><span
+class="toc-section-number">2.3</span> Setup SSH</a></li>
 </ul></li>
 <li><a href="#shortcuts" id="toc-shortcuts"><span
 class="toc-section-number">3</span> Shortcuts</a></li>
@@ -201,23 +201,27 @@ lab/alpine/1-node/ans.</p></li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> setup-alpine <span class="at">-e</span> <span class="at">-f</span> ans</span></code></pre></div>
 <ul>
-<li>Allow root ssh login with a empty password.</li>
-</ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> vi /etc/ssh/sshd_config</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitRootLogin</span> yes</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">PasswordAuthentication</span> yes</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitEmptyPasswords</span> yes</span></code></pre></div>
-<ul>
 <li>Shutdown the VM.</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> poweroff</span></code></pre></div>
-<h2 data-number="2.3" id="start-vm"><span
-class="header-section-number">2.3</span> Start VM</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> poweroff</span></code></pre></div>
+<h2 data-number="2.3" id="setup-ssh"><span
+class="header-section-number">2.3</span> Setup SSH</h2>
 <ul>
 <li>Start the VM.</li>
 </ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./start_vm.sh</span></code></pre></div>
+<ul>
+<li>Allow root ssh login with a empty password.</li>
+</ul>
 <div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./start_vm.sh</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> vi /etc/ssh/sshd_config</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitRootLogin</span> yes</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">PasswordAuthentication</span> yes</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitEmptyPasswords</span> yes</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> rc-service sshd restart</span></code></pre></div>
 <ul>
 <li>Check ssh access from the container to the VM.</li>
 </ul>

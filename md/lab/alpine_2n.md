@@ -38,146 +38,97 @@ subtitle: '(Lab Series)'
 
 # Setup
 ## Setup Container
+- Clone code.
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
 host$ cd lab/alpine/2-nodes
 ```
 
+- Setup the container.
 ```sh
 host$ docker compose build
 host$ docker compose up --detach
-host$ docker exec -it apk bash
 ```
 
 
 ## Setup VM1
-Create VM1.
+- Access the container.
 ```sh
-container$ ./create_vm1.sh
+host$ docker exec -it apk bash
 ```
 
+- Create VM1.
 ```sh
-vm1$ setup-alpine
-# - hostname:   vm1
-# - interface:  eth0
-# - ipv4 addr:  dhcp
-# - ipv6 addr:  auto
-# - manual network config:  no
-# - password:
-# - timezone:   UTC
-# - proxy:      none
-# - ntp:        busybox
-# - apk mirror: 1
-# - setup user: no
-# - ssh server: openssh
-# - allow root ssh: yes
-# - ssh key:    none
-# - disk:       sda, sys
+cont$ ./create_vm1.sh
+```
+
+- On VM1, create a file named ans_vm1 with the same content as lab/alpine/2-node/ans_vm1.
+
+- Install Alpine to VM1.
+```sh
+vm1$ setup-alpine -e -f ans_vm1
 
 vm1$ poweroff
 ```
 
+- Start VM1.
 ```sh
-container$ ./start_vm1.sh
+cont$ ./start_vm1.sh
 ```
 
-Configure static IP.
+- Allow root ssh login with a empty password.
 ```sh
-vm1$ cat /etc/network/interfaces
-# -------------------- #
-auto lo
-iface lo inet loopback
+vm1$ vi /etc/ssh/sshd_config
+# ------------------------------ #
+PermitRootLogin yes
+PasswordAuthentication yes
+PermitEmptyPasswords yes
+# ------------------------------ #
 
-auto eth0
-iface eth0 inet dhcp
-hostname alpine-test
-
-auto eth1
-iface eth1 inet static
-    address 192.0.0.10/24
-# -------------------- #
+vm1$ rc-service sshd restart
 ```
 
+- Check ssh access from the container to VM1.
 ```sh
-vm1$ rc-service networking restart
-
-vm1$ ip addr show
-eth1: inet 192.0.0.10
+cont$ ssh vm1
 ```
 
 
 ## Setup VM2
-Create VM2.
+- Create VM2.
 ```sh
-container$ ./create_vm2.sh
+cont$ ./create_vm2.sh
 ```
 
+- On VM2, create a file named ans_vm2 with the same content as lab/alpine/2-node/ans_vm2.
+
+- Install Alpine to VM2.
 ```sh
-vm2$ setup-alpine
-# - hostname:   vm2
-# - interface:  eth0
-# - ipv4 addr:  dhcp
-# - ipv6 addr:  auto
-# - manual network config:  no
-# - password:
-# - timezone:   UTC
-# - proxy:      none
-# - ntp:        busybox
-# - apk mirror: 1
-# - setup user: no
-# - ssh server: openssh
-# - allow root ssh: yes
-# - ssh key:    none
-# - disk:       sda, sys
+vm2$ setup-alpine -e -f ans_vm2
 
 vm2$ poweroff
 ```
 
+- Start VM1.
 ```sh
-container$ ./start_vm2.sh
+cont$ ./start_vm2.sh
 ```
 
-Configure static IP.
+- Allow root ssh login with a empty password.
 ```sh
-vm2$ cat /etc/network/interfaces
-# -------------------- #
-auto lo
-iface lo inet loopback
+vm2$ vi /etc/ssh/sshd_config
+# ------------------------------ #
+PermitRootLogin yes
+PasswordAuthentication yes
+PermitEmptyPasswords yes
+# ------------------------------ #
 
-auto eth0
-iface eth0 inet dhcp
-hostname alpine-test
-
-auto eth1
-iface eth1 inet static
-    address 192.0.0.20/24
-# -------------------- #
+vm2$ rc-service sshd restart
 ```
 
+- Check ssh access from the container to VM1.
 ```sh
-vm2$ rc-service networking restart
-
-vm2$ ip addr show
-eth1: inet 192.0.0.20
-```
-
-
-## Check
-Check SSH.
-```sh
-container$ ssh root@192.0.0.10
-container$ ssh root@192.0.0.20
-```
-
-Check ping.
-```sh
-# vm1 -> vm2
-vm1$ ping 192.0.0.20
-```
-
-```sh
-# vm2 -> vm1
-vm2$ ping 192.0.0.10
+cont$ ssh vm2
 ```
 
 

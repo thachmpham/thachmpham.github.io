@@ -84,24 +84,28 @@ cont$ ./create_vm.sh
 vm$ setup-alpine -e -f ans
 ```
 
-- Allow root ssh login with a empty password.
-```sh
-vm$ vi /etc/ssh/sshd_config
-PermitRootLogin yes
-PasswordAuthentication yes
-PermitEmptyPasswords yes
-```
-
 - Shutdown the VM.
 ```sh
 vm$ poweroff
 ```
 
 
-## Start VM
+## Setup SSH
 - Start the VM.
 ```sh
 cont$ ./start_vm.sh
+```
+
+- Allow root ssh login with a empty password.
+```sh
+vm$ vi /etc/ssh/sshd_config
+# ------------------------------ #
+PermitRootLogin yes
+PasswordAuthentication yes
+PermitEmptyPasswords yes
+# ------------------------------ #
+
+vm$ rc-service sshd restart
 ```
 
 - Check ssh access from the container to the VM.
