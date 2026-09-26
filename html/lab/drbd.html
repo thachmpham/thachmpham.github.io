@@ -114,16 +114,22 @@
 <ul>
 <li><a href="#overview" id="toc-overview"><span
 class="toc-section-number">1</span> Overview</a></li>
-<li><a href="#initial-setup" id="toc-initial-setup"><span
-class="toc-section-number">2</span> Initial Setup</a></li>
+<li><a href="#manual-setup" id="toc-manual-setup"><span
+class="toc-section-number">2</span> Manual Setup</a>
+<ul>
+<li><a href="#initial" id="toc-initial"><span
+class="toc-section-number">2.1</span> Initial</a></li>
 <li><a href="#setup-vm1" id="toc-setup-vm1"><span
-class="toc-section-number">3</span> Setup VM1</a></li>
+class="toc-section-number">2.2</span> Setup VM1</a></li>
 <li><a href="#setup-vm2" id="toc-setup-vm2"><span
-class="toc-section-number">4</span> Setup VM2</a></li>
-<li><a href="#check" id="toc-check"><span
-class="toc-section-number">5</span> Check</a></li>
+class="toc-section-number">2.3</span> Setup VM2</a></li>
+<li><a href="#check-status" id="toc-check-status"><span
+class="toc-section-number">2.4</span> Check Status</a></li>
+</ul></li>
+<li><a href="#automation-setup" id="toc-automation-setup"><span
+class="toc-section-number">3</span> Automation Setup</a></li>
 <li><a href="#references" id="toc-references"><span
-class="toc-section-number">6</span> References</a></li>
+class="toc-section-number">4</span> References</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="overview"><span
@@ -147,8 +153,10 @@ class="header-section-number">1</span> Overview</h1>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>               Container</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="2" id="initial-setup"><span
-class="header-section-number">2</span> Initial Setup</h1>
+<h1 data-number="2" id="manual-setup"><span
+class="header-section-number">2</span> Manual Setup</h1>
+<h2 data-number="2.1" id="initial"><span
+class="header-section-number">2.1</span> Initial</h2>
 <ul>
 <li>Setup lab: <a href="/html/lab/alpine_2n.html">Alpine 2
 Nodes</a>.</li>
@@ -165,8 +173,8 @@ Nodes</a>.</li>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> vi /root/.profile</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="va">$PATH</span>:/usr/lib/drbd</span></code></pre></div>
-<h1 data-number="3" id="setup-vm1"><span
-class="header-section-number">3</span> Setup VM1</h1>
+<h2 data-number="2.2" id="setup-vm1"><span
+class="header-section-number">2.2</span> Setup VM1</h2>
 <ul>
 <li>Create the disk partition.</li>
 </ul>
@@ -202,8 +210,8 @@ class="header-section-number">3</span> Setup VM1</h1>
 <li>Set as primary.</li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> drbdadm primary <span class="at">--force</span> drbd0</span></code></pre></div>
-<h1 data-number="4" id="setup-vm2"><span
-class="header-section-number">4</span> Setup VM2</h1>
+<h2 data-number="2.3" id="setup-vm2"><span
+class="header-section-number">2.3</span> Setup VM2</h2>
 <ul>
 <li>Create the disk partition.</li>
 </ul>
@@ -241,8 +249,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 </ul>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> drbdadm secondary drbd0</span></code></pre></div>
-<h1 data-number="5" id="check"><span
-class="header-section-number">5</span> Check</h1>
+<h2 data-number="2.4" id="check-status"><span
+class="header-section-number">2.4</span> Check Status</h2>
 <div class="columns">
 <div class="column">
 <ul>
@@ -278,8 +286,33 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">replication:Established</span> peer-disk:UpToDate</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="6" id="references"><span
-class="header-section-number">6</span> References</h1>
+<h1 data-number="3" id="automation-setup"><span
+class="header-section-number">3</span> Automation Setup</h1>
+<p>To quickly setup a DRBD lab:</p>
+<ul>
+<li>Setup lab: <a href="/html/lab/alpine_2n.html">Alpine 2
+Nodes</a>.</li>
+<li>Copy needed files to the container.</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> find lab/drbd/setup-1 <span class="at">-type</span> f <span class="at">-exec</span> docker cp {} apk:/ws <span class="dt">\;</span></span></code></pre></div>
+<ul>
+<li>Install packages to the VMs.</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> /ws/drbd_install_packages.sh</span></code></pre></div>
+<ul>
+<li>Create disk partitions.</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> /ws/drbd_create_partitions.sh</span></code></pre></div>
+<ul>
+<li>Setup DRBD resources.</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> /ws/drbd_up_resources.sh</span></code></pre></div>
+<h1 data-number="4" id="references"><span
+class="header-section-number">4</span> References</h1>
 <ul>
 <li><a
 href="https://wiki.alpinelinux.org/wiki/Disk_Replication_with_DRBD">Alpine

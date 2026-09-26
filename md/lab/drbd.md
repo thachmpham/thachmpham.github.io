@@ -32,7 +32,8 @@ subtitle: '(Lab Series)'
 ::::::::::::::
 
 
-# Initial Setup
+# Manual Setup
+## Initial
 - Setup lab: [Alpine 2 Nodes](/html/lab/alpine_2n.html).
 - Install packages.
 ```sh
@@ -51,7 +52,7 @@ export PATH=$PATH:/usr/lib/drbd
 ```
 
 
-# Setup VM1
+## Setup VM1
 - Create the disk partition.
 ```sh
 vm1$ parted -s /dev/sdb mklabel msdos
@@ -92,7 +93,7 @@ vm1$ drbdadm primary --force drbd0
 ```
 
 
-# Setup VM2
+## Setup VM2
 - Create the disk partition.
 ```sh
 vm2$ parted -s /dev/sdb mklabel msdos
@@ -133,7 +134,7 @@ vm1$ drbdadm secondary drbd0
 ```
 
 
-# Check
+## Check Status
 
 :::::::::::::: {.columns}
 ::: {.column}
@@ -171,9 +172,33 @@ drbd0 role:Secondary
     replication:Established peer-disk:UpToDate
 ```
 
-
 :::
 ::::::::::::::
+
+
+# Automation Setup
+To quickly setup a DRBD lab:
+
+- Setup lab: [Alpine 2 Nodes](/html/lab/alpine_2n.html).
+- Copy needed files to the container.
+```sh
+host$ find lab/drbd/setup-1 -type f -exec docker cp {} apk:/ws \;
+```
+
+- Install packages to the VMs.
+```sh
+cont$ /ws/drbd_install_packages.sh
+```
+
+- Create disk partitions.
+```sh
+cont$ /ws/drbd_create_partitions.sh
+```
+
+- Setup DRBD resources.
+```sh
+cont$ /ws/drbd_up_resources.sh
+```
 
 # References
 - [Alpine DRBD](https://wiki.alpinelinux.org/wiki/Disk_Replication_with_DRBD)
