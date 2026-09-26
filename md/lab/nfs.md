@@ -37,7 +37,7 @@ subtitle: '(Lab Series)'
 ## Server
 - Install packages.
 ```sh
-vm1$ apk add nfs-utils rsyslog util-linux
+vm1$ apk add nfs-utils rsyslog util-linux e2fsprogs-extra
 ```
 
 - Start NFS service.
@@ -63,7 +63,7 @@ vm1$ exportfs -v
 ## Client
 - Install packages.
 ```sh
-vm2$ apk add nfs-utils rsyslog util-linux
+vm2$ apk add nfs-utils rsyslog util-linux e2fsprogs-extra
 ```
 
 - Mount.
