@@ -9,16 +9,16 @@ subtitle: '(Lab Series)'
 :::::::::::::: {.columns}
 ::: {.column}
 
-- Create 2 QEMU VMs.
-- Setup VM1 as NFS server.
-- Setup VM2 as NFS client.
-- VM2 mounts the NFS filesystem hosted by VM1.
+- The lab runs in a Docker container with two QEMU VMs inside.
+- VM1 acts as NFS server, which exports the NFS filesystem.
+- VM2 acts as NFS client, which mount the NFS filesystem.
 
 :::
 ::: {.column}
 
 ```go
-  VM1 (NFS Server)        VM2 (NFS Client)
+       VM1                    VM2
+   (NFS Server)            (NFS Client)
     192.0.0.10              192.0.0.20
        eth1                    eth1
         +                        +

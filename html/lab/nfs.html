@@ -141,17 +141,17 @@ class="header-section-number">1</span> Overview</h1>
 <div class="columns">
 <div class="column">
 <ul>
-<li>Create 2 QEMU VMs.</li>
-<li>Setup VM1 as NFS server.</li>
-<li>Setup VM2 as NFS client.</li>
-<li>VM2 mounts the NFS filesystem hosted by VM1.</li>
+<li>The lab runs in a Docker container with two QEMU VMs inside.</li>
+<li>VM1 acts as NFS server, which exports the NFS filesystem.</li>
+<li>VM2 acts as NFS client, which mount the NFS filesystem.</li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  VM1 <span class="op">(</span>NFS Server<span class="op">)</span>        VM2 <span class="op">(</span>NFS Client<span class="op">)</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="fl">192.0</span><span class="er">.0.10</span>              <span class="fl">192.0</span><span class="er">.0.20</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       eth1                    eth1</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">+</span>                        <span class="op">+</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">+------------------------+</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>       VM1                    VM2</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>NFS Server<span class="op">)</span>            <span class="op">(</span>NFS Client<span class="op">)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fl">192.0</span><span class="er">.0.10</span>              <span class="fl">192.0</span><span class="er">.0.20</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>       eth1                    eth1</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">+</span>                        <span class="op">+</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">+------------------------+</span></span></code></pre></div>
 </div>
 </div>
 <h1 data-number="2" id="initial-setup"><span
