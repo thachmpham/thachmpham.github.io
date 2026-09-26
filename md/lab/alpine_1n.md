@@ -93,7 +93,7 @@ PermitEmptyPasswords yes
 ```
 
 - Shutdown the VM.
-```
+```sh
 vm$ poweroff
 ```
 
