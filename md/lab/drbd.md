@@ -194,23 +194,17 @@ To quickly setup a DRBD lab:
 - Setup lab: [Alpine 2 Nodes](/html/lab/alpine_2n.html).
 - Copy needed files to the container.
 ```sh
-host$ find lab/drbd/setup-1 -type f -exec docker cp {} apk:/ws \;
+host$ cd lab/drbd/setup-1
+host$ ./copy_to_cont.sh
 ```
 
-- Install packages to the VMs.
+- Setup DRBD for VMs.
 ```sh
-cont$ /ws/drbd_install_packages.sh
+cont$ cd /ws
+cont$ ./drbd_setup_vm1.sh
+cont$ ./drbd_setup_vm2.sh
 ```
 
-- Create disk partitions.
-```sh
-cont$ /ws/drbd_create_partitions.sh
-```
-
-- Setup DRBD resources.
-```sh
-cont$ /ws/drbd_up_resources.sh
-```
 
 # References
 - [Alpine DRBD](https://wiki.alpinelinux.org/wiki/Disk_Replication_with_DRBD)

@@ -310,22 +310,15 @@ Nodes</a>.</li>
 <li>Copy needed files to the container.</li>
 </ul>
 <div class="sourceCode" id="cb15"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> find lab/drbd/setup-1 <span class="at">-type</span> f <span class="at">-exec</span> docker cp {} apk:/ws <span class="dt">\;</span></span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cd lab/drbd/setup-1</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> ./copy_to_cont.sh</span></code></pre></div>
 <ul>
-<li>Install packages to the VMs.</li>
+<li>Setup DRBD for VMs.</li>
 </ul>
 <div class="sourceCode" id="cb16"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> /ws/drbd_install_packages.sh</span></code></pre></div>
-<ul>
-<li>Create disk partitions.</li>
-</ul>
-<div class="sourceCode" id="cb17"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> /ws/drbd_create_partitions.sh</span></code></pre></div>
-<ul>
-<li>Setup DRBD resources.</li>
-</ul>
-<div class="sourceCode" id="cb18"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> /ws/drbd_up_resources.sh</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> cd /ws</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./drbd_setup_vm1.sh</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./drbd_setup_vm2.sh</span></code></pre></div>
 <h1 data-number="4" id="references"><span
 class="header-section-number">4</span> References</h1>
 <ul>
