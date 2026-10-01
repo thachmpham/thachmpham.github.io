@@ -136,34 +136,29 @@ class="header-section-number">1</span> Overview</h1>
 <div class="column">
 <ul>
 <li>The lab runs in a Docker container with two QEMU VMs inside.</li>
-<li>Each VM connects to the container through two network interfaces:
+<li>The VMs connect to each other through the below bridge interfaces:
 <ul>
-<li>User-mode: -netdev user</li>
-<li>Bridge: -netdev bridge,br=br0</li>
+<li>br1 (191.0.0.0/24): For ssh.</li>
+<li>br2 (192.0.0.0/24): For testing.</li>
+<li>br3 (193.0.0.0/24): For testing.</li>
 </ul></li>
-<li>The VMs connect to each other through the bridge interface,
-br0.</li>
-<li>Static IP configured for SSH access:
-<ul>
-<li>Container: br0, 192.0.0.254</li>
-<li>VM1: eth1, 192.0.0.10</li>
-<li>VM2: eth1, 192.0.0.20</li>
-</ul></li>
-<li>Each VM has two disks:
+<li>The containter acts as router, forwards traffics between VMs.</li>
+<li>Each VM has the below disks:
 <ul>
 <li>/dev/sda: Boot and filesystem.</li>
 <li>/dev/sdb: For testing.</li>
+<li>/dev/sdc: For testing.</li>
 </ul></li>
 </ul>
 </div><div class="column">
 <div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>        VM1                 VM2</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="fl">192.0</span><span class="er">.0.10</span>           <span class="fl">192.0</span><span class="er">.0.20</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="fl">191.0</span><span class="er">.0.10</span>           <span class="fl">191.0</span><span class="er">.0.20</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       eth1                 eth1</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">+</span>                    <span class="op">+</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">+--------------------+</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                  <span class="op">+</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                 br0</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>              <span class="fl">192.0</span><span class="er">.0.254</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>              <span class="fl">191.0</span><span class="er">.0.254</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>               Container</span></code></pre></div>
 </div>
 </div>

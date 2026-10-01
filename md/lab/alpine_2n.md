@@ -10,31 +10,28 @@ subtitle: '(Lab Series)'
 ::: {.column}
 
 - The lab runs in a Docker container with two QEMU VMs inside.
-- Each VM connects to the container through two network interfaces:
-    - User-mode: -netdev user
-    - Bridge: -netdev bridge,br=br0
-- The VMs connect to each other through the bridge interface, br0.
-- Static IP configured for SSH access:
-    - Container: br0, 192.0.0.254
-    - VM1: eth1, 192.0.0.10
-    - VM2: eth1, 192.0.0.20
-- Each VM has two disks:
+- The VMs connect to each other through the below bridge interfaces:
+    - br1 (191.0.0.0/24): For ssh.
+    - br2 (192.0.0.0/24): For testing.
+    - br3 (193.0.0.0/24): For testing.
+- The containter acts as router, forwards traffics between VMs.
+- Each VM has the below disks:
    - /dev/sda: Boot and filesystem.
    - /dev/sdb: For testing.
-
+   - /dev/sdc: For testing.
 
 :::
 ::: {.column}
 
 ```go
         VM1                 VM2
-    192.0.0.10           192.0.0.20
+    191.0.0.10           191.0.0.20
        eth1                 eth1
         +                    +
         +--------------------+
                   +
                  br0
-              192.0.0.254
+              191.0.0.254
                Container
 ```
 
