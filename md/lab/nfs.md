@@ -20,7 +20,7 @@ subtitle: '(Lab Series)'
        VM1                    VM2
    (NFS Server)            (NFS Client)
     192.0.0.10              192.0.0.20
-       eth1                    eth1
+       eth2                    eth2
         +                        +
         +------------------------+
 ```
@@ -92,6 +92,18 @@ vm2$ cat /etc/fstab
 192.0.0.10:/srv/nfs /mnt/nfs nfs4 rw,_netdev 0 0
 
 vm2$ rc-update add nfsmount
+```
+
+
+# Automation Setup
+- Copy files to container.
+```sh
+host$ find lab/nfs -type f -exec docker cp {} apk:/ws
+```
+
+- Run the setup script in the container.
+```sh
+cont$ /ws/nfs_setup.sh
 ```
 
 
