@@ -5,41 +5,24 @@ subtitle: '(Lab Series)'
 
 
 # Overview
-
-:::::::::::::: {.columns}
-::: {.column}
-
-- The lab runs in a Docker container with two QEMU VMs inside.
-- VM1 acts as NFS server, which exports the NFS filesystem.
-- VM2 acts as NFS client, which mount the NFS filesystem.
-
-:::
-::: {.column}
-
-```go
-       VM1                    VM2
-   (NFS Server)            (NFS Client)
-    192.0.0.10              192.0.0.20
-       eth2                    eth2
-        +                        +
-        +------------------------+
-```
-
-:::
-::::::::::::::
+- This NFS lab is based on the [**Alpine 2 Nodes**](/html/lab/alpine_2n.html) lab.
+- VM1 will be set up as the NFS server to export the filesystem.
+- VM2 will be set up as the NFS client to mount the filesystem.
 
 
-# Initial Setup
+# Base Lab
 - Setup lab: [**Alpine 2 Nodes**](/html/lab/alpine_2n.html).
-
-
-# Export & Mount
-## Server
 - Install packages.
 ```sh
 vm1$ apk add nfs-utils rsyslog util-linux e2fsprogs-extra
+vm2$ apk add nfs-utils rsyslog util-linux e2fsprogs-extra
 ```
 
+
+# Manual Setup
+The step-by-step procedure to set up the NFS server and client.
+
+## Export NFS on Server
 - Start NFS service.
 ```sh
 vm1$ rc-service nfs start
@@ -60,13 +43,8 @@ vm1$ exportfs -v
 ```
 
 
-## Client
-- Install packages.
-```sh
-vm2$ apk add nfs-utils rsyslog util-linux e2fsprogs-extra
-```
-
-- Mount.
+## Mount NFS on Client
+- Mount the NFS filesystem.
 ```sh
 vm2$ mkdir /mnt/nfs
 
@@ -77,33 +55,33 @@ vm2$ df -h
 ```
 
 
-# Startup
-## Server
-- Auto-start NFS on boot.
+# Automation Setup
+Save time from manual setup, the below steps to quickly setup the NFS server and client.
+
+```sh
+host$ find lab/nfs -type f -exec docker cp {} apk:/ws
+host$ docker exec apk /ws/nfs_setup.sh
+```
+
+
+# Boot Configuration
+## Export NFS on Boot
+- Add nfs to startup.
 ```sh
 vm1$ rc-update add nfs
 ```
 
 
-## Client
-- Auto-mount on boot.
+## Mount NFS on Boot
+- Add nfsmount to startup.
 ```sh
-vm2$ cat /etc/fstab
-192.0.0.10:/srv/nfs /mnt/nfs nfs4 rw,_netdev 0 0
-
 vm2$ rc-update add nfsmount
 ```
 
-
-# Automation Setup
-- Copy files to container.
+- Add nfs directory to fstab.
 ```sh
-host$ find lab/nfs -type f -exec docker cp {} apk:/ws
-```
-
-- Run the setup script in the container.
-```sh
-cont$ /ws/nfs_setup.sh
+vm2$ cat /etc/fstab
+192.0.0.10:/srv/nfs /mnt/nfs nfs4 rw,_netdev 0 0
 ```
 
 
