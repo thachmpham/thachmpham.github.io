@@ -116,25 +116,32 @@
 class="toc-section-number">1</span> Overview</a></li>
 <li><a href="#prepare-lab" id="toc-prepare-lab"><span
 class="toc-section-number">2</span> Prepare Lab</a></li>
-<li><a href="#delete-an-open-directory"
-id="toc-delete-an-open-directory"><span
-class="toc-section-number">3</span> Delete an Open Directory</a></li>
-<li><a href="#export-a-different-directory"
-id="toc-export-a-different-directory"><span
-class="toc-section-number">4</span> Export a Different
+<li><a href="#reproduce" id="toc-reproduce"><span
+class="toc-section-number">3</span> Reproduce</a>
+<ul>
+<li><a href="#case-1-delete-an-open-directory"
+id="toc-case-1-delete-an-open-directory"><span
+class="toc-section-number">3.1</span> Case 1: Delete an Open
 Directory</a></li>
+<li><a href="#case-2-export-a-different-directory"
+id="toc-case-2-export-a-different-directory"><span
+class="toc-section-number">3.2</span> Case 2: Export a Different
+Directory</a></li>
+</ul></li>
+<li><a href="#references" id="toc-references"><span
+class="toc-section-number">4</span> References</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="overview"><span
 class="header-section-number">1</span> Overview</h1>
 <p>When an NFS client accesses an inode that no longer available on the
 server, the stale file handle error (ESTALE) occurs.</p>
-<p>Reproduce cases:</p>
+<p>Cases to reproduce:</p>
 <ul>
 <li>While the client currently opens an NFS directory, the server
 deletes it.</li>
 <li>While the client currently opens an NFS directory, the server
-exports a different directory.</li>
+un-exports it and exports a different directory.</li>
 </ul>
 <h1 data-number="2" id="prepare-lab"><span
 class="header-section-number">2</span> Prepare Lab</h1>
@@ -154,8 +161,11 @@ class="header-section-number">2</span> Prepare Lab</h1>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span>       5.6G    221.0M      5.1G   4% /mnt/nfs</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="3" id="delete-an-open-directory"><span
-class="header-section-number">3</span> Delete an Open Directory</h1>
+<h1 data-number="3" id="reproduce"><span
+class="header-section-number">3</span> Reproduce</h1>
+<h2 data-number="3.1" id="case-1-delete-an-open-directory"><span
+class="header-section-number">3.1</span> Case 1: Delete an Open
+Directory</h2>
 <ul>
 <li>Scenario: While the client open a directory, the server deletes the
 directory.</li>
@@ -190,8 +200,9 @@ directory.</li>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ls:</span> .: Stale file handle</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="4" id="export-a-different-directory"><span
-class="header-section-number">4</span> Export a Different Directory</h1>
+<h2 data-number="3.2" id="case-2-export-a-different-directory"><span
+class="header-section-number">3.2</span> Case 2: Export a Different
+Directory</h2>
 <ul>
 <li>Scenario: While the client open a directory, the server unexport the
 directory and export a different path.</li>
@@ -236,6 +247,17 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ls:</span> .: Stale file handle</span></code></pre></div>
 </div>
 </div>
+<h1 data-number="4" id="references"><span
+class="header-section-number">4</span> References</h1>
+<ul>
+<li><a
+href="https://stackoverflow.com/questions/20105260/what-does-stale-file-handle-in-linux-mean">StackOverflow
+Stale File Handle</a></li>
+<li><a
+href="https://unix.stackexchange.com/questions/433051/mount-nfs-stale-file-handle-error-cannot-umount">StackExchange
+Cannot Unmount NFS</a></li>
+<li><a href="">ServerFault Stale File Handle after Reboot</a></li>
+</ul>
 <footer class="footer text-muted">
    <div align="center">      
       <br>

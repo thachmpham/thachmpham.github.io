@@ -30,6 +30,9 @@ vm1$ rc-service nfs start
 
 - Configure NFS directory.
 ```sh
+vm1$ mkdir -p /srv/nfs
+vm1$ chmod -R 777 /srv/nfs
+
 vm1$ cat /etc/exports
 # -------------------------------------------------- #
 # Accept clients from 192.0.0.0/24
@@ -77,7 +80,7 @@ vm2$ cat /etc/fstab
 
 
 # Automation Setup
-Save time from manual setup, the below steps to quickly setup the NFS server and client.
+To save time from manual setup, the below steps to quickly setup the NFS server and client.
 
 ```sh
 host$ find lab/nfs -type f -exec docker cp {} apk:/ws

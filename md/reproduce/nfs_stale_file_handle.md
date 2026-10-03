@@ -7,10 +7,11 @@ subtitle: '(Reproduce Series)'
 # Overview
 When an NFS client accesses an inode that no longer available on the server, the stale file handle error (ESTALE) occurs. 
 
-Reproduce cases:
+Cases to reproduce:
 
 - While the client currently opens an NFS directory, the server deletes it.
-- While the client currently opens an NFS directory, the server exports a different directory.
+- While the client currently opens an NFS directory, the server un-exports it and exports a different directory.
+
 
 # Prepare Lab
 - Setup lab: [Network File System (NFS)](/html/lab/nfs.html).
@@ -38,7 +39,8 @@ Filesystem                Size      Used Available Use% Mounted on
 ::::::::::::::
 
 
-# Delete an Open Directory
+# Reproduce
+## Case 1: Delete an Open Directory
 - Scenario: While the client open a directory, the server deletes the directory.
 - Result:
     - The inode held by the client becomes unavailable.
@@ -79,7 +81,7 @@ ls: .: Stale file handle
 ::::::::::::::
 
 
-# Export a Different Directory
+## Case 2: Export a Different Directory
 - Scenario: While the client open a directory, the server unexport the directory and export a different path.
 - Result:
     - The underlying inodes on server change.
@@ -128,3 +130,9 @@ ls: .: Stale file handle
 
 :::
 ::::::::::::::
+
+
+# References
+- [StackOverflow Stale File Handle](https://stackoverflow.com/questions/20105260/what-does-stale-file-handle-in-linux-mean)
+- [StackExchange Cannot Unmount NFS](https://unix.stackexchange.com/questions/433051/mount-nfs-stale-file-handle-error-cannot-umount)
+- [ServerFault Stale File Handle after Reboot ]()

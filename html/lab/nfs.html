@@ -168,16 +168,19 @@ class="header-section-number">3.1</span> Export NFS on Server</h2>
 <ul>
 <li>Configure NFS directory.</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> cat /etc/exports</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------------------------------------- #</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Accept clients from 192.0.0.0/24</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">/srv/nfs</span> 192.0.0.0/24<span class="er">(</span><span class="ex">rw,sync,no_subtree_check</span><span class="kw">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> mkdir <span class="at">-p</span> /srv/nfs</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> chmod <span class="at">-R</span> 777 /srv/nfs</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> cat /etc/exports</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------------------------------------- #</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-a</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-v</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ex">/srv/nfs</span>        192.0.0.0/24<span class="er">(</span><span class="fu">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,ro<span class="kw">)</span></span></code></pre></div>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Accept clients from 192.0.0.0/24</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">/srv/nfs</span> 192.0.0.0/24<span class="er">(</span><span class="ex">rw,sync,no_subtree_check</span><span class="kw">)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------------------------------------- #</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-a</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-v</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="ex">/srv/nfs</span>        192.0.0.0/24<span class="er">(</span><span class="fu">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,ro<span class="kw">)</span></span></code></pre></div>
 <h2 data-number="3.2" id="mount-nfs-on-client"><span
 class="header-section-number">3.2</span> Mount NFS on Client</h2>
 <ul>
@@ -210,8 +213,8 @@ class="header-section-number">4.2</span> Mount NFS on Boot</h2>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span> /mnt/nfs nfs4 rw,_netdev 0 0</span></code></pre></div>
 <h1 data-number="5" id="automation-setup"><span
 class="header-section-number">5</span> Automation Setup</h1>
-<p>Save time from manual setup, the below steps to quickly setup the NFS
-server and client.</p>
+<p>To save time from manual setup, the below steps to quickly setup the
+NFS server and client.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> find lab/nfs <span class="at">-type</span> f <span class="at">-exec</span> docker cp {} apk:/ws</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec apk /ws/nfs_setup.sh</span></code></pre></div>
 <h1 data-number="6" id="references"><span
