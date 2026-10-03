@@ -55,15 +55,6 @@ vm2$ df -h
 ```
 
 
-# Automation Setup
-Save time from manual setup, the below steps to quickly setup the NFS server and client.
-
-```sh
-host$ find lab/nfs -type f -exec docker cp {} apk:/ws
-host$ docker exec apk /ws/nfs_setup.sh
-```
-
-
 # Boot Configuration
 ## Export NFS on Boot
 - Add nfs to startup.
@@ -82,6 +73,15 @@ vm2$ rc-update add nfsmount
 ```sh
 vm2$ cat /etc/fstab
 192.0.0.10:/srv/nfs /mnt/nfs nfs4 rw,_netdev 0 0
+```
+
+
+# Automation Setup
+Save time from manual setup, the below steps to quickly setup the NFS server and client.
+
+```sh
+host$ find lab/nfs -type f -exec docker cp {} apk:/ws
+host$ docker exec apk /ws/nfs_setup.sh
 ```
 
 

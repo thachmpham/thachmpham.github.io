@@ -124,16 +124,16 @@ class="toc-section-number">3.1</span> Export NFS on Server</a></li>
 <li><a href="#mount-nfs-on-client" id="toc-mount-nfs-on-client"><span
 class="toc-section-number">3.2</span> Mount NFS on Client</a></li>
 </ul></li>
-<li><a href="#automation-setup" id="toc-automation-setup"><span
-class="toc-section-number">4</span> Automation Setup</a></li>
 <li><a href="#boot-configuration" id="toc-boot-configuration"><span
-class="toc-section-number">5</span> Boot Configuration</a>
+class="toc-section-number">4</span> Boot Configuration</a>
 <ul>
 <li><a href="#export-nfs-on-boot" id="toc-export-nfs-on-boot"><span
-class="toc-section-number">5.1</span> Export NFS on Boot</a></li>
+class="toc-section-number">4.1</span> Export NFS on Boot</a></li>
 <li><a href="#mount-nfs-on-boot" id="toc-mount-nfs-on-boot"><span
-class="toc-section-number">5.2</span> Mount NFS on Boot</a></li>
+class="toc-section-number">4.2</span> Mount NFS on Boot</a></li>
 </ul></li>
+<li><a href="#automation-setup" id="toc-automation-setup"><span
+class="toc-section-number">5</span> Automation Setup</a></li>
 <li><a href="#references" id="toc-references"><span
 class="toc-section-number">6</span> References</a></li>
 </ul>
@@ -189,31 +189,31 @@ class="header-section-number">3.2</span> Mount NFS on Client</h2>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> df <span class="at">-h</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span>       5.6G    220.9M      5.1G   4% /mnt/nfs</span></code></pre></div>
-<h1 data-number="4" id="automation-setup"><span
-class="header-section-number">4</span> Automation Setup</h1>
-<p>Save time from manual setup, the below steps to quickly setup the NFS
-server and client.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> find lab/nfs <span class="at">-type</span> f <span class="at">-exec</span> docker cp {} apk:/ws</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec apk /ws/nfs_setup.sh</span></code></pre></div>
-<h1 data-number="5" id="boot-configuration"><span
-class="header-section-number">5</span> Boot Configuration</h1>
-<h2 data-number="5.1" id="export-nfs-on-boot"><span
-class="header-section-number">5.1</span> Export NFS on Boot</h2>
+<h1 data-number="4" id="boot-configuration"><span
+class="header-section-number">4</span> Boot Configuration</h1>
+<h2 data-number="4.1" id="export-nfs-on-boot"><span
+class="header-section-number">4.1</span> Export NFS on Boot</h2>
 <ul>
 <li>Add nfs to startup.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> rc-update add nfs</span></code></pre></div>
-<h2 data-number="5.2" id="mount-nfs-on-boot"><span
-class="header-section-number">5.2</span> Mount NFS on Boot</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> rc-update add nfs</span></code></pre></div>
+<h2 data-number="4.2" id="mount-nfs-on-boot"><span
+class="header-section-number">4.2</span> Mount NFS on Boot</h2>
 <ul>
 <li>Add nfsmount to startup.</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> rc-update add nfsmount</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> rc-update add nfsmount</span></code></pre></div>
 <ul>
 <li>Add nfs directory to fstab.</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> cat /etc/fstab</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span> /mnt/nfs nfs4 rw,_netdev 0 0</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> cat /etc/fstab</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span> /mnt/nfs nfs4 rw,_netdev 0 0</span></code></pre></div>
+<h1 data-number="5" id="automation-setup"><span
+class="header-section-number">5</span> Automation Setup</h1>
+<p>Save time from manual setup, the below steps to quickly setup the NFS
+server and client.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> find lab/nfs <span class="at">-type</span> f <span class="at">-exec</span> docker cp {} apk:/ws</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec apk /ws/nfs_setup.sh</span></code></pre></div>
 <h1 data-number="6" id="references"><span
 class="header-section-number">6</span> References</h1>
 <ul>
