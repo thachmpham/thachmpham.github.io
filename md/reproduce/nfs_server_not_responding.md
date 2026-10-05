@@ -37,7 +37,7 @@ To quickly reproduce "NFS server not responding", we use small timeo, retrans va
 ## Firewall Blocks NFS
 
 
-## NFS Fails due to Network Errors
+## NFS Timed out due to Network
 
 
 ## Disk IO Bottleneck
@@ -46,5 +46,5 @@ To quickly reproduce "NFS server not responding", we use small timeo, retrans va
 ## Resource Exhausted
 
 
-
 # References
+- [NFS Manual](https://linux.die.net/man/5/nfs)
