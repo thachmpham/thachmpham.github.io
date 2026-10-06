@@ -58,6 +58,8 @@ vm2$ mount -v
 192.0.0.10:/srv/nfs on /mnt/nfs type nfs4 (rw,relatime,vers=4.2,\
 rsize=131072,wsize=131072,namlen=255,\
 hard,fatal_neterrors=none,proto=tcp,timeo=100,retrans=2,sec=sys,client)
+  
+  
 ```
 
 :::
