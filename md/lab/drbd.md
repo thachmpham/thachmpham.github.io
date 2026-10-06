@@ -143,18 +143,16 @@ vm2$ drbdadm up r0
 vm1$ drbdadm secondary r0
 ```
 
-
-## Check Status
+- Check DRBD status.
 
 :::::::::::::: {.columns}
 ::: {.column}
 
-- Check vm1.
 ```sh
 vm1$ lsblk
 NAME      MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
-sdb         8:16   0    4G  0 disk 
-└─sdb1      8:17   0    2G  0 part 
+sdb         8:16   0    4G  0 disk
+└─sdb1      8:17   0    2G  0 part
   └─drbd0 147:0    0    2G  0 disk
 
 vm2$ drbdadm status
@@ -167,12 +165,11 @@ r0 role:Primary
 :::
 ::: {.column}
 
-- Check vm2.
 ```sh
 vm2$ lsblk
 NAME      MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
-sdb         8:16   0    8G  0 disk 
-└─sdb1      8:17   0    2G  0 part 
+sdb         8:16   0    8G  0 disk
+└─sdb1      8:17   0    2G  0 part
   └─drbd0 147:0    0    2G  1 disk
 
 vm2$ drbdadm status
@@ -191,10 +188,34 @@ To save time from manual setup, use the below steps to quickly setup the DRBD la
 
 ```sh
 host$ find lab/drbd/setup-1 -type f -exec docker cp {} apk:/ws \;
-host$ docker exec apk /ws/drbd/drbd_setup_vm1.sh
-host$ docker exec apk /ws/drbd/drbd_setup_vm2.sh
+host$ docker exec apk /ws/drbd_setup_vm1.sh
+host$ docker exec apk /ws/drbd_setup_vm2.sh
 ```
 
+:::::::::::::: {.columns}
+::: {.column}
+
+```sh
+vm1$ drbdadm status
+r0 role:Primary
+  disk:UpToDate
+  peer role:Secondary
+    replication:Established peer-disk:UpToDate
+```
+
+:::
+::: {.column}
+
+```sh
+vm2$ drbdadm status
+r0 role:Secondary
+  disk:UpToDate
+  peer role:Primary
+    replication:Established peer-disk:UpToDate
+```
+
+:::
+::::::::::::::
 
 # References
 - [Alpine DRBD](https://wiki.alpinelinux.org/wiki/Disk_Replication_with_DRBD)
