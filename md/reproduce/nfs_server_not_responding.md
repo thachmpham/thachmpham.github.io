@@ -11,11 +11,13 @@ According to [NFS manual](https://linux.die.net/man/5/nfs), the NFS client can s
 nfs_client$ mount -t nfs -o recovery_method,timeo=n,retrans=n server:path path
 ```
 
-- recovery_method: How the client recovers when an NFS request times out.
+- recovery_method: The method for NFS client to recovers on requests time out.
     - hard: Retry indefinitely. Default.
     - soft: Retry a limited number of times.
-- timeo: Time to wait before retry. Unit: decisecond (0.1s). Default: 600 deciseconds.
-- retrans: Number of retries before apply recovery method. Default: 3.
+- timeo: Time to wait before retry. Unit: decisecond (0.1s).
+    - NFS over TCP: Default timeo: 600. After each retransmission, increases the timeout by up to the maximum of 600 seconds.
+    - NFS over UDP: Default timeo: 11. After each retransmission, doubles the timeout, up to a maximum timeout length of 60 seconds.
+- retrans: Number of retries before apply recovery method. Default: 3. The NFS client generates a "server not responding" message after retrans retries,
 
 "NFS server not responding" occurs when the NFS client cannot complete a RPC function within the timeout. Common reasons:
 
@@ -50,12 +52,12 @@ tcp   LISTEN 0      64                      [::]:2049             [::]:*
 ::: {.column width=50%}
 
 ```sh
-vm2$ mount -t nfs -o soft,timeo=200,retrans=3 192.0.0.10:/srv/nfs /mnt/nfs
+vm2$ mount -t nfs -o timeo=100,retrans=2 192.0.0.10:/srv/nfs /mnt/nfs
 
 vm2$ mount -v
 192.0.0.10:/srv/nfs on /mnt/nfs type nfs4 (rw,relatime,vers=4.2,\
-rsize=131072,wsize=131072,namlen=255,soft,fatal_neterrors=none,\
-proto=tcp,timeo=200,retrans=3,sec=sys,client)
+rsize=131072,wsize=131072,namlen=255,\
+hard,fatal_neterrors=none,proto=tcp,timeo=100,retrans=2,sec=sys,client)
 ```
 
 :::
@@ -64,12 +66,12 @@ proto=tcp,timeo=200,retrans=3,sec=sys,client)
 
 # Reproduce
 ## Firewall Blocks NFS
-- Install iptables.
+- VM1: Install iptables.
 ```sh
 vm1$ apk add iptables
 ```
 
-- On vm1, block NFS requests from vm2.
+- VM1: Block NFS requests from VM2.
 ```sh
 vm1$ iptables --append INPUT --source 192.0.0.20 -p tcp --dport 2049 -j DROP
 vm1$ iptables --append INPUT --source 192.0.0.20 -p udp --dport 2049 -j DROP
@@ -87,27 +89,48 @@ Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
 num   pkts bytes target     prot opt in     out     source               destination
 ```
 
-- On vm2, check dmesg.
+- VM2: Check dmesg.
 ```sh
 vm2$ dmesg -wT
-[Tue Oct  6 05:11:19 2026] nfs: server 192.0.0.10 not responding, timed out
-[Tue Oct  6 05:12:39 2026] nfs: server 192.0.0.10 not responding, timed out
+[Tue Oct  6 06:16:53 2026] nfs: server 192.0.0.10 not responding, still trying
+[Tue Oct  6 06:19:15 2026] nfs: server 192.0.0.10 not responding, timed out
+[Tue Oct  6 06:19:35 2026] nfs: server 192.0.0.10 not responding, timed out
+[Tue Oct  6 06:20:35 2026] nfs: server 192.0.0.10 not responding, timed out
+[Tue Oct  6 06:21:35 2026] nfs: server 192.0.0.10 not responding, timed out
 ```
 
-- Unblock NFS requests.
+- VM1: Cleanup after test.
 ```sh
-vm1$ iptables --delete INPUT 1
 vm1$ iptables --delete INPUT 2
+vm1$ iptables --delete INPUT 1
 ```
 
 
-## NFS Timed out due to Network
+## Traffic Control Drops NFS
+- VM1: Simulate packet loss.
+```sh
+vm1$ tc qdisc add dev eth2 root netem loss 100%
 
+vm1$ tc qdisc show dev eth2
+qdisc netem 8001: root refcnt 2 limit 1000 loss 100% seed 13627998538068838059
+```
 
-## Disk IO Bottleneck
+- VM2: Check dmesg.
+```sh
+vm2$ dmesg -wT
+[Tue Oct  6 06:32:13 2026] nfs: server 192.0.0.10 not responding, still trying
+[Tue Oct  6 06:33:48 2026] nfs: server 192.0.0.10 not responding, timed out
+[Tue Oct  6 06:34:48 2026] nfs: server 192.0.0.10 not responding, timed out
+[Tue Oct  6 06:35:48 2026] nfs: server 192.0.0.10 not responding, timed out
+```
 
+- VM1: Cleanup after test.
+```sh
+vm1$ tc qdisc del dev eth2 root netem
 
-## Resource Exhausted
+vm1$ tc qdisc show dev eth2
+qdisc pfifo_fast 0: root refcnt 2 bands 3 priomap 1 2 2 2 1 2 0 0 1 1 1 1 1 1 1 1
+```
 
 
 # References

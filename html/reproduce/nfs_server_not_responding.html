@@ -121,14 +121,9 @@ class="toc-section-number">3</span> Reproduce</a>
 <ul>
 <li><a href="#firewall-blocks-nfs" id="toc-firewall-blocks-nfs"><span
 class="toc-section-number">3.1</span> Firewall Blocks NFS</a></li>
-<li><a href="#nfs-timed-out-due-to-network"
-id="toc-nfs-timed-out-due-to-network"><span
-class="toc-section-number">3.2</span> NFS Timed out due to
-Network</a></li>
-<li><a href="#disk-io-bottleneck" id="toc-disk-io-bottleneck"><span
-class="toc-section-number">3.3</span> Disk IO Bottleneck</a></li>
-<li><a href="#resource-exhausted" id="toc-resource-exhausted"><span
-class="toc-section-number">3.4</span> Resource Exhausted</a></li>
+<li><a href="#traffic-control-drops-nfs"
+id="toc-traffic-control-drops-nfs"><span
+class="toc-section-number">3.2</span> Traffic Control Drops NFS</a></li>
 </ul></li>
 <li><a href="#references" id="toc-references"><span
 class="toc-section-number">4</span> References</a></li>
@@ -141,16 +136,22 @@ manual</a>, the NFS client can specify the mount options with the below
 parameters.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nfs_client$</span> mount <span class="at">-t</span> nfs <span class="at">-o</span> recovery_method,timeo=n,retrans=n server:path path</span></code></pre></div>
 <ul>
-<li>recovery_method: How the client recovers when an NFS request times
-out.
+<li>recovery_method: The method for NFS client to recovers on requests
+time out.
 <ul>
 <li>hard: Retry indefinitely. Default.</li>
 <li>soft: Retry a limited number of times.</li>
 </ul></li>
-<li>timeo: Time to wait before retry. Unit: decisecond (0.1s). Default:
-600 deciseconds.</li>
-<li>retrans: Number of retries before apply recovery method. Default:
-3.</li>
+<li>timeo: Time to wait before retry. Unit: decisecond (0.1s).
+<ul>
+<li>NFS over TCP: Default timeo: 600. After each retransmission,
+increases the timeout by up to the maximum of 600 seconds.</li>
+<li>NFS over UDP: Default timeo: 11. After each retransmission, doubles
+the timeout, up to a maximum timeout length of 60 seconds.</li>
+</ul></li>
+<li>retrans: Number of retries before apply recovery method. Default: 3.
+The NFS client generates a “server not responding” message after retrans
+retries,</li>
 </ul>
 <p>“NFS server not responding” occurs when the NFS client cannot
 complete a RPC function within the timeout. Common reasons:</p>
@@ -185,12 +186,12 @@ class="header-section-number">2</span> Prepare Lab</h1>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">tcp</span>   ESTAB  0      0                 192.0.0.10:2049       192.0.0.20:693</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">tcp</span>   LISTEN 0      64                      <span class="pp">[</span><span class="ss">::</span><span class="pp">]</span>:2049             <span class="pp">[</span><span class="ss">::</span><span class="pp">]</span>:<span class="pp">*</span></span></code></pre></div>
 </div><div class="column" style="width:50%;">
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mount <span class="at">-t</span> nfs <span class="at">-o</span> soft,timeo=200,retrans=3 192.0.0.10:/srv/nfs /mnt/nfs</span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mount <span class="at">-t</span> nfs <span class="at">-o</span> timeo=100,retrans=2 192.0.0.10:/srv/nfs /mnt/nfs</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mount <span class="at">-v</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span> on /mnt/nfs type nfs4 <span class="er">(</span><span class="ex">rw,relatime,vers=4.2,</span><span class="dt">\</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">rsize=131072,wsize=131072,namlen=255,soft,fatal_neterrors=none,</span><span class="dt">\</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">proto=tcp,timeo=200,retrans=3,sec=sys,client</span><span class="kw">)</span></span></code></pre></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">rsize=131072,wsize=131072,namlen=255,</span><span class="dt">\</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">hard,fatal_neterrors=none,proto=tcp,timeo=100,retrans=2,sec=sys,client</span><span class="kw">)</span></span></code></pre></div>
 </div>
 </div>
 <h1 data-number="3" id="reproduce"><span
@@ -198,11 +199,11 @@ class="header-section-number">3</span> Reproduce</h1>
 <h2 data-number="3.1" id="firewall-blocks-nfs"><span
 class="header-section-number">3.1</span> Firewall Blocks NFS</h2>
 <ul>
-<li>Install iptables.</li>
+<li>VM1: Install iptables.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> apk add iptables</span></code></pre></div>
 <ul>
-<li>On vm1, block NFS requests from vm2.</li>
+<li>VM1: Block NFS requests from VM2.</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--append</span> INPUT <span class="at">--source</span> 192.0.0.20 <span class="at">-p</span> tcp <span class="at">--dport</span> 2049 <span class="at">-j</span> DROP</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--append</span> INPUT <span class="at">--source</span> 192.0.0.20 <span class="at">-p</span> udp <span class="at">--dport</span> 2049 <span class="at">-j</span> DROP</span>
@@ -219,23 +220,44 @@ class="header-section-number">3.1</span> Firewall Blocks NFS</h2>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Chain</span> OUTPUT <span class="er">(</span><span class="ex">policy</span> ACCEPT 0 packets, 0 bytes<span class="kw">)</span></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="ex">num</span>   pkts bytes target     prot opt in     out     source               destination</span></code></pre></div>
 <ul>
-<li>On vm2, check dmesg.</li>
+<li>VM2: Check dmesg.</li>
 </ul>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> dmesg <span class="at">-wT</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 05:11:19 2026] nfs: server 192.0.0.10 not responding, timed out</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 05:12:39 2026] nfs: server 192.0.0.10 not responding, timed out</span></code></pre></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:16:53 2026] nfs: server 192.0.0.10 not responding, still trying</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:19:15 2026] nfs: server 192.0.0.10 not responding, timed out</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:19:35 2026] nfs: server 192.0.0.10 not responding, timed out</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:20:35 2026] nfs: server 192.0.0.10 not responding, timed out</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:21:35 2026] nfs: server 192.0.0.10 not responding, timed out</span></code></pre></div>
 <ul>
-<li>Unblock NFS requests.</li>
+<li>VM1: Cleanup after test.</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--delete</span> INPUT 1</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--delete</span> INPUT 2</span></code></pre></div>
-<h2 data-number="3.2" id="nfs-timed-out-due-to-network"><span
-class="header-section-number">3.2</span> NFS Timed out due to
-Network</h2>
-<h2 data-number="3.3" id="disk-io-bottleneck"><span
-class="header-section-number">3.3</span> Disk IO Bottleneck</h2>
-<h2 data-number="3.4" id="resource-exhausted"><span
-class="header-section-number">3.4</span> Resource Exhausted</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--delete</span> INPUT 2</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--delete</span> INPUT 1</span></code></pre></div>
+<h2 data-number="3.2" id="traffic-control-drops-nfs"><span
+class="header-section-number">3.2</span> Traffic Control Drops NFS</h2>
+<ul>
+<li>VM1: Simulate packet loss.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> tc qdisc add dev eth2 root netem loss 100%</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> tc qdisc show dev eth2</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">qdisc</span> netem 8001: root refcnt 2 limit 1000 loss 100% seed 13627998538068838059</span></code></pre></div>
+<ul>
+<li>VM2: Check dmesg.</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> dmesg <span class="at">-wT</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:32:13 2026] nfs: server 192.0.0.10 not responding, still trying</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:33:48 2026] nfs: server 192.0.0.10 not responding, timed out</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:34:48 2026] nfs: server 192.0.0.10 not responding, timed out</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:35:48 2026] nfs: server 192.0.0.10 not responding, timed out</span></code></pre></div>
+<ul>
+<li>VM1: Cleanup after test.</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> tc qdisc del dev eth2 root netem</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> tc qdisc show dev eth2</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">qdisc</span> pfifo_fast 0: root refcnt 2 bands 3 priomap 1 2 2 2 1 2 0 0 1 1 1 1 1 1 1 1</span></code></pre></div>
 <h1 data-number="4" id="references"><span
 class="header-section-number">4</span> References</h1>
 <ul>
