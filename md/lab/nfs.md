@@ -80,7 +80,7 @@ vm2$ cat /etc/fstab
 
 
 # Automation Setup
-To save time from manual setup, the below steps to quickly setup the NFS server and client.
+To save time from manual setup, use the below steps to quickly setup the NFS lab.
 
 ```sh
 host$ find lab/nfs -type f -exec docker cp {} apk:/ws

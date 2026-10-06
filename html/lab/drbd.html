@@ -114,22 +114,22 @@
 <ul>
 <li><a href="#overview" id="toc-overview"><span
 class="toc-section-number">1</span> Overview</a></li>
+<li><a href="#base-lab" id="toc-base-lab"><span
+class="toc-section-number">2</span> Base Lab</a></li>
 <li><a href="#manual-setup" id="toc-manual-setup"><span
-class="toc-section-number">2</span> Manual Setup</a>
+class="toc-section-number">3</span> Manual Setup</a>
 <ul>
-<li><a href="#initial" id="toc-initial"><span
-class="toc-section-number">2.1</span> Initial</a></li>
 <li><a href="#setup-vm1" id="toc-setup-vm1"><span
-class="toc-section-number">2.2</span> Setup VM1</a></li>
+class="toc-section-number">3.1</span> Setup VM1</a></li>
 <li><a href="#setup-vm2" id="toc-setup-vm2"><span
-class="toc-section-number">2.3</span> Setup VM2</a></li>
+class="toc-section-number">3.2</span> Setup VM2</a></li>
 <li><a href="#check-status" id="toc-check-status"><span
-class="toc-section-number">2.4</span> Check Status</a></li>
+class="toc-section-number">3.3</span> Check Status</a></li>
 </ul></li>
 <li><a href="#automation-setup" id="toc-automation-setup"><span
-class="toc-section-number">3</span> Automation Setup</a></li>
+class="toc-section-number">4</span> Automation Setup</a></li>
 <li><a href="#references" id="toc-references"><span
-class="toc-section-number">4</span> References</a></li>
+class="toc-section-number">5</span> References</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="overview"><span
@@ -137,33 +137,30 @@ class="header-section-number">1</span> Overview</h1>
 <div class="columns">
 <div class="column">
 <ul>
-<li>The lab runs in a Docker container with two QEMU VMs inside.</li>
-<li>The VMs connect to each other through the bridge interface,
-br0.</li>
-<li>Each VM has two disks:
+<li>This NFS lab is based on the <a
+href="/html/lab/alpine_2n.html"><strong>Alpine 2 Nodes</strong></a>
+lab.</li>
+<li>Used disks in VMs:
 <ul>
 <li>/dev/sda: Boot and filesystem.</li>
-<li>/dev/sdb: For DRBD setup.</li>
+<li>/dev/sdb: For DRBD.</li>
 </ul></li>
-<li>The DRBD resource r0 is used to replicate data between the two
-VMs.</li>
+<li>The r0 DRBD resource replicates data between the two VMs.</li>
 </ul>
 </div><div class="column">
 <div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>        VM1                 VM2</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="fl">192.0</span><span class="er">.0.10</span>           <span class="fl">192.0</span><span class="er">.0.20</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       eth1                 eth1</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       eth2                 eth2</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">+</span>                    <span class="op">+</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">+--------------------+</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                  <span class="op">+</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                 br0</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                 br2</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>              <span class="fl">192.0</span><span class="er">.0.254</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>               Container</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="2" id="manual-setup"><span
-class="header-section-number">2</span> Manual Setup</h1>
-<h2 data-number="2.1" id="initial"><span
-class="header-section-number">2.1</span> Initial</h2>
+<h1 data-number="2" id="base-lab"><span
+class="header-section-number">2</span> Base Lab</h1>
 <ul>
 <li>Setup lab: <a href="/html/lab/alpine_2n.html">Alpine 2
 Nodes</a>.</li>
@@ -171,8 +168,12 @@ Nodes</a>.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> apk add drbd-utils lsblk parted e2fsprogs-extra</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> apk add drbd-utils lsblk parted e2fsprogs-extra</span></code></pre></div>
+<h1 data-number="3" id="manual-setup"><span
+class="header-section-number">3</span> Manual Setup</h1>
+<h2 data-number="3.1" id="setup-vm1"><span
+class="header-section-number">3.1</span> Setup VM1</h2>
 <ul>
-<li>VM1: Add path to fix some minor issues.</li>
+<li>Edit PATH to fix some minor issues.</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> cat /root/.profile</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="va">$PATH</span>:/usr/lib/drbd</span>
@@ -181,52 +182,50 @@ Nodes</a>.</li>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="va">$PATH</span>:/usr/lib/drbd</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ...</span></span></code></pre></div>
 <ul>
-<li>VM2: Add path to fix some minor issues.</li>
-</ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> cat /root/.profile</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="va">$PATH</span>:/usr/lib/drbd</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> cat /etc/init.d/drbd</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="va">$PATH</span>:/usr/lib/drbd</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ...</span></span></code></pre></div>
-<h2 data-number="2.2" id="setup-vm1"><span
-class="header-section-number">2.2</span> Setup VM1</h2>
-<ul>
 <li>Create the disk partition.</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> parted <span class="at">-s</span> /dev/sdb mklabel msdos</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> parted <span class="at">-s</span> /dev/sdb mkpart primary 0% 2GiB</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> parted <span class="at">-s</span> /dev/sdb mklabel msdos</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> parted <span class="at">-s</span> /dev/sdb mkpart primary 0% 2GiB</span></code></pre></div>
 <ul>
 <li>Configure DRBD resource.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> vi /etc/drbd.d/r0.res</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------- #</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">resource</span> r0 {</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">device</span> minor 0<span class="kw">;</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">disk</span> /dev/sdb1<span class="kw">;</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">meta-disk</span> internal<span class="kw">;</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">protocol</span> C<span class="kw">;</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">on</span> vm1 {</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="ex">address</span>       192.0.0.10:7789<span class="kw">;</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="er">}</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">on</span> vm2 {</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="ex">address</span>       192.0.0.20:7789<span class="kw">;</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="er">}</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------- #</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> vi /etc/drbd.d/r0.res</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------- #</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">resource</span> r0 {</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">device</span> minor 0<span class="kw">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">disk</span> /dev/sdb1<span class="kw">;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">meta-disk</span> internal<span class="kw">;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">protocol</span> C<span class="kw">;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">on</span> vm1 {</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="ex">address</span>       192.0.0.10:7789<span class="kw">;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="er">}</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">on</span> vm2 {</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        <span class="ex">address</span>       192.0.0.20:7789<span class="kw">;</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="er">}</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------- #</span></span></code></pre></div>
 <ul>
-<li>Bring up the resource.</li>
+<li>Bring r0.</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> drbdadm create-md r0</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> drbdadm up r0</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> drbdadm create-md r0</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> drbdadm up r0</span></code></pre></div>
 <ul>
 <li>Set as primary.</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> drbdadm primary <span class="at">--force</span> r0</span></code></pre></div>
-<h2 data-number="2.3" id="setup-vm2"><span
-class="header-section-number">2.3</span> Setup VM2</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> drbdadm primary <span class="at">--force</span> r0</span></code></pre></div>
+<h2 data-number="3.2" id="setup-vm2"><span
+class="header-section-number">3.2</span> Setup VM2</h2>
+<ul>
+<li>Edit PATH to fix some minor issues.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> cat /root/.profile</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="va">$PATH</span>:/usr/lib/drbd</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> cat /etc/init.d/drbd</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="va">$PATH</span>:/usr/lib/drbd</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ...</span></span></code></pre></div>
 <ul>
 <li>Create the disk partition.</li>
 </ul>
@@ -264,8 +263,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#
 </ul>
 <div class="sourceCode" id="cb12"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> drbdadm secondary r0</span></code></pre></div>
-<h2 data-number="2.4" id="check-status"><span
-class="header-section-number">2.4</span> Check Status</h2>
+<h2 data-number="3.3" id="check-status"><span
+class="header-section-number">3.3</span> Check Status</h2>
 <div class="columns">
 <div class="column">
 <ul>
@@ -301,26 +300,16 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">replication:Established</span> peer-disk:UpToDate</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="3" id="automation-setup"><span
-class="header-section-number">3</span> Automation Setup</h1>
-<p>To quickly setup a DRBD lab:</p>
-<ul>
-<li>Setup lab: <a href="/html/lab/alpine_2n.html">Alpine 2
-Nodes</a>.</li>
-<li>Copy needed files to the container.</li>
-</ul>
+<h1 data-number="4" id="automation-setup"><span
+class="header-section-number">4</span> Automation Setup</h1>
+<p>To save time from manual setup, use the below steps to quickly setup
+the DRBD lab.</p>
 <div class="sourceCode" id="cb15"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cd lab/drbd/setup-1</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> ./copy_to_cont.sh</span></code></pre></div>
-<ul>
-<li>Setup DRBD for VMs.</li>
-</ul>
-<div class="sourceCode" id="cb16"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> cd /ws</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./drbd_setup_vm1.sh</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./drbd_setup_vm2.sh</span></code></pre></div>
-<h1 data-number="4" id="references"><span
-class="header-section-number">4</span> References</h1>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> find lab/drbd/setup-1 <span class="at">-type</span> f <span class="at">-exec</span> docker cp {} apk:/ws <span class="dt">\;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec apk /ws/drbd/drbd_setup_vm1.sh</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec apk /ws/drbd/drbd_setup_vm2.sh</span></code></pre></div>
+<h1 data-number="5" id="references"><span
+class="header-section-number">5</span> References</h1>
 <ul>
 <li><a
 href="https://wiki.alpinelinux.org/wiki/Disk_Replication_with_DRBD">Alpine

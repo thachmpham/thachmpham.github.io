@@ -213,8 +213,8 @@ class="header-section-number">4.2</span> Mount NFS on Boot</h2>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span> /mnt/nfs nfs4 rw,_netdev 0 0</span></code></pre></div>
 <h1 data-number="5" id="automation-setup"><span
 class="header-section-number">5</span> Automation Setup</h1>
-<p>To save time from manual setup, the below steps to quickly setup the
-NFS server and client.</p>
+<p>To save time from manual setup, use the below steps to quickly setup
+the NFS lab.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> find lab/nfs <span class="at">-type</span> f <span class="at">-exec</span> docker cp {} apk:/ws</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec apk /ws/nfs_setup.sh</span></code></pre></div>
 <h1 data-number="6" id="references"><span

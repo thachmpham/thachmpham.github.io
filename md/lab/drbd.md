@@ -9,13 +9,11 @@ subtitle: '(Lab Series)'
 :::::::::::::: {.columns}
 ::: {.column}
 
-- The lab runs in a Docker container with two QEMU VMs inside.
-- The VMs connect to each other through the bridge interface, br0.
-- Each VM has two disks:
+- This NFS lab is based on the [**Alpine 2 Nodes**](/html/lab/alpine_2n.html) lab.
+- Used disks in VMs:
     - /dev/sda: Boot and filesystem.
-    - /dev/sdb: For DRBD setup.
-- The DRBD resource r0 is used to replicate data between the two VMs.
-
+    - /dev/sdb: For DRBD.
+- The r0 DRBD resource replicates data between the two VMs.
 
 :::
 ::: {.column}
@@ -23,11 +21,11 @@ subtitle: '(Lab Series)'
 ```go
         VM1                 VM2
     192.0.0.10           192.0.0.20
-       eth1                 eth1
+       eth2                 eth2
         +                    +
         +--------------------+
                   +
-                 br0
+                 br2
               192.0.0.254
                Container
 ```
@@ -36,8 +34,7 @@ subtitle: '(Lab Series)'
 ::::::::::::::
 
 
-# Manual Setup
-## Initial
+# Base Lab
 - Setup lab: [Alpine 2 Nodes](/html/lab/alpine_2n.html).
 - Install packages.
 ```sh
@@ -45,7 +42,10 @@ vm1$ apk add drbd-utils lsblk parted e2fsprogs-extra
 vm2$ apk add drbd-utils lsblk parted e2fsprogs-extra
 ```
 
-- VM1: Add path to fix some minor issues.
+
+# Manual Setup
+## Setup VM1
+- Edit PATH to fix some minor issues.
 ```sh
 vm1$ cat /root/.profile
 export PATH=$PATH:/usr/lib/drbd
@@ -55,18 +55,6 @@ export PATH=$PATH:/usr/lib/drbd
 # ...
 ```
 
-- VM2: Add path to fix some minor issues.
-```sh
-vm2$ cat /root/.profile
-export PATH=$PATH:/usr/lib/drbd
-
-vm2$ cat /etc/init.d/drbd
-export PATH=$PATH:/usr/lib/drbd
-# ...
-```
-
-
-## Setup VM1
 - Create the disk partition.
 ```sh
 vm1$ parted -s /dev/sdb mklabel msdos
@@ -94,7 +82,7 @@ resource r0 {
 # ---------------------------------------- #
 ```
 
-- Bring up the resource.
+- Bring r0.
 ```sh
 vm1$ drbdadm create-md r0
 vm1$ drbdadm up r0
@@ -107,6 +95,16 @@ vm1$ drbdadm primary --force r0
 
 
 ## Setup VM2
+- Edit PATH to fix some minor issues.
+```sh
+vm2$ cat /root/.profile
+export PATH=$PATH:/usr/lib/drbd
+
+vm2$ cat /etc/init.d/drbd
+export PATH=$PATH:/usr/lib/drbd
+# ...
+```
+
 - Create the disk partition.
 ```sh
 vm2$ parted -s /dev/sdb mklabel msdos
@@ -189,20 +187,12 @@ r0 role:Secondary
 
 
 # Automation Setup
-To quickly setup a DRBD lab:
+To save time from manual setup, use the below steps to quickly setup the DRBD lab.
 
-- Setup lab: [Alpine 2 Nodes](/html/lab/alpine_2n.html).
-- Copy needed files to the container.
 ```sh
-host$ cd lab/drbd/setup-1
-host$ ./copy_to_cont.sh
-```
-
-- Setup DRBD for VMs.
-```sh
-cont$ cd /ws
-cont$ ./drbd_setup_vm1.sh
-cont$ ./drbd_setup_vm2.sh
+host$ find lab/drbd/setup-1 -type f -exec docker cp {} apk:/ws \;
+host$ docker exec apk /ws/drbd/drbd_setup_vm1.sh
+host$ docker exec apk /ws/drbd/drbd_setup_vm2.sh
 ```
 
 
