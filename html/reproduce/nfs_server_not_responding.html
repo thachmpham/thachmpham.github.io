@@ -174,10 +174,61 @@ class="header-section-number">2</span> Prepare Lab</h1>
 <li>VM1 acts as NFS server.</li>
 <li>VM2 acts as NFS client.</li>
 </ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-v</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/srv/nfs</span> 192.0.0.0/24<span class="er">(</span><span class="fu">sync</span>,wdelay,hide,no_subtree_check,<span class="dt">\</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sec=sys,rw,root_squash,no_all_squash<span class="kw">)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1:~#</span> ss <span class="at">-an</span> <span class="kw">|</span> <span class="fu">grep</span> :2049</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">tcp</span>   LISTEN 0      64                   0.0.0.0:2049          0.0.0.0:<span class="pp">*</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">tcp</span>   ESTAB  0      0                 192.0.0.10:2049       192.0.0.20:693</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">tcp</span>   LISTEN 0      64                      <span class="pp">[</span><span class="ss">::</span><span class="pp">]</span>:2049             <span class="pp">[</span><span class="ss">::</span><span class="pp">]</span>:<span class="pp">*</span></span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mount <span class="at">-t</span> nfs <span class="at">-o</span> soft,timeo=200,retrans=3 192.0.0.10:/srv/nfs /mnt/nfs</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mount <span class="at">-v</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span> on /mnt/nfs type nfs4 <span class="er">(</span><span class="ex">rw,relatime,vers=4.2,</span><span class="dt">\</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">rsize=131072,wsize=131072,namlen=255,soft,fatal_neterrors=none,</span><span class="dt">\</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">proto=tcp,timeo=200,retrans=3,sec=sys,client</span><span class="kw">)</span></span></code></pre></div>
+</div>
+</div>
 <h1 data-number="3" id="reproduce"><span
 class="header-section-number">3</span> Reproduce</h1>
 <h2 data-number="3.1" id="firewall-blocks-nfs"><span
 class="header-section-number">3.1</span> Firewall Blocks NFS</h2>
+<ul>
+<li>Install iptables.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> apk add iptables</span></code></pre></div>
+<ul>
+<li>On vm1, block NFS requests from vm2.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--append</span> INPUT <span class="at">--source</span> 192.0.0.20 <span class="at">-p</span> tcp <span class="at">--dport</span> 2049 <span class="at">-j</span> DROP</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--append</span> INPUT <span class="at">--source</span> 192.0.0.20 <span class="at">-p</span> udp <span class="at">--dport</span> 2049 <span class="at">-j</span> DROP</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">-nvL</span> <span class="at">--line-numbers</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Chain</span> INPUT <span class="er">(</span><span class="ex">policy</span> ACCEPT 435 packets, 35580 bytes<span class="kw">)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">num</span>   pkts bytes target     prot opt in     out     source               destination</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span>      163 10860 DROP       tcp  <span class="at">--</span>  <span class="pp">*</span>      <span class="pp">*</span>       192.0.0.20           0.0.0.0/0            tcp dpt:2049</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">2</span>        0     0 DROP       udp  <span class="at">--</span>  <span class="pp">*</span>      <span class="pp">*</span>       192.0.0.20           0.0.0.0/0            udp dpt:2049</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Chain</span> FORWARD <span class="er">(</span><span class="ex">policy</span> ACCEPT 0 packets, 0 bytes<span class="kw">)</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="ex">num</span>   pkts bytes target     prot opt in     out     source               destination</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Chain</span> OUTPUT <span class="er">(</span><span class="ex">policy</span> ACCEPT 0 packets, 0 bytes<span class="kw">)</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="ex">num</span>   pkts bytes target     prot opt in     out     source               destination</span></code></pre></div>
+<ul>
+<li>On vm2, check dmesg.</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> dmesg <span class="at">-wT</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 05:11:19 2026] nfs: server 192.0.0.10 not responding, timed out</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 05:12:39 2026] nfs: server 192.0.0.10 not responding, timed out</span></code></pre></div>
+<ul>
+<li>Unblock NFS requests.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--delete</span> INPUT 1</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--delete</span> INPUT 2</span></code></pre></div>
 <h2 data-number="3.2" id="nfs-timed-out-due-to-network"><span
 class="header-section-number">3.2</span> NFS Timed out due to
 Network</h2>
