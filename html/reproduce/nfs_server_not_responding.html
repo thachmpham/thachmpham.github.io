@@ -114,21 +114,22 @@
 <ul>
 <li><a href="#overview" id="toc-overview"><span
 class="toc-section-number">1</span> Overview</a></li>
-<li><a href="#prepare-lab" id="toc-prepare-lab"><span
-class="toc-section-number">2</span> Prepare Lab</a></li>
-<li><a href="#reproduce" id="toc-reproduce"><span
-class="toc-section-number">3</span> Reproduce</a>
-<ul>
-<li><a href="#firewall-blocks-nfs" id="toc-firewall-blocks-nfs"><span
-class="toc-section-number">3.1</span> Firewall Blocks NFS</a></li>
-<li><a href="#traffic-control-drops-nfs"
-id="toc-traffic-control-drops-nfs"><span
-class="toc-section-number">3.2</span> Traffic Control Drops NFS</a></li>
-<li><a href="#disk-io-blocks-nfs" id="toc-disk-io-blocks-nfs"><span
-class="toc-section-number">3.3</span> Disk IO Blocks NFS</a></li>
-</ul></li>
+<li><a href="#lab" id="toc-lab"><span
+class="toc-section-number">2</span> Lab</a></li>
+<li><a href="#case-study-firewall-blocks-nfs"
+id="toc-case-study-firewall-blocks-nfs"><span
+class="toc-section-number">3</span> Case Study: Firewall Blocks
+NFS</a></li>
+<li><a href="#case-study-traffic-control-drops-nfs"
+id="toc-case-study-traffic-control-drops-nfs"><span
+class="toc-section-number">4</span> Case Study: Traffic Control Drops
+NFS</a></li>
+<li><a href="#case-study-slow-disk-impacts-on-nfs"
+id="toc-case-study-slow-disk-impacts-on-nfs"><span
+class="toc-section-number">5</span> Case Study: Slow Disk Impacts on
+NFS</a></li>
 <li><a href="#references" id="toc-references"><span
-class="toc-section-number">4</span> References</a></li>
+class="toc-section-number">6</span> References</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="overview"><span
@@ -169,8 +170,8 @@ from CPU/RAM starvation, unable to accept new requests.</li>
 </ul>
 <p>To quickly reproduce “NFS server not responding”, we use small timeo,
 retrans values and simulate the above conditions.</p>
-<h1 data-number="2" id="prepare-lab"><span
-class="header-section-number">2</span> Prepare Lab</h1>
+<h1 data-number="2" id="lab"><span
+class="header-section-number">2</span> Lab</h1>
 <ul>
 <li>Setup lab: <a href="/html/lab/nfs.html">Network File System
 (NFS)</a>.</li>
@@ -198,10 +199,9 @@ class="header-section-number">2</span> Prepare Lab</h1>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 </div>
 </div>
-<h1 data-number="3" id="reproduce"><span
-class="header-section-number">3</span> Reproduce</h1>
-<h2 data-number="3.1" id="firewall-blocks-nfs"><span
-class="header-section-number">3.1</span> Firewall Blocks NFS</h2>
+<h1 data-number="3" id="case-study-firewall-blocks-nfs"><span
+class="header-section-number">3</span> Case Study: Firewall Blocks
+NFS</h1>
 <ul>
 <li>Install iptables.</li>
 </ul>
@@ -237,8 +237,9 @@ class="header-section-number">3.1</span> Firewall Blocks NFS</h2>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--delete</span> INPUT 2</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--delete</span> INPUT 1</span></code></pre></div>
-<h2 data-number="3.2" id="traffic-control-drops-nfs"><span
-class="header-section-number">3.2</span> Traffic Control Drops NFS</h2>
+<h1 data-number="4" id="case-study-traffic-control-drops-nfs"><span
+class="header-section-number">4</span> Case Study: Traffic Control Drops
+NFS</h1>
 <ul>
 <li>Simulate packet loss on NFS server.</li>
 </ul>
@@ -262,8 +263,9 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> tc qdisc show dev eth2</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">qdisc</span> pfifo_fast 0: root refcnt 2 bands 3 priomap 1 2 2 2 1 2 0 0 1 1 1 1 1 1 1 1</span></code></pre></div>
-<h2 data-number="3.3" id="disk-io-blocks-nfs"><span
-class="header-section-number">3.3</span> Disk IO Blocks NFS</h2>
+<h1 data-number="5" id="case-study-slow-disk-impacts-on-nfs"><span
+class="header-section-number">5</span> Case Study: Slow Disk Impacts on
+NFS</h1>
 <ul>
 <li>Install packages.</li>
 </ul>
@@ -341,8 +343,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#
 </ul>
 <div class="sourceCode" id="cb21"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> dmsetup resume /dev/mapper/dm0</span></code></pre></div>
-<h1 data-number="4" id="references"><span
-class="header-section-number">4</span> References</h1>
+<h1 data-number="6" id="references"><span
+class="header-section-number">6</span> References</h1>
 <ul>
 <li><a href="https://linux.die.net/man/5/nfs">NFS Manual</a></li>
 <li><a

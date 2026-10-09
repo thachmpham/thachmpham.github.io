@@ -13,7 +13,7 @@ Reproduce cases:
 - Create an invalid file mode.
 
 
-# Prepare Lab
+# Lab
 ## Initial Setup
 - Setup lab: [**Alpine 1 Node**](/html/lab/alpine_1n.html).
 - Install packages to the VM.
@@ -80,7 +80,7 @@ vm$ mount /dev/vda1 /mnt/vda1
 ```
 
 
-# Create an Orphaned File
+# Case Study: Orphaned Files
 The inode link count is the number of filenames or hard links that point to the inode. An inode with a zero link count is known as an orphaned file. The fsck considers an orphaned file as a incomplete deletion error.
 
 
@@ -139,7 +139,7 @@ lost+found
 ```
 
 
-# Create an Invalid-Mode File
+# Case Study: Invalid-Mode Files
 - Create a test file.
 ```sh
 vm$ echo 'Hello B' > /mnt/vda1

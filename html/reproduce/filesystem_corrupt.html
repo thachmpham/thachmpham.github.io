@@ -114,20 +114,21 @@
 <ul>
 <li><a href="#overview" id="toc-overview"><span
 class="toc-section-number">1</span> Overview</a></li>
-<li><a href="#prepare-lab" id="toc-prepare-lab"><span
-class="toc-section-number">2</span> Prepare Lab</a>
+<li><a href="#lab" id="toc-lab"><span
+class="toc-section-number">2</span> Lab</a>
 <ul>
 <li><a href="#initial-setup" id="toc-initial-setup"><span
 class="toc-section-number">2.1</span> Initial Setup</a></li>
 <li><a href="#create-a-filesystem" id="toc-create-a-filesystem"><span
 class="toc-section-number">2.2</span> Create a Filesystem</a></li>
 </ul></li>
-<li><a href="#create-an-orphaned-file"
-id="toc-create-an-orphaned-file"><span
-class="toc-section-number">3</span> Create an Orphaned File</a></li>
-<li><a href="#create-an-invalid-mode-file"
-id="toc-create-an-invalid-mode-file"><span
-class="toc-section-number">4</span> Create an Invalid-Mode File</a></li>
+<li><a href="#case-study-orphaned-files"
+id="toc-case-study-orphaned-files"><span
+class="toc-section-number">3</span> Case Study: Orphaned Files</a></li>
+<li><a href="#case-study-invalid-mode-files"
+id="toc-case-study-invalid-mode-files"><span
+class="toc-section-number">4</span> Case Study: Invalid-Mode
+Files</a></li>
 <li><a href="#references" id="toc-references"><span
 class="toc-section-number">5</span> References</a></li>
 </ul>
@@ -141,8 +142,8 @@ corrupted.</p>
 <li>Create an orphaned file.</li>
 <li>Create an invalid file mode.</li>
 </ul>
-<h1 data-number="2" id="prepare-lab"><span
-class="header-section-number">2</span> Prepare Lab</h1>
+<h1 data-number="2" id="lab"><span
+class="header-section-number">2</span> Lab</h1>
 <h2 data-number="2.1" id="initial-setup"><span
 class="header-section-number">2.1</span> Initial Setup</h2>
 <ul>
@@ -201,8 +202,8 @@ class="header-section-number">2.2</span> Create a Filesystem</h2>
 </ul>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> mkdir /mnt/vda1</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> mount /dev/vda1 /mnt/vda1</span></code></pre></div>
-<h1 data-number="3" id="create-an-orphaned-file"><span
-class="header-section-number">3</span> Create an Orphaned File</h1>
+<h1 data-number="3" id="case-study-orphaned-files"><span
+class="header-section-number">3</span> Case Study: Orphaned Files</h1>
 <p>The inode link count is the number of filenames or hard links that
 point to the inode. An inode with a zero link count is known as an
 orphaned file. The fsck considers an orphaned file as a incomplete
@@ -253,8 +254,9 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> ls /mnt/vda1/</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ls:</span> /mnt/vda1/file_a: Data consistency error</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ex">lost+found</span></span></code></pre></div>
-<h1 data-number="4" id="create-an-invalid-mode-file"><span
-class="header-section-number">4</span> Create an Invalid-Mode File</h1>
+<h1 data-number="4" id="case-study-invalid-mode-files"><span
+class="header-section-number">4</span> Case Study: Invalid-Mode
+Files</h1>
 <ul>
 <li>Create a test file.</li>
 </ul>

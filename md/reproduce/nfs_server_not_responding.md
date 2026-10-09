@@ -29,7 +29,7 @@ nfs_client$ mount -t nfs -o recovery_method,timeo=n,retrans=n server:path path
 To quickly reproduce "NFS server not responding", we use small timeo, retrans values and simulate the above conditions.
 
 
-# Prepare Lab
+# Lab
 - Setup lab: [Network File System (NFS)](/html/lab/nfs.html).
 - VM1 acts as NFS server.
 - VM2 acts as NFS client.
@@ -66,8 +66,7 @@ hard,fatal_neterrors=none,proto=tcp,timeo=100,retrans=2,sec=sys,client)
 ::::::::::::::
 
 
-# Reproduce
-## Firewall Blocks NFS
+# Case Study: Firewall Blocks NFS
 - Install iptables.
 ```sh
 vm1$ apk add iptables
@@ -108,7 +107,7 @@ vm1$ iptables --delete INPUT 1
 ```
 
 
-## Traffic Control Drops NFS
+# Case Study: Traffic Control Drops NFS
 - Simulate packet loss on NFS server.
 ```sh
 vm1$ tc qdisc add dev eth2 root netem loss 100%
@@ -135,7 +134,7 @@ qdisc pfifo_fast 0: root refcnt 2 bands 3 priomap 1 2 2 2 1 2 0 0 1 1 1 1 1 1 1 
 ```
 
 
-## Disk IO Blocks NFS
+# Case Study: Slow Disk Impacts on NFS
 - Install packages.
 ```sh
 vm1$ apk add lvm2 device-mapper

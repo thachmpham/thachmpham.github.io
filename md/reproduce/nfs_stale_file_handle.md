@@ -13,7 +13,7 @@ Cases to reproduce:
 - While the client currently opens an NFS directory, the server un-exports it and exports a different directory.
 
 
-# Prepare Lab
+# Lab
 - Setup lab: [Network File System (NFS)](/html/lab/nfs.html).
 - VM1 acts as NFS server.
 - VM2 acts as NFS client.
@@ -39,8 +39,7 @@ Filesystem                Size      Used Available Use% Mounted on
 ::::::::::::::
 
 
-# Reproduce
-## Case 1: Delete an Open Directory
+# Case Study: Delete an Open Directory
 - Scenario: While the client open a directory, the server deletes the directory.
 - Result:
     - The inode held by the client becomes unavailable.
@@ -81,7 +80,7 @@ ls: .: Stale file handle
 ::::::::::::::
 
 
-## Case 2: Export a Different Directory
+# Case Study: Export a Different Directory
 - Scenario: While the client open a directory, the server unexport the directory and export a different path.
 - Result:
     - The underlying inodes on server change.
