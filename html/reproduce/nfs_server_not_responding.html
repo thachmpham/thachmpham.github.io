@@ -124,6 +124,8 @@ class="toc-section-number">3.1</span> Firewall Blocks NFS</a></li>
 <li><a href="#traffic-control-drops-nfs"
 id="toc-traffic-control-drops-nfs"><span
 class="toc-section-number">3.2</span> Traffic Control Drops NFS</a></li>
+<li><a href="#disk-io-blocks-nfs" id="toc-disk-io-blocks-nfs"><span
+class="toc-section-number">3.3</span> Disk IO Blocks NFS</a></li>
 </ul></li>
 <li><a href="#references" id="toc-references"><span
 class="toc-section-number">4</span> References</a></li>
@@ -201,11 +203,11 @@ class="header-section-number">3</span> Reproduce</h1>
 <h2 data-number="3.1" id="firewall-blocks-nfs"><span
 class="header-section-number">3.1</span> Firewall Blocks NFS</h2>
 <ul>
-<li>VM1: Install iptables.</li>
+<li>Install iptables.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> apk add iptables</span></code></pre></div>
 <ul>
-<li>VM1: Block NFS requests from VM2.</li>
+<li>Block NFS requests on NFS server.</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--append</span> INPUT <span class="at">--source</span> 192.0.0.20 <span class="at">-p</span> tcp <span class="at">--dport</span> 2049 <span class="at">-j</span> DROP</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--append</span> INPUT <span class="at">--source</span> 192.0.0.20 <span class="at">-p</span> udp <span class="at">--dport</span> 2049 <span class="at">-j</span> DROP</span>
@@ -222,7 +224,7 @@ class="header-section-number">3.1</span> Firewall Blocks NFS</h2>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Chain</span> OUTPUT <span class="er">(</span><span class="ex">policy</span> ACCEPT 0 packets, 0 bytes<span class="kw">)</span></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="ex">num</span>   pkts bytes target     prot opt in     out     source               destination</span></code></pre></div>
 <ul>
-<li>VM2: Check dmesg.</li>
+<li>Monitor dmesg on NFS client.</li>
 </ul>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> dmesg <span class="at">-wT</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:16:53 2026] nfs: server 192.0.0.10 not responding, still trying</span>
@@ -231,21 +233,21 @@ class="header-section-number">3.1</span> Firewall Blocks NFS</h2>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:20:35 2026] nfs: server 192.0.0.10 not responding, timed out</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:21:35 2026] nfs: server 192.0.0.10 not responding, timed out</span></code></pre></div>
 <ul>
-<li>VM1: Cleanup after test.</li>
+<li>Reset after test.</li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--delete</span> INPUT 2</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--delete</span> INPUT 1</span></code></pre></div>
 <h2 data-number="3.2" id="traffic-control-drops-nfs"><span
 class="header-section-number">3.2</span> Traffic Control Drops NFS</h2>
 <ul>
-<li>VM1: Simulate packet loss.</li>
+<li>Simulate packet loss on NFS server.</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> tc qdisc add dev eth2 root netem loss 100%</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> tc qdisc show dev eth2</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">qdisc</span> netem 8001: root refcnt 2 limit 1000 loss 100% seed 13627998538068838059</span></code></pre></div>
 <ul>
-<li>VM2: Check dmesg.</li>
+<li>Monitor dmesg on NFS client.</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> dmesg <span class="at">-wT</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:32:13 2026] nfs: server 192.0.0.10 not responding, still trying</span>
@@ -253,17 +255,102 @@ class="header-section-number">3.2</span> Traffic Control Drops NFS</h2>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:34:48 2026] nfs: server 192.0.0.10 not responding, timed out</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[Tue</span> Oct  6 06:35:48 2026] nfs: server 192.0.0.10 not responding, timed out</span></code></pre></div>
 <ul>
-<li>VM1: Cleanup after test.</li>
+<li>Reset after test.</li>
 </ul>
 <div class="sourceCode" id="cb10"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> tc qdisc del dev eth2 root netem</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> tc qdisc show dev eth2</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">qdisc</span> pfifo_fast 0: root refcnt 2 bands 3 priomap 1 2 2 2 1 2 0 0 1 1 1 1 1 1 1 1</span></code></pre></div>
+<h2 data-number="3.3" id="disk-io-blocks-nfs"><span
+class="header-section-number">3.3</span> Disk IO Blocks NFS</h2>
+<ul>
+<li>Install packages.</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> apk add lvm2 device-mapper</span></code></pre></div>
+<ul>
+<li>Load dm-delay module.</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> modprobe dm-delay</span></code></pre></div>
+<ul>
+<li>Create a loopback device with size of 2 GiB.</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> dd if=/dev/zero of=dm0.img bs=1M count=2048</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> losetup /dev/loop0 dm0.img</span></code></pre></div>
+<ul>
+<li>Create dm device with a delay on read, write.</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># param 4194304:    2G = 2 * (1024 ** 3) / 512 = 4194304 sectors.</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># param 250:        delay read, write for 250 ms.</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> dmsetup create dm0 <span class="at">--table</span> <span class="st">&quot;0 4194304 delay /dev/loop0 0 250 /dev/loop0 0 250&quot;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> lsblk</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="ex">loop0</span>    7:0    0    2G  0 loop </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="ex">└─dm0</span>  253:0    0    2G  0 dm</span></code></pre></div>
+<ul>
+<li>Make filesystem.</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> mkfs.ext4 /dev/mapper/dm0</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> mount /dev/mapper/dm0 /mnt/dm0</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> chmod <span class="at">-R</span> 777 /mnt/dm0</span></code></pre></div>
+<ul>
+<li>Export NFS.</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> cat /etc/exports</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/mnt/dm0</span> 192.0.0.0/24<span class="er">(</span><span class="ex">rw,sync,no_subtree_check</span><span class="kw">)</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-ar</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> exportfs <span class="at">-v</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="ex">/mnt/dm0</span>        192.0.0.0/24<span class="er">(</span><span class="fu">sync</span>,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,no_all_squash<span class="kw">)</span></span></code></pre></div>
+<ul>
+<li>Mount NFS.</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mkdir /mnt/dm0</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mount <span class="at">-t</span> nfs <span class="at">-o</span> timeo=100,retrans=2 192.0.0.10:/mnt/dm0 /mnt/dm0</span></code></pre></div>
+<ul>
+<li>Suspend the disk of the NFS server.</li>
+</ul>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> dmsetup suspend /dev/mapper/dm0</span></code></pre></div>
+<ul>
+<li>Create a file on the NFS client.</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> touch /mnt/dm0/hello</span></code></pre></div>
+<ul>
+<li>Monitor dmesg on NFS client.</li>
+</ul>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> dmesg <span class="at">-wT</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[Thu</span> Oct  8 23:51:25 2026] nfs: server 192.0.0.10 not responding, still trying</span></code></pre></div>
+<ul>
+<li>Reset after test.</li>
+</ul>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> dmsetup resume /dev/mapper/dm0</span></code></pre></div>
 <h1 data-number="4" id="references"><span
 class="header-section-number">4</span> References</h1>
 <ul>
 <li><a href="https://linux.die.net/man/5/nfs">NFS Manual</a></li>
+<li><a
+href="https://blogs.oracle.com/linux/emulating-disk-latency-with-dm-delay">Emulate
+Disk Latency with dm-delay</a></li>
+<li><a
+href="https://enodev.fr/posts/emulate-a-slow-block-device-with-dm-delay.html">Emulate
+a slow block device with dm-delay</a></li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">      
