@@ -114,6 +114,15 @@ cont$ ssh vm
 ```
 
 
+# Setup Repository
+- Enable community repository.
+```sh
+vm$ vi /etc/apk/repositories
+http://dl-cdn.alpinelinux.org/alpine/v3.24/main
+http://dl-cdn.alpinelinux.org/alpine/v3.24/community
+```
+
+
 # Shortcuts
 QEMU keys:
 

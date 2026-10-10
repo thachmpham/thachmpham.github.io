@@ -116,17 +116,17 @@
 class="toc-section-number">1</span> Overview</a></li>
 <li><a href="#lab" id="toc-lab"><span
 class="toc-section-number">2</span> Lab</a></li>
-<li><a href="#case-study-firewall-blocks-nfs"
-id="toc-case-study-firewall-blocks-nfs"><span
-class="toc-section-number">3</span> Case Study: Firewall Blocks
+<li><a href="#reproduce-firewall-blocks-nfs"
+id="toc-reproduce-firewall-blocks-nfs"><span
+class="toc-section-number">3</span> Reproduce: Firewall Blocks
 NFS</a></li>
-<li><a href="#case-study-traffic-control-drops-nfs"
-id="toc-case-study-traffic-control-drops-nfs"><span
-class="toc-section-number">4</span> Case Study: Traffic Control Drops
+<li><a href="#reproduce-traffic-control-drops-nfs"
+id="toc-reproduce-traffic-control-drops-nfs"><span
+class="toc-section-number">4</span> Reproduce: Traffic Control Drops
 NFS</a></li>
-<li><a href="#case-study-slow-disk-impacts-on-nfs"
-id="toc-case-study-slow-disk-impacts-on-nfs"><span
-class="toc-section-number">5</span> Case Study: Slow Disk Impacts on
+<li><a href="#reproduce-slow-disk-impacts-on-nfs"
+id="toc-reproduce-slow-disk-impacts-on-nfs"><span
+class="toc-section-number">5</span> Reproduce: Slow Disk Impacts on
 NFS</a></li>
 <li><a href="#references" id="toc-references"><span
 class="toc-section-number">6</span> References</a></li>
@@ -199,8 +199,8 @@ class="header-section-number">2</span> Lab</h1>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
 </div>
 </div>
-<h1 data-number="3" id="case-study-firewall-blocks-nfs"><span
-class="header-section-number">3</span> Case Study: Firewall Blocks
+<h1 data-number="3" id="reproduce-firewall-blocks-nfs"><span
+class="header-section-number">3</span> Reproduce: Firewall Blocks
 NFS</h1>
 <ul>
 <li>Install iptables.</li>
@@ -237,8 +237,8 @@ NFS</h1>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--delete</span> INPUT 2</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> iptables <span class="at">--delete</span> INPUT 1</span></code></pre></div>
-<h1 data-number="4" id="case-study-traffic-control-drops-nfs"><span
-class="header-section-number">4</span> Case Study: Traffic Control Drops
+<h1 data-number="4" id="reproduce-traffic-control-drops-nfs"><span
+class="header-section-number">4</span> Reproduce: Traffic Control Drops
 NFS</h1>
 <ul>
 <li>Simulate packet loss on NFS server.</li>
@@ -263,8 +263,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> tc qdisc show dev eth2</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">qdisc</span> pfifo_fast 0: root refcnt 2 bands 3 priomap 1 2 2 2 1 2 0 0 1 1 1 1 1 1 1 1</span></code></pre></div>
-<h1 data-number="5" id="case-study-slow-disk-impacts-on-nfs"><span
-class="header-section-number">5</span> Case Study: Slow Disk Impacts on
+<h1 data-number="5" id="reproduce-slow-disk-impacts-on-nfs"><span
+class="header-section-number">5</span> Reproduce: Slow Disk Impacts on
 NFS</h1>
 <ul>
 <li>Install packages.</li>

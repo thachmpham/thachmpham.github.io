@@ -124,10 +124,12 @@ class="toc-section-number">2.2</span> Create VM</a></li>
 <li><a href="#setup-ssh" id="toc-setup-ssh"><span
 class="toc-section-number">2.3</span> Setup SSH</a></li>
 </ul></li>
+<li><a href="#setup-repository" id="toc-setup-repository"><span
+class="toc-section-number">3</span> Setup Repository</a></li>
 <li><a href="#shortcuts" id="toc-shortcuts"><span
-class="toc-section-number">3</span> Shortcuts</a></li>
+class="toc-section-number">4</span> Shortcuts</a></li>
 <li><a href="#references" id="toc-references"><span
-class="toc-section-number">4</span> References</a></li>
+class="toc-section-number">5</span> References</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="overview"><span
@@ -227,16 +229,25 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 </ul>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ssh vm</span></code></pre></div>
-<h1 data-number="3" id="shortcuts"><span
-class="header-section-number">3</span> Shortcuts</h1>
+<h1 data-number="3" id="setup-repository"><span
+class="header-section-number">3</span> Setup Repository</h1>
+<ul>
+<li>Enable community repository.</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> vi /etc/apk/repositories</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">http://dl-cdn.alpinelinux.org/alpine/v3.24/main</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">http://dl-cdn.alpinelinux.org/alpine/v3.24/community</span></span></code></pre></div>
+<h1 data-number="4" id="shortcuts"><span
+class="header-section-number">4</span> Shortcuts</h1>
 <p>QEMU keys:</p>
 <ul>
 <li>Ctrl + a h: Help Menu</li>
 <li>Ctrl + a x: Exit</li>
 <li>Ctrl + a c: Switch between VM console and QEMU monitor.</li>
 </ul>
-<h1 data-number="4" id="references"><span
-class="header-section-number">4</span> References</h1>
+<h1 data-number="5" id="references"><span
+class="header-section-number">5</span> References</h1>
 <ul>
 <li><a href="https://wiki.alpinelinux.org/wiki/Installation">Alpine
 Installation</a></li>

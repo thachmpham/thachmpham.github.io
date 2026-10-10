@@ -39,7 +39,7 @@ Filesystem                Size      Used Available Use% Mounted on
 ::::::::::::::
 
 
-# Case Study: Delete an Open Directory
+# Reproduce: Delete an Open Directory
 - Scenario: While the client open a directory, the server deletes the directory.
 - Result:
     - The inode held by the client becomes unavailable.
@@ -80,7 +80,7 @@ ls: .: Stale file handle
 ::::::::::::::
 
 
-# Case Study: Export a Different Directory
+# Reproduce: Export a Different Directory
 - Scenario: While the client open a directory, the server unexport the directory and export a different path.
 - Result:
     - The underlying inodes on server change.
