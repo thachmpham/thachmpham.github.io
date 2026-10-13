@@ -1,5 +1,5 @@
 ---
-title: 'Corrupt a Filesystem'
+title: 'Corrupted Filesystems'
 subtitle: '(Reproduce & Troubleshoot Series)'
 ---
 
