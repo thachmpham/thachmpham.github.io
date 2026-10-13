@@ -1,6 +1,6 @@
 ---
 title: 'Corrupt a Filesystem'
-subtitle: (Reproduce Series)
+subtitle: '(Reproduce & Troubleshoot Series)'
 ---
 
 
@@ -80,7 +80,8 @@ vm$ mount /dev/vda1 /mnt/vda1
 ```
 
 
-# Reproduce: Orphaned Files
+# Case Study: Orphaned Files
+## Reproduce
 The inode link count is the number of filenames or hard links that point to the inode. An inode with a zero link count is known as an orphaned file. The fsck considers an orphaned file as a incomplete deletion error.
 
 
@@ -139,7 +140,8 @@ lost+found
 ```
 
 
-# Reproduce: Invalid-Mode Files
+# Case Study: Invalid-Mode Files
+## Reproduce
 - Create a test file.
 ```sh
 vm$ echo 'Hello B' > /mnt/vda1

@@ -108,7 +108,7 @@
 <body>
 <header id="title-block-header">
 <h1 class="title">NFS Stale File Handle</h1>
-<p class="subtitle">(Reproduce Series)</p>
+<p class="subtitle">(Reproduce &amp; Troubleshoot Series)</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -116,14 +116,22 @@
 class="toc-section-number">1</span> Overview</a></li>
 <li><a href="#lab" id="toc-lab"><span
 class="toc-section-number">2</span> Lab</a></li>
-<li><a href="#reproduce-delete-an-open-directory"
-id="toc-reproduce-delete-an-open-directory"><span
-class="toc-section-number">3</span> Reproduce: Delete an Open
-Directory</a></li>
-<li><a href="#reproduce-export-a-different-directory"
-id="toc-reproduce-export-a-different-directory"><span
-class="toc-section-number">4</span> Reproduce: Export a Different
-Directory</a></li>
+<li><a href="#case-study-delete-an-open-directory"
+id="toc-case-study-delete-an-open-directory"><span
+class="toc-section-number">3</span> Case Study: Delete an Open
+Directory</a>
+<ul>
+<li><a href="#reproduce" id="toc-reproduce"><span
+class="toc-section-number">3.1</span> Reproduce</a></li>
+</ul></li>
+<li><a href="#case-study-export-a-different-directory"
+id="toc-case-study-export-a-different-directory"><span
+class="toc-section-number">4</span> Case Study: Export a Different
+Directory</a>
+<ul>
+<li><a href="#reproduce-1" id="toc-reproduce-1"><span
+class="toc-section-number">4.1</span> Reproduce</a></li>
+</ul></li>
 <li><a href="#references" id="toc-references"><span
 class="toc-section-number">5</span> References</a></li>
 </ul>
@@ -157,9 +165,11 @@ class="header-section-number">2</span> Lab</h1>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span>       5.6G    221.0M      5.1G   4% /mnt/nfs</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="3" id="reproduce-delete-an-open-directory"><span
-class="header-section-number">3</span> Reproduce: Delete an Open
+<h1 data-number="3" id="case-study-delete-an-open-directory"><span
+class="header-section-number">3</span> Case Study: Delete an Open
 Directory</h1>
+<h2 data-number="3.1" id="reproduce"><span
+class="header-section-number">3.1</span> Reproduce</h2>
 <ul>
 <li>Scenario: While the client open a directory, the server deletes the
 directory.</li>
@@ -194,9 +204,11 @@ directory.</li>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ls:</span> .: Stale file handle</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="4" id="reproduce-export-a-different-directory"><span
-class="header-section-number">4</span> Reproduce: Export a Different
+<h1 data-number="4" id="case-study-export-a-different-directory"><span
+class="header-section-number">4</span> Case Study: Export a Different
 Directory</h1>
+<h2 data-number="4.1" id="reproduce-1"><span
+class="header-section-number">4.1</span> Reproduce</h2>
 <ul>
 <li>Scenario: While the client open a directory, the server unexport the
 directory and export a different path.</li>

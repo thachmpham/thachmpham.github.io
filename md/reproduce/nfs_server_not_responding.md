@@ -1,6 +1,6 @@
 ---
 title: 'NFS Server Not Responding'
-subtitle: '(Reproduce Series)'
+subtitle: '(Reproduce & Troubleshoot Series)'
 ---
 
 
@@ -66,7 +66,8 @@ hard,fatal_neterrors=none,proto=tcp,timeo=100,retrans=2,sec=sys,client)
 ::::::::::::::
 
 
-# Reproduce: Firewall Blocks NFS
+# Case Study: Firewall Blocks NFS
+## Reproduce
 - Install iptables.
 ```sh
 vm1$ apk add iptables
@@ -107,7 +108,8 @@ vm1$ iptables --delete INPUT 1
 ```
 
 
-# Reproduce: Traffic Control Drops NFS
+# Case Study: Traffic Control Drops NFS
+## Reproduce
 - Simulate packet loss on NFS server.
 ```sh
 vm1$ tc qdisc add dev eth2 root netem loss 100%
@@ -134,7 +136,8 @@ qdisc pfifo_fast 0: root refcnt 2 bands 3 priomap 1 2 2 2 1 2 0 0 1 1 1 1 1 1 1 
 ```
 
 
-# Reproduce: Slow Disk Impacts on NFS
+# Case Study: Slow Disk Impacts on NFS
+## Reproduce
 - Install packages.
 ```sh
 vm1$ apk add lvm2 device-mapper

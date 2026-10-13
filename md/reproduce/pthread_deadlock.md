@@ -1,6 +1,6 @@
 ---
 title: 'C/C++ pthread Deadlock'
-subtitle: '(Reproduce Series)'
+subtitle: '(Reproduce & Troubleshoot Series)'
 ---
 
 # Syscall Futex

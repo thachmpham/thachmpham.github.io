@@ -1,6 +1,6 @@
 ---
 title: 'NFS Stale File Handle'
-subtitle: '(Reproduce Series)'
+subtitle: '(Reproduce & Troubleshoot Series)'
 ---
 
 
@@ -39,7 +39,8 @@ Filesystem                Size      Used Available Use% Mounted on
 ::::::::::::::
 
 
-# Reproduce: Delete an Open Directory
+# Case Study: Delete an Open Directory
+## Reproduce
 - Scenario: While the client open a directory, the server deletes the directory.
 - Result:
     - The inode held by the client becomes unavailable.
@@ -80,7 +81,8 @@ ls: .: Stale file handle
 ::::::::::::::
 
 
-# Reproduce: Export a Different Directory
+# Case Study: Export a Different Directory
+## Reproduce
 - Scenario: While the client open a directory, the server unexport the directory and export a different path.
 - Result:
     - The underlying inodes on server change.
