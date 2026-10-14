@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Slow Disk</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="/html/style/dark.css" />
+  <header class="footer text-muted">
+     <div align="center">      
+        <a href="/index.html"><b>Home</b></a>
+     </div>
+  </header>
+
+  <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+          theme: 'dark',
+      });
+  </script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Slow Disk</h1>
+<p class="subtitle">(Fault Injection Series)</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#overview" id="toc-overview"><span
+class="toc-section-number">1</span> Overview</a></li>
+<li><a href="#references" id="toc-references"><span
+class="toc-section-number">2</span> References</a></li>
+</ul>
+</nav>
+<h1 data-number="1" id="overview"><span
+class="header-section-number">1</span> Overview</h1>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Term/Tool</th>
+<th style="text-align: left;">Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Device Mapper (DM)</td>
+<td style="text-align: left;">Map software devices to physical
+device.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Loop Device</td>
+<td style="text-align: left;">Allow to mount a regular file as a
+disk.</td>
+</tr>
+<tr>
+<td style="text-align: left;">dmsetup</td>
+<td style="text-align: left;">Manage DM devices.</td>
+</tr>
+<tr>
+<td style="text-align: left;">losetup</td>
+<td style="text-align: left;">Manage loop device.</td>
+</tr>
+<tr>
+<td style="text-align: left;">dm-linear</td>
+<td style="text-align: left;">Merge multiple devices into one. Split one
+device into multiple devices.</td>
+</tr>
+<tr>
+<td style="text-align: left;">dm-error</td>
+<td style="text-align: left;">Return I/O errors for any read, write to
+an erea.</td>
+</tr>
+</tbody>
+</table>
+<p>Agenda:</p>
+<ul>
+<li>Create a regular file.</li>
+<li>Create a loop device associated with the file.</li>
+<li>Create a dm-linear device on top of the loop device.</li>
+<li>Inject dm-error an erea of the dm-linear device.</li>
+<li>Read, write to the dm-error erea.</li>
+</ul>
+<h1 data-number="2" id="references"><span
+class="header-section-number">2</span> References</h1>
+<ul>
+<li>https://kb.linbit.com/generic-linux-tips/dmsetup-creating-virtual-blkdev-to-generate-io-errors/</li>
+<li>https://kb.linbit.com/generic-linux-tips/how-to-simulate-disk-io-error/</li>
+<li>https://blogs.oracle.com/linux/emulating-disk-latency-with-dm-delay</li>
+<li>https://wiki.gentoo.org/wiki/Device-mapper</li>
+</ul>
+<footer class="footer text-muted">
+   <div align="center">      
+      <br>
+      <br>
+      <a href="/index.html"><b>Home</b></a>
+   </div>
+ </footer>
+</body>
+</html>

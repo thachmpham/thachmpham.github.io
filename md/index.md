@@ -5,7 +5,8 @@ title: "A Developer Diary"
 :::::::::::::: {.columns}
 ::: {.column width=40%}
 
-## 1. Lab
+
+## Lab
 
 * * * * *
 
@@ -23,25 +24,36 @@ title: "A Developer Diary"
 
 <br>
 
-## 2. Build
+
+## Build
 
 * * * * *
 
 - [Fedora SRPM: Banner](/html/build/srpm_banner.html)
 
+<br>
 
-:::
-::: {.column width=60%}
 
-## 3. Debug
+## Debug
 
 * * * * *
 
 - [Reverse C/C++ Stack Frame](/html/debug/reverse_stack.html)
 
+:::
+::: {.column width=60%}
+
+
+## Fault Injection
+
+* * * * * 
+
+- [Slow Disk](/html/fault_injection/slow_disk.html)
+
+
 <br>
 
-## 4. Reproduce & Troubleshoot
+## Reproduce & Troubleshoot
 
 * * * * * 
 

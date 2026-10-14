@@ -146,8 +146,8 @@ class="toc-section-number">6</span> References</a></li>
 <h1 data-number="1" id="overview"><span
 class="header-section-number">1</span> Overview</h1>
 <p>According to <a href="https://linux.die.net/man/5/nfs">NFS
-manual</a>, the NFS client can specify the mount options with the below
-parameters.</p>
+manual</a>, the NFS client mount a filesystem with the below
+options:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nfs_client$</span> mount <span class="at">-t</span> nfs <span class="at">-o</span> recovery_method,timeo=n,retrans=n server:path path</span></code></pre></div>
 <ul>
 <li>recovery_method: The method for NFS client to recovers on requests

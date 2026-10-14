@@ -5,7 +5,7 @@ subtitle: '(Reproduce & Troubleshoot Series)'
 
 
 # Overview
-According to [NFS manual](https://linux.die.net/man/5/nfs), the NFS client can specify the mount options with the below parameters.
+According to [NFS manual](https://linux.die.net/man/5/nfs), the NFS client mount a filesystem with the below options:
 
 ```sh
 nfs_client$ mount -t nfs -o recovery_method,timeo=n,retrans=n server:path path
