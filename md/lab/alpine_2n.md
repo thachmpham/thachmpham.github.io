@@ -93,6 +93,13 @@ vm1$ rc-service sshd restart
 cont$ ssh vm1
 ```
 
+- Enable community repository.
+```sh
+vm$ vi /etc/apk/repositories
+http://dl-cdn.alpinelinux.org/alpine/v3.24/main
+http://dl-cdn.alpinelinux.org/alpine/v3.24/community
+```
+
 
 ## Setup VM2
 - Create VM2.
@@ -129,6 +136,13 @@ vm2$ rc-service sshd restart
 - Check ssh access from the container to VM1.
 ```sh
 cont$ ssh vm2
+```
+
+- Enable community repository.
+```sh
+vm$ vi /etc/apk/repositories
+http://dl-cdn.alpinelinux.org/alpine/v3.24/main
+http://dl-cdn.alpinelinux.org/alpine/v3.24/community
 ```
 
 

@@ -9,19 +9,19 @@ subtitle: '(Fault Injection Series)'
 | Term/Tool | Usage | 
 | :--- | :--- |
 | Device Mapper (DM) | Map software devices to physical device. |
-| Loop Device | Allow to mount a regular file as a disk. |
+| Loop Device | Allow users to mount a regular file as a disk. |
 | dmsetup | Manage DM devices. |
 | losetup | Manage loop device. |
-| dm-linear | Merge multiple devices into one. Split one device into multiple devices. |
+| dm-linear | Split, merge devices |
 | dm-error  | Return I/O errors for any read, write to an erea. |
 
-Agenda:
+Steps:
 
 - Create a regular file.
-- Create a loop device associated with the file.
+- Create a loop device on top of the file.
 - Create a dm-linear device on top of the loop device.
-- Inject dm-error an erea of the dm-linear device.
-- Read, write to the dm-error erea.
+- Inject errors to an erea of the dm-linear device.
+- Test read, write on the error erea.
 
 
 # References

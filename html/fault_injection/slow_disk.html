@@ -57,10 +57,6 @@ class="toc-section-number">2</span> References</a></li>
 <h1 data-number="1" id="overview"><span
 class="header-section-number">1</span> Overview</h1>
 <table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
 <thead>
 <tr>
 <th style="text-align: left;">Term/Tool</th>
@@ -75,7 +71,7 @@ device.</td>
 </tr>
 <tr>
 <td style="text-align: left;">Loop Device</td>
-<td style="text-align: left;">Allow to mount a regular file as a
+<td style="text-align: left;">Allow users to mount a regular file as a
 disk.</td>
 </tr>
 <tr>
@@ -88,8 +84,7 @@ disk.</td>
 </tr>
 <tr>
 <td style="text-align: left;">dm-linear</td>
-<td style="text-align: left;">Merge multiple devices into one. Split one
-device into multiple devices.</td>
+<td style="text-align: left;">Split, merge devices</td>
 </tr>
 <tr>
 <td style="text-align: left;">dm-error</td>
@@ -98,13 +93,13 @@ an erea.</td>
 </tr>
 </tbody>
 </table>
-<p>Agenda:</p>
+<p>Steps:</p>
 <ul>
 <li>Create a regular file.</li>
-<li>Create a loop device associated with the file.</li>
+<li>Create a loop device on top of the file.</li>
 <li>Create a dm-linear device on top of the loop device.</li>
-<li>Inject dm-error an erea of the dm-linear device.</li>
-<li>Read, write to the dm-error erea.</li>
+<li>Inject errors to an erea of the dm-linear device.</li>
+<li>Test read, write on the error erea.</li>
 </ul>
 <h1 data-number="2" id="references"><span
 class="header-section-number">2</span> References</h1>

@@ -16,7 +16,7 @@ Reproduce cases:
 # Lab
 ## Initial Setup
 - Setup lab: [**Alpine 1 Node**](/html/lab/alpine_1n.html).
-- Install packages to the VM.
+- Install packages.
 ```sh
 vm$ apk add lsblk e2fsprogs-extra util-linux file
 ```

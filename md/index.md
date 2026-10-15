@@ -49,6 +49,7 @@ title: "A Developer Diary"
 * * * * * 
 
 - [Slow Disk](/html/fault_injection/slow_disk.html)
+- [Disk Input/Output Error](/html/fault_injection/disk_eio.html)
 
 
 <br>

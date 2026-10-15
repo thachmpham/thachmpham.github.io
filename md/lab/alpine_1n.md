@@ -9,16 +9,15 @@ subtitle: '(Lab Series)'
 :::::::::::::: {.columns}
 ::: {.column}
 
-- The lab runs in a Docker container with a QEMU VM inside.
-- The VM connects to the container through two network interfaces:
-    - User-mode: -netdev user
-    - Bridge: -netdev bridge,br=br0
-- Static IP configured for SSH access:
-    - Container: br0, 192.0.0.254
-    - VM: eth1, 192.0.0.10
-- Two virtual disks added to the VM:
-    - disk_a.qcow2 (/dev/sda): Boot and filesystem.
-    - disk_b.qcow2 (/dev/sdb): For testing.
+- The lab runs in a Docker container with two QEMU VMs inside.
+- The VM has three interfaces:
+    - br1 (191.0.0.0/24): For ssh.
+    - br2 (192.0.0.0/24): For testing.
+    - br3 (193.0.0.0/24): For testing.
+- Each VM has the below disks:
+   - /dev/sda: Boot and filesystem.
+   - /dev/sdb: For testing.
+   - /dev/sdc: For testing.
 
 :::
 ::: {.column}
@@ -31,20 +30,6 @@ subtitle: '(Lab Series)'
 | |   +--------+    |  |
 | +-----------------+  |
 +----------------------+
-```
-
-:::
-::: {.column}
-
-```go
-
-Container               VM
-192.0.0.254         192.0.0.10
-   br0                  eth1
-    +                    +
-    +--------------------+
-
-
 ```
 
 :::
@@ -108,7 +93,7 @@ PermitEmptyPasswords yes
 vm$ rc-service sshd restart
 ```
 
-- Check ssh access from the container to the VM.
+- Check ssh from container to vm.
 ```sh
 cont$ ssh vm
 ```
