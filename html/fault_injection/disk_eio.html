@@ -120,17 +120,22 @@ class="toc-section-number">2</span> Setup Lab</a></li>
 class="toc-section-number">3</span> Create Devices</a></li>
 <li><a href="#inject-io-errors" id="toc-inject-io-errors"><span
 class="toc-section-number">4</span> Inject IO Errors</a></li>
-<li><a href="#reproduce-io-errors" id="toc-reproduce-io-errors"><span
-class="toc-section-number">5</span> Reproduce IO Errors</a></li>
+<li><a href="#io-error-on-block-operations"
+id="toc-io-error-on-block-operations"><span
+class="toc-section-number">5</span> IO Error on Block
+Operations</a></li>
+<li><a href="#io-error-on-file-operations"
+id="toc-io-error-on-file-operations"><span
+class="toc-section-number">6</span> IO Error on File Operations</a></li>
 <li><a href="#references" id="toc-references"><span
-class="toc-section-number">6</span> References</a></li>
+class="toc-section-number">7</span> References</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="overview"><span
 class="header-section-number">1</span> Overview</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>Simulate the disk IO error with dm-error:</p>
+<p>Simulate the disk IO error (EIO) with dm-error:</p>
 <ul>
 <li>Create a regular file.</li>
 <li>Create a loop device on top of the file.</li>
@@ -174,6 +179,10 @@ disk.</td>
 <td style="text-align: left;">Return I/O errors for any read, write to
 an erea.</td>
 </tr>
+<tr>
+<td style="text-align: left;">sector</td>
+<td style="text-align: left;">In dmsetup, 1 sector = 512 bytes</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -185,7 +194,7 @@ class="header-section-number">2</span> Setup Lab</h1>
 Node</strong></a>.</li>
 <li>Install packages.</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> apk add device-mapper lsblk dmesg</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> apk add device-mapper lsblk dmesg e2fsprogs-extra perl</span></code></pre></div>
 <h1 data-number="3" id="create-devices"><span
 class="header-section-number">3</span> Create Devices</h1>
 <ul>
@@ -225,13 +234,13 @@ class="header-section-number">3</span> Create Devices</h1>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> lsblk</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="ex">loop0</span>    7:0    0    2G  0 loop </span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="ex">└─dm0</span>  253:0    0    2G  0 dm </span></code></pre></div>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="ex">loop0</span>    7:0    0    2G  0 loop</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="ex">└─dm0</span>  253:0    0    2G  0 dm</span></code></pre></div>
 <h1 data-number="4" id="inject-io-errors"><span
 class="header-section-number">4</span> Inject IO Errors</h1>
 <ul>
-<li>Show partition tables. The dm-linear device has 4194304
-sectors.</li>
+<li>Show partition tables. The dm-linear device has 4194304 sectors.
+Size of a sector is 512 bytes.</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> fdisk <span class="at">-l</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Disk</span> /dev/dm-0: 2048 MB, 2147483648 bytes, 4194304 sectors</span>
@@ -261,18 +270,118 @@ sectors.</li>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> dmsetup table</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="ex">dm0:</span> 0 3145728 linear 7:0 0</span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="ex">dm0:</span> 3145728 1048576 error</span></code></pre></div>
-<h1 data-number="5" id="reproduce-io-errors"><span
-class="header-section-number">5</span> Reproduce IO Errors</h1>
+<h1 data-number="5" id="io-error-on-block-operations"><span
+class="header-section-number">5</span> IO Error on Block Operations</h1>
 <ul>
-<li>Read from the error area.</li>
+<li>Read from the error area with dd.</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> dd if=/dev/dm-0 of=/dev/null bs=512 count=1 skip=3145728</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">dd:</span> /dev/dm-0: I/O error</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> dmesg <span class="at">-w</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Buffer</span> I/O error on dev dm-0, logical block 393216, async page read</span></code></pre></div>
-<h1 data-number="6" id="references"><span
-class="header-section-number">6</span> References</h1>
+<h1 data-number="6" id="io-error-on-file-operations"><span
+class="header-section-number">6</span> IO Error on File Operations</h1>
+<ul>
+<li>Reset the dm0 device, remove all error injection.</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> dmsetup reload dm0 <span class="at">--table</span> <span class="st">&#39;0 4194304 linear /dev/loop0 0&#39;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> dmsetup resume dm0</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> dmsetup table</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">dm0:</span> 0 4194304 linear 7:0 0</span></code></pre></div>
+<ul>
+<li>Make, mount filesystem.</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> mkdir /mnt/dm0</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> mkfs.ext4 /dev/dm-0</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> mount /dev/dm-0 /mnt/dm0</span></code></pre></div>
+<ul>
+<li>Create test files.</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> perl <span class="at">-e</span> <span class="st">&#39;print &quot;A&quot; x 512&#39;</span> <span class="op">&gt;</span> /mnt/dm0/file_a</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> perl <span class="at">-e</span> <span class="st">&#39;print &quot;B&quot; x 512&#39;</span> <span class="op">&gt;</span> /mnt/dm0/file_b</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> perl <span class="at">-e</span> <span class="st">&#39;print &quot;C&quot; x 512&#39;</span> <span class="op">&gt;</span> /mnt/dm0/file_c</span></code></pre></div>
+<ul>
+<li>Size of a block on /dev/dm-0 is 4096 bytes. Total 524288
+blocks.</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> dumpe2fs <span class="at">-h</span> /dev/dm-0</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Block</span> count:    524288</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Block</span> size:     4096</span></code></pre></div>
+<ul>
+<li>file_a starts at block 34827, which corresponds to byte offset 34827
+* 4096 = 142651392, or sector 42651392 / 512 = 278616.</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find block</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> debugfs <span class="at">-R</span> <span class="st">&#39;stat file_a&#39;</span> /dev/dm-0</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">EXTENTS:</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">0</span><span class="kw">)</span><span class="ex">:34827</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># convert block to byte offset</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> echo <span class="st">&#39;34827 * 4096&#39;</span> <span class="kw">|</span> <span class="fu">bc</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="ex">142651392</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># to verify, dump data at this offset</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> xxd <span class="at">-s</span> 142651392 <span class="at">-l</span> 512 /dev/dm-0</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="ex">0880b000:</span> 4141 4141 4141 4141 4141 4141 4141 4141  AAAAAAAAAAAAAAAA</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="ex">0880b010:</span> 4141 4141 4141 4141 4141 4141 4141 4141  AAAAAAAAAAAAAAAA</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="ex">0880b1e0:</span> 4141 4141 4141 4141 4141 4141 4141 4141  AAAAAAAAAAAAAAAA</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="ex">0880b1f0:</span> 4141 4141 4141 4141 4141 4141 4141 4141  AAAAAAAAAAAAAAAA</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co"># convert byte to 512-byte sector offset</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> echo <span class="st">&#39;142651392 / 512&#39;</span> <span class="kw">|</span> <span class="fu">bc</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="ex">278616</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co"># file_a</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a><span class="co">#   starts at sector 278616</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="co">#   size of 1 sector</span></span></code></pre></div>
+<ul>
+<li>file_b starts at block 34827, which corresponds to byte offset 34827
+* 4096 = 142651392, or sector 42651392 / 512 = 278616.</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find block</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> debugfs <span class="at">-R</span> <span class="st">&#39;stat file_b&#39;</span> /dev/dm-0</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">EXTENTS:</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">0</span><span class="kw">)</span><span class="ex">:34828</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># convert block to byte offset</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> echo <span class="st">&#39;34828 * 4096&#39;</span> <span class="kw">|</span> <span class="fu">bc</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="ex">142655488</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co"># to verify, dump data at this offset</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> xxd <span class="at">-s</span> 142655488 <span class="at">-l</span> 512 /dev/dm-0</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="ex">0880c000:</span> 4242 4242 4242 4242 4242 4242 4242 4242  BBBBBBBBBBBBBBBB</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="ex">0880c010:</span> 4242 4242 4242 4242 4242 4242 4242 4242  BBBBBBBBBBBBBBBB</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="ex">0880c1e0:</span> 4242 4242 4242 4242 4242 4242 4242 4242  BBBBBBBBBBBBBBBB</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="ex">0880c1f0:</span> 4242 4242 4242 4242 4242 4242 4242 4242  BBBBBBBBBBBBBBBB</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="co"># convert byte to 512-byte sector offset</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> echo <span class="st">&#39;142655488 / 512&#39;</span> <span class="kw">|</span> <span class="fu">bc</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="ex">278624</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="co"># file_b</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="co">#   starts at sector 278624</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="co">#   size of 1 sector</span></span></code></pre></div>
+<ul>
+<li>Inject IO errors.</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"></code></pre></div>
+<p>dmsetup reload dm0 &lt;&lt; EOF 0 274456 linear /dev/loop0 0 274456
+10 error 274466 3919838 linear /dev/loop0 274466 EOF</p>
+<h1 data-number="7" id="references"><span
+class="header-section-number">7</span> References</h1>
 <ul>
 <li><a
 href="https://kb.linbit.com/generic-linux-tips/dmsetup-creating-virtual-blkdev-to-generate-io-errors/">LINBIT
@@ -285,6 +394,9 @@ Mapper</a></li>
 <li><a
 href="https://docs.kernel.org/admin-guide/device-mapper/index.html">Kernel
 Device Mapper</a></li>
+<li><a
+href="https://stackoverflow.com/questions/3444844/finding-what-hard-drive-sectors-occupy-a-file">Stackoverflow
+Find Sector of a File</a></li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">      
