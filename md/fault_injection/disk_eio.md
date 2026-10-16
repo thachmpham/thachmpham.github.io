@@ -1,5 +1,5 @@
 ---
-title: 'Disk Input/Output Error'
+title: 'Disk IO Error'
 subtitle: '(Fault Injection Series)'
 ---
 

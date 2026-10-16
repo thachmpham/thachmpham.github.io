@@ -48,7 +48,7 @@ title: "A Developer Diary"
 
 * * * * * 
 
-- [Disk Input/Output Error](/html/fault_injection/disk_eio.html)
+- [Disk IO Error](/html/fault_injection/disk_eio.html)
 
 
 <br>
