@@ -62,14 +62,7 @@ host$ docker exec -it f1 bash
 cont$ cd /ws
 cont$ ./create_vm.sh
 #
-# Language settings
-#   17 (English)
-#       1 (United States)
-#
 # Root password
-#
-#
-# login: root
 #
 ```
 
@@ -81,24 +74,29 @@ cont$ ./create_vm.sh
 vm$ hostnamectl hostname vm
 ```
 
+- Reboot
+```sh
+vm$ reboot
+```
 
 ### Static IP
 - Set static IP.
 ```sh
-ip -br link show
+vm$ ip -br link show
 lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP>
 ens3             UP             52:54:00:12:34:56 <BROADCAST,MULTICAST,UP,LOWER_UP>
 ens4             UP             50:54:00:01:00:01 <BROADCAST,MULTICAST,UP,LOWER_UP>
 ens5             UP             50:54:00:02:00:01 <BROADCAST,MULTICAST,UP,LOWER_UP>
 ens6             UP             50:54:00:03:00:01 <BROADCAST,MULTICAST,UP,LOWER_UP>
 
-vm$ nmcli connection show
+vm$ nmcli conn show
 NAME                UUID                                  TYPE      DEVICE
 Wired connection 1  f1a11ae6-c99b-3dc9-a93e-b53d5c07b5e7  ethernet  ens3
 Wired connection 2  9e51782f-a94e-36b3-a8b2-c7da6e005de7  ethernet  ens4
 Wired connection 3  7fbc26d6-a1a0-388f-a13f-0e2e7d2cc7f2  ethernet  ens5
 Wired connection 4  1967bc2c-709c-3b88-9fdb-babdc1c76902  ethernet  ens6
 lo                  5eda62d0-1322-4a95-a564-a0a27a5ba757  loopback  lo
+
 
 # set IP for ens4
 vm$ nmcli conn modify 'Wired connection 2' ipv4.method manual ipv4.addr 191.0.0.10/24
@@ -135,3 +133,4 @@ QEMU keys:
 - Ctrl + a h: Help Menu
 - Ctrl + a x: Exit
 - Ctrl + a c: Switch between VM console and QEMU monitor.
+
