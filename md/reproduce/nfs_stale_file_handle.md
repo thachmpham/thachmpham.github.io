@@ -39,7 +39,7 @@ Filesystem                Size      Used Available Use% Mounted on
 ::::::::::::::
 
 
-# Case Study: Delete an Open Directory
+# Delete an Open Directory
 ## Reproduce
 - Scenario: While the client open a directory, the server deletes the directory.
 - Result:
@@ -81,7 +81,7 @@ ls: .: Stale file handle
 ::::::::::::::
 
 
-# Case Study: Export a Different Directory
+# Export a Different Directory
 ## Reproduce
 - Scenario: While the client open a directory, the server unexport the directory and export a different path.
 - Result:
