@@ -193,6 +193,10 @@ class="header-section-number">2.2</span> Create VM</h2>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Root password</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span></code></pre></div>
+<ul>
+<li>Reboot</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> reboot</span></code></pre></div>
 <h2 data-number="2.3" id="setup-vm"><span
 class="header-section-number">2.3</span> Setup VM</h2>
 <h3 data-number="2.3.1" id="hostname"><span
@@ -200,11 +204,7 @@ class="header-section-number">2.3.1</span> Hostname</h3>
 <ul>
 <li>Set hostname.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> hostnamectl hostname vm</span></code></pre></div>
-<ul>
-<li>Reboot</li>
-</ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> reboot</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> hostnamectl hostname vm</span></code></pre></div>
 <h3 data-number="2.3.2" id="static-ip"><span
 class="header-section-number">2.3.2</span> Static IP</h3>
 <ul>
@@ -225,15 +225,14 @@ class="header-section-number">2.3.2</span> Static IP</h3>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Wired</span> connection 4  1967bc2c-709c-3b88-9fdb-babdc1c76902  ethernet  ens6</span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="ex">lo</span>                  5eda62d0-1322-4a95-a564-a0a27a5ba757  loopback  lo</span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens4</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 2&#39;</span> ipv4.method manual ipv4.addr 191.0.0.10/24</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens5</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 3&#39;</span> ipv4.method manual ipv4.addr 192.0.0.10/24</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens6</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 4&#39;</span> ipv4.method manual ipv4.addr 193.0.0.10/24</span></code></pre></div>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens4</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 2&#39;</span> ipv4.method manual ipv4.addr 191.0.0.10/24</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens5</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 3&#39;</span> ipv4.method manual ipv4.addr 192.0.0.10/24</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens6</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 4&#39;</span> ipv4.method manual ipv4.addr 193.0.0.10/24</span></code></pre></div>
 <h3 data-number="2.3.3" id="ssh"><span
 class="header-section-number">2.3.3</span> SSH</h3>
 <ul>

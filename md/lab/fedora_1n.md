@@ -66,6 +66,11 @@ cont$ ./create_vm.sh
 #
 ```
 
+- Reboot
+```sh
+vm$ reboot
+```
+
 
 ## Setup VM
 ### Hostname
@@ -74,10 +79,6 @@ cont$ ./create_vm.sh
 vm$ hostnamectl hostname vm
 ```
 
-- Reboot
-```sh
-vm$ reboot
-```
 
 ### Static IP
 - Set static IP.
@@ -96,7 +97,6 @@ Wired connection 2  9e51782f-a94e-36b3-a8b2-c7da6e005de7  ethernet  ens4
 Wired connection 3  7fbc26d6-a1a0-388f-a13f-0e2e7d2cc7f2  ethernet  ens5
 Wired connection 4  1967bc2c-709c-3b88-9fdb-babdc1c76902  ethernet  ens6
 lo                  5eda62d0-1322-4a95-a564-a0a27a5ba757  loopback  lo
-
 
 # set IP for ens4
 vm$ nmcli conn modify 'Wired connection 2' ipv4.method manual ipv4.addr 191.0.0.10/24
