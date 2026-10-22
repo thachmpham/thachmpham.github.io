@@ -14,6 +14,7 @@ title: "A Developer Diary"
 
 - [Alpine 1 Node](/html/lab/alpine_1n.html)
 - [Alpine 2 Nodes](/html/lab/alpine_2n.html)
+- [Fedora 1 Node](html/lab/fedora_1n.html)
 - [Preboot Execution Environment (PXE)](/html/lab/pxeboot.html)
 - [Network File System (NFS)](/html/lab/nfs.html)
 - [Distributed Replicated Block Device (DRBD)](/html/lab/drbd.html)

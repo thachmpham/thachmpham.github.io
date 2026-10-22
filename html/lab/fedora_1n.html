@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Fedora Single Node</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #cccccc; background-color: #303030; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ffcfaf; } /* Alert */
+    code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bn { color: #dca3a3; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #f0dfaf; } /* ControlFlow */
+    code span.ch { color: #dca3a3; } /* Char */
+    code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+    code span.co { color: #7f9f7f; } /* Comment */
+    code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+    code span.do { color: #7f9f7f; } /* Documentation */
+    code span.dt { color: #dfdfbf; } /* DataType */
+    code span.dv { color: #dcdccc; } /* DecVal */
+    code span.er { color: #c3bf9f; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #c0bed1; } /* Float */
+    code span.fu { color: #efef8f; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+    code span.kw { color: #f0dfaf; } /* Keyword */
+    code span.op { color: #f0efd0; } /* Operator */
+    code span.ot { color: #efef8f; } /* Other */
+    code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+    code span.sc { color: #dca3a3; } /* SpecialChar */
+    code span.ss { color: #cc9393; } /* SpecialString */
+    code span.st { color: #cc9393; } /* String */
+    code span.va { } /* Variable */
+    code span.vs { color: #cc9393; } /* VerbatimString */
+    code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="/html/style/dark.css" />
+  <header class="footer text-muted">
+     <div align="center">      
+        <a href="/index.html"><b>Home</b></a>
+     </div>
+  </header>
+
+  <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+          theme: 'dark',
+      });
+  </script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Fedora Single Node</h1>
+<p class="subtitle">(Lab Series)</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#overview" id="toc-overview"><span
+class="toc-section-number">1</span> Overview</a></li>
+<li><a href="#setup" id="toc-setup"><span
+class="toc-section-number">2</span> Setup</a>
+<ul>
+<li><a href="#setup-container" id="toc-setup-container"><span
+class="toc-section-number">2.1</span> Setup Container</a></li>
+<li><a href="#create-vm" id="toc-create-vm"><span
+class="toc-section-number">2.2</span> Create VM</a></li>
+<li><a href="#setup-vm" id="toc-setup-vm"><span
+class="toc-section-number">2.3</span> Setup VM</a>
+<ul>
+<li><a href="#hostname" id="toc-hostname"><span
+class="toc-section-number">2.3.1</span> Hostname</a></li>
+<li><a href="#static-ip" id="toc-static-ip"><span
+class="toc-section-number">2.3.2</span> Static IP</a></li>
+<li><a href="#ssh" id="toc-ssh"><span
+class="toc-section-number">2.3.3</span> SSH</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#shortcuts" id="toc-shortcuts"><span
+class="toc-section-number">3</span> Shortcuts</a></li>
+</ul>
+</nav>
+<h1 data-number="1" id="overview"><span
+class="header-section-number">1</span> Overview</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>The lab runs in a Docker container with two QEMU VMs inside.</li>
+<li>The VM has three interfaces:
+<ul>
+<li>br1 (191.0.0.0/24): For ssh.</li>
+<li>br2 (192.0.0.0/24): For testing.</li>
+<li>br3 (193.0.0.0/24): For testing.</li>
+</ul></li>
+<li>Each VM has the below disks:
+<ul>
+<li>/dev/sda: (Fedora Server QCOW) Boot and filesystem.</li>
+<li>/dev/sdb: For testing.</li>
+<li>/dev/sdc: For testing.</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">+-------</span> Host <span class="op">---------+</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">+-----</span> Container <span class="op">-+</span>  <span class="op">|</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">|</span>   <span class="op">+-</span> VM <span class="op">---+</span>    <span class="op">|</span>  <span class="op">|</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">|</span>   <span class="op">|</span>        <span class="op">|</span>    <span class="op">|</span>  <span class="op">|</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">|</span>   <span class="op">+--------+</span>    <span class="op">|</span>  <span class="op">|</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">+-----------------+</span>  <span class="op">|</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="op">+----------------------+</span></span></code></pre></div>
+</div>
+</div>
+<h1 data-number="2" id="setup"><span
+class="header-section-number">2</span> Setup</h1>
+<h2 data-number="2.1" id="setup-container"><span
+class="header-section-number">2.1</span> Setup Container</h2>
+<ul>
+<li>Clone code.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> git clone https://github.com/thachmpham/lab.git</span></code></pre></div>
+<ul>
+<li>Setup container.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cd lab/fedora/1-node</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose build</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose up <span class="at">--detach</span></span></code></pre></div>
+<h2 data-number="2.2" id="create-vm"><span
+class="header-section-number">2.2</span> Create VM</h2>
+<ul>
+<li>Access to container.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec <span class="at">-it</span> f1 bash</span></code></pre></div>
+<ul>
+<li>Create VM.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> cd /ws</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./create_vm.sh</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Language settings</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   17 (English)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#       1 (United States)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Root password</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># login: root</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span></code></pre></div>
+<h2 data-number="2.3" id="setup-vm"><span
+class="header-section-number">2.3</span> Setup VM</h2>
+<h3 data-number="2.3.1" id="hostname"><span
+class="header-section-number">2.3.1</span> Hostname</h3>
+<ul>
+<li>Set hostname.</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> hostnamectl hostname vm</span></code></pre></div>
+<h3 data-number="2.3.2" id="static-ip"><span
+class="header-section-number">2.3.2</span> Static IP</h3>
+<ul>
+<li>Set static IP.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ip</span> <span class="at">-br</span> link show</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">lo</span>               UNKNOWN        00:00:00:00:00:00 <span class="op">&lt;</span>LOOPBACK,UP,LOWER_UP<span class="op">&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ens3</span>             UP             52:54:00:12:34:56 <span class="op">&lt;</span>BROADCAST,MULTICAST,UP,LOWER_UP<span class="op">&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ens4</span>             UP             50:54:00:01:00:01 <span class="op">&lt;</span>BROADCAST,MULTICAST,UP,LOWER_UP<span class="op">&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ens5</span>             UP             50:54:00:02:00:01 <span class="op">&lt;</span>BROADCAST,MULTICAST,UP,LOWER_UP<span class="op">&gt;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ens6</span>             UP             50:54:00:03:00:01 <span class="op">&lt;</span>BROADCAST,MULTICAST,UP,LOWER_UP<span class="op">&gt;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli connection show</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>                UUID                                  TYPE      DEVICE</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Wired</span> connection 1  f1a11ae6-c99b-3dc9-a93e-b53d5c07b5e7  ethernet  ens3</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="ex">Wired</span> connection 2  9e51782f-a94e-36b3-a8b2-c7da6e005de7  ethernet  ens4</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Wired</span> connection 3  7fbc26d6-a1a0-388f-a13f-0e2e7d2cc7f2  ethernet  ens5</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Wired</span> connection 4  1967bc2c-709c-3b88-9fdb-babdc1c76902  ethernet  ens6</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="ex">lo</span>                  5eda62d0-1322-4a95-a564-a0a27a5ba757  loopback  lo</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens4</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 2&#39;</span> ipv4.method manual ipv4.addr 191.0.0.10/24</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens5</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 3&#39;</span> ipv4.method manual ipv4.addr 192.0.0.10/24</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens6</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 4&#39;</span> ipv4.method manual ipv4.addr 193.0.0.10/24</span></code></pre></div>
+<h3 data-number="2.3.3" id="ssh"><span
+class="header-section-number">2.3.3</span> SSH</h3>
+<ul>
+<li>Allow root login.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> vi /etc/ssh/sshd_config</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitRootLogin</span> yes</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">PasswordAuthentication</span> yes</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> systemctl restart sshd</span></code></pre></div>
+<ul>
+<li>Check ssh.</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ssh vm</span></code></pre></div>
+<h1 data-number="3" id="shortcuts"><span
+class="header-section-number">3</span> Shortcuts</h1>
+<p>QEMU keys:</p>
+<ul>
+<li>Ctrl + a h: Help Menu</li>
+<li>Ctrl + a x: Exit</li>
+<li>Ctrl + a c: Switch between VM console and QEMU monitor.</li>
+</ul>
+<footer class="footer text-muted">
+   <div align="center">      
+      <br>
+      <br>
+      <a href="/index.html"><b>Home</b></a>
+   </div>
+ </footer>
+</body>
+</html>

@@ -41,24 +41,25 @@ subtitle: '(Lab Series)'
 - Clone code.
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
-host$ cd lab/alpine/1-node
 ```
 
-- Setup the container.
+- Setup container.
 ```sh
+host$ cd lab/alpine/1-node
 host$ docker compose build
 host$ docker compose up --detach
 ```
 
 
 ## Create VM
-- Access the container.
+- Access to container.
 ```sh
 host$ docker exec -it apk bash
 ```
 
 - Create the VM.
 ```sh
+cont$ cd /ws
 cont$ ./create_vm.sh
 ```
 
