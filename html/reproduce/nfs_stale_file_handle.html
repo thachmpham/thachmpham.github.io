@@ -116,16 +116,16 @@
 class="toc-section-number">1</span> Overview</a></li>
 <li><a href="#lab" id="toc-lab"><span
 class="toc-section-number">2</span> Lab</a></li>
-<li><a href="#delete-an-open-directory"
-id="toc-delete-an-open-directory"><span
-class="toc-section-number">3</span> Delete an Open Directory</a>
+<li><a href="#nfs-directory-deleted"
+id="toc-nfs-directory-deleted"><span class="toc-section-number">3</span>
+NFS Directory Deleted</a>
 <ul>
 <li><a href="#reproduce" id="toc-reproduce"><span
 class="toc-section-number">3.1</span> Reproduce</a></li>
 </ul></li>
-<li><a href="#export-a-different-directory"
-id="toc-export-a-different-directory"><span
-class="toc-section-number">4</span> Export a Different Directory</a>
+<li><a href="#nfs-directory-changed"
+id="toc-nfs-directory-changed"><span class="toc-section-number">4</span>
+NFS Directory Changed</a>
 <ul>
 <li><a href="#reproduce-1" id="toc-reproduce-1"><span
 class="toc-section-number">4.1</span> Reproduce</a></li>
@@ -137,8 +137,8 @@ class="toc-section-number">5</span> References</a></li>
 <h1 data-number="1" id="overview"><span
 class="header-section-number">1</span> Overview</h1>
 <p>When an NFS client accesses an inode that no longer available on the
-server, the stale file handle error (ESTALE) occurs.</p>
-<p>Cases to reproduce:</p>
+NFS server, the stale file handle error (ESTALE) occurs. Common
+reasons:</p>
 <ul>
 <li>While the client currently opens an NFS directory, the server
 deletes it.</li>
@@ -163,20 +163,14 @@ class="header-section-number">2</span> Lab</h1>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span>       5.6G    221.0M      5.1G   4% /mnt/nfs</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="3" id="delete-an-open-directory"><span
-class="header-section-number">3</span> Delete an Open Directory</h1>
+<h1 data-number="3" id="nfs-directory-deleted"><span
+class="header-section-number">3</span> NFS Directory Deleted</h1>
 <h2 data-number="3.1" id="reproduce"><span
 class="header-section-number">3.1</span> Reproduce</h2>
-<ul>
-<li>Scenario: While the client open a directory, the server deletes the
-directory.</li>
-<li>Result:
-<ul>
-<li>The inode held by the client becomes unavailable.</li>
-<li>The further request from the client to the inode will fail with
-‘Stale file handle’ error.</li>
-</ul></li>
-</ul>
+<p>If the NFS server deletes a directory which currently opened by the
+NFS client, the inode held by the client becomes unavailable. The
+further operation of the client on the inode fails with ‘Stale file
+handle’ error.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>Server</strong>.</p>
@@ -201,20 +195,13 @@ directory.</li>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ls:</span> .: Stale file handle</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="4" id="export-a-different-directory"><span
-class="header-section-number">4</span> Export a Different Directory</h1>
+<h1 data-number="4" id="nfs-directory-changed"><span
+class="header-section-number">4</span> NFS Directory Changed</h1>
 <h2 data-number="4.1" id="reproduce-1"><span
 class="header-section-number">4.1</span> Reproduce</h2>
-<ul>
-<li>Scenario: While the client open a directory, the server unexport the
-directory and export a different path.</li>
-<li>Result:
-<ul>
-<li>The underlying inodes on server change.</li>
-<li>The further request from the client to the inode will fail with
-‘Stale file handle’ error.</li>
-</ul></li>
-</ul>
+<p>While the NFS client currently opens a directory, if the NFS server
+unexport the directory and export another directory, the further request
+from the client to the inode fails with ‘Stale file handle’ error.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>Server</strong>.</p>
@@ -258,7 +245,6 @@ Stale File Handle</a></li>
 <li><a
 href="https://unix.stackexchange.com/questions/433051/mount-nfs-stale-file-handle-error-cannot-umount">StackExchange
 Cannot Unmount NFS</a></li>
-<li><a href="">ServerFault Stale File Handle after Reboot</a></li>
 </ul>
 <footer class="footer text-muted">
    <div align="center">      

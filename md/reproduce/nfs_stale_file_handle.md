@@ -5,9 +5,7 @@ subtitle: '(Reproduce & Troubleshoot Series)'
 
 
 # Overview
-When an NFS client accesses an inode that no longer available on the server, the stale file handle error (ESTALE) occurs. 
-
-Cases to reproduce:
+When an NFS client accesses an inode that no longer available on the NFS server, the stale file handle error (ESTALE) occurs. Common reasons:
 
 - While the client currently opens an NFS directory, the server deletes it.
 - While the client currently opens an NFS directory, the server un-exports it and exports a different directory.
@@ -39,17 +37,15 @@ Filesystem                Size      Used Available Use% Mounted on
 ::::::::::::::
 
 
-# Delete an Open Directory
+# NFS Directory Deleted
 ## Reproduce
-- Scenario: While the client open a directory, the server deletes the directory.
-- Result:
-    - The inode held by the client becomes unavailable.
-    - The further request from the client to the inode will fail with 'Stale file handle' error.
+If the NFS server deletes a directory which currently opened by the NFS client, the inode held by the client becomes unavailable.
+The further operation of the client on the inode fails with 'Stale file handle' error.
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-**Server**. 
+**Server**.
 
 - Step 1: Create a directory.
 ```sh
@@ -64,7 +60,7 @@ vm1$ rm -rf /srv/nfs/test
 :::
 ::: {.column width=50%}
 
-**Client**. 
+**Client**.
 
 - Step 2: Go to the directory.
 ```sh
@@ -81,18 +77,14 @@ ls: .: Stale file handle
 ::::::::::::::
 
 
-# Export a Different Directory
+# NFS Directory Changed
 ## Reproduce
-- Scenario: While the client open a directory, the server unexport the directory and export a different path.
-- Result:
-    - The underlying inodes on server change.
-    - The further request from the client to the inode will fail with 'Stale file handle' error.
-
+While the NFS client currently opens a directory, if the NFS server unexport the directory and export another directory, the further request from the client to the inode fails with 'Stale file handle' error.
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-**Server**. 
+**Server**.
 
 - Step 1: Exporting the /srv/nfs directory.
 ```sh
@@ -116,7 +108,7 @@ exporting 192.0.0.0/24:/srv/nfs1
 :::
 ::: {.column width=50%}
 
-**Client**. 
+**Client**.
 
 - Step 2: Go to the directory.
 ```sh
@@ -136,4 +128,3 @@ ls: .: Stale file handle
 # References
 - [StackOverflow Stale File Handle](https://stackoverflow.com/questions/20105260/what-does-stale-file-handle-in-linux-mean)
 - [StackExchange Cannot Unmount NFS](https://unix.stackexchange.com/questions/433051/mount-nfs-stale-file-handle-error-cannot-umount)
-- [ServerFault Stale File Handle after Reboot ]()
