@@ -9,28 +9,25 @@ subtitle: '(Reproduce & Troubleshoot Series)'
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-According to [NFS manual](https://linux.die.net/man/5/nfs), the NFS client mount a filesystem with the below options:
+According to [NFS manual](https://linux.die.net/man/5/nfs), the NFS client mount a filesystem with the below paramters:
 
 ```sh
 nfs_client$ mount -t nfs -o recovery_method,timeo=n,retrans=n server:path path
 ```
 
-- recovery_method: The method for NFS client to recovers on a request times out.
+- recovery_method: How NFS client acts after NFS request times out.
     - hard: Retry indefinitely.
-    - soft: Retry a limited number of times.
-    - default: hard.
-- timeo: Time to wait before retry. Unit: decisecond (0.1s).
-    - NFS over TCP: After each retransmission, increases the timeout by up to the maximum of 600 seconds.
-        - Default: 600 (60s).
-    - NFS over UDP: After each retransmission, doubles the timeout, up to a maximum timeout length of 60 seconds.
-        - Default: 11.
-- retrans: Number of retries before apply recovery method. The NFS client generates a 'server not responding' message after retry 'retrans' times.
-    - Default: 3.
+    - soft: After retry 'retrans' times, give up.
+- timeo: Timeout to wait before retry.
+    - When use NFS over TCP:
+        - Default, timeout is 600 deciseconds (or 60s).
+        - After each retransmission, timeout += timeo.
+        - Maximum 600 seconds.
 
 :::
 ::: {.column width=50%}
 
-Common reasons of the 'NFS server not responding' issues:
+The NFS client generates a "server not responding" message after retrans retries, then attempts further recovery. Common reasons:
 
 - Firewall block: Firewall settings block the NFS ports. Requests cannot reach the server.
 - Network errors: Packet drop, high latency. Messages cannot reach NFS peers in time.
@@ -68,12 +65,15 @@ tcp   LISTEN 0      64                      [::]:2049             [::]:*
 **NFS Client.**
 
 ```sh
+# when a nfs request times out, client waits for 10s (timeo=100) then retry.
+# if no reponse after 2 retries (retrans=2), client prints 'server not responding'.
+# default, recovery method is hard, so retry forever.
 vm2$ mount -t nfs -o timeo=100,retrans=2 192.0.0.10:/srv/nfs /mnt/nfs
 
 vm2$ mount -v
 192.0.0.10:/srv/nfs on /mnt/nfs type nfs4 (rw,relatime,vers=4.2,\
-rsize=131072,wsize=131072,namlen=255,\
-hard,fatal_neterrors=none,proto=tcp,timeo=100,retrans=2,sec=sys,client)
+rsize=131072,wsize=131072,namlen=255,hard,fatal_neterrors=none,\
+proto=tcp,timeo=100,retrans=2,sec=sys,client)
 ```
 
 :::
@@ -217,10 +217,10 @@ vm1$ blockdev --getsz /dev/loop0
 4194304
 
 # create the dm-linear device
-vm$ dmsetup create dm0 --table '0 4194304 linear /dev/loop0 0'
+vm1$ dmsetup create dm0 --table '0 4194304 linear /dev/loop0 0'
 
 # show dm table
-vm$ dmsetup table
+vm1$ dmsetup table
 dm0: 0 4194304 linear 7:0 0
 
 # list blocks

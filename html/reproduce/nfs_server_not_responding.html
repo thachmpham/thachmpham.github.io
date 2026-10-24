@@ -151,38 +151,27 @@ class="header-section-number">1</span> Overview</h1>
 <div class="column" style="width:50%;">
 <p>According to <a href="https://linux.die.net/man/5/nfs">NFS
 manual</a>, the NFS client mount a filesystem with the below
-options:</p>
+paramters:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nfs_client$</span> mount <span class="at">-t</span> nfs <span class="at">-o</span> recovery_method,timeo=n,retrans=n server:path path</span></code></pre></div>
 <ul>
-<li>recovery_method: The method for NFS client to recovers on a request
-times out.
+<li>recovery_method: How NFS client acts after NFS request times out.
 <ul>
 <li>hard: Retry indefinitely.</li>
-<li>soft: Retry a limited number of times.</li>
-<li>default: hard.</li>
+<li>soft: After retry ‘retrans’ times, give up.</li>
 </ul></li>
-<li>timeo: Time to wait before retry. Unit: decisecond (0.1s).
+<li>timeo: Timeout to wait before retry.
 <ul>
-<li>NFS over TCP: After each retransmission, increases the timeout by up
-to the maximum of 600 seconds.
+<li>When use NFS over TCP:
 <ul>
-<li>Default: 600 (60s).</li>
+<li>Default, timeout is 600 deciseconds (or 60s).</li>
+<li>After each retransmission, timeout += timeo.</li>
+<li>Maximum 600 seconds.</li>
 </ul></li>
-<li>NFS over UDP: After each retransmission, doubles the timeout, up to
-a maximum timeout length of 60 seconds.
-<ul>
-<li>Default: 11.</li>
-</ul></li>
-</ul></li>
-<li>retrans: Number of retries before apply recovery method. The NFS
-client generates a ‘server not responding’ message after retry ‘retrans’
-times.
-<ul>
-<li>Default: 3.</li>
 </ul></li>
 </ul>
 </div><div class="column" style="width:50%;">
-<p>Common reasons of the ‘NFS server not responding’ issues:</p>
+<p>The NFS client generates a “server not responding” message after
+retrans retries, then attempts further recovery. Common reasons:</p>
 <ul>
 <li>Firewall block: Firewall settings block the NFS ports. Requests
 cannot reach the server.</li>
@@ -216,12 +205,15 @@ class="header-section-number">2</span> Lab</h1>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">tcp</span>   LISTEN 0      64                      <span class="pp">[</span><span class="ss">::</span><span class="pp">]</span>:2049             <span class="pp">[</span><span class="ss">::</span><span class="pp">]</span>:<span class="pp">*</span></span></code></pre></div>
 </div><div class="column" style="width:50%;">
 <p><strong>NFS Client.</strong></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mount <span class="at">-t</span> nfs <span class="at">-o</span> timeo=100,retrans=2 192.0.0.10:/srv/nfs /mnt/nfs</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mount <span class="at">-v</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span> on /mnt/nfs type nfs4 <span class="er">(</span><span class="ex">rw,relatime,vers=4.2,</span><span class="dt">\</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">rsize=131072,wsize=131072,namlen=255,</span><span class="dt">\</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">hard,fatal_neterrors=none,proto=tcp,timeo=100,retrans=2,sec=sys,client</span><span class="kw">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># when a nfs request times out, client waits for 10s (timeo=100) then retry.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># if no reponse after 2 retries (retrans=2), client prints &#39;server not responding&#39;.</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># default, recovery method is hard, so retry forever.</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mount <span class="at">-t</span> nfs <span class="at">-o</span> timeo=100,retrans=2 192.0.0.10:/srv/nfs /mnt/nfs</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> mount <span class="at">-v</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">192.0.0.10:/srv/nfs</span> on /mnt/nfs type nfs4 <span class="er">(</span><span class="ex">rw,relatime,vers=4.2,</span><span class="dt">\</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ex">rsize=131072,wsize=131072,namlen=255,hard,fatal_neterrors=none,</span><span class="dt">\</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ex">proto=tcp,timeo=100,retrans=2,sec=sys,client</span><span class="kw">)</span></span></code></pre></div>
 </div>
 </div>
 <h1 data-number="3" id="nfs-blocked-by-firewall"><span
@@ -340,10 +332,10 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">4194304</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create the dm-linear device</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> dmsetup create dm0 <span class="at">--table</span> <span class="st">&#39;0 4194304 linear /dev/loop0 0&#39;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> dmsetup create dm0 <span class="at">--table</span> <span class="st">&#39;0 4194304 linear /dev/loop0 0&#39;</span></span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># show dm table</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> dmsetup table</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> dmsetup table</span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="ex">dm0:</span> 0 4194304 linear 7:0 0</span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># list blocks</span></span>
