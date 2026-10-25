@@ -58,11 +58,17 @@ title: "A Developer Diary"
 
 * * * * * 
 
+**Boot**
+
+- [Systemd Unit Hang Before Login Prompt](/html/reproduce/systemd_unit_hang_before_login_prompt.html)
+
+
 **File System**
 
 - [Corrupted Filesystems](/html/reproduce/filesystem_corrupt.html)
 - [NFS Stale File Handle](/html/reproduce/nfs_stale_file_handle.html)
 - [NFS Server Not Responding](/html/reproduce/nfs_server_not_responding.html)
+
 
 **Multithreading**
 
