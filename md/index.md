@@ -60,7 +60,7 @@ title: "A Developer Diary"
 
 **Boot**
 
-- [Systemd Unit Hang Before Login Prompt](/html/reproduce/systemd_unit_hang_before_login_prompt.html)
+- [Systemd Unit Hang During Boot](/html/reproduce/systemd_unit_hang_during_boot.html)
 
 
 **File System**
