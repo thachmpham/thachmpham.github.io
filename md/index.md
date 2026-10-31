@@ -12,16 +12,16 @@ title: "A Developer Diary"
 
 **QEMU**
 
-- [Alpine 1 Node](/html/lab/alpine_1n.html)
-- [Alpine 2 Nodes](/html/lab/alpine_2n.html)
-- [Fedora 1 Node](html/lab/fedora_1n.html)
-- [Preboot Execution Environment (PXE)](/html/lab/pxeboot.html)
-- [Network File System (NFS)](/html/lab/nfs.html)
-- [Distributed Replicated Block Device (DRBD)](/html/lab/drbd.html)
+- [Alpine 1 Node](/html/lab/alpine_1n.html).
+- [Alpine 2 Nodes](/html/lab/alpine_2n.html).
+- [Fedora 1 Node](html/lab/fedora_1n.html).
+- [Preboot Execution Environment (PXE)](/html/lab/pxeboot.html).
+- [Network File System (NFS)](/html/lab/nfs.html).
+- [Distributed Replicated Block Device (DRBD)](/html/lab/drbd.html).
 
 **Docker**
 
-- [Iproute: 2 Nodes + 1 Router](/html/lab/iproute_2n1r.html)
+- [Iproute: 2 Nodes + 1 Router](/html/lab/iproute_2n1r.html).
 
 <br>
 
@@ -30,7 +30,7 @@ title: "A Developer Diary"
 
 * * * * *
 
-- [Fedora SRPM: Banner](/html/build/srpm_banner.html)
+- [Fedora SRPM: Banner](/html/build/srpm_banner.html).
 
 <br>
 
@@ -39,7 +39,7 @@ title: "A Developer Diary"
 
 * * * * *
 
-- [Reverse C/C++ Stack Frame](/html/debug/reverse_stack.html)
+- [Reverse C/C++ Stack Frame](/html/debug/reverse_stack.html).
 
 :::
 ::: {.column width=60%}
@@ -49,7 +49,7 @@ title: "A Developer Diary"
 
 * * * * * 
 
-- [Disk IO Error](/html/fault_injection/disk_eio.html)
+- [Disk IO Error](/html/fault_injection/disk_eio.html).
 
 
 <br>
@@ -60,19 +60,24 @@ title: "A Developer Diary"
 
 **Boot**
 
-- [Systemd Unit Hang During Boot](/html/reproduce/systemd_unit_hang_during_boot.html)
+- [Systemd Unit Hang During Boot](/html/reproduce/systemd_unit_hang_during_boot.html).
 
 
 **File System**
 
-- [Corrupted Filesystems](/html/reproduce/filesystem_corrupt.html)
-- [NFS Stale File Handle](/html/reproduce/nfs_stale_file_handle.html)
-- [NFS Server Not Responding](/html/reproduce/nfs_server_not_responding.html)
+- [Corrupted Filesystems](/html/reproduce/filesystem_corrupt.html).
+- [NFS Stale File Handle](/html/reproduce/nfs_stale_file_handle.html).
+- [NFS Server Not Responding](/html/reproduce/nfs_server_not_responding.html).
 
 
 **Multithreading**
 
-- [C/C++ pthread Deadlock](/html/reproduce/pthread_deadlock.html)
+- [C/C++ pthread Deadlock](/html/reproduce/pthread_deadlock.html).
+
+
+**Compiler**
+
+- [GCC libc.so.6 Version GLIBC_X.XX Not Found](/html/reproduce/gcc_glibc_version_not_found.html).
 
 :::
 ::::::::::::::

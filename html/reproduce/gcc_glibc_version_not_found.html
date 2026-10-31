@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>GCC libc.so.6 Version GLIBC_X.XX Not Found</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #cccccc; background-color: #303030; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ffcfaf; } /* Alert */
+    code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bn { color: #dca3a3; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #f0dfaf; } /* ControlFlow */
+    code span.ch { color: #dca3a3; } /* Char */
+    code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+    code span.co { color: #7f9f7f; } /* Comment */
+    code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+    code span.do { color: #7f9f7f; } /* Documentation */
+    code span.dt { color: #dfdfbf; } /* DataType */
+    code span.dv { color: #dcdccc; } /* DecVal */
+    code span.er { color: #c3bf9f; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #c0bed1; } /* Float */
+    code span.fu { color: #efef8f; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+    code span.kw { color: #f0dfaf; } /* Keyword */
+    code span.op { color: #f0efd0; } /* Operator */
+    code span.ot { color: #efef8f; } /* Other */
+    code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+    code span.sc { color: #dca3a3; } /* SpecialChar */
+    code span.ss { color: #cc9393; } /* SpecialString */
+    code span.st { color: #cc9393; } /* String */
+    code span.va { } /* Variable */
+    code span.vs { color: #cc9393; } /* VerbatimString */
+    code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="/html/style/dark.css" />
+  <header class="footer text-muted">
+     <div align="center">      
+        <a href="/index.html"><b>Home</b></a>
+     </div>
+  </header>
+
+  <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+          theme: 'dark',
+      });
+  </script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">GCC libc.so.6 Version GLIBC_X.XX Not Found</h1>
+<p class="subtitle">(Reproduce &amp; Troubleshoot Series)</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#overview" id="toc-overview"><span
+class="toc-section-number">1</span> Overview</a></li>
+<li><a href="#reproduce" id="toc-reproduce"><span
+class="toc-section-number">2</span> Reproduce</a></li>
+<li><a href="#root-cause-analysis" id="toc-root-cause-analysis"><span
+class="toc-section-number">3</span> Root Cause Analysis</a></li>
+</ul>
+</nav>
+<h1 data-number="1" id="overview"><span
+class="header-section-number">1</span> Overview</h1>
+<h1 data-number="2" id="reproduce"><span
+class="header-section-number">2</span> Reproduce</h1>
+<p>Find gcc and fedora version mapping at <a
+href="https://koji.fedoraproject.org">koji.fedoraproject.org</a>:</p>
+<ul>
+<li><a
+href="https://koji.fedoraproject.org/koji/search?terms=%5Egcc-10.*&amp;type=rpm&amp;match=regexp">gcc-10.3.1-1.fc33.aarch64.rpm</a>.</li>
+<li><a
+href="https://koji.fedoraproject.org/koji/search?terms=%5Egcc-%5Cd%2B.*fc44&amp;type=rpm&amp;match=regexp">gcc-16.2.1-1.fc44.aarch64.rpm</a>.</li>
+</ul>
+<p>Through the RPM names, we have the below mapping:</p>
+<ul>
+<li>GCC 10, Fedora 33.</li>
+<li>GCC 16, Fedora 44.</li>
+</ul>
+<p>Step 1: Create docker container of fedora 33.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cat Dockerfile.f33</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> fedora:33</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">dnf</span> group install <span class="at">-y</span> c-development</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;tail&quot;</span>, <span class="st">&quot;-f&quot;</span>, <span class="st">&quot;/dev/null&quot;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker build <span class="at">--tag</span> fedora33 <span class="at">--file</span> Dockerfile.f33 .</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker create <span class="at">--name</span> f33 <span class="at">--hostname</span> f33 fedora33</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker start f33</span></code></pre></div>
+<p>Step 2: Create docker container of fedora 44.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cat Dockerfile.f44</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> fedora:33</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">dnf</span> group install <span class="at">-y</span> c-development</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;tail&quot;</span>, <span class="st">&quot;-f&quot;</span>, <span class="st">&quot;/dev/null&quot;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker build <span class="at">--tag</span> fedora44 <span class="at">--file</span> Dockerfile.f44 .</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker create <span class="at">--name</span> f44 <span class="at">--hostname</span> f44 fedora44</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker start f44</span></code></pre></div>
+<p>Step 3: Check gcc and libc version on the containers.</p>
+<ul>
+<li>Fedora 33, g++ 10, libc 2.32.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> g++ <span class="at">--version</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">g++</span> <span class="er">(</span><span class="ex">GCC</span><span class="kw">)</span> <span class="ex">10.3.1</span> 20210422 <span class="er">(</span><span class="ex">Red</span> Hat 10.3.1-1<span class="kw">)</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> ldd <span class="at">--version</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ldd</span> <span class="er">(</span><span class="ex">GNU</span> libc<span class="kw">)</span> <span class="ex">2.32</span></span></code></pre></div>
+<ul>
+<li>Fedora 44, g++ 16, libc 2.43.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f44$</span> g++ <span class="at">--version</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">g++</span> <span class="er">(</span><span class="ex">GCC</span><span class="kw">)</span> <span class="ex">16.2.1</span> 20260819 <span class="er">(</span><span class="ex">Red</span> Hat 16.2.1-2<span class="kw">)</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">f44$</span> ldd <span class="at">--version</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ldd</span> <span class="er">(</span><span class="ex">GNU</span> libc<span class="kw">)</span> <span class="ex">2.43</span></span></code></pre></div>
+<p>Step 4: On fedora 44, build a binary.</p>
+<ul>
+<li>Build.</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f44$</span> cat main.cpp</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">&quot;hello&quot;</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f44$</span> g++ main.cpp <span class="at">-o</span> main</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">f44$</span> ./main</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">hello</span></span></code></pre></div>
+<p>Step 5: On fedora 33, run the binary which is built from fedora
+44.</p>
+<ul>
+<li>Copy the binary to fedora 33.</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker cp f44:/root/main .</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker cp main f33:/root</span></code></pre></div>
+<ul>
+<li>Fedora 33 cannot run the binary.
+<ul>
+<li>The binary requires GLIBC_2.34, which is not available in libc.so.6
+on fedora 33.</li>
+<li>The binary requires GLIBCXX_3.4.32, which is not available in
+libstdc++.so.6 on fedora 33.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> ./main</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./main:</span> /lib64/libc.so.6: version <span class="kw">`</span><span class="ex">GLIBC_2.34</span><span class="st">&#39; not found (required by ./main)</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="st">./main: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.32&#39;</span> not found <span class="er">(</span><span class="ex">required</span> by ./main<span class="kw">)</span></span></code></pre></div>
+<h1 data-number="3" id="root-cause-analysis"><span
+class="header-section-number">3</span> Root Cause Analysis</h1>
+<ul>
+<li>The binary depends on libc.so.6 and libstdc++.so.6.</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> ldd main</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./main:</span> /lib64/libc.so.6: version <span class="kw">`</span><span class="ex">GLIBC_2.34</span><span class="st">&#39; not found (required by ./main)</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="st">./main: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.32&#39;</span> not found <span class="er">(</span><span class="ex">required</span> by ./main<span class="kw">)</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">linux-vdso.so.1</span> <span class="er">(</span><span class="ex">0x0000ffff8467c000</span><span class="kw">)</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">libstdc++.so.6</span> =<span class="op">&gt;</span> /lib64/libstdc++.so.6 <span class="er">(</span><span class="ex">0x0000ffff8442a000</span><span class="kw">)</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">libm.so.6</span> =<span class="op">&gt;</span> /lib64/libm.so.6 <span class="er">(</span><span class="ex">0x0000ffff84379000</span><span class="kw">)</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">libgcc_s.so.1</span> =<span class="op">&gt;</span> /lib64/libgcc_s.so.1 <span class="er">(</span><span class="ex">0x0000ffff84348000</span><span class="kw">)</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">libc.so.6</span> =<span class="op">&gt;</span> /lib64/libc.so.6 <span class="er">(</span><span class="ex">0x0000ffff841c2000</span><span class="kw">)</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/lib/ld-linux-aarch64.so.1</span> <span class="er">(</span><span class="ex">0x0000ffff84630000</span><span class="kw">)</span></span></code></pre></div>
+<ul>
+<li>The binary requires:
+<ul>
+<li>GLIBC_2.17, GLIBC_2.34.</li>
+<li>GLIBCXX_3.4, GLIBCXX_3.4.32.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f44$</span> strings main <span class="kw">|</span> <span class="fu">grep</span> GLIBC</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">GLIBC_2.17</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">GLIBC_2.34</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">GLIBCXX_3.4.32</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="ex">GLIBCXX_3.4</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="ex">__libc_start_main@GLIBC_2.34</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="ex">_ZSt4cout@GLIBCXX_3.4</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="ex">_ZSt21ios_base_library_initv@GLIBCXX_3.4.32</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="ex">abort@GLIBC_2.17</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span></code></pre></div>
+<ul>
+<li>List of GLIBC supported on fedora 33. GLIBC_2.34 is not in the
+list.</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> strings /lib64/libc.so.6 <span class="kw">|</span> <span class="fu">grep</span> GLIBC</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">GLIBC_2.17</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">GLIBC_2.18</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="ex">GLIBC_2.30</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="ex">GLIBC_2.32</span></span></code></pre></div>
+<ul>
+<li>List of GLIBCXX supported on fedora 33. GLIBCXX_3.4.32 is not in the
+list.</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> strings /lib64/libstdc++.so.6 <span class="kw">|</span> <span class="fu">grep</span> GLIBCXX</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">GLIBCXX_3.4</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">GLIBCXX_3.4.1</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ex">GLIBCXX_3.4.27</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="ex">GLIBCXX_3.4.28</span></span></code></pre></div>
+<p><strong>Root Cause</strong></p>
+<ul>
+<li>On fedora 44, the binary is built with libc 2.43. It requires
+GLIBC_2.34.</li>
+<li>On fedora 33, libc 2.32 does not provide GLIBC_2.34. So, fedora 33
+cannot run the binary due to lack of dependencies.</li>
+</ul>
+<footer class="footer text-muted">
+   <div align="center">      
+      <br>
+      <br>
+      <a href="/index.html"><b>Home</b></a>
+   </div>
+ </footer>
+</body>
+</html>
