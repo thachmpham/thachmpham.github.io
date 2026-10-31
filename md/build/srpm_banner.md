@@ -1,6 +1,6 @@
 ---
 title: 'Fedora SRPM: Banner'
-subtitle: '(Build Series)'
+subtitle: '(Open Source Rebuild Series)'
 ---
 
 

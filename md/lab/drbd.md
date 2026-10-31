@@ -1,6 +1,6 @@
 ---
 title: 'Distributed Replicated Block Device (DRBD)'
-subtitle: '(Lab Series)'
+subtitle: '(Lab Setup Series)'
 ---
 
 

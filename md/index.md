@@ -6,7 +6,7 @@ title: "A Developer Diary"
 ::: {.column width=40%}
 
 
-## Lab
+## Lab Setup
 
 * * * * *
 
@@ -26,7 +26,7 @@ title: "A Developer Diary"
 <br>
 
 
-## Build
+## Open Source Rebuild
 
 * * * * *
 
@@ -75,7 +75,7 @@ title: "A Developer Diary"
 - [C/C++ pthread Deadlock](/html/reproduce/pthread_deadlock.html).
 
 
-**Compiler**
+**Compile**
 
 - [GCC libc.so.6 Version GLIBC_X.XX Not Found](/html/reproduce/gcc_glibc_version_not_found.html).
 

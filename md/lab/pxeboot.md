@@ -1,6 +1,6 @@
 ---
 title: PXE Boot
-subtitle: '(Lab Series)'
+subtitle: '(Lab Setup Series)'
 ---
 
 

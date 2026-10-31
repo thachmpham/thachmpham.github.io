@@ -1,6 +1,6 @@
 ---
 title: 'Fedora Single Node'
-subtitle: '(Lab Series)'
+subtitle: '(Lab Setup Series)'
 ---
 
 

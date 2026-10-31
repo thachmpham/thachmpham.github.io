@@ -1,6 +1,6 @@
 ---
 title: Network File System (NFS)
-subtitle: '(Lab Series)'
+subtitle: '(Lab Setup Series)'
 ---
 
 

@@ -1,6 +1,6 @@
 ---
 title: 'Alpine Two Nodes'
-subtitle: '(Lab Series)'
+subtitle: '(Lab Setup Series)'
 ---
 
 
