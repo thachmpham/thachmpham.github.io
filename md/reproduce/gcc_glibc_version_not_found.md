@@ -5,8 +5,11 @@ subtitle: '(Reproduce & Troubleshoot Series)'
 
 
 # Overview
-Build a binary on a machine, run it on another machine. It is the classic recipe for the 'libc.so.6: version 'GLIBC_X.XX' not found' issue. Let's reproduce and troubleshoot the issue.
+Build a binary on a machine, run it on another machine. It is the classic recipe for the libc version mismatch issue. Let's reproduce and troubleshoot the issue.
 
+```sh
+libc.so.6: version 'GLIBC_X.XX' not found
+```
 
 # Reproduce
 Find gcc and fedora version mapping at [koji.fedoraproject.org](https://koji.fedoraproject.org):
