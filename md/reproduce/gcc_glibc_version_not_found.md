@@ -5,7 +5,8 @@ subtitle: '(Reproduce & Troubleshoot Series)'
 
 
 # Overview
-Build a binary on a machine, run it on another machine. It is the classic recipe for the libc version mismatch issue. Let's reproduce and troubleshoot the issue.
+Build a binary on a machine, run it on another machine. It is the classic recipe for the libc version mismatch issue.
+In this blog, we will build a binary on fedora 44, and run it on fedora 33.
 
 ```sh
 libc.so.6: version 'GLIBC_X.XX' not found
@@ -178,11 +179,11 @@ GLIBCXX_3.4.28
 
 
 # Solution 1: Recompile on Runtime Machine
-If that is the case you can setup a build environment on fedora 33, you can recompile the code on fedora 33 and run.If you can set up a build environment on Fedora 33, you can recompile the code directly on Fedora 33 and run the resulting binary in that environment.
+If you can set up a build environment on fedora 33, the solution is to recompile the code on fedora 33 and run the resulting binary in this host.
 
 
 # Solution 2: Recompile on Build Machine with rpath
-If you cannot set up a build environment on Fedora 33 and must build the code on Fedora 44, you can use rpath option to specify where the runtime loader should look for dynamic libraries at runtime. This allows you to bypass the standard system library search paths (e.g., /lib64).
+If you cannot set up a build environment on fedora 33 and must build the code on fedora 44, you can use rpath option to specify where the loader should look for dynamic libraries at runtime. This allows to bypass the system library search paths (e.g., /lib64).
 
 Step 1: On fedora 44, recompile with rpath.
 ```sh

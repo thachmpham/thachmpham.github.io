@@ -137,8 +137,8 @@ class="toc-section-number">7</span> References</a></li>
 <h1 data-number="1" id="overview"><span
 class="header-section-number">1</span> Overview</h1>
 <p>Build a binary on a machine, run it on another machine. It is the
-classic recipe for the libc version mismatch issue. Let’s reproduce and
-troubleshoot the issue.</p>
+classic recipe for the libc version mismatch issue. In this blog, we
+will build a binary on fedora 44, and run it on fedora 33.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">libc.so.6:</span> version <span class="st">&#39;GLIBC_X.XX&#39;</span> not found</span></code></pre></div>
 <h1 data-number="2" id="reproduce"><span
 class="header-section-number">2</span> Reproduce</h1>
@@ -295,19 +295,17 @@ cannot run the binary due to lack of dependencies.</li>
 <h1 data-number="4" id="solution-1-recompile-on-runtime-machine"><span
 class="header-section-number">4</span> Solution 1: Recompile on Runtime
 Machine</h1>
-<p>If that is the case you can setup a build environment on fedora 33,
-you can recompile the code on fedora 33 and run.If you can set up a
-build environment on Fedora 33, you can recompile the code directly on
-Fedora 33 and run the resulting binary in that environment.</p>
+<p>If you can set up a build environment on fedora 33, the solution is
+to recompile the code on fedora 33 and run the resulting binary in this
+host.</p>
 <h1 data-number="5"
 id="solution-2-recompile-on-build-machine-with-rpath"><span
 class="header-section-number">5</span> Solution 2: Recompile on Build
 Machine with rpath</h1>
-<p>If you cannot set up a build environment on Fedora 33 and must build
-the code on Fedora 44, you can use rpath option to specify where the
-runtime loader should look for dynamic libraries at runtime. This allows
-you to bypass the standard system library search paths (e.g.,
-/lib64).</p>
+<p>If you cannot set up a build environment on fedora 33 and must build
+the code on fedora 44, you can use rpath option to specify where the
+loader should look for dynamic libraries at runtime. This allows to
+bypass the system library search paths (e.g., /lib64).</p>
 <p>Step 1: On fedora 44, recompile with rpath.</p>
 <div class="sourceCode" id="cb19"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f44$</span> g++ main.cpp <span class="at">-o</span> main <span class="at">-Wl,--rpath</span><span class="op">=</span>/root/patchlib <span class="at">-Wl,--dynamic-linker</span><span class="op">=</span>/root/patchlib/ld-linux-aarch64.so.1</span>
