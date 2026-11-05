@@ -31,6 +31,7 @@ title: "A Developer Diary"
 * * * * *
 
 - [Fedora SRPM: Banner](/html/build/srpm_banner.html).
+- [OpenSSL](/html/build/openssl.html).
 
 <br>
 
