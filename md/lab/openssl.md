@@ -9,7 +9,7 @@ subtitle: '(Lab Setup Series)'
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-A lab to practice OpenSSL wth 2 docker containers. The h1 container acts as openssl server, h2 as openssl client.
+A lab to practice openssl. The lab has 2 docker containers; one acts as server, the other one as client.
 
 
 Step 1: Setup keys and certificate on server.
@@ -18,17 +18,18 @@ Step 1: Setup keys and certificate on server.
 - Create a certificate signing request from the priviate key.
 - Sign the request to get a certificate.
 
-Step 2: Setup trust store on client.
+Step 2: Setup keys and certificate on client.
+
+- Create a private key.
+- Create a certificate signing request from the priviate key.
+- Sign the request to get a certificate.
+
+Step 3: Setup trust store on client.
 
 - Copy server's certificate to it's local.
 - Add the certificate to its trust store database.
 
-Purpose of the trust store:
-
-- During tls handshake, server sends its certificate to client.
-- Client validate server's certificate against its trust store.
-
-Step 3: Connect the server and client by openssl s_server and s_client.
+Step 4: Connect the server and client by openssl s_server and s_client.
 
 
 :::
@@ -36,18 +37,25 @@ Step 3: Connect the server and client by openssl s_server and s_client.
 
 | Term | Meaning |
 | :--- | :--- |
-| Private Key | A hash string. Keep in private. To verify public key. |
-| Public Key | Generated from private key. Share to public. |
-| Certificate Signing Request| Generated from priviate key. Send to Certificate Authority to get a certificate. |
-| Certificate | Binds an domain name or IP to a public key. |
+| Private Key | A hash string. Keep in private. |
+| Public Key | A hash string. Share to public. |
+| Certificate Signing Request | Send to Certificate Authority to request a certificate. |
+| Certificate | Digital identify of a server, website. |
 | Trust Store | A collection of trusted certificates. |
+
+<br>
+
+Trust store:
+
+- During tls handshake, server sends its certificate to client.
+- Client validate server's certificate against client's trust store.
 
 :::
 ::::::::::::::
 
 
 # Setup
-## Nodes
+## Create Nodes
 - Setup containers.
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
@@ -67,53 +75,67 @@ host$ docker exec -it h2 bash
 ```
 
 
-## Keys, Certificates for Server
+## Keys, Certificates on Server
 - Generate keys and certificates.
 ```sh
 # create private key
 h1$ openssl genpkey -algorithm RSA -out h1.pkey
+h1$ openssl pkeygen -in h1.pkey -text -noout
 
 # create certificate signing request
 h1$ openssl req -new -key h1.pkey -out h1.req
+h1$ openssl req -in h1.req -text -noout
 
 # create certificate
 h1$ openssl x509 -req -in h1.req -key h1.pkey -out h1.crt
+h1$ openssl x509 -in h1.crt -text -noout
 ```
 
 
-## Trust Store for Client
+## Keys, Certificates on Client
+- Generate keys and certificates.
+```sh
+# create private key
+h2$ openssl genpkey -algorithm RSA -out h2.pkey
+h1$ openssl pkeygen -in h2.pkey -text -noout
+
+# create certificate signing request
+h2$ openssl req -new -key h2.pkey -out h2.req
+h1$ openssl req -in h2.req -text -noout
+
+# create certificate
+h2$ openssl x509 -req -in h2.req -key h2.pkey -out h2.crt
+h1$ openssl x509 -in h2.crt -text -noout
+```
+
+
+## Trust Store on Client
 - Copy server's certificate to client.
 ```sh
 host$ docker cp h1:/root/h1.crt .
 host$ docker cp h1.crt h2:/root
 ```
 
-- Add server's certificate to client trust store.
+- Setup trust store directory.
 ```sh
-# convert server's certificate to PEM format
-h2$ openssl x509 -in h1.crt -out h1.pem -outform PEM
+h2$ mkdir /root/trust
+h2$ mv h1.crt /root/trust
 
-# add server's certificate to trust store
-h2$ cp h1.pem /etc/pki/ca-trust/extracted/anchors
-h2$ update-ca-trust
+h2$ openssl rehash /root/trust
+
+h2$ s -lh /root/trust/
+lrwxrwxrwx 1 root root    6 Nov 14 00:07 9741086f.0 -> h1.crt
+-rw-r--r-- 1 root root 1.2K Nov 14 00:06 h1.crt
+```
+
+- Verify server's certificate against trust store.
+```sh
+h2$ openssl verify -CApath /root/trust/ h1.crt
+h1.crt: OK
 ```
 
 
-## Keys, Certificates for Client
-- Generate keys and certificates.
-```sh
-# create private key
-h2$ openssl genpkey -algorithm RSA -out h2.pkey
-
-# create certificate signing request
-h2$ openssl req -new -key h2.pkey -out h2.req
-
-# create certificate
-h2$ openssl x509 -req -in h2.req -key h2.pkey -out h2.crt
-```
-
-
-## Connect Server and Client
+## Establish Connection
 - Start openssl server.
 ```sh
 h1$ openssl s_server -accept 172.19.0.2:4433 -cert h1.crt -key h1.pkey
@@ -121,12 +143,13 @@ h1$ openssl s_server -accept 172.19.0.2:4433 -cert h1.crt -key h1.pkey
 
 - Start openssl client.
 ```sh
-h2$ openssl s_client -connect 172.19.0.2:4433 -cert h2.crt -key h2.pkey -verify_return_error -CAfile h1.pem
+h2$ openssl s_client -connect 172.19.0.2:4433 -cert h2.crt -key h2.pkey -CApath /root/trust -verify_return_error
+SSL handshake has read 2467 bytes and written 1617 bytes
+Verification: OK
 ```
 
 
 # References
+- [OpenSSL Lookup Hash Directory](https://docs.openssl.org/3.4/man3/X509_LOOKUP_hash_dir/#file-method)
 - [Add Trust Store on Fedora](https://ajmaradiaga.com/Adding-trusting-CA-Fedora/)
 - [CA Certificates Trust Store](https://www.golinuxcloud.com/linux-ca-certificates-trust-store/)
-- [Self-Signed Certificates](https://learn.microsoft.com/en-us/azure/application-gateway/self-signed-certificates)
-
