@@ -7,19 +7,22 @@ subtitle: '(Lab Setup Series)'
 # Overview
 
 :::::::::::::: {.columns}
-::: {.column}
+::: {.column width=50%}
+
+A lab to practice iproute.
 
 - Each node is a docker container:
     - H1: Node, host 1.
     - H2: Node, host 2.
     - RT: Router, forward messages between node.
 - Allow transfer messages through the below paths:
-    - H1 → RT → H2.
-    - H2 → RT → H1.
+    - H1 => RT => H2.
+    - H2 => RT => H1.
 
 :::
-::: {.column}
+::: {.column width=50%}
 
+Network topology.
 ```go
 +--------------------+                     +----------------------+
 | H1                 |                     |                   H2 |
@@ -40,21 +43,35 @@ subtitle: '(Lab Setup Series)'
 
 # Setup
 ## Create Cluster
-- Clone code.
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+- Step 1: Clone code.
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
 ```
 
+:::
+::: {.column width=50%}
 
-- Build container.
+- Step 2: Build container.
 ```sh
 host$ cd lab/iproute2/2n1r
 host$ docker compose build
 host$ docker compose up --detach
 ```
 
-## Check Connection 
-- Check h1.
+:::
+::::::::::::::
+
+
+## Check Connection
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+- Step 1: Check h1.
 ```sh
 host$ docker exec -it h1 bash
 ```
@@ -71,8 +88,10 @@ h1$ ping 20.0.0.2
 64 bytes from 20.0.0.2: icmp_seq=1 ttl=63 time=0.133 ms
 ```
 
+:::
+::: {.column width=50%}
 
-- Check h2.
+- Step 2: Check h2.
 ```sh
 host$ docker exec -it h2 bash
 ```
@@ -89,7 +108,10 @@ h2$ ping 10.0.0.2
 64 bytes from 10.0.0.2: icmp_seq=1 ttl=63 time=0.314 ms
 ```
 
-- Check rt.
+:::
+::::::::::::::
+
+- Step 3: Check rt router.
 ```sh
 $ docker exec -it rt bash
 ```

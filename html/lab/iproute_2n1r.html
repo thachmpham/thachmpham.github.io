@@ -129,7 +129,8 @@ class="toc-section-number">3</span> References</a></li>
 <h1 data-number="1" id="overview"><span
 class="header-section-number">1</span> Overview</h1>
 <div class="columns">
-<div class="column">
+<div class="column" style="width:50%;">
+<p>A lab to practice iproute.</p>
 <ul>
 <li>Each node is a docker container:
 <ul>
@@ -139,11 +140,12 @@ class="header-section-number">1</span> Overview</h1>
 </ul></li>
 <li>Allow transfer messages through the below paths:
 <ul>
-<li>H1 → RT → H2.</li>
-<li>H2 → RT → H1.</li>
+<li>H1 =&gt; RT =&gt; H2.</li>
+<li>H2 =&gt; RT =&gt; H1.</li>
 </ul></li>
 </ul>
-</div><div class="column">
+</div><div class="column" style="width:50%;">
+<p>Network topology.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">+--------------------+</span>                     <span class="op">+----------------------+</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> H1                 <span class="op">|</span>                     <span class="op">|</span>                   H2 <span class="op">|</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">|</span>             eth0 <span class="op">+</span> <span class="op">|</span>                     <span class="op">|</span> <span class="op">+</span> eth0               <span class="op">|</span></span>
@@ -161,20 +163,27 @@ class="header-section-number">1</span> Overview</h1>
 class="header-section-number">2</span> Setup</h1>
 <h2 data-number="2.1" id="create-cluster"><span
 class="header-section-number">2.1</span> Create Cluster</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
-<li>Clone code.</li>
+<li>Step 1: Clone code.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> git clone https://github.com/thachmpham/lab.git</span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <ul>
-<li>Build container.</li>
+<li>Step 2: Build container.</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cd lab/iproute2/2n1r</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose build</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose up <span class="at">--detach</span></span></code></pre></div>
+</div>
+</div>
 <h2 data-number="2.2" id="check-connection"><span
 class="header-section-number">2.2</span> Check Connection</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
-<li>Check h1.</li>
+<li>Step 1: Check h1.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec <span class="at">-it</span> h1 bash</span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h1$</span> ip <span class="at">-br</span> addr</span>
@@ -186,8 +195,9 @@ class="header-section-number">2.2</span> Check Connection</h2>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">h1$</span> ping 20.0.0.2</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ex">64</span> bytes from 20.0.0.2: icmp_seq=1 ttl=63 time=0.133 ms</span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <ul>
-<li>Check h2.</li>
+<li>Step 2: Check h2.</li>
 </ul>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec <span class="at">-it</span> h2 bash</span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> ip <span class="at">-br</span> addr</span>
@@ -199,8 +209,10 @@ class="header-section-number">2.2</span> Check Connection</h2>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> ping 10.0.0.2</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="ex">64</span> bytes from 10.0.0.2: icmp_seq=1 ttl=63 time=0.314 ms</span></code></pre></div>
+</div>
+</div>
 <ul>
-<li>Check rt.</li>
+<li>Step 3: Check rt router.</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker exec <span class="at">-it</span> rt bash</span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rt$</span> ip <span class="at">-br</span> addr</span>
