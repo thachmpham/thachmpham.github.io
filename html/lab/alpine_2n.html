@@ -134,15 +134,14 @@ class="toc-section-number">4</span> References</a></li>
 class="header-section-number">1</span> Overview</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
+<p>A lab to quickly setup 2 Alpine QEMU VMs.</p>
 <ul>
-<li>The lab runs in a Docker container with two QEMU VMs inside.</li>
 <li>The VMs connect to each other through the below bridge interfaces.
 <ul>
 <li>br1 (191.0.0.0/24): For ssh.</li>
 <li>br2 (192.0.0.0/24): For testing.</li>
 <li>br3 (193.0.0.0/24): For testing.</li>
 </ul></li>
-<li>The containter acts as router, forwards traffics between VMs.</li>
 <li>Each VM has the below disks.
 <ul>
 <li>/dev/sda: Boot and filesystem.</li>
@@ -151,6 +150,8 @@ class="header-section-number">1</span> Overview</h1>
 </ul></li>
 </ul>
 </div><div class="column" style="width:50%;">
+<p>The VMs run within a docker container which acts as router, forwards
+traffics between VMs.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>         VM1            Container           VM2</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>          <span class="op">+</span>                 <span class="op">+</span>                <span class="op">+</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>      <span class="fl">191.0</span><span class="er">.0.10</span> eth1 <span class="op">+----</span>br1<span class="op">----+</span> eth1 <span class="fl">191.0</span><span class="er">.0.20</span></span>

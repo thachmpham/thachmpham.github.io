@@ -7,7 +7,9 @@ subtitle: '(Lab Setup Series)'
 # Overview
 
 :::::::::::::: {.columns}
-::: {.column}
+::: {.column width=50%}
+
+A lab to practice Preboot Execution Environment (PXE Boot).
 
 - PXE server is a docker container. Provides:
     - DHCP server (isc-dhcp-server).
@@ -20,10 +22,10 @@ subtitle: '(Lab Setup Series)'
 - PXE server and client connect through a bridge.
 
 :::
-::: {.column}
+::: {.column width=50%}
 
+The docker container acts as PXE server, QEMU VM as PXE client.
 ```go
-
 
 PXE Server           PXE Client
 (Container)           (QEMU VM)
@@ -40,36 +42,39 @@ PXE Server           PXE Client
 
 
 # PXE Server
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+- Step 1: Clone code.
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
-host$ cd lab/pxe/setup-2
 ```
 
+- Step 2: Setup docker container.
 ```sh
+host$ cd lab/pxe/setup-2
 host$ docker compose build
 host$ docker compose up
+```
+
+:::
+::: {.column width=50%}
+
+- Step 3: Access the container.
+```sh
 host$ docker exec -it pxe bash
 ```
 
+:::
+::::::::::::::
 
 ## DHCP Server
-The DHCP server automatically start together the container startup.
-```sh
-container$ ps ax
-  PID TTY      STAT   TIME COMMAND
-   46 ?        Ss     0:00 /usr/sbin/dhcpd -4 -q -cf /etc/dhcp/dhcpd.conf br0
-```
 
+:::::::::::::: {.columns}
+::: {.column width=50%}
 
-Listening at port 67.
-```sh
-container$ lsof -P -i -n
-COMMAND PID   USER FD   TYPE DEVICE SIZE/OFF NODE NAME
-dhcpd    46   root 8u  IPv4   9300      0t0  UDP *:67
-```
-
-
-Show DHCP configuration.
+- Step 1: Check DHCP configuration.
 ```sh
 container$ cat /etc/dhcp/dhcpd.conf
 # ---------------------------------------- #
@@ -97,23 +102,34 @@ INTERFACESv4="br0"
 # ---------------------------------------- #
 ```
 
+:::
+::: {.column width=50%}
+
+
+Step 2: Check dhcpd process.
+```sh
+container$ ps ax
+  PID TTY      STAT   TIME COMMAND
+   46 ?        Ss     0:00 /usr/sbin/dhcpd -4 -q -cf /etc/dhcp/dhcpd.conf br0
+```
+
+Step 3: Check dhcp port.
+```sh
+container$ lsof -P -i -n
+COMMAND PID   USER FD   TYPE DEVICE SIZE/OFF NODE NAME
+dhcpd    46   root 8u  IPv4   9300      0t0  UDP *:67
+```
+
+:::
+::::::::::::::
+
 
 ## TFTP Server
-The TFTP server automatically start together the container startup.
-```sh
-pxe$ ps ax | grep -P 'dhcp|tftp'
-  PID TTY      STAT   TIME COMMAND
-   59 ?        Ss     0:00 /usr/sbin/atftpd --daemon --port 69 --verbose=7 /srv/tftp
-```
 
-Listening at port 69.
-```sh
-pxe$ lsof -P -i -n
-COMMAND PID   USER FD   TYPE DEVICE SIZE/OFF NODE NAME
-atftpd   59 nobody 0u  IPv6   8401      0t0  UDP *:69
-```
+:::::::::::::: {.columns}
+::: {.column width=50%}
 
-Show TFTP configuration.
+- Step 1: Check tftp configuration.
 ```sh
 container$ cat /etc/default/atftpd
 # ---------------------------------------- #
@@ -121,7 +137,7 @@ OPTIONS="--port 69 --verbose=7 /srv/tftp"
 # ---------------------------------------- #
 ```
 
-TFTP server hosts the boot directory (/srv/tftp).
+- Step 2: Check tftp directory.
 ```sh
 container$ tree /srv/tftp
 .
@@ -152,9 +168,30 @@ label cli
 # ---------------------------------------- #
 ```
 
+:::
+::: {.column width=50%}
+
+- Step 3: Check tftp process.
+```sh
+pxe$ ps ax
+  PID TTY      STAT   TIME COMMAND
+   59 ?        Ss     0:00 /usr/sbin/atftpd --daemon --port 69 --verbose=7 /srv/tftp
+```
+
+- Step 4: Check tftp port.
+```sh
+pxe$ lsof -P -i -n
+COMMAND PID   USER FD   TYPE DEVICE SIZE/OFF NODE NAME
+atftpd   59 nobody 0u  IPv6   8401      0t0  UDP *:69
+```
+
+:::
+::::::::::::::
+
 
 # PXE Client
-Start VM, boot from network.
+
+- Start QEMU VM.
 ```sh
 container$ ./start_vm.sh
 ```

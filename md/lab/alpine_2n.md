@@ -9,12 +9,12 @@ subtitle: '(Lab Setup Series)'
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-- The lab runs in a Docker container with two QEMU VMs inside.
+A lab to quickly setup 2 Alpine QEMU VMs.
+
 - The VMs connect to each other through the below bridge interfaces.
     - br1 (191.0.0.0/24): For ssh.
     - br2 (192.0.0.0/24): For testing.
     - br3 (193.0.0.0/24): For testing.
-- The containter acts as router, forwards traffics between VMs.
 - Each VM has the below disks.
    - /dev/sda: Boot and filesystem.
    - /dev/sdb: For testing.
@@ -23,6 +23,7 @@ subtitle: '(Lab Setup Series)'
 :::
 ::: {.column width=50%}
 
+The VMs run within a docker container which acts as router, forwards traffics between VMs.
 ```go
          VM1            Container           VM2
           +                 +                +

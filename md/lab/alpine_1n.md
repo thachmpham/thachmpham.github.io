@@ -9,8 +9,9 @@ subtitle: '(Lab Setup Series)'
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-- The lab runs in a Docker container with one Alpine QEMU VM inside.
-- The VM has 3 network interfaces and IPs as below.
+A lab to quickly setup a Alpine QEMU VM.
+
+- The VM has 3 network interfaces.
     - br1 (191.0.0.0/24): For ssh.
     - br2 (192.0.0.0/24): For testing.
     - br3 (193.0.0.0/24): For testing.
@@ -22,6 +23,7 @@ subtitle: '(Lab Setup Series)'
 :::
 ::: {.column width=50%}
 
+The VM runs within a docker container.
 ```go
 +------- Host ---------+
 | +----- Container -+  |

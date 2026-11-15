@@ -140,9 +140,8 @@ class="toc-section-number">3</span> Shortcuts</a></li>
 class="header-section-number">1</span> Overview</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
+<p>A lab to quickly setup a Fedora QEMU VM.</p>
 <ul>
-<li>The lab runs in a Docker container with a Fedora QEMU VM
-inside.</li>
 <li>The VM has 3 network interfaces and IP as below.
 <ul>
 <li>br1 (191.0.0.0/24): For ssh.</li>
@@ -157,6 +156,7 @@ inside.</li>
 </ul></li>
 </ul>
 </div><div class="column" style="width:50%;">
+<p>The VM runs within a docker container.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">+-------</span> Host <span class="op">---------+</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">+-----</span> Container <span class="op">-+</span>  <span class="op">|</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">|</span>   <span class="op">+-</span> VM <span class="op">---+</span>    <span class="op">|</span>  <span class="op">|</span></span>

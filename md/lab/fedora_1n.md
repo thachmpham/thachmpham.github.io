@@ -9,7 +9,8 @@ subtitle: '(Lab Setup Series)'
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-- The lab runs in a Docker container with a Fedora QEMU VM inside.
+A lab to quickly setup a Fedora QEMU VM.
+
 - The VM has 3 network interfaces and IP as below.
     - br1 (191.0.0.0/24): For ssh.
     - br2 (192.0.0.0/24): For testing.
@@ -22,6 +23,7 @@ subtitle: '(Lab Setup Series)'
 :::
 ::: {.column width=50%}
 
+The VM runs within a docker container.
 ```go
 +------- Host ---------+
 | +----- Container -+  |
