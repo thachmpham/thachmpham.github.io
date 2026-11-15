@@ -9,8 +9,7 @@ subtitle: '(Lab Setup Series)'
 :::::::::::::: {.columns}
 ::: {.column width=50%}
 
-A lab to practice openssl. The lab has 2 docker containers; one acts as server, the other one as client.
-
+A lab to practice openssl. The lab has 2 docker containers; one acts as server, one as client.
 
 Step 1: Setup keys and certificate on server.
 
@@ -26,8 +25,7 @@ Step 2: Setup keys and certificate on client.
 
 Step 3: Setup trust store on client.
 
-- Copy server's certificate to it's local.
-- Add the certificate to its trust store database.
+- Copy server's certificate to client's trust store.
 
 Step 4: Connect the server and client by openssl s_server and s_client.
 
@@ -36,19 +34,12 @@ Step 4: Connect the server and client by openssl s_server and s_client.
 ::: {.column width=50%}
 
 | Term | Meaning |
-| :--- | :--- |
+| :--- | :------ |
 | Private Key | A hash string. Keep in private. |
 | Public Key | A hash string. Share to public. |
-| Certificate Signing Request | Send to Certificate Authority to request a certificate. |
+| CSR | Certificate Signing Request. Send to Certificate Authority to request a certificate. |
 | Certificate | Digital identify of a server, website. |
-| Trust Store | A collection of trusted certificates. |
-
-<br>
-
-Trust store:
-
-- During tls handshake, server sends its certificate to client.
-- Client validate server's certificate against client's trust store.
+| Trust Store | A collection of trusted certificates. During TLS handshake, server sends its certificate to client. Client validates server's certificate against client's trust store.|
 
 :::
 ::::::::::::::
@@ -56,27 +47,43 @@ Trust store:
 
 # Setup
 ## Create Nodes
-- Setup containers.
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+- Step 1: Setup containers.
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
+
 host$ cd lab/openssl
+
 host$ docker compose build
 host$ docker compose up --detach
 ```
 
-- To access server.
+:::
+::: {.column width=50%}
+
+- Step 2: To access server.
 ```sh
 host$ docker exec -it h1 bash
 ```
 
-- To access client.
+- Step 3: To access client.
 ```sh
 host$ docker exec -it h2 bash
 ```
 
+:::
+::::::::::::::
 
-## Keys, Certificates on Server
-- Generate keys and certificates.
+
+## Keys, Certificates
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+- Step 1: Generate keys and certificates for servers.
 ```sh
 # create private key
 h1$ openssl genpkey -algorithm RSA -out h1.pkey
@@ -91,9 +98,10 @@ h1$ openssl x509 -req -in h1.req -key h1.pkey -out h1.crt
 h1$ openssl x509 -in h1.crt -text -noout
 ```
 
+:::
+::: {.column width=50%}
 
-## Keys, Certificates on Client
-- Generate keys and certificates.
+- Step 2: Generate keys and certificates for client.
 ```sh
 # create private key
 h2$ openssl genpkey -algorithm RSA -out h2.pkey
@@ -108,19 +116,24 @@ h2$ openssl x509 -req -in h2.req -key h2.pkey -out h2.crt
 h1$ openssl x509 -in h2.crt -text -noout
 ```
 
+:::
+::::::::::::::
 
-## Trust Store on Client
-- Copy server's certificate to client.
+
+## Trust Store
+- Step 1: Copy server's certificate to client.
 ```sh
+h2$ mkdir /root/trust-store
+
 host$ docker cp h1:/root/h1.crt .
-host$ docker cp h1.crt h2:/root
+host$ docker cp h1.crt h2:/root/trust-store
 ```
 
-- Setup trust store directory.
-```sh
-h2$ mkdir /root/trust
-h2$ mv h1.crt /root/trust
+:::::::::::::: {.columns}
+::: {.column width=50%}
 
+- Step 2: Setup trust store directory on client.
+```sh
 h2$ openssl rehash /root/trust
 
 h2$ s -lh /root/trust/
@@ -128,25 +141,40 @@ lrwxrwxrwx 1 root root    6 Nov 14 00:07 9741086f.0 -> h1.crt
 -rw-r--r-- 1 root root 1.2K Nov 14 00:06 h1.crt
 ```
 
-- Verify server's certificate against trust store.
+:::
+::: {.column width=50%}
+
+- Step 3: Verify server's certificate against client's trust store.
 ```sh
 h2$ openssl verify -CApath /root/trust/ h1.crt
 h1.crt: OK
 ```
 
+:::
+::::::::::::::
+
 
 ## Establish Connection
-- Start openssl server.
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+- Step 1: Start openssl server on h1.
 ```sh
 h1$ openssl s_server -accept 172.19.0.2:4433 -cert h1.crt -key h1.pkey
 ```
 
-- Start openssl client.
+:::
+::: {.column width=50%}
+
+- Step 2: Start openssl client on h2.
 ```sh
-h2$ openssl s_client -connect 172.19.0.2:4433 -cert h2.crt -key h2.pkey -CApath /root/trust -verify_return_error
-SSL handshake has read 2467 bytes and written 1617 bytes
-Verification: OK
+h2$ openssl s_client -connect 172.19.0.2:4433 -cert h2.crt -key h2.pkey \
+    -CApath /root/trust -verify_return_error
 ```
+
+:::
+::::::::::::::
 
 
 # References

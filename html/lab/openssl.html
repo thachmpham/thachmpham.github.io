@@ -119,19 +119,12 @@ class="toc-section-number">2</span> Setup</a>
 <ul>
 <li><a href="#create-nodes" id="toc-create-nodes"><span
 class="toc-section-number">2.1</span> Create Nodes</a></li>
-<li><a href="#keys-certificates-on-server"
-id="toc-keys-certificates-on-server"><span
-class="toc-section-number">2.2</span> Keys, Certificates on
-Server</a></li>
-<li><a href="#keys-certificates-on-client"
-id="toc-keys-certificates-on-client"><span
-class="toc-section-number">2.3</span> Keys, Certificates on
-Client</a></li>
-<li><a href="#trust-store-on-client"
-id="toc-trust-store-on-client"><span
-class="toc-section-number">2.4</span> Trust Store on Client</a></li>
+<li><a href="#keys-certificates" id="toc-keys-certificates"><span
+class="toc-section-number">2.2</span> Keys, Certificates</a></li>
+<li><a href="#trust-store" id="toc-trust-store"><span
+class="toc-section-number">2.3</span> Trust Store</a></li>
 <li><a href="#establish-connection" id="toc-establish-connection"><span
-class="toc-section-number">2.5</span> Establish Connection</a></li>
+class="toc-section-number">2.4</span> Establish Connection</a></li>
 </ul></li>
 <li><a href="#references" id="toc-references"><span
 class="toc-section-number">3</span> References</a></li>
@@ -142,7 +135,7 @@ class="header-section-number">1</span> Overview</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>A lab to practice openssl. The lab has 2 docker containers; one acts
-as server, the other one as client.</p>
+as server, one as client.</p>
 <p>Step 1: Setup keys and certificate on server.</p>
 <ul>
 <li>Create a private key.</li>
@@ -157,16 +150,15 @@ as server, the other one as client.</p>
 </ul>
 <p>Step 3: Setup trust store on client.</p>
 <ul>
-<li>Copy server’s certificate to it’s local.</li>
-<li>Add the certificate to its trust store database.</li>
+<li>Copy server’s certificate to client’s trust store.</li>
 </ul>
 <p>Step 4: Connect the server and client by openssl s_server and
 s_client.</p>
 </div><div class="column" style="width:50%;">
 <table>
 <colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
+<col style="width: 36%" />
+<col style="width: 63%" />
 </colgroup>
 <thead>
 <tr>
@@ -184,9 +176,9 @@ s_client.</p>
 <td style="text-align: left;">A hash string. Share to public.</td>
 </tr>
 <tr>
-<td style="text-align: left;">Certificate Signing Request</td>
-<td style="text-align: left;">Send to Certificate Authority to request a
-certificate.</td>
+<td style="text-align: left;">CSR</td>
+<td style="text-align: left;">Certificate Signing Request. Send to
+Certificate Authority to request a certificate.</td>
 </tr>
 <tr>
 <td style="text-align: left;">Certificate</td>
@@ -195,43 +187,46 @@ website.</td>
 </tr>
 <tr>
 <td style="text-align: left;">Trust Store</td>
-<td style="text-align: left;">A collection of trusted certificates.</td>
+<td style="text-align: left;">A collection of trusted certificates.
+During TLS handshake, server sends its certificate to client. Client
+validates server’s certificate against client’s trust store.</td>
 </tr>
 </tbody>
 </table>
-<p><br></p>
-<p>Trust store:</p>
-<ul>
-<li>During tls handshake, server sends its certificate to client.</li>
-<li>Client validate server’s certificate against client’s trust
-store.</li>
-</ul>
 </div>
 </div>
 <h1 data-number="2" id="setup"><span
 class="header-section-number">2</span> Setup</h1>
 <h2 data-number="2.1" id="create-nodes"><span
 class="header-section-number">2.1</span> Create Nodes</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
-<li>Setup containers.</li>
+<li>Step 1: Setup containers.</li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> git clone https://github.com/thachmpham/lab.git</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cd lab/openssl</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose build</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose up <span class="at">--detach</span></span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cd lab/openssl</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose build</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose up <span class="at">--detach</span></span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <ul>
-<li>To access server.</li>
+<li>Step 2: To access server.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec <span class="at">-it</span> h1 bash</span></code></pre></div>
 <ul>
-<li>To access client.</li>
+<li>Step 3: To access client.</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec <span class="at">-it</span> h2 bash</span></code></pre></div>
-<h2 data-number="2.2" id="keys-certificates-on-server"><span
-class="header-section-number">2.2</span> Keys, Certificates on
-Server</h2>
+</div>
+</div>
+<h2 data-number="2.2" id="keys-certificates"><span
+class="header-section-number">2.2</span> Keys, Certificates</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
-<li>Generate keys and certificates.</li>
+<li>Step 1: Generate keys and certificates for servers.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create private key</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">h1$</span> openssl genpkey <span class="at">-algorithm</span> RSA <span class="at">-out</span> h1.pkey</span>
@@ -244,11 +239,9 @@ Server</h2>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create certificate</span></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ex">h1$</span> openssl x509 <span class="at">-req</span> <span class="at">-in</span> h1.req <span class="at">-key</span> h1.pkey <span class="at">-out</span> h1.crt</span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="ex">h1$</span> openssl x509 <span class="at">-in</span> h1.crt <span class="at">-text</span> <span class="at">-noout</span></span></code></pre></div>
-<h2 data-number="2.3" id="keys-certificates-on-client"><span
-class="header-section-number">2.3</span> Keys, Certificates on
-Client</h2>
+</div><div class="column" style="width:50%;">
 <ul>
-<li>Generate keys and certificates.</li>
+<li>Step 2: Generate keys and certificates for client.</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create private key</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> openssl genpkey <span class="at">-algorithm</span> RSA <span class="at">-out</span> h2.pkey</span>
@@ -261,42 +254,53 @@ Client</h2>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create certificate</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> openssl x509 <span class="at">-req</span> <span class="at">-in</span> h2.req <span class="at">-key</span> h2.pkey <span class="at">-out</span> h2.crt</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="ex">h1$</span> openssl x509 <span class="at">-in</span> h2.crt <span class="at">-text</span> <span class="at">-noout</span></span></code></pre></div>
-<h2 data-number="2.4" id="trust-store-on-client"><span
-class="header-section-number">2.4</span> Trust Store on Client</h2>
+</div>
+</div>
+<h2 data-number="2.3" id="trust-store"><span
+class="header-section-number">2.3</span> Trust Store</h2>
 <ul>
-<li>Copy server’s certificate to client.</li>
+<li>Step 1: Copy server’s certificate to client.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker cp h1:/root/h1.crt .</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker cp h1.crt h2:/root</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> mkdir /root/trust-store</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker cp h1:/root/h1.crt .</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker cp h1.crt h2:/root/trust-store</span></code></pre></div>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
-<li>Setup trust store directory.</li>
+<li>Step 2: Setup trust store directory on client.</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> mkdir /root/trust</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> mv h1.crt /root/trust</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> openssl rehash /root/trust</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> s <span class="at">-lh</span> /root/trust/</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">lrwxrwxrwx</span> 1 root root    6 Nov 14 00:07 9741086f.0 <span class="at">-</span><span class="op">&gt;</span> h1.crt</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">-rw-r--r--</span> 1 root root 1.2K Nov 14 00:06 h1.crt</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> openssl rehash /root/trust</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> s <span class="at">-lh</span> /root/trust/</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">lrwxrwxrwx</span> 1 root root    6 Nov 14 00:07 9741086f.0 <span class="at">-</span><span class="op">&gt;</span> h1.crt</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">-rw-r--r--</span> 1 root root 1.2K Nov 14 00:06 h1.crt</span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <ul>
-<li>Verify server’s certificate against trust store.</li>
+<li>Step 3: Verify server’s certificate against client’s trust
+store.</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> openssl verify <span class="at">-CApath</span> /root/trust/ h1.crt</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">h1.crt:</span> OK</span></code></pre></div>
-<h2 data-number="2.5" id="establish-connection"><span
-class="header-section-number">2.5</span> Establish Connection</h2>
+</div>
+</div>
+<h2 data-number="2.4" id="establish-connection"><span
+class="header-section-number">2.4</span> Establish Connection</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
-<li>Start openssl server.</li>
+<li>Step 1: Start openssl server on h1.</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h1$</span> openssl s_server <span class="at">-accept</span> 172.19.0.2:4433 <span class="at">-cert</span> h1.crt <span class="at">-key</span> h1.pkey</span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <ul>
-<li>Start openssl client.</li>
+<li>Step 2: Start openssl client on h2.</li>
 </ul>
 <div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> openssl s_client <span class="at">-connect</span> 172.19.0.2:4433 <span class="at">-cert</span> h2.crt <span class="at">-key</span> h2.pkey <span class="at">-CApath</span> /root/trust <span class="at">-verify_return_error</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">SSL</span> handshake has read 2467 bytes and written 1617 bytes</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Verification:</span> OK</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h2$</span> openssl s_client <span class="at">-connect</span> 172.19.0.2:4433 <span class="at">-cert</span> h2.crt <span class="at">-key</span> h2.pkey <span class="dt">\</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">-CApath</span> /root/trust <span class="at">-verify_return_error</span></span></code></pre></div>
+</div>
+</div>
 <h1 data-number="3" id="references"><span
 class="header-section-number">3</span> References</h1>
 <ul>
