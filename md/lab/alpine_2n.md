@@ -7,7 +7,7 @@ subtitle: '(Lab Setup Series)'
 # Overview
 
 :::::::::::::: {.columns}
-::: {.column}
+::: {.column width=50%}
 
 - The lab runs in a Docker container with two QEMU VMs inside.
 - The VMs connect to each other through the below bridge interfaces:
@@ -21,7 +21,7 @@ subtitle: '(Lab Setup Series)'
    - /dev/sdc: For testing.
 
 :::
-::: {.column}
+::: {.column width=50%}
 
 ```go
          VM1            Container           VM2
@@ -38,45 +38,65 @@ subtitle: '(Lab Setup Series)'
 
 # Setup
 ## Setup Container
-- Clone code.
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+- Step 1: Clone code.
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
-host$ cd lab/alpine/2-nodes
 ```
 
-- Setup the container.
+- Step 2: Setup the container.
 ```sh
+host$ cd lab/alpine/2-nodes
 host$ docker compose build
 host$ docker compose up --detach
 ```
 
+:::
+::: {.column width=50%}
 
-## Setup VM1
-- Access the container.
+- Step 3: Access the container.
 ```sh
 host$ docker exec -it apk bash
 ```
 
-- Create VM1.
+:::
+::::::::::::::
+
+
+## Setup VM1
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+- Step 1: Create vm1.
 ```sh
 cont$ ./create_vm1.sh
 ```
 
-- On VM1, create a file named ans_vm1 with the same content as lab/alpine/2-node/ans_vm1.
+- Step 2: On vm1, create a file named ans_vm1 with the same content as lab/alpine/2-node/ans_vm1.
 
-- Install Alpine to VM1.
+- Step 3: Install Alpine to VM1.
 ```sh
 vm1$ setup-alpine -e -f ans_vm1
+```
 
+- Step 4: Shutdown.
+```sh
 vm1$ poweroff
 ```
 
-- Start VM1.
+- Step 5: Start vm1.
 ```sh
 cont$ ./start_vm1.sh
 ```
 
-- Allow root ssh login with a empty password.
+:::
+::: {.column width=50%}
+
+- Step 6: Allow root ssh login with a empty password.
 ```sh
 vm1$ vi /etc/ssh/sshd_config
 # ------------------------------ #
@@ -88,40 +108,53 @@ PermitEmptyPasswords yes
 vm1$ rc-service sshd restart
 ```
 
-- Check ssh access from the container to VM1.
+- Step 7: Check ssh access from the container to VM1.
 ```sh
 cont$ ssh vm1
 ```
 
-- Enable community repository.
+- Step 8: Enable community repository.
 ```sh
 vm$ vi /etc/apk/repositories
 http://dl-cdn.alpinelinux.org/alpine/v3.24/main
 http://dl-cdn.alpinelinux.org/alpine/v3.24/community
 ```
 
+:::
+::::::::::::::
+
 
 ## Setup VM2
-- Create VM2.
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+- Step 1: Create vm2.
 ```sh
 cont$ ./create_vm2.sh
 ```
 
-- On VM2, create a file named ans_vm2 with the same content as lab/alpine/2-node/ans_vm2.
+- Step 2: On vm2, create a file named ans_vm2 with the same content as lab/alpine/2-node/ans_vm2.
 
-- Install Alpine to VM2.
+- Step 3: Install Alpine to vm2.
 ```sh
 vm2$ setup-alpine -e -f ans_vm2
+```
 
+- Step 4: Shutdown.
+```sh
 vm2$ poweroff
 ```
 
-- Start VM1.
+- Step 5: Start vm2.
 ```sh
 cont$ ./start_vm2.sh
 ```
 
-- Allow root ssh login with a empty password.
+:::
+::: {.column width=50%}
+
+- Step 6: Allow root ssh login with a empty password.
 ```sh
 vm2$ vi /etc/ssh/sshd_config
 # ------------------------------ #
@@ -133,17 +166,20 @@ PermitEmptyPasswords yes
 vm2$ rc-service sshd restart
 ```
 
-- Check ssh access from the container to VM1.
+- Step 7: Check ssh access from the container to VM1.
 ```sh
 cont$ ssh vm2
 ```
 
-- Enable community repository.
+- Step 8: Enable community repository.
 ```sh
 vm$ vi /etc/apk/repositories
 http://dl-cdn.alpinelinux.org/alpine/v3.24/main
 http://dl-cdn.alpinelinux.org/alpine/v3.24/community
 ```
+
+:::
+::::::::::::::
 
 
 # Shortcuts

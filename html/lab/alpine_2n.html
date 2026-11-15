@@ -133,7 +133,7 @@ class="toc-section-number">4</span> References</a></li>
 <h1 data-number="1" id="overview"><span
 class="header-section-number">1</span> Overview</h1>
 <div class="columns">
-<div class="column">
+<div class="column" style="width:50%;">
 <ul>
 <li>The lab runs in a Docker container with two QEMU VMs inside.</li>
 <li>The VMs connect to each other through the below bridge interfaces:
@@ -150,7 +150,7 @@ class="header-section-number">1</span> Overview</h1>
 <li>/dev/sdc: For testing.</li>
 </ul></li>
 </ul>
-</div><div class="column">
+</div><div class="column" style="width:50%;">
 <div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>         VM1            Container           VM2</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>          <span class="op">+</span>                 <span class="op">+</span>                <span class="op">+</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>      <span class="fl">191.0</span><span class="er">.0.10</span> eth1 <span class="op">+----</span>br1<span class="op">----+</span> eth1 <span class="fl">191.0</span><span class="er">.0.20</span></span>
@@ -163,105 +163,126 @@ class="header-section-number">1</span> Overview</h1>
 class="header-section-number">2</span> Setup</h1>
 <h2 data-number="2.1" id="setup-container"><span
 class="header-section-number">2.1</span> Setup Container</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
-<li>Clone code.</li>
+<li>Step 1: Clone code.</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> git clone https://github.com/thachmpham/lab.git</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cd lab/alpine/2-nodes</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> git clone https://github.com/thachmpham/lab.git</span></code></pre></div>
 <ul>
-<li>Setup the container.</li>
+<li>Step 2: Setup the container.</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose build</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose up <span class="at">--detach</span></span></code></pre></div>
-<h2 data-number="2.2" id="setup-vm1"><span
-class="header-section-number">2.2</span> Setup VM1</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cd lab/alpine/2-nodes</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose build</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose up <span class="at">--detach</span></span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <ul>
-<li>Access the container.</li>
+<li>Step 3: Access the container.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec <span class="at">-it</span> apk bash</span></code></pre></div>
+</div>
+</div>
+<h2 data-number="2.2" id="setup-vm1"><span
+class="header-section-number">2.2</span> Setup VM1</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
-<li>Create VM1.</li>
+<li>Step 1: Create vm1.</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./create_vm1.sh</span></code></pre></div>
 <ul>
-<li><p>On VM1, create a file named ans_vm1 with the same content as
-lab/alpine/2-node/ans_vm1.</p></li>
-<li><p>Install Alpine to VM1.</p></li>
+<li><p>Step 2: On vm1, create a file named ans_vm1 with the same content
+as lab/alpine/2-node/ans_vm1.</p></li>
+<li><p>Step 3: Install Alpine to VM1.</p></li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> setup-alpine <span class="at">-e</span> <span class="at">-f</span> ans_vm1</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> poweroff</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> setup-alpine <span class="at">-e</span> <span class="at">-f</span> ans_vm1</span></code></pre></div>
 <ul>
-<li>Start VM1.</li>
+<li>Step 4: Shutdown.</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./start_vm1.sh</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> poweroff</span></code></pre></div>
 <ul>
-<li>Allow root ssh login with a empty password.</li>
+<li>Step 5: Start vm1.</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> vi /etc/ssh/sshd_config</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitRootLogin</span> yes</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">PasswordAuthentication</span> yes</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitEmptyPasswords</span> yes</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> rc-service sshd restart</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./start_vm1.sh</span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <ul>
-<li>Check ssh access from the container to VM1.</li>
+<li>Step 6: Allow root ssh login with a empty password.</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ssh vm1</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> vi /etc/ssh/sshd_config</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitRootLogin</span> yes</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">PasswordAuthentication</span> yes</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitEmptyPasswords</span> yes</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> rc-service sshd restart</span></code></pre></div>
 <ul>
-<li>Enable community repository.</li>
+<li>Step 7: Check ssh access from the container to VM1.</li>
 </ul>
 <div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> vi /etc/apk/repositories</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">http://dl-cdn.alpinelinux.org/alpine/v3.24/main</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">http://dl-cdn.alpinelinux.org/alpine/v3.24/community</span></span></code></pre></div>
-<h2 data-number="2.3" id="setup-vm2"><span
-class="header-section-number">2.3</span> Setup VM2</h2>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ssh vm1</span></code></pre></div>
 <ul>
-<li>Create VM2.</li>
+<li>Step 8: Enable community repository.</li>
 </ul>
 <div class="sourceCode" id="cb11"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./create_vm2.sh</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> vi /etc/apk/repositories</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">http://dl-cdn.alpinelinux.org/alpine/v3.24/main</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">http://dl-cdn.alpinelinux.org/alpine/v3.24/community</span></span></code></pre></div>
+</div>
+</div>
+<h2 data-number="2.3" id="setup-vm2"><span
+class="header-section-number">2.3</span> Setup VM2</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
-<li><p>On VM2, create a file named ans_vm2 with the same content as
-lab/alpine/2-node/ans_vm2.</p></li>
-<li><p>Install Alpine to VM2.</p></li>
+<li>Step 1: Create vm2.</li>
 </ul>
 <div class="sourceCode" id="cb12"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> setup-alpine <span class="at">-e</span> <span class="at">-f</span> ans_vm2</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> poweroff</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./create_vm2.sh</span></code></pre></div>
 <ul>
-<li>Start VM1.</li>
+<li><p>Step 2: On vm2, create a file named ans_vm2 with the same content
+as lab/alpine/2-node/ans_vm2.</p></li>
+<li><p>Step 3: Install Alpine to vm2.</p></li>
 </ul>
 <div class="sourceCode" id="cb13"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./start_vm2.sh</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> setup-alpine <span class="at">-e</span> <span class="at">-f</span> ans_vm2</span></code></pre></div>
 <ul>
-<li>Allow root ssh login with a empty password.</li>
+<li>Step 4: Shutdown.</li>
 </ul>
 <div class="sourceCode" id="cb14"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> vi /etc/ssh/sshd_config</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitRootLogin</span> yes</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">PasswordAuthentication</span> yes</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitEmptyPasswords</span> yes</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> rc-service sshd restart</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> poweroff</span></code></pre></div>
 <ul>
-<li>Check ssh access from the container to VM1.</li>
+<li>Step 5: Start vm2.</li>
 </ul>
 <div class="sourceCode" id="cb15"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ssh vm2</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./start_vm2.sh</span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <ul>
-<li>Enable community repository.</li>
+<li>Step 6: Allow root ssh login with a empty password.</li>
 </ul>
 <div class="sourceCode" id="cb16"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> vi /etc/apk/repositories</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">http://dl-cdn.alpinelinux.org/alpine/v3.24/main</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">http://dl-cdn.alpinelinux.org/alpine/v3.24/community</span></span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> vi /etc/ssh/sshd_config</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitRootLogin</span> yes</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">PasswordAuthentication</span> yes</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitEmptyPasswords</span> yes</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> rc-service sshd restart</span></code></pre></div>
+<ul>
+<li>Step 7: Check ssh access from the container to VM1.</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ssh vm2</span></code></pre></div>
+<ul>
+<li>Step 8: Enable community repository.</li>
+</ul>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> vi /etc/apk/repositories</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">http://dl-cdn.alpinelinux.org/alpine/v3.24/main</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">http://dl-cdn.alpinelinux.org/alpine/v3.24/community</span></span></code></pre></div>
+</div>
+</div>
 <h1 data-number="3" id="shortcuts"><span
 class="header-section-number">3</span> Shortcuts</h1>
 <p>QEMU keys:</p>

@@ -7,20 +7,20 @@ subtitle: '(Lab Setup Series)'
 # Overview
 
 :::::::::::::: {.columns}
-::: {.column}
+::: {.column width=50%}
 
-- The lab runs in a Docker container with two QEMU VMs inside.
-- The VM has three interfaces:
+- The lab runs in a Docker container with one Alpine QEMU VM inside.
+- The VM has three network interfaces and IPs as below:
     - br1 (191.0.0.0/24): For ssh.
     - br2 (192.0.0.0/24): For testing.
     - br3 (193.0.0.0/24): For testing.
-- Each VM has the below disks:
+- The VM has the below disks:
    - /dev/sda: Boot and filesystem.
    - /dev/sdb: For testing.
    - /dev/sdc: For testing.
 
 :::
-::: {.column}
+::: {.column width=50%}
 
 ```go
 +------- Host ---------+
@@ -38,51 +38,74 @@ subtitle: '(Lab Setup Series)'
 
 # Setup
 ## Setup Container
-- Clone code.
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+- Step 1: Clone code.
 ```sh
 host$ git clone https://github.com/thachmpham/lab.git
 ```
 
-- Setup container.
+- Step 2: Setup container.
 ```sh
 host$ cd lab/alpine/1-node
 host$ docker compose build
 host$ docker compose up --detach
 ```
 
+:::
+::: {.column width=50%}
 
-## Create VM
-- Access to container.
+- Step 3: Access to container.
 ```sh
 host$ docker exec -it apk bash
 ```
 
-- Create the VM.
+:::
+::::::::::::::
+
+## Create VM
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+- Step 1: Create the QEMU VM.
 ```sh
 cont$ cd /ws
 cont$ ./create_vm.sh
 ```
 
-- On the VM, create a file named ans with the same content as lab/alpine/1-node/ans.
+- Step 2: On the VM, create a file named ans with the same content as lab/alpine/1-node/ans.
 
-- Install Alpine to the VM.
+- Step 3: Install Alpine to the VM.
 ```sh
 vm$ setup-alpine -e -f ans
 ```
 
-- Shutdown the VM.
+:::
+::: {.column width=50%}
+
+- Step 4: Shutdown the VM.
 ```sh
 vm$ poweroff
 ```
 
-
-## Setup SSH
-- Start the VM.
+- Step 5: Start the VM.
 ```sh
 cont$ ./start_vm.sh
 ```
 
-- Allow root ssh login with a empty password.
+:::
+::::::::::::::
+
+
+## Setup SSH
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+- Step 1: Allow root ssh login with a empty password.
 ```sh
 vm$ vi /etc/ssh/sshd_config
 # ------------------------------ #
@@ -94,13 +117,19 @@ PermitEmptyPasswords yes
 vm$ rc-service sshd restart
 ```
 
-- Check ssh from container to vm.
+:::
+::: {.column width=50%}
+
+- Step 2: Check ssh from container to vm.
 ```sh
 cont$ ssh vm
 ```
 
+:::
+::::::::::::::
 
-# Setup Repository
+
+## Setup Repository
 - Enable community repository.
 ```sh
 vm$ vi /etc/apk/repositories
