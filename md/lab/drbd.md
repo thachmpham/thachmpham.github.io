@@ -7,17 +7,22 @@ subtitle: '(Lab Setup Series)'
 # Overview
 
 :::::::::::::: {.columns}
-::: {.column}
+::: {.column width=50%}
 
-- This NFS lab is based on the [**Alpine 2 Nodes**](/html/lab/alpine_2n.html) lab.
-- Used disks in VMs:
+A lab to practice DRBD with 2 QEMU VMs.
+
+- The VMs connect to each other through the below bridge interfaces.
+    - br1 (191.0.0.0/24): For ssh.
+    - br2 (192.0.0.0/24): For DRBD.
+- Each VMs has the below disks.
     - /dev/sda: Boot and filesystem.
     - /dev/sdb: For DRBD.
-- The r0 DRBD resource replicates data between the two VMs.
+- The r0 DRBD resource replicates data between the VMs.
 
 :::
-::: {.column}
+::: {.column width=50%}
 
+The VMs run within a docker container which acts as router, forwards traffics between VMs.
 ```go
         VM1                 VM2
     192.0.0.10           192.0.0.20
@@ -34,8 +39,8 @@ subtitle: '(Lab Setup Series)'
 ::::::::::::::
 
 
-# Base Lab
-- Setup lab: [Alpine 2 Nodes](/html/lab/alpine_2n.html).
+# Requirement
+- Initialize lab with the instructions at [Alpine 2 Nodes](/html/lab/alpine_2n.html).
 - Install packages.
 ```sh
 vm1$ apk add drbd-utils lsblk parted e2fsprogs-extra
@@ -45,23 +50,17 @@ vm2$ apk add drbd-utils lsblk parted e2fsprogs-extra
 
 # Manual Setup
 ## Setup VM1
-- Edit PATH to fix some minor issues.
-```sh
-vm1$ cat /root/.profile
-export PATH=$PATH:/usr/lib/drbd
 
-vm1$ cat /etc/init.d/drbd
-export PATH=$PATH:/usr/lib/drbd
-# ...
-```
+:::::::::::::: {.columns}
+::: {.column width=50%}
 
-- Create the disk partition.
+- Step 1: Create the disk partition.
 ```sh
 vm1$ parted -s /dev/sdb mklabel msdos
 vm1$ parted -s /dev/sdb mkpart primary 0% 2GiB
 ```
 
-- Configure DRBD resource.
+- Step 2: Configure DRBD resource.
 ```sh
 vm1$ vi /etc/drbd.d/r0.res
 # ---------------------------------------- #
@@ -82,36 +81,45 @@ resource r0 {
 # ---------------------------------------- #
 ```
 
-- Bring r0.
+:::
+::: {.column width=50%}
+
+- Step 3: Edit PATH.
+```sh
+vm1$ vi /root/.profile
+export PATH=$PATH:/usr/lib/drbd
+
+vm1$ vi /etc/init.d/drbd
+export PATH=$PATH:/usr/lib/drbd
+```
+
+- Step 4: Bring up r0.
 ```sh
 vm1$ drbdadm create-md r0
 vm1$ drbdadm up r0
 ```
 
-- Set as primary.
+- Step 5: Set vm1 as primary.
 ```sh
 vm1$ drbdadm primary --force r0
 ```
 
+:::
+::::::::::::::
+
 
 ## Setup VM2
-- Edit PATH to fix some minor issues.
-```sh
-vm2$ cat /root/.profile
-export PATH=$PATH:/usr/lib/drbd
 
-vm2$ cat /etc/init.d/drbd
-export PATH=$PATH:/usr/lib/drbd
-# ...
-```
+:::::::::::::: {.columns}
+::: {.column width=50%}
 
-- Create the disk partition.
+- Step 1: Create the disk partition.
 ```sh
 vm2$ parted -s /dev/sdb mklabel msdos
 vm2$ parted -s /dev/sdb mkpart primary 0% 2GiB
 ```
 
-- Configure DRBD resource.
+- Step 2: Configure DRBD resource.
 ```sh
 vm2$ vi /etc/drbd.d/r0.res
 # ---------------------------------------- #
@@ -132,51 +140,69 @@ resource r0 {
 # ---------------------------------------- #
 ```
 
-- Bring up the resource.
+:::
+::: {.column width=50%}
+
+- Step 3: Edit PATH.
+```sh
+vm2$ vi /root/.profile
+export PATH=$PATH:/usr/lib/drbd
+
+vm2$ vi /etc/init.d/drbd
+export PATH=$PATH:/usr/lib/drbd
+```
+
+- Step 4: Bring up r0.
 ```sh
 vm2$ drbdadm create-md r0
 vm2$ drbdadm up r0
 ```
 
-- Set as secondary.
+- Step 5: Set vm1 as secondary.
 ```sh
 vm1$ drbdadm secondary r0
 ```
 
-- Check DRBD status.
+:::
+::::::::::::::
+
+
+## Check DRBD Status
 
 :::::::::::::: {.columns}
 ::: {.column}
 
+- Check drbd on vm1.
 ```sh
-vm1$ lsblk
-NAME      MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
-sdb         8:16   0    4G  0 disk
-└─sdb1      8:17   0    2G  0 part
-  └─drbd0 147:0    0    2G  0 disk
-
 vm2$ drbdadm status
 r0 role:Primary
   disk:UpToDate
   peer role:Secondary
     replication:Established peer-disk:UpToDate
+
+vm1$ lsblk
+NAME      MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sdb         8:16   0    4G  0 disk
+└─sdb1      8:17   0    2G  0 part
+  └─drbd0 147:0    0    2G  0 disk
 ```
 
 :::
 ::: {.column}
 
+- Check drbd on vm2.
 ```sh
-vm2$ lsblk
-NAME      MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
-sdb         8:16   0    8G  0 disk
-└─sdb1      8:17   0    2G  0 part
-  └─drbd0 147:0    0    2G  1 disk
-
 vm2$ drbdadm status
 r0 role:Secondary
   disk:UpToDate
   peer role:Primary
     replication:Established peer-disk:UpToDate
+
+vm2$ lsblk
+NAME      MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sdb         8:16   0    8G  0 disk
+└─sdb1      8:17   0    2G  0 part
+  └─drbd0 147:0    0    2G  1 disk
 ```
 
 :::
@@ -184,38 +210,31 @@ r0 role:Secondary
 
 
 # Automation Setup
-To save time from manual setup, use the below steps to quickly setup the DRBD lab.
 
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
+- Step 1: Follow requirement section to initialize lab.
+
+- Step 2: Copy needed file to container.
 ```sh
 host$ find lab/drbd/setup-1 -type f -exec docker cp {} apk:/ws \;
+```
+
+:::
+::: {.column width=50%}
+
+- Step 3: Setup VMs.
+```sh
 host$ docker exec apk /ws/drbd_setup_vm1.sh
 host$ docker exec apk /ws/drbd_setup_vm2.sh
 ```
 
-:::::::::::::: {.columns}
-::: {.column}
-
-```sh
-vm1$ drbdadm status
-r0 role:Primary
-  disk:UpToDate
-  peer role:Secondary
-    replication:Established peer-disk:UpToDate
-```
-
-:::
-::: {.column}
-
-```sh
-vm2$ drbdadm status
-r0 role:Secondary
-  disk:UpToDate
-  peer role:Primary
-    replication:Established peer-disk:UpToDate
-```
+- Step 4: Check DRBD status on the VMs.
 
 :::
 ::::::::::::::
+
 
 # References
 - [Alpine DRBD](https://wiki.alpinelinux.org/wiki/Disk_Replication_with_DRBD)

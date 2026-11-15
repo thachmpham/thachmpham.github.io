@@ -148,21 +148,14 @@ class="header-section-number">1</span> Overview</h1>
 </ul>
 <h1 data-number="2" id="requirement"><span
 class="header-section-number">2</span> Requirement</h1>
-<div class="columns">
-<div class="column" style="width:50%;">
 <ul>
-<li>Step 1: Initialize lab with the instructions at <a
+<li>Initialize lab with the instructions at <a
 href="/html/lab/alpine_2n.html"><strong>Alpine 2
 Nodes</strong></a>.</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<ul>
-<li>Step 2: Install packages.</li>
+<li>Install packages.</li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm1$</span> apk add nfs-utils rsyslog util-linux e2fsprogs-extra</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm2$</span> apk add nfs-utils rsyslog util-linux e2fsprogs-extra</span></code></pre></div>
-</div>
-</div>
 <h1 data-number="3" id="manual-setup"><span
 class="header-section-number">3</span> Manual Setup</h1>
 <h2 data-number="3.1" id="export-nfs-on-server"><span
@@ -240,7 +233,7 @@ class="header-section-number">5</span> Automation Setup</h1>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> find lab/nfs <span class="at">-type</span> f <span class="at">-exec</span> docker cp {} apk:/ws</span></code></pre></div>
 </div><div class="column" style="width:50%;">
 <ul>
-<li>Step 3: Run script to setup NFS.</li>
+<li>Step 3: Setup NFS.</li>
 </ul>
 <div class="sourceCode" id="cb10"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec apk /ws/nfs_setup.sh</span></code></pre></div>

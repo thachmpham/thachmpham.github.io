@@ -13,24 +13,12 @@ A lab to practice NFS with 2 QEMU VMs.
 
 
 # Requirement
-
-:::::::::::::: {.columns}
-::: {.column width=50%}
-
-- Step 1: Initialize lab with the instructions at [**Alpine 2 Nodes**](/html/lab/alpine_2n.html).
-
-:::
-::: {.column width=50%}
-
-- Step 2: Install packages.
+- Initialize lab with the instructions at [**Alpine 2 Nodes**](/html/lab/alpine_2n.html).
+- Install packages.
 ```sh
 vm1$ apk add nfs-utils rsyslog util-linux e2fsprogs-extra
 vm2$ apk add nfs-utils rsyslog util-linux e2fsprogs-extra
 ```
-
-:::
-::::::::::::::
-
 
 # Manual Setup
 ## Export NFS on Server
@@ -128,7 +116,7 @@ host$ find lab/nfs -type f -exec docker cp {} apk:/ws
 :::
 ::: {.column width=50%}
 
-- Step 3: Run script to setup NFS.
+- Step 3: Setup NFS.
 ```sh
 host$ docker exec apk /ws/nfs_setup.sh
 ```
