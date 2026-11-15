@@ -136,14 +136,14 @@ class="header-section-number">1</span> Overview</h1>
 <div class="column" style="width:50%;">
 <ul>
 <li>The lab runs in a Docker container with two QEMU VMs inside.</li>
-<li>The VMs connect to each other through the below bridge interfaces:
+<li>The VMs connect to each other through the below bridge interfaces.
 <ul>
 <li>br1 (191.0.0.0/24): For ssh.</li>
 <li>br2 (192.0.0.0/24): For testing.</li>
 <li>br3 (193.0.0.0/24): For testing.</li>
 </ul></li>
 <li>The containter acts as router, forwards traffics between VMs.</li>
-<li>Each VM has the below disks:
+<li>Each VM has the below disks.
 <ul>
 <li>/dev/sda: Boot and filesystem.</li>
 <li>/dev/sdb: For testing.</li>

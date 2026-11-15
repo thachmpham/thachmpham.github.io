@@ -139,23 +139,24 @@ class="toc-section-number">3</span> Shortcuts</a></li>
 <h1 data-number="1" id="overview"><span
 class="header-section-number">1</span> Overview</h1>
 <div class="columns">
-<div class="column">
+<div class="column" style="width:50%;">
 <ul>
-<li>The lab runs in a Docker container with two QEMU VMs inside.</li>
-<li>The VM has three interfaces:
+<li>The lab runs in a Docker container with a Fedora QEMU VM
+inside.</li>
+<li>The VM has 3 network interfaces and IP as below.
 <ul>
 <li>br1 (191.0.0.0/24): For ssh.</li>
 <li>br2 (192.0.0.0/24): For testing.</li>
 <li>br3 (193.0.0.0/24): For testing.</li>
 </ul></li>
-<li>Each VM has the below disks:
+<li>Each VM has the below disks.
 <ul>
 <li>/dev/sda: (Fedora Server QCOW) Boot and filesystem.</li>
 <li>/dev/sdb: For testing.</li>
 <li>/dev/sdc: For testing.</li>
 </ul></li>
 </ul>
-</div><div class="column">
+</div><div class="column" style="width:50%;">
 <div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">+-------</span> Host <span class="op">---------+</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">+-----</span> Container <span class="op">-+</span>  <span class="op">|</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="op">|</span>   <span class="op">+-</span> VM <span class="op">---+</span>    <span class="op">|</span>  <span class="op">|</span></span>
@@ -169,34 +170,42 @@ class="header-section-number">1</span> Overview</h1>
 class="header-section-number">2</span> Setup</h1>
 <h2 data-number="2.1" id="setup-container"><span
 class="header-section-number">2.1</span> Setup Container</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
-<li>Clone code.</li>
+<li>Step 1: Clone code.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> git clone https://github.com/thachmpham/lab.git</span></code></pre></div>
 <ul>
-<li>Setup container.</li>
+<li>Step 2: Setup container.</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> cd lab/fedora/1-node</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose build</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker compose up <span class="at">--detach</span></span></code></pre></div>
-<h2 data-number="2.2" id="create-vm"><span
-class="header-section-number">2.2</span> Create VM</h2>
+</div><div class="column" style="width:50%;">
 <ul>
-<li>Access to container.</li>
+<li>Step 3: Access to container.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec <span class="at">-it</span> f1 bash</span></code></pre></div>
+</div>
+</div>
+<h2 data-number="2.2" id="create-vm"><span
+class="header-section-number">2.2</span> Create VM</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
-<li>Create VM.</li>
+<li>Step 1: Create VM.</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> cd /ws</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ./create_vm.sh</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Root password</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span></code></pre></div>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Remember to set root password</span></span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <ul>
-<li>Reboot</li>
+<li>Step 2: Reboot.</li>
 </ul>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> reboot</span></code></pre></div>
+</div>
+</div>
 <h2 data-number="2.3" id="setup-vm"><span
 class="header-section-number">2.3</span> Setup VM</h2>
 <h3 data-number="2.3.1" id="hostname"><span
@@ -207,49 +216,54 @@ class="header-section-number">2.3.1</span> Hostname</h3>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> hostnamectl hostname vm</span></code></pre></div>
 <h3 data-number="2.3.2" id="static-ip"><span
 class="header-section-number">2.3.2</span> Static IP</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
-<li>Set static IP.</li>
+<li>Step 1: Show connections and interfaces.</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> ip <span class="at">-br</span> link show</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">lo</span>               UNKNOWN        00:00:00:00:00:00 <span class="op">&lt;</span>LOOPBACK,UP,LOWER_UP<span class="op">&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ens3</span>             UP             52:54:00:12:34:56 <span class="op">&lt;</span>BROADCAST,MULTICAST,UP,LOWER_UP<span class="op">&gt;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ens4</span>             UP             50:54:00:01:00:01 <span class="op">&lt;</span>BROADCAST,MULTICAST,UP,LOWER_UP<span class="op">&gt;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ens5</span>             UP             50:54:00:02:00:01 <span class="op">&lt;</span>BROADCAST,MULTICAST,UP,LOWER_UP<span class="op">&gt;</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ens6</span>             UP             50:54:00:03:00:01 <span class="op">&lt;</span>BROADCAST,MULTICAST,UP,LOWER_UP<span class="op">&gt;</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn show</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>                UUID                                  TYPE      DEVICE</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Wired</span> connection 1  f1a11ae6-c99b-3dc9-a93e-b53d5c07b5e7  ethernet  ens3</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="ex">Wired</span> connection 2  9e51782f-a94e-36b3-a8b2-c7da6e005de7  ethernet  ens4</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Wired</span> connection 3  7fbc26d6-a1a0-388f-a13f-0e2e7d2cc7f2  ethernet  ens5</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Wired</span> connection 4  1967bc2c-709c-3b88-9fdb-babdc1c76902  ethernet  ens6</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="ex">lo</span>                  5eda62d0-1322-4a95-a564-a0a27a5ba757  loopback  lo</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens4</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 2&#39;</span> ipv4.method manual ipv4.addr 191.0.0.10/24</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens5</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 3&#39;</span> ipv4.method manual ipv4.addr 192.0.0.10/24</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens6</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 4&#39;</span> ipv4.method manual ipv4.addr 193.0.0.10/24</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn show</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">NAME</span>                UUID                                  TYPE      DEVICE</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Wired</span> connection 1  f1a11ae6-c99b-3dc9-a93e-b53d5c07b5e7  ethernet  ens3</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Wired</span> connection 2  9e51782f-a94e-36b3-a8b2-c7da6e005de7  ethernet  ens4</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Wired</span> connection 3  7fbc26d6-a1a0-388f-a13f-0e2e7d2cc7f2  ethernet  ens5</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Wired</span> connection 4  1967bc2c-709c-3b88-9fdb-babdc1c76902  ethernet  ens6</span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li>Step 2: Set static IPs.</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens4</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 2&#39;</span> ipv4.method manual ipv4.addr 191.0.0.10/24</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens5</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 3&#39;</span> ipv4.method manual ipv4.addr 192.0.0.10/24</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># set IP for ens6</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> nmcli conn modify <span class="st">&#39;Wired connection 4&#39;</span> ipv4.method manual ipv4.addr 193.0.0.10/24</span></code></pre></div>
+</div>
+</div>
 <h3 data-number="2.3.3" id="ssh"><span
 class="header-section-number">2.3.3</span> SSH</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
 <ul>
-<li>Allow root login.</li>
-</ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> vi /etc/ssh/sshd_config</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitRootLogin</span> yes</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">PasswordAuthentication</span> yes</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> systemctl restart sshd</span></code></pre></div>
-<ul>
-<li>Check ssh.</li>
+<li>Step 1: Allow root login.</li>
 </ul>
 <div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ssh vm</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> vi /etc/ssh/sshd_config</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">PermitRootLogin</span> yes</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">PasswordAuthentication</span> yes</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------ #</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> systemctl restart sshd</span></code></pre></div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li>Step 2: Check ssh.</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> ssh vm</span></code></pre></div>
+</div>
+</div>
 <h1 data-number="3" id="shortcuts"><span
 class="header-section-number">3</span> Shortcuts</h1>
 <p>QEMU keys:</p>

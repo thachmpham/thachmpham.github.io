@@ -10,11 +10,11 @@ subtitle: '(Lab Setup Series)'
 ::: {.column width=50%}
 
 - The lab runs in a Docker container with one Alpine QEMU VM inside.
-- The VM has three network interfaces and IPs as below:
+- The VM has 3 network interfaces and IPs as below.
     - br1 (191.0.0.0/24): For ssh.
     - br2 (192.0.0.0/24): For testing.
     - br3 (193.0.0.0/24): For testing.
-- The VM has the below disks:
+- The VM has the 3 disks.
    - /dev/sda: Boot and filesystem.
    - /dev/sdb: For testing.
    - /dev/sdc: For testing.

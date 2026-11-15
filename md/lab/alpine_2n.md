@@ -10,12 +10,12 @@ subtitle: '(Lab Setup Series)'
 ::: {.column width=50%}
 
 - The lab runs in a Docker container with two QEMU VMs inside.
-- The VMs connect to each other through the below bridge interfaces:
+- The VMs connect to each other through the below bridge interfaces.
     - br1 (191.0.0.0/24): For ssh.
     - br2 (192.0.0.0/24): For testing.
     - br3 (193.0.0.0/24): For testing.
 - The containter acts as router, forwards traffics between VMs.
-- Each VM has the below disks:
+- Each VM has the below disks.
    - /dev/sda: Boot and filesystem.
    - /dev/sdb: For testing.
    - /dev/sdc: For testing.
