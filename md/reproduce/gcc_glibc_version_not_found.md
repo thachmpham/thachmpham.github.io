@@ -19,6 +19,8 @@ Find gcc and fedora version mapping at [koji.fedoraproject.org](https://koji.fed
 - [gcc-10.3.1-1.fc33.aarch64.rpm](https://koji.fedoraproject.org/koji/search?terms=%5Egcc-10.*&type=rpm&match=regexp): Fedora 33, GCC 10.
 - [gcc-16.2.1-1.fc44.aarch64.rpm](https://koji.fedoraproject.org/koji/search?terms=%5Egcc-%5Cd%2B.*fc44&type=rpm&match=regexp): Fedora 44, GCC 16.
 
+:::::::::::::: {.columns}
+::: {.column width=50%}
 
 Step 1: Create docker containers of fedora 33 and fedora 44.
 ```sh
@@ -40,9 +42,12 @@ host$ docker exec -it f33 bash
 host$ docker exec -it f44 bash
 ```
 
+:::
+::: {.column width=50%}
 
 Step 2: Check glibc versions.
 
+- Check glibc version on fedora 33.
 ```sh
 f33$ ldconfig -p | grep libc.so
 libc.so.6 (libc6,AArch64, OS ABI: Linux 3.7.0) => /lib64/libc.so.6
@@ -52,6 +57,7 @@ GNU C Library (GNU libc) stable release version 2.32.
 Compiled by GNU CC version 10.3.1 20210422 (Red Hat 10.3.1-1).
 ```
 
+- Check glibc version on fedora 44.
 ```sh
 f44$ /lib64/libc.so.6
 GNU C Library (GNU libc) stable release version 2.43.
@@ -59,9 +65,16 @@ Compiled by GNU CC version 16.2.1 20260819 (Red Hat 16.2.1-2).
 Minimum supported kernel: 3.7.0
 ```
 
+:::
+::::::::::::::
+
 
 # Cannot Start Program Due to Missing Glibc Versions
 ## Reproduce
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
+
 Step 1: Build a program on fedora 44.
 ```sh
 f44$ vi main.c
@@ -84,6 +97,9 @@ f44$ ./main
 hello
 ```
 
+:::
+::: {.column width=50%}
+
 Step 2: Run the program on fedora 33.
 ```sh
 f33$ ./main
@@ -96,10 +112,14 @@ f33$ ldd main
     /lib/ld-linux-aarch64.so.1 (0x0000ffffaf860000)
 ```
 
-The error means that libc.so.6 does not have GLIBC_2.34 which required by ./main.
+:::
+::::::::::::::
 
 
 ## Analysis
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
 
 Step 1: Check GLIBC versions that the program requires.
 ```sh
@@ -111,9 +131,12 @@ Version needs section '.gnu.version_r' contains 1 entry:
   0x0020:   Name: GLIBC_2.34  Flags: none  Version: 2
 ```
 
-Section '.gnu.version_r' contains the GLIBC versions that the program requires. The program needs GLIBC 2.17 and 2.34.
+Section '.gnu.version_r' contains the GLIBC versions required by the program. It needs GLIBC 2.17 and 2.34.
 
-Step 3: Check GLIBC versions defined in libc.so.6.
+:::
+::: {.column width=50%}
+
+Step 2: Check GLIBC versions defined in libc.so.6.
 ```sh
 f33$ readelf --version-info /lib64/libc.so.6
 Version definition section '.gnu.version_d' contains 14 entries:
@@ -136,13 +159,20 @@ Version definition section '.gnu.version_d' contains 14 entries:
 Section '.gnu.version_d' contains the GLIBC versions defined by libc.so.6. It does not contain GLIBC 2.34 which required by the program.
 So, the program cannot start on fedora 33 due to lack of the required version.
 
+:::
+::::::::::::::
+
 
 ## Trick: ELF Section ".gnu.version_r"
-To let the program not require GLIBC 2.34 anymore, we will modify the .gnu.version_r section, replace GLIBC_2.34 by GLIBC_2.17.
+This trick can be used in case we cannot rebuild the program.
+To let the program not require GLIBC 2.34 anymore, we modify the .gnu.version_r section, replace GLIBC_2.34 by GLIBC_2.17.
+
+:::::::::::::: {.columns}
+::: {.column width=50%}
 
 Step 1: Patch the ELF.
 ```sh
-f33$ vi patch.py
+f44$ vi patch.py
 ```
 
 ```python
@@ -158,9 +188,9 @@ elf.write('main1')
 ```
 
 ```sh
-f33$ python3 patch.py
+f44$ python3 patch.py
 
-f33$ readelf --version-info main1
+f44$ readelf --version-info main1
 Version needs section '.gnu.version_r' contains 1 entry:
  Addr: 0x0000000000400410  Offset: 0x000410  Link: 5 (.dynstr)
   000000: Version: 1  File: libc.so.6  Cnt: 2
@@ -168,7 +198,10 @@ Version needs section '.gnu.version_r' contains 1 entry:
   0x0020:   Name: GLIBC_2.17  Flags: none  Version: 2
 ```
 
-Step 2: Check dependencies and run the program.
+:::
+::: {.column width=50%}
+
+Step 2: Check dependencies and run the program on fedora 33.
 ```sh
 f33$ ldd main1
 	linux-vdso.so.1 (0x0000ffffa2884000)
@@ -180,6 +213,9 @@ f33$ chmod +x main1
 f33$ ./main1
 hello
 ```
+
+:::
+::::::::::::::
 
 
 # References

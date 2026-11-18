@@ -153,6 +153,8 @@ Fedora 33, GCC 10.</li>
 href="https://koji.fedoraproject.org/koji/search?terms=%5Egcc-%5Cd%2B.*fc44&amp;type=rpm&amp;match=regexp">gcc-16.2.1-1.fc44.aarch64.rpm</a>:
 Fedora 44, GCC 16.</li>
 </ul>
+<div class="columns">
+<div class="column" style="width:50%;">
 <p>Step 1: Create docker containers of fedora 33 and fedora 44.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> git clone https://github.com/thachmpham/lab.git</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -168,23 +170,34 @@ Fedora 44, GCC 16.</li>
 <li>To access fedora 44 container.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">host$</span> docker exec <span class="at">-it</span> f44 bash</span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <p>Step 2: Check glibc versions.</p>
+<ul>
+<li>Check glibc version on fedora 33.</li>
+</ul>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> ldconfig <span class="at">-p</span> <span class="kw">|</span> <span class="fu">grep</span> libc.so</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">libc.so.6</span> <span class="er">(</span><span class="ex">libc6,AArch64,</span> OS ABI: Linux 3.7.0<span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> /lib64/libc.so.6</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> /lib64/libc.so.6</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">GNU</span> C Library <span class="er">(</span><span class="ex">GNU</span> libc<span class="kw">)</span> <span class="ex">stable</span> release version 2.32.</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Compiled</span> by GNU CC version 10.3.1 20210422 <span class="er">(</span><span class="ex">Red</span> Hat 10.3.1-1<span class="kw">)</span><span class="bu">.</span></span></code></pre></div>
+<ul>
+<li>Check glibc version on fedora 44.</li>
+</ul>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f44$</span> /lib64/libc.so.6</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">GNU</span> C Library <span class="er">(</span><span class="ex">GNU</span> libc<span class="kw">)</span> <span class="ex">stable</span> release version 2.43.</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Compiled</span> by GNU CC version 16.2.1 20260819 <span class="er">(</span><span class="ex">Red</span> Hat 16.2.1-2<span class="kw">)</span><span class="bu">.</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Minimum</span> supported kernel: 3.7.0</span></code></pre></div>
+</div>
+</div>
 <h1 data-number="3"
 id="cannot-start-program-due-to-missing-glibc-versions"><span
 class="header-section-number">3</span> Cannot Start Program Due to
 Missing Glibc Versions</h1>
 <h2 data-number="3.1" id="reproduce"><span
 class="header-section-number">3.1</span> Reproduce</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <p>Step 1: Build a program on fedora 44.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f44$</span> vi main.c</span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre
@@ -199,6 +212,7 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#c
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">f44$</span> ./main</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">hello</span></span></code></pre></div>
+</div><div class="column" style="width:50%;">
 <p>Step 2: Run the program on fedora 33.</p>
 <div class="sourceCode" id="cb10"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> ./main</span>
@@ -209,10 +223,12 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">linux-vdso.so.1</span> <span class="er">(</span><span class="ex">0x0000ffffaf8ae000</span><span class="kw">)</span></span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">libc.so.6</span> =<span class="op">&gt;</span> /lib64/libc.so.6 <span class="er">(</span><span class="ex">0x0000ffffaf6da000</span><span class="kw">)</span></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/lib/ld-linux-aarch64.so.1</span> <span class="er">(</span><span class="ex">0x0000ffffaf860000</span><span class="kw">)</span></span></code></pre></div>
-<p>The error means that libc.so.6 does not have GLIBC_2.34 which
-required by ./main.</p>
+</div>
+</div>
 <h2 data-number="3.2" id="analysis"><span
 class="header-section-number">3.2</span> Analysis</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <p>Step 1: Check GLIBC versions that the program requires.</p>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> readelf <span class="at">--version-info</span> main</span>
@@ -223,7 +239,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">0x0020:</span>   Name: GLIBC_2.34  Flags: none  Version: 2</span></code></pre></div>
 <p>Section ‘.gnu.version_r’ contains the GLIBC versions that the program
 requires. The program needs GLIBC 2.17 and 2.34.</p>
-<p>Step 3: Check GLIBC versions defined in libc.so.6.</p>
+</div><div class="column" style="width:50%;">
+<p>Step 2: Check GLIBC versions defined in libc.so.6.</p>
 <div class="sourceCode" id="cb12"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> readelf <span class="at">--version-info</span> /lib64/libc.so.6</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Version</span> definition section <span class="st">&#39;.gnu.version_d&#39;</span> contains 14 entries:</span>
@@ -245,14 +262,19 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#
 libc.so.6. It does not contain GLIBC 2.34 which required by the program.
 So, the program cannot start on fedora 33 due to lack of the required
 version.</p>
+</div>
+</div>
 <h2 data-number="3.3" id="trick-elf-section-.gnu.version_r"><span
 class="header-section-number">3.3</span> Trick: ELF Section
 “.gnu.version_r”</h2>
-<p>To let the program not require GLIBC 2.34 anymore, we will modify the
-.gnu.version_r section, replace GLIBC_2.34 by GLIBC_2.17.</p>
+<p>This trick can be used in case we cannot rebuild the program. To let
+the program not require GLIBC 2.34 anymore, we modify the .gnu.version_r
+section, replace GLIBC_2.34 by GLIBC_2.17.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
 <p>Step 1: Patch the ELF.</p>
 <div class="sourceCode" id="cb13"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> vi patch.py</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f44$</span> vi patch.py</span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> lief</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -264,15 +286,16 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a h
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># write elf to another file, main1.</span></span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>elf.write(<span class="st">&#39;main1&#39;</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> python3 patch.py</span>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f44$</span> python3 patch.py</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> readelf <span class="at">--version-info</span> main1</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">f44$</span> readelf <span class="at">--version-info</span> main1</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Version</span> needs section <span class="st">&#39;.gnu.version_r&#39;</span> contains 1 entry:</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a> <span class="ex">Addr:</span> 0x0000000000400410  Offset: 0x000410  Link: 5 <span class="er">(</span><span class="ex">.dynstr</span><span class="kw">)</span></span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">000000:</span> Version: 1  File: libc.so.6  Cnt: 2</span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="ex">0x0010:</span>   Name: GLIBC_2.17  Flags: none  Version: 3</span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">0x0020:</span>   Name: GLIBC_2.17  Flags: none  Version: 2</span></code></pre></div>
-<p>Step 2: Check dependencies and run the program.</p>
+</div><div class="column" style="width:50%;">
+<p>Step 2: Check dependencies and run the program on fedora 33.</p>
 <div class="sourceCode" id="cb16"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> ldd main1</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">linux-vdso.so.1</span> <span class="er">(</span><span class="ex">0x0000ffffa2884000</span><span class="kw">)</span></span>
@@ -283,6 +306,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> ./main1</span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="ex">hello</span></span></code></pre></div>
+</div>
+</div>
 <h1 data-number="4" id="references"><span
 class="header-section-number">4</span> References</h1>
 <ul>
