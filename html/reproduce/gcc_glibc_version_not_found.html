@@ -116,22 +116,16 @@
 class="toc-section-number">1</span> Overview</a></li>
 <li><a href="#setup-lab" id="toc-setup-lab"><span
 class="toc-section-number">2</span> Setup Lab</a></li>
-<li><a href="#cannot-start-program-due-to-missing-glibc-versions"
-id="toc-cannot-start-program-due-to-missing-glibc-versions"><span
-class="toc-section-number">3</span> Cannot Start Program Due to Missing
-Glibc Versions</a>
-<ul>
 <li><a href="#reproduce" id="toc-reproduce"><span
-class="toc-section-number">3.1</span> Reproduce</a></li>
+class="toc-section-number">3</span> Reproduce</a></li>
 <li><a href="#analysis" id="toc-analysis"><span
-class="toc-section-number">3.2</span> Analysis</a></li>
+class="toc-section-number">4</span> Analysis</a></li>
 <li><a href="#trick-elf-section-.gnu.version_r"
 id="toc-trick-elf-section-.gnu.version_r"><span
-class="toc-section-number">3.3</span> Trick: ELF Section
+class="toc-section-number">5</span> Trick: ELF Section
 “.gnu.version_r”</a></li>
-</ul></li>
 <li><a href="#references" id="toc-references"><span
-class="toc-section-number">4</span> References</a></li>
+class="toc-section-number">6</span> References</a></li>
 </ul>
 </nav>
 <h1 data-number="1" id="overview"><span
@@ -190,12 +184,8 @@ Fedora 44, GCC 16.</li>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Minimum</span> supported kernel: 3.7.0</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="3"
-id="cannot-start-program-due-to-missing-glibc-versions"><span
-class="header-section-number">3</span> Cannot Start Program Due to
-Missing Glibc Versions</h1>
-<h2 data-number="3.1" id="reproduce"><span
-class="header-section-number">3.1</span> Reproduce</h2>
+<h1 data-number="3" id="reproduce"><span
+class="header-section-number">3</span> Reproduce</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Step 1: Build a program on fedora 44.</p>
@@ -225,8 +215,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/lib/ld-linux-aarch64.so.1</span> <span class="er">(</span><span class="ex">0x0000ffffaf860000</span><span class="kw">)</span></span></code></pre></div>
 </div>
 </div>
-<h2 data-number="3.2" id="analysis"><span
-class="header-section-number">3.2</span> Analysis</h2>
+<h1 data-number="4" id="analysis"><span
+class="header-section-number">4</span> Analysis</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Step 1: Check GLIBC versions that the program requires.</p>
@@ -237,8 +227,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">000000:</span> Version: 1  File: libc.so.6  Cnt: 2</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">0x0010:</span>   Name: GLIBC_2.17  Flags: none  Version: 3</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">0x0020:</span>   Name: GLIBC_2.34  Flags: none  Version: 2</span></code></pre></div>
-<p>Section ‘.gnu.version_r’ contains the GLIBC versions that the program
-requires. The program needs GLIBC 2.17 and 2.34.</p>
+<p>Section ‘.gnu.version_r’ contains the GLIBC versions required by the
+program. It needs GLIBC 2.17 and 2.34.</p>
 </div><div class="column" style="width:50%;">
 <p>Step 2: Check GLIBC versions defined in libc.so.6.</p>
 <div class="sourceCode" id="cb12"><pre
@@ -264,9 +254,9 @@ So, the program cannot start on fedora 33 due to lack of the required
 version.</p>
 </div>
 </div>
-<h2 data-number="3.3" id="trick-elf-section-.gnu.version_r"><span
-class="header-section-number">3.3</span> Trick: ELF Section
-“.gnu.version_r”</h2>
+<h1 data-number="5" id="trick-elf-section-.gnu.version_r"><span
+class="header-section-number">5</span> Trick: ELF Section
+“.gnu.version_r”</h1>
 <p>This trick can be used in case we cannot rebuild the program. To let
 the program not require GLIBC 2.34 anymore, we modify the .gnu.version_r
 section, replace GLIBC_2.34 by GLIBC_2.17.</p>
@@ -308,8 +298,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="ex">hello</span></span></code></pre></div>
 </div>
 </div>
-<h1 data-number="4" id="references"><span
-class="header-section-number">4</span> References</h1>
+<h1 data-number="6" id="references"><span
+class="header-section-number">6</span> References</h1>
 <ul>
 <li><a
 href="https://stackoverflow.com/questions/847179/multiple-glibc-libraries-on-a-single-host">Multiple

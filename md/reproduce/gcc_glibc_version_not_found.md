@@ -69,8 +69,7 @@ Minimum supported kernel: 3.7.0
 ::::::::::::::
 
 
-# Cannot Start Program Due to Missing Glibc Versions
-## Reproduce
+# Reproduce
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -116,7 +115,7 @@ f33$ ldd main
 ::::::::::::::
 
 
-## Analysis
+# Analysis
 
 :::::::::::::: {.columns}
 ::: {.column width=50%}
@@ -163,7 +162,7 @@ So, the program cannot start on fedora 33 due to lack of the required version.
 ::::::::::::::
 
 
-## Trick: ELF Section ".gnu.version_r"
+# Trick: ELF Section ".gnu.version_r"
 This trick can be used in case we cannot rebuild the program.
 To let the program not require GLIBC 2.34 anymore, we modify the .gnu.version_r section, replace GLIBC_2.34 by GLIBC_2.17.
 
