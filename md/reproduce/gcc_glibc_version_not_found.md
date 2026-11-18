@@ -137,7 +137,7 @@ Section '.gnu.version_d' contains the GLIBC versions defined by libc.so.6. It do
 So, the program cannot start on fedora 33 due to lack of the required version.
 
 
-## Workaround: Modify Section ".gnu.version_r"
+## Trick: Modify Section ".gnu.version_r"
 To let the program not require GLIBC 2.34 anymore, we will modify the .gnu.version_r section, replace GLIBC_2.34 by GLIBC_2.17.
 
 Step 1: Patch the ELF.

@@ -125,9 +125,9 @@ Glibc Versions</a>
 class="toc-section-number">3.1</span> Reproduce</a></li>
 <li><a href="#analysis" id="toc-analysis"><span
 class="toc-section-number">3.2</span> Analysis</a></li>
-<li><a href="#workaround-modify-section-.gnu.version_r"
-id="toc-workaround-modify-section-.gnu.version_r"><span
-class="toc-section-number">3.3</span> Workaround: Modify Section
+<li><a href="#trick-modify-section-.gnu.version_r"
+id="toc-trick-modify-section-.gnu.version_r"><span
+class="toc-section-number">3.3</span> Trick: Modify Section
 “.gnu.version_r”</a></li>
 </ul></li>
 <li><a href="#references" id="toc-references"><span
@@ -245,9 +245,8 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#
 libc.so.6. It does not contain GLIBC 2.34 which required by the program.
 So, the program cannot start on fedora 33 due to lack of the required
 version.</p>
-<h2 data-number="3.3"
-id="workaround-modify-section-.gnu.version_r"><span
-class="header-section-number">3.3</span> Workaround: Modify Section
+<h2 data-number="3.3" id="trick-modify-section-.gnu.version_r"><span
+class="header-section-number">3.3</span> Trick: Modify Section
 “.gnu.version_r”</h2>
 <p>To let the program not require GLIBC 2.34 anymore, we will modify the
 .gnu.version_r section, replace GLIBC_2.34 by GLIBC_2.17.</p>
