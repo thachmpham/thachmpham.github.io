@@ -1,5 +1,5 @@
 ---
-title: 'OpenSSL: Client + Server'
+title: 'OpenSSL'
 subtitle: '(Lab Setup Series)'
 ---
 

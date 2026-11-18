@@ -6,92 +6,74 @@ subtitle: '(Reproduce & Troubleshoot Series)'
 
 # Overview
 Build a binary on a machine, run it on another machine. It is the classic recipe for the libc version mismatch issue.
-In this blog, we will build a binary on fedora 44, and run it on fedora 33.
+In this blog, we will reproduce the issue by buiding a binary on fedora 44, and running it on fedora 33.
 
 ```sh
 libc.so.6: version 'GLIBC_X.XX' not found
 ```
 
-# Reproduce
+
+# Setup Lab
 Find gcc and fedora version mapping at [koji.fedoraproject.org](https://koji.fedoraproject.org):
 
-- [gcc-10.3.1-1.fc33.aarch64.rpm](https://koji.fedoraproject.org/koji/search?terms=%5Egcc-10.*&type=rpm&match=regexp).
-- [gcc-16.2.1-1.fc44.aarch64.rpm](https://koji.fedoraproject.org/koji/search?terms=%5Egcc-%5Cd%2B.*fc44&type=rpm&match=regexp).
-
-Through the RPM names, we have the below mapping:
-
-- GCC 10, Fedora 33.
-- GCC 16, Fedora 44.
+- [gcc-10.3.1-1.fc33.aarch64.rpm](https://koji.fedoraproject.org/koji/search?terms=%5Egcc-10.*&type=rpm&match=regexp): Fedora 33, GCC 10.
+- [gcc-16.2.1-1.fc44.aarch64.rpm](https://koji.fedoraproject.org/koji/search?terms=%5Egcc-%5Cd%2B.*fc44&type=rpm&match=regexp): Fedora 44, GCC 16.
 
 
-Step 1: Create docker container of fedora 33.
+Step 1: Create docker containers of fedora 33 and fedora 44.
 ```sh
-host$ cat Dockerfile.f33
-```
-```Dockerfile
-FROM fedora:33
-RUN dnf group install -y c-development patchelf
-CMD ["tail", "-f", "/dev/null"]
+host$ git clone https://github.com/thachmpham/lab.git
+
+host$ cd lab/c-development
+
+host$ docker compose build
+host$ docker compose up --detach
 ```
 
+- To access fedora 33 container.
 ```sh
-host$ docker build --tag fedora33 --file Dockerfile.f33 .
-host$ docker create --name f33 --hostname f33 fedora33
-host$ docker start f33
+host$ docker exec -it f33 bash
 ```
 
-
-Step 2: Create docker container of fedora 44.
+- To access fedora 44 container.
 ```sh
-host$ cat Dockerfile.f44
+host$ docker exec -it f44 bash
 ```
 
-```Dockerfile
-FROM fedora:33
-RUN dnf group install -y c-development patchelf
-CMD ["tail", "-f", "/dev/null"]
-```
+
+Step 2: Check glibc versions.
 
 ```sh
-host$ docker build --tag fedora44 --file Dockerfile.f44 .
-host$ docker create --name f44 --hostname f44 fedora44
-host$ docker start f44
+f33$ ldconfig -p | grep libc.so
+libc.so.6 (libc6,AArch64, OS ABI: Linux 3.7.0) => /lib64/libc.so.6
+
+f33$ /lib64/libc.so.6
+GNU C Library (GNU libc) stable release version 2.32.
+Compiled by GNU CC version 10.3.1 20210422 (Red Hat 10.3.1-1).
 ```
 
-Step 3: Check gcc and libc version on the containers.
-
-- Fedora 33, g++ 10, libc 2.32.
 ```sh
-f33$ g++ --version
-g++ (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1)
-
-f33$ ldd --version
-ldd (GNU libc) 2.32
+f44$ /lib64/libc.so.6
+GNU C Library (GNU libc) stable release version 2.43.
+Compiled by GNU CC version 16.2.1 20260819 (Red Hat 16.2.1-2).
+Minimum supported kernel: 3.7.0
 ```
 
-- Fedora 44, g++ 16, libc 2.43.
+
+# Cannot Start Program Due to Missing Glibc Versions
+## Reproduce
+Step 1: Build a program on fedora 44.
 ```sh
-f44$ g++ --version
-g++ (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)
-
-f44$ ldd --version
-ldd (GNU libc) 2.43
-```
-
-Step 4: On fedora 44, build a binary.
-
-- Build.
-```sh
-f44$ cat main.cpp
+f44$ vi main.c
 ```
 
 ```cpp
-#include <iostream>
+#include <stdio.h>
 
-int main()
+int main(int argc, char** argv)
 {
-    std::cout << "hello" << std::endl;
-    return 0;
+	printf("hello\n");
+	return 0;
 }
 ```
 
@@ -102,151 +84,101 @@ f44$ ./main
 hello
 ```
 
-Step 5: On fedora 33, run the binary which is built from fedora 44.
-
-- Copy the binary to fedora 33.
-```sh
-host$ docker cp f44:/root/main .
-host$ docker cp main f33:/root
-```
-
-- Fedora 33 cannot run the binary.
-    - The binary requires GLIBC_2.34, which is not available in libc.so.6 on fedora 33.
-    - The binary requires GLIBCXX_3.4.32, which is not available in libstdc++.so.6 on fedora 33.
-
+Step 2: Run the program on fedora 33.
 ```sh
 f33$ ./main
 ./main: /lib64/libc.so.6: version `GLIBC_2.34' not found (required by ./main)
-./main: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.32' not found (required by ./main)
-```
 
-
-# Root Cause Analysis
-- The binary depends on libc.so.6 and libstdc++.so.6.
-```sh
 f33$ ldd main
-./main: /lib64/libc.so.6: version `GLIBC_2.34' not found (required by ./main)
-./main: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.32' not found (required by ./main)
-	linux-vdso.so.1 (0x0000ffff8467c000)
-	libstdc++.so.6 => /lib64/libstdc++.so.6 (0x0000ffff8442a000)
-	libm.so.6 => /lib64/libm.so.6 (0x0000ffff84379000)
-	libgcc_s.so.1 => /lib64/libgcc_s.so.1 (0x0000ffff84348000)
-	libc.so.6 => /lib64/libc.so.6 (0x0000ffff841c2000)
-	/lib/ld-linux-aarch64.so.1 (0x0000ffff84630000)
+	./main: /lib64/libc.so.6: version `GLIBC_2.34' not found (required by ./main)
+    linux-vdso.so.1 (0x0000ffffaf8ae000)
+    libc.so.6 => /lib64/libc.so.6 (0x0000ffffaf6da000)
+    /lib/ld-linux-aarch64.so.1 (0x0000ffffaf860000)
 ```
 
-- The binary requires:
-    - GLIBC_2.17, GLIBC_2.34.
-    - GLIBCXX_3.4, GLIBCXX_3.4.32.
+The error means that libc.so.6 does not have GLIBC_2.34 which required by ./main.
 
+
+## Analysis
+
+Step 1: Check GLIBC versions that the program requires.
 ```sh
-f44$ strings main | grep GLIBC
-GLIBC_2.17
-GLIBC_2.34
-GLIBCXX_3.4.32
-GLIBCXX_3.4
-__libc_start_main@GLIBC_2.34
-_ZSt4cout@GLIBCXX_3.4
-_ZSt21ios_base_library_initv@GLIBCXX_3.4.32
-abort@GLIBC_2.17
-...
+f33$ readelf --version-info main
+Version needs section '.gnu.version_r' contains 1 entry:
+ Addr: 0x0000000000400410  Offset: 0x000410  Link: 5 (.dynstr)
+  000000: Version: 1  File: libc.so.6  Cnt: 2
+  0x0010:   Name: GLIBC_2.17  Flags: none  Version: 3
+  0x0020:   Name: GLIBC_2.34  Flags: none  Version: 2
 ```
 
-- List of GLIBC supported on fedora 33. GLIBC_2.34 is not in the list.
+Section '.gnu.version_r' contains the GLIBC versions that the program requires. The program needs GLIBC 2.17 and 2.34.
+
+Step 3: Check GLIBC versions defined in libc.so.6.
 ```sh
-f33$ strings /lib64/libc.so.6 | grep GLIBC
-GLIBC_2.17
-GLIBC_2.18
-...
-GLIBC_2.30
-GLIBC_2.32
+f33$ readelf --version-info /lib64/libc.so.6
+Version definition section '.gnu.version_d' contains 14 entries:
+  000000: Rev: 1  Flags: BASE  Index: 1  Cnt: 1  Name: libc.so.6
+  0x001c: Rev: 1  Flags: none  Index: 2  Cnt: 1  Name: GLIBC_2.17
+  0x0038: Rev: 1  Flags: none  Index: 3  Cnt: 2  Name: GLIBC_2.18
+  0x005c: Rev: 1  Flags: none  Index: 4  Cnt: 2  Name: GLIBC_2.22
+  0x0080: Rev: 1  Flags: none  Index: 5  Cnt: 2  Name: GLIBC_2.23
+  0x00a4: Rev: 1  Flags: none  Index: 6  Cnt: 2  Name: GLIBC_2.24
+  0x00c8: Rev: 1  Flags: none  Index: 7  Cnt: 2  Name: GLIBC_2.25
+  0x00ec: Rev: 1  Flags: none  Index: 8  Cnt: 2  Name: GLIBC_2.26
+  0x0110: Rev: 1  Flags: none  Index: 9  Cnt: 2  Name: GLIBC_2.27
+  0x0134: Rev: 1  Flags: none  Index: 10  Cnt: 2  Name: GLIBC_2.28
+  0x0158: Rev: 1  Flags: none  Index: 11  Cnt: 2  Name: GLIBC_2.29
+  0x017c: Rev: 1  Flags: none  Index: 12  Cnt: 2  Name: GLIBC_2.30
+  0x01a0: Rev: 1  Flags: none  Index: 13  Cnt: 2  Name: GLIBC_2.32
+  0x01c4: Rev: 1  Flags: none  Index: 14  Cnt: 2  Name: GLIBC_PRIVATE
 ```
 
-- List of GLIBCXX supported on fedora 33. GLIBCXX_3.4.32 is not in the list.
+Section '.gnu.version_d' contains the GLIBC versions defined by libc.so.6. It does not contain GLIBC 2.34 which required by the program.
+So, the program cannot start on fedora 33 due to lack of the required version.
+
+
+## Workaround: Modify Section ".gnu.version_r"
+In this workaround, we will modify the .gnu.version_r section of the program, replace GLIBC_2.34 by GLIBC_2.17.
+
+Step 1: Patch the ELF.
 ```sh
-f33$ strings /lib64/libstdc++.so.6 | grep GLIBCXX
-GLIBCXX_3.4
-GLIBCXX_3.4.1
-...
-GLIBCXX_3.4.27
-GLIBCXX_3.4.28
+f33$ vi patch.py
 ```
 
-**Root Cause**
+```python
+import lief
 
-- On fedora 44, the binary is built with libc 2.43. It requires GLIBC_2.34.
-- On fedora 33, libc 2.32 does not provide GLIBC_2.34. So, fedora 33 cannot run the binary due to lack of dependencies.
+elf = lief.parse('main')
 
+# in section .gnu.version_r, change GLIBC_2.34 to GLIBC_2.17
+elf.symbols_version_requirement[0].get_auxiliary_symbols()[1].name = "GLIBC_2.17"
 
-# Solution 1: Recompile on Runtime Machine
-If you can set up a build environment on fedora 33, the solution is to recompile the code on fedora 33 and run the resulting binary in this host.
-
-
-# Solution 2: Recompile on Build Machine with rpath
-If you cannot set up a build environment on fedora 33 and must build the code on fedora 44, you can use rpath option to specify where the loader should look for dynamic libraries at runtime. This allows to bypass the system library search paths (e.g., /lib64).
-
-Step 1: On fedora 44, recompile with rpath.
-```sh
-f44$ g++ main.cpp -o main -Wl,--rpath=/root/patchlib -Wl,--dynamic-linker=/root/patchlib/ld-linux-aarch64.so.1
-
-f44$ readelf --dynamic main
-  Tag        Type                         Name/Value
- 0x000000000000001d (RUNPATH)            Library runpath: [/root/patchlib]
-
-f44$ readelf --segments main
-  INTERP         0x0000000000000294 0x0000000000400294 0x0000000000400294
-                 0x0000000000000025 0x0000000000000025  R      0x1
-  [Requesting program interpreter: /root/patchlib/ld-linux-aarch64.so.1]
-```
-
-Step 2: Copy libc and interpreter of fedora 44 to fedora 33.
-```sh
-f33$ mkdir /root/patchlib
-
-host$ docker cp f44:/lib64/libc.so.6 .
-host$ docker cp f44:/lib64/libstdc++.so.6 .
-host$ docker cp f44:/lib64/libstdc++.so.6.0.36 .
-host$ docker cp f44:/lib/ld-linux-aarch64.so.1 .
-
-host$ docker cp libc.so.6 f33:/root/patchlib
-host$ docker cp libstdc++.so.6 f33:/root/patchlib
-host$ docker cp libstdc++.so.6.0.36 f33:/root/patchlib
-host$ docker cp ld-linux-aarch64.so.1 f33:/root/patchlib
-```
-
-
-Step 3: Copy the binary to fedora 33 and run.
-```sh
-host$ docker cp f44:/root/main .
-host$ docker cp main f33:/root
+# write elf to another file, main1.
+elf.write('main1')
 ```
 
 ```sh
-f33$ ldd main
-./main: /lib/ld-linux-aarch64.so.1: version `GLIBC_2.35' not found (required by /root/patchlib/libc.so.6)
-	linux-vdso.so.1 (0x0000ffff9f594000)
-	libstdc++.so.6 => /root/patchlib/libstdc++.so.6 (0x0000ffff9f2ab000)
-	libm.so.6 => /lib64/libm.so.6 (0x0000ffff9f1fa000)
-	libgcc_s.so.1 => /lib64/libgcc_s.so.1 (0x0000ffff9f1c9000)
-	libc.so.6 => /root/patchlib/libc.so.6 (0x0000ffff9f000000)
-	/root/patchlib/ld-linux-aarch64.so.1 => /lib/ld-linux-aarch64.so.1 (0x0000ffff9f550000)
+f33$ python3 patch.py
 
-f33$ ./main
+f33$ readelf --version-info main1
+Version needs section '.gnu.version_r' contains 1 entry:
+ Addr: 0x0000000000400410  Offset: 0x000410  Link: 5 (.dynstr)
+  000000: Version: 1  File: libc.so.6  Cnt: 2
+  0x0010:   Name: GLIBC_2.17  Flags: none  Version: 3
+  0x0020:   Name: GLIBC_2.17  Flags: none  Version: 2
+```
+
+Step 2: Check dependencies and run the program.
+```sh
+f33$ ldd main1
+	linux-vdso.so.1 (0x0000ffffa2884000)
+	libc.so.6 => /lib64/libc.so.6 (0x0000ffffa26ba000)
+	/lib/ld-linux-aarch64.so.1 (0x0000ffffa2840000)
+
+f33$ chmod +x main1
+
+f33$ ./main1
 hello
-```
-
-
-# Workaround: Use patchelf to Edit rpath of Binary
-If you cannot rebuild the code and only have the precompiled binary, you can use patchelf to modify the rpath of the binary. This workaround has the same effect as solution 2.
-
-```sh
-f44$ patchelf --set-interpreter /root/patchlib/ld-linux-aarch64.so.1 --force-rpath --set-rpath /root/patchlib main
-
-f44$ patchelf --print-interpreter main
-/root/patchlib/ld-linux-aarch64.so.1
-
-f44$ patchelf --print-rpath main
-/root/patchlib
 ```
 
 
