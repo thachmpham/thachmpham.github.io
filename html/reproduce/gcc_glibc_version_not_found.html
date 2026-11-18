@@ -249,8 +249,8 @@ version.</p>
 id="workaround-modify-section-.gnu.version_r"><span
 class="header-section-number">3.3</span> Workaround: Modify Section
 “.gnu.version_r”</h2>
-<p>In this workaround, we will modify the .gnu.version_r section of the
-program, replace GLIBC_2.34 by GLIBC_2.17.</p>
+<p>To let the program not require GLIBC 2.34 anymore, we will modify the
+.gnu.version_r section, replace GLIBC_2.34 by GLIBC_2.17.</p>
 <p>Step 1: Patch the ELF.</p>
 <div class="sourceCode" id="cb13"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">f33$</span> vi patch.py</span></code></pre></div>

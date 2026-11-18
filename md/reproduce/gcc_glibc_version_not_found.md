@@ -138,7 +138,7 @@ So, the program cannot start on fedora 33 due to lack of the required version.
 
 
 ## Workaround: Modify Section ".gnu.version_r"
-In this workaround, we will modify the .gnu.version_r section of the program, replace GLIBC_2.34 by GLIBC_2.17.
+To let the program not require GLIBC 2.34 anymore, we will modify the .gnu.version_r section, replace GLIBC_2.34 by GLIBC_2.17.
 
 Step 1: Patch the ELF.
 ```sh
