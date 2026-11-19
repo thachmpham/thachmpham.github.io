@@ -73,6 +73,11 @@ title: "A Developer Diary"
 - [NFS Server Not Responding](/html/reproduce/nfs_server_not_responding.html).
 
 
+**Adminstration**
+
+- [RPM: Failed Dependencies Error](/html/reproduce/rpm_failed_dependencies.html).
+
+
 **Multithreading**
 
 - [C/C++ pthread Deadlock](/html/reproduce/pthread_deadlock.html).

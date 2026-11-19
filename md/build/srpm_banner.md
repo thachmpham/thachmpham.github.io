@@ -55,8 +55,9 @@ Downloaded: banner-1.3.6.tar.gz
 ```sh
 $ cp banner-1.3.6.tar.gz ~/rpmbuild/SOURCES/
 
-# extract ~/rpmbuild/SOURCES/ to ~/rpmbuild/BUILD
 $ rpmbuild -bp banner.spec
+# above cmd extracts ~/rpmbuild/SOURCES/banner-1.3.6.tar.gz
+#                 to ~/rpmbuild/BUILD
 
 $ tree ~/rpmbuild/
 /root/rpmbuild/
@@ -131,3 +132,6 @@ NAME
 - [Fedora Package Sources](https://src.fedoraproject.org)
 - [SRPM Banner](https://docs.fedoraproject.org/en-US/package-maintainers/Packaging_Tutorial_1_banner)
 - [SRPM Hello](https://docs.fedoraproject.org/en-US/package-maintainers/Packaging_Tutorial_2_GNU_Hello)
+- [RPM Homepage](https://rpm.org).
+- [RPM Github](https://github.com/rpm-software-management/rpm).
+- [RPM Spec Format](https://rpm.org/docs/4.20.x/manual/spec.html).
