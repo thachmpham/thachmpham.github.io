@@ -118,20 +118,17 @@ class="toc-section-number">1</span> Overview</a></li>
 class="toc-section-number">2</span> Lab</a></li>
 <li><a href="#reproduce" id="toc-reproduce"><span
 class="toc-section-number">3</span> Reproduce</a></li>
-<li><a href="#troubleshoot" id="toc-troubleshoot"><span
-class="toc-section-number">4</span> Troubleshoot</a>
+<li><a href="#trick" id="toc-trick"><span
+class="toc-section-number">4</span> Trick</a>
 <ul>
-<li><a href="#tip-1-use-rescue-mode"
-id="toc-tip-1-use-rescue-mode"><span
-class="toc-section-number">4.1</span> Tip 1: Use Rescue Mode</a></li>
-<li><a href="#tip-2-forward-journal-log-to-console"
-id="toc-tip-2-forward-journal-log-to-console"><span
-class="toc-section-number">4.2</span> Tip 2: Forward Journal Log to
+<li><a href="#rescue-mode" id="toc-rescue-mode"><span
+class="toc-section-number">4.1</span> Rescue Mode</a></li>
+<li><a href="#forward-journal-log-to-console"
+id="toc-forward-journal-log-to-console"><span
+class="toc-section-number">4.2</span> Forward Journal Log to
 Console</a></li>
-<li><a href="#tip-3-use-additional-console"
-id="toc-tip-3-use-additional-console"><span
-class="toc-section-number">4.3</span> Tip 3: Use Additional
-Console</a></li>
+<li><a href="#additional-console" id="toc-additional-console"><span
+class="toc-section-number">4.3</span> Additional Console</a></li>
 </ul></li>
 <li><a href="#references" id="toc-references"><span
 class="toc-section-number">5</span> References</a></li>
@@ -217,10 +214,10 @@ login promt serial-getty@ttyS0.service.</li>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#       =&gt; /usr/bin/loop.sh (5min)</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   serial-getty@ttyS0.service</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#       =&gt; login prompt</span></span></code></pre></div>
-<h1 data-number="4" id="troubleshoot"><span
-class="header-section-number">4</span> Troubleshoot</h1>
-<h2 data-number="4.1" id="tip-1-use-rescue-mode"><span
-class="header-section-number">4.1</span> Tip 1: Use Rescue Mode</h2>
+<h1 data-number="4" id="trick"><span
+class="header-section-number">4</span> Trick</h1>
+<h2 data-number="4.1" id="rescue-mode"><span
+class="header-section-number">4.1</span> Rescue Mode</h2>
 <ul>
 <li>Use the kernel parameter ‘systemd.unit=rescue.target’ to boot to
 rescue mode.</li>
@@ -253,8 +250,8 @@ rescue mode.</li>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------- #</span></span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ex">vm$</span> grub2-mkconfig <span class="at">-o</span> /boot/grub2/grub.cfg</span></code></pre></div>
-<h2 data-number="4.2" id="tip-2-forward-journal-log-to-console"><span
-class="header-section-number">4.2</span> Tip 2: Forward Journal Log to
+<h2 data-number="4.2" id="forward-journal-log-to-console"><span
+class="header-section-number">4.2</span> Forward Journal Log to
 Console</h2>
 <ul>
 <li>Use the kernel parameters ‘systemd.journald.forward_to_console=1’ to
@@ -284,9 +281,8 @@ forward journal log to console.</li>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span>   60.393537] loop.sh<span class="pp">[</span><span class="ss">1007</span><span class="pp">]</span>: httpd: <span class="er">loop</span> <span class="ex">21</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span>   61.418861] loop.sh<span class="pp">[</span><span class="ss">1007</span><span class="pp">]</span>: httpd: <span class="er">loop</span> <span class="ex">22</span></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span></code></pre></div>
-<h2 data-number="4.3" id="tip-3-use-additional-console"><span
-class="header-section-number">4.3</span> Tip 3: Use Additional
-Console</h2>
+<h2 data-number="4.3" id="additional-console"><span
+class="header-section-number">4.3</span> Additional Console</h2>
 <ul>
 <li>Modify the start_vm.sh script. Use parameter ‘-serial pty:/tmp/pty’
 to redirect VM console ttyS1 to file /tmp/pty on host.</li>

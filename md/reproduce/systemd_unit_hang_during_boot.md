@@ -88,8 +88,8 @@ vm$ reboot
 ```
 
 
-# Troubleshoot
-## Tip 1: Use Rescue Mode
+# Trick
+## Rescue Mode
 - Use the kernel parameter 'systemd.unit=rescue.target' to boot to rescue mode.
 ```sh
                                GRUB version 2.12
@@ -124,7 +124,7 @@ vm$ grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
 
 
-## Tip 2: Forward Journal Log to Console
+## Forward Journal Log to Console
 - Use the kernel parameters 'systemd.journald.forward_to_console=1' to forward journal log to console.
 ```sh
                                GRUB version 2.12
@@ -155,7 +155,7 @@ vm$ grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
 
 
-## Tip 3: Use Additional Console
+## Additional Console
 - Modify the start_vm.sh script. Use parameter '-serial pty:/tmp/pty' to redirect VM console ttyS1 to file /tmp/pty on host.
 
 ```sh
