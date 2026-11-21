@@ -108,7 +108,7 @@
 <body>
 <header id="title-block-header">
 <h1 class="title">RPM: Failed Dependencies Error</h1>
-<p class="subtitle">(Open Source Rebuild Series)</p>
+<p class="subtitle">(Reproduce &amp; Troubleshoot Series)</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -118,12 +118,16 @@ class="toc-section-number">1</span> Overview</a></li>
 class="toc-section-number">2</span> Setup Lab</a></li>
 <li><a href="#reproduce" id="toc-reproduce"><span
 class="toc-section-number">3</span> Reproduce</a></li>
-<li><a href="#trick-rpmrebuild" id="toc-trick-rpmrebuild"><span
-class="toc-section-number">4</span> Trick: RpmRebuild</a></li>
-<li><a href="#solution-install-needed-packages"
-id="toc-solution-install-needed-packages"><span
-class="toc-section-number">5</span> Solution: Install Needed
-Packages</a></li>
+<li><a href="#trick" id="toc-trick"><span
+class="toc-section-number">4</span> Trick</a>
+<ul>
+<li><a href="#rpmrebuild" id="toc-rpmrebuild"><span
+class="toc-section-number">4.1</span> RpmRebuild</a></li>
+<li><a href="#nodeps" id="toc-nodeps"><span
+class="toc-section-number">4.2</span> Nodeps</a></li>
+</ul></li>
+<li><a href="#solution" id="toc-solution"><span
+class="toc-section-number">5</span> Solution</a></li>
 <li><a href="#references" id="toc-references"><span
 class="toc-section-number">6</span> References</a></li>
 </ul>
@@ -183,8 +187,10 @@ class="header-section-number">3</span> Reproduce</h1>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="ex">tree</span> is needed by banner-1.3.6-1.fc44.aarch64</span></code></pre></div>
 </div>
 </div>
-<h1 data-number="4" id="trick-rpmrebuild"><span
-class="header-section-number">4</span> Trick: RpmRebuild</h1>
+<h1 data-number="4" id="trick"><span
+class="header-section-number">4</span> Trick</h1>
+<h2 data-number="4.1" id="rpmrebuild"><span
+class="header-section-number">4.1</span> RpmRebuild</h2>
 <p>In case we don’t have the source to rebuild the banner rpm, we can
 modify the final rpm using rpmrebuild, remove the failed
 dependencies.</p>
@@ -216,12 +222,17 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#
 with the installation.</p>
 </div>
 </div>
-<h1 data-number="5" id="solution-install-needed-packages"><span
-class="header-section-number">5</span> Solution: Install Needed
-Packages</h1>
-<p>Install tree rpm which is required by banner rpm.</p>
+<h2 data-number="4.2" id="nodeps"><span
+class="header-section-number">4.2</span> Nodeps</h2>
+<p>Install the rpm with option –nodeps, do not verify package
+dependencies.</p>
 <div class="sourceCode" id="cb11"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> dnf install tree</span></code></pre></div>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> rpm <span class="at">--install</span> <span class="at">--nodeps</span> /root/rpmbuild/RPMS/aarch64/banner-1.3.6-1.fc44.aarch64.rpm</span></code></pre></div>
+<h1 data-number="5" id="solution"><span
+class="header-section-number">5</span> Solution</h1>
+<p>Install tree rpm which is required by banner rpm.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cont$</span> dnf install tree</span></code></pre></div>
 <h1 data-number="6" id="references"><span
 class="header-section-number">6</span> References</h1>
 <ul>

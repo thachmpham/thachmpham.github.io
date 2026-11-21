@@ -1,6 +1,6 @@
 ---
 title: 'RPM: Failed Dependencies Error'
-subtitle: '(Open Source Rebuild Series)'
+subtitle: '(Reproduce & Troubleshoot Series)'
 ---
 
 
@@ -79,7 +79,8 @@ error: Failed dependencies:
 ::::::::::::::
 
 
-# Trick: RpmRebuild
+# Trick
+## RpmRebuild
 In case we don't have the source to rebuild the banner rpm, we can modify the
 final rpm using rpmrebuild, remove the failed dependencies.
 
@@ -129,7 +130,13 @@ The banner rpm does not require tree rpm anymore, so we can proceed with the ins
 ::::::::::::::
 
 
-# Solution: Install Needed Packages
+## Nodeps
+Install the rpm with option --nodeps, do not verify package dependencies.
+```sh
+cont$ rpm --install --nodeps /root/rpmbuild/RPMS/aarch64/banner-1.3.6-1.fc44.aarch64.rpm
+```
+
+# Solution
 Install tree rpm which is required by banner rpm.
 ```sh
 cont$ dnf install tree
